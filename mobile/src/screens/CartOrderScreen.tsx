@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, Divider, Menu, Text, TextInput } from "react-native-paper";
+import { Button, Card, Divider, Menu, Text } from "react-native-paper";
+import { DatePickerModal } from "react-native-paper-dates";
 import { z } from "zod/v4";
 
 import { generatedClientConfig } from "../api/generatedConfig";
@@ -23,6 +24,31 @@ import { Customer } from "../types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CartOrder">;
 const CURRENT_USER_ID = 1;
+
+const parseDateInput = (value: string) => {
+  const parsedDate = new Date(`${value}T00:00:00`);
+  return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
+};
+
+const formatDateForApi = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const formatDateForDisplay = (value: string) => {
+  const parsedDate = parseDateInput(value);
+  if (!parsedDate) {
+    return value;
+  }
+
+  return parsedDate.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+};
 
 const orderFormSchema = orderCreateDtoSchema
   .pick({
@@ -61,8 +87,15 @@ export const CartOrderScreen = ({ navigation }: Props) => {
   const clearCart = useCartStore((state) => state.clearCart);
 
   const [customerMenuVisible, setCustomerMenuVisible] = useState(false);
+  const [isDateRangePickerVisible, setIsDateRangePickerVisible] = useState(false);
+  const [dateRange, setDateRange] = useState<{
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+  }>({
+    startDate: parseDateInput("2026-04-17"),
+    endDate: parseDateInput("2026-04-20"),
+  });
   const {
-    control,
     handleSubmit,
     setValue,
     watch,
@@ -87,6 +120,8 @@ export const CartOrderScreen = ({ navigation }: Props) => {
   });
   const customers: Customer[] = useMemo(() => customersQuery.data ?? [], [customersQuery.data]);
   const selectedCustomerId = watch("customerId");
+  const rentalStartDate = watch("rentalStartDate");
+  const rentalEndDate = watch("rentalEndDate");
 
   useEffect(() => {
     if (!selectedCustomerId && customers.length > 0) {
@@ -140,6 +175,10 @@ export const CartOrderScreen = ({ navigation }: Props) => {
       });
     }
   };
+
+  const dateRangeLabel = `${formatDateForDisplay(rentalStartDate)} - ${formatDateForDisplay(
+    rentalEndDate,
+  )}`;
 
   return (
     <ScreenShell title="Rental Cart" subtitle="Review items, assign customer, and submit an order.">
@@ -223,36 +262,26 @@ export const CartOrderScreen = ({ navigation }: Props) => {
             ) : null}
           </View>
 
-          <Controller
-            control={control}
-            name="rentalStartDate"
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                label="Rental Start Date (YYYY-MM-DD)"
-                mode="outlined"
-                value={value}
-                onChangeText={onChange}
-                error={Boolean(errors.rentalStartDate)}
-              />
-            )}
-          />
+          <View>
+            <Text variant="labelLarge" style={styles.fieldLabel}>
+              Rental Period
+            </Text>
+            <Button
+              mode="outlined"
+              icon="calendar-range"
+              contentStyle={styles.menuButtonContent}
+              style={[
+                styles.dateRangeButton,
+                errors.rentalStartDate || errors.rentalEndDate ? styles.dateRangeButtonError : null,
+              ]}
+              onPress={() => setIsDateRangePickerVisible(true)}
+            >
+              {dateRangeLabel}
+            </Button>
+          </View>
           {errors.rentalStartDate ? (
             <Text style={styles.errorText}>{errors.rentalStartDate.message}</Text>
           ) : null}
-
-          <Controller
-            control={control}
-            name="rentalEndDate"
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                label="Rental End Date (YYYY-MM-DD)"
-                mode="outlined"
-                value={value}
-                onChangeText={onChange}
-                error={Boolean(errors.rentalEndDate)}
-              />
-            )}
-          />
           {errors.rentalEndDate ? <Text style={styles.errorText}>{errors.rentalEndDate.message}</Text> : null}
           <Text variant="titleMedium">Subtotal / day: ${subtotal.toFixed(2)}</Text>
         </Card.Content>
@@ -268,6 +297,35 @@ export const CartOrderScreen = ({ navigation }: Props) => {
       >
         Confirm Order
       </Button>
+
+      <DatePickerModal
+        locale="en-GB"
+        mode="range"
+        visible={isDateRangePickerVisible}
+        onDismiss={() => setIsDateRangePickerVisible(false)}
+        startDate={dateRange.startDate}
+        endDate={dateRange.endDate}
+        saveLabel="Apply"
+        label="Select rental period"
+        onConfirm={({ startDate, endDate }) => {
+          setIsDateRangePickerVisible(false);
+          setDateRange({ startDate, endDate });
+
+          if (startDate) {
+            setValue("rentalStartDate", formatDateForApi(startDate), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          }
+
+          if (endDate) {
+            setValue("rentalEndDate", formatDateForApi(endDate), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          }
+        }}
+      />
     </ScreenShell>
   );
 };
@@ -294,8 +352,14 @@ const styles = StyleSheet.create({
     color: "#334155",
   },
   errorText: {
-    marginTop: 8,
+    marginTop: 2,
     color: "#b91c1c",
+  },
+  dateRangeButton: {
+    borderColor: "#cbd5e1",
+  },
+  dateRangeButtonError: {
+    borderColor: "#b91c1c",
   },
   menuButtonContent: {
     justifyContent: "space-between",
