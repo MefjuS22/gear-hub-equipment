@@ -26,25 +26,33 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
             .ToDictionaryAsync(item => item.Id, cancellationToken);
     }
 
-    public async Task<bool> TryReserveEquipmentAsync(
+    public async Task<bool> IsEquipmentAvailableForPeriodAsync(
         IEnumerable<int> equipmentIds,
+        DateTime rentalStartUtc,
+        DateTime rentalEndUtc,
         CancellationToken cancellationToken = default)
     {
-        foreach (var equipmentId in equipmentIds.Distinct())
-        {
-            var affectedRows = await dbContext.Equipment
-                .Where(item => item.Id == equipmentId && item.IsAvailable)
-                .ExecuteUpdateAsync(
-                    setters => setters.SetProperty(item => item.IsAvailable, false),
-                    cancellationToken);
+        var distinctIds = equipmentIds.Distinct().ToList();
 
-            if (affectedRows == 0)
-            {
-                return false;
-            }
+        var hasDisabledEquipment = await dbContext.Equipment
+            .AnyAsync(
+                item => distinctIds.Contains(item.Id) && !item.IsAvailable,
+                cancellationToken);
+        if (hasDisabledEquipment)
+        {
+            return false;
         }
 
-        return true;
+        var hasOverlappingReservation = await dbContext.RentalOrderItems
+            .AnyAsync(
+                item =>
+                    distinctIds.Contains(item.EquipmentId)
+                    && item.RentalOrder != null
+                    && item.RentalOrder.RentalStartDate < rentalEndUtc
+                    && rentalStartUtc < item.RentalOrder.RentalEndDate,
+                cancellationToken);
+
+        return !hasOverlappingReservation;
     }
 
     public async Task<RentalOrder> CreateOrderWithItemsAsync(

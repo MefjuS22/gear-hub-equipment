@@ -79,21 +79,23 @@ const orderFormSchema = orderCreateDtoSchema
 
 type OrderFormValues = z.infer<typeof orderFormSchema>;
 
-export const CartOrderScreen = ({ navigation }: Props) => {
+export const CartOrderScreen = ({ navigation, route }: Props) => {
   const { showError } = useAppToast();
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const clearCart = useCartStore((state) => state.clearCart);
 
+  const initialRentalStartDate = route.params?.initialRentalStartDate ?? "2026-04-17";
+  const initialRentalEndDate = route.params?.initialRentalEndDate ?? "2026-04-20";
   const [customerMenuVisible, setCustomerMenuVisible] = useState(false);
   const [isDateRangePickerVisible, setIsDateRangePickerVisible] = useState(false);
   const [dateRange, setDateRange] = useState<{
     startDate: Date | undefined;
     endDate: Date | undefined;
   }>({
-    startDate: parseDateInput("2026-04-17"),
-    endDate: parseDateInput("2026-04-20"),
+    startDate: parseDateInput(initialRentalStartDate),
+    endDate: parseDateInput(initialRentalEndDate),
   });
   const {
     handleSubmit,
@@ -105,8 +107,8 @@ export const CartOrderScreen = ({ navigation }: Props) => {
     defaultValues: {
       customerId: undefined,
       userId: CURRENT_USER_ID,
-      rentalStartDate: "2026-04-17",
-      rentalEndDate: "2026-04-20",
+      rentalStartDate: initialRentalStartDate,
+      rentalEndDate: initialRentalEndDate,
     },
   });
   const customersQuery = useGetApiCustomer({

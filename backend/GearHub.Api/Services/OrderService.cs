@@ -40,22 +40,29 @@ public class OrderService(
             return OrderCreationResult.Failed("One or more equipment items were not found.");
         }
 
-        await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        var rentalStartUtc = NormalizeToUtc(request.RentalStartDate);
+        var rentalEndUtc = NormalizeToUtc(request.RentalEndDate);
 
-        var reserved = await orderRepository.TryReserveEquipmentAsync(equipmentIds, cancellationToken);
-        if (!reserved)
+        var isAvailableForPeriod = await orderRepository.IsEquipmentAvailableForPeriodAsync(
+            equipmentIds,
+            rentalStartUtc,
+            rentalEndUtc,
+            cancellationToken);
+        if (!isAvailableForPeriod)
         {
-            await transaction.RollbackAsync(cancellationToken);
-            return OrderCreationResult.Failed("One or more equipment items are no longer available.");
+            return OrderCreationResult.Failed(
+                "One or more equipment items are unavailable for the selected rental period.");
         }
+
+        await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
 
         var order = new RentalOrder
         {
             CustomerId = request.CustomerId,
             UserId = request.UserId,
             OrderDate = DateTime.UtcNow,
-            RentalStartDate = NormalizeToUtc(request.RentalStartDate),
-            RentalEndDate = NormalizeToUtc(request.RentalEndDate)
+            RentalStartDate = rentalStartUtc,
+            RentalEndDate = rentalEndUtc
         };
 
         var items = aggregatedItems.Select(item => new RentalOrderItem

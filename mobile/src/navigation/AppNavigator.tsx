@@ -8,7 +8,12 @@ import { OrderConfirmationScreen } from "../screens/OrderConfirmationScreen";
 export type RootStackParamList = {
   EquipmentList: undefined;
   EquipmentForm: { equipmentId?: number } | undefined;
-  CartOrder: undefined;
+  CartOrder:
+    | {
+        initialRentalStartDate?: string;
+        initialRentalEndDate?: string;
+      }
+    | undefined;
   OrderConfirmation: {
     customerName: string;
     rentalStartDate: string;
