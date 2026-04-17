@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  CircularProgress,
   FormControlLabel,
   MenuItem,
   Paper,
@@ -13,31 +12,34 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography,
 } from "@mui/material";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Controller } from "react-hook-form";
 import { formatUsd } from "../../lib/formatCurrency";
 import { useEquipmentAdmin } from "../../hooks/intranet/useEquipmentAdmin";
+import { LoadingState, PageHeader } from "../common";
 
 export function EquipmentAdminView() {
   const { equipment, categories, brands, warehouses, remove, form, handleSubmitForm, create } =
     useEquipmentAdmin();
 
   if (equipment.isLoading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <LoadingState message="Loading equipment…" />;
   }
 
   return (
     <Box>
-      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
-        Equipment
-      </Typography>
+      <PageHeader
+        title="Equipment inventory"
+        subtitle="Manage and track your active rental fleet across warehouses."
+        actions={
+          <Button type="submit" form="equipment-create-form" variant="containedBlack" disabled={create.isPending} startIcon={<PlusCircle size={18} aria-hidden />}>
+            Add equipment
+          </Button>
+        }
+      />
       <Paper
+        id="equipment-create-form"
         component="form"
         variant="outlined"
         onSubmit={handleSubmitForm}
@@ -184,11 +186,6 @@ export function EquipmentAdminView() {
               />
             )}
           />
-        </Box>
-        <Box>
-          <Button type="submit" variant="contained" disabled={create.isPending} startIcon={<PlusCircle size={18} aria-hidden />}>
-            Add equipment
-          </Button>
         </Box>
       </Paper>
       <TableContainer component={Paper} variant="outlined">
