@@ -1,0 +1,19 @@
+import type {
+  Customer as GeneratedCustomer,
+  Equipment as GeneratedEquipment,
+} from "./generated/types";
+import type { Customer, Equipment } from "../types";
+
+export const mapApiEquipment = (equipment: GeneratedEquipment): Equipment => ({
+  id: equipment.id ?? 0,
+  name: equipment.name ?? "Unknown equipment",
+  categoryId: equipment.categoryId ?? 0,
+  brandId: equipment.brandId ?? 0,
+  dailyRate: equipment.dailyRate ?? 0,
+  isAvailable: equipment.isAvailable ?? false,
+});
+
+export const mapApiCustomer = (customer: GeneratedCustomer): Customer => ({
+  id: customer.id ?? 0,
+  companyName: customer.companyName ?? "Unknown company",
+});

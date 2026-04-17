@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer", "format": "int32" },
+    "name": { "type": "string", "nullable": true },
+    "categoryId": { "type": "integer", "format": "int32" },
+    "category": { "$ref": "#/components/schemas/Category" },
+    "brandId": { "type": "integer", "format": "int32" },
+    "brand": { "$ref": "#/components/schemas/Brand" },
+    "warehouseId": { "type": "integer", "format": "int32" },
+    "warehouse": { "$ref": "#/components/schemas/Warehouse" },
+    "dailyRate": { "type": "number", "format": "double" },
+    "isAvailable": { "type": "boolean" },
+    "maintenances": {
+      "type": "array",
+      "items": { "$ref": "#/components/schemas/Maintenance" },
+      "nullable": true
+    },
+    "rentalOrderItems": {
+      "type": "array",
+      "items": { "$ref": "#/components/schemas/RentalOrderItem" },
+      "nullable": true
+    }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "Equipment"
+}

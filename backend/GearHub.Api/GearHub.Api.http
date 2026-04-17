@@ -1,0 +1,6 @@
+@GearHub.Api_HostAddress = http://localhost:5206
+
+GET {{GearHub.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

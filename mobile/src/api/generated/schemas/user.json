@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer", "format": "int32" },
+    "name": { "type": "string", "nullable": true },
+    "email": { "type": "string", "nullable": true },
+    "roleId": { "type": "integer", "format": "int32" },
+    "role": { "$ref": "#/components/schemas/Role" },
+    "rentalOrders": {
+      "type": "array",
+      "items": { "$ref": "#/components/schemas/RentalOrder" },
+      "nullable": true
+    }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "User"
+}

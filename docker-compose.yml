@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: gearhub-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: GearHubDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SecretPassword123!
+    ports:
+      - "5432:5432"
+    volumes:
+      - gearhub-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d GearHubDb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend/GearHub.Api
+      dockerfile: Dockerfile
+    container_name: gearhub-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=GearHubDb;Username=postgres;Password=SecretPassword123!
+    ports:
+      - "5000:8080"
+
+volumes:
+  gearhub-postgres-data:

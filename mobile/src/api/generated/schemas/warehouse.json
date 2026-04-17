@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer", "format": "int32" },
+    "name": { "type": "string", "nullable": true },
+    "location": { "type": "string", "nullable": true },
+    "equipmentItems": {
+      "type": "array",
+      "items": { "$ref": "#/components/schemas/Equipment" },
+      "nullable": true
+    }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "Warehouse"
+}

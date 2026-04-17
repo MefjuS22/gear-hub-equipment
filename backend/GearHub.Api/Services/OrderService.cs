@@ -1,0 +1,74 @@
+﻿using GearHub.Api.Data;
+using GearHub.Api.DTOs;
+using GearHub.Api.Models;
+using GearHub.Api.Repositories;
+
+namespace GearHub.Api.Services;
+
+public class OrderService(
+    ApplicationDbContext dbContext,
+    IOrderRepository orderRepository) : IOrderService
+{
+    public async Task<OrderCreationResult> CreateOrderAsync(
+        OrderCreateDto request,
+        CancellationToken cancellationToken = default)
+    {
+        if (!await orderRepository.CustomerExistsAsync(request.CustomerId, cancellationToken))
+        {
+            return OrderCreationResult.Failed("Customer not found.");
+        }
+
+        if (!await orderRepository.UserExistsAsync(request.UserId, cancellationToken))
+        {
+            return OrderCreationResult.Failed("User not found.");
+        }
+
+        var aggregatedItems = request.Items
+            .GroupBy(item => item.EquipmentId)
+            .Select(group => new OrderItemDto
+            {
+                EquipmentId = group.Key,
+                Quantity = group.Sum(item => item.Quantity)
+            })
+            .ToList();
+
+        var equipmentIds = aggregatedItems.Select(item => item.EquipmentId).ToList();
+        var equipmentMap = await orderRepository.GetEquipmentMapAsync(equipmentIds, cancellationToken);
+
+        if (equipmentMap.Count != equipmentIds.Distinct().Count())
+        {
+            return OrderCreationResult.Failed("One or more equipment items were not found.");
+        }
+
+        await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
+
+        var reserved = await orderRepository.TryReserveEquipmentAsync(equipmentIds, cancellationToken);
+        if (!reserved)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            return OrderCreationResult.Failed("One or more equipment items are no longer available.");
+        }
+
+        var order = new RentalOrder
+        {
+            CustomerId = request.CustomerId,
+            UserId = request.UserId,
+            OrderDate = DateTime.UtcNow,
+            RentalStartDate = request.RentalStartDate,
+            RentalEndDate = request.RentalEndDate
+        };
+
+        var items = aggregatedItems.Select(item => new RentalOrderItem
+        {
+            RentalOrder = order,
+            EquipmentId = item.EquipmentId,
+            Quantity = item.Quantity,
+            UnitPrice = equipmentMap[item.EquipmentId].DailyRate
+        }).ToList();
+
+        var createdOrder = await orderRepository.CreateOrderWithItemsAsync(order, items, cancellationToken);
+
+        await transaction.CommitAsync(cancellationToken);
+        return OrderCreationResult.Created(createdOrder);
+    }
+}

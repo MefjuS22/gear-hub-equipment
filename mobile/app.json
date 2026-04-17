@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "GearHub",
+    "slug": "gearhub",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#f8f9fa",
+    "assetBundlePatterns": ["**/*"],
+    "jsEngine": "hermes",
+    "ios": {
+      "supportsTablet": true,
+       "jsEngine": "jsc"
+    },
+    "android": {
+      "package": "com.gearhub.mobile"
+    }
+  }
+}
