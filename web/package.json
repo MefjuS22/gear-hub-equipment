@@ -1,0 +1,48 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -b --noEmit",
+    "lint": "eslint .",
+    "api:generate": "kubb --config kubb.config.ts",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@tanstack/react-query": "^5.99.0",
+    "@tanstack/react-router": "^1.168.22",
+    "axios": "^1.15.0",
+    "bootstrap": "^5.3.8",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.72.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@kubb/cli": "^4.37.2",
+    "@kubb/core": "^4.37.2",
+    "@kubb/plugin-client": "^4.37.2",
+    "@kubb/plugin-oas": "^4.37.2",
+    "@kubb/plugin-react-query": "^4.37.2",
+    "@kubb/plugin-ts": "^4.37.2",
+    "@kubb/plugin-zod": "^4.37.2",
+    "@tanstack/react-query-devtools": "^5.99.0",
+    "@tanstack/router-plugin": "^1.167.22",
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "typescript": "~6.0.2",
+    "typescript-eslint": "^8.58.0",
+    "vite": "^8.0.4",
+    "zod": "^4.3.6"
+  }
+}

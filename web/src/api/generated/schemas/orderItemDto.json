@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "equipmentId": { "type": "integer", "format": "int32" },
+    "quantity": { "type": "integer", "format": "int32" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "OrderItemDto"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "rentalOrderId": { "type": "integer", "format": "int32" },
+    "rentalOrder": { "$ref": "#/components/schemas/RentalOrder" },
+    "equipmentId": { "type": "integer", "format": "int32" },
+    "equipment": { "$ref": "#/components/schemas/Equipment" },
+    "quantity": { "type": "integer", "format": "int32" },
+    "unitPrice": { "type": "number", "format": "double" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "RentalOrderItem"
+}
