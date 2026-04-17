@@ -14,7 +14,9 @@ type Props = NativeStackScreenProps<RootStackParamList, "EquipmentList">;
 export const useEquipmentListScreen = ({ navigation }: Pick<Props, "navigation">) => {
   const { showInfo } = useAppToast();
   const addToCart = useCartStore((state) => state.addToCart);
-  const cartItemsCount = useCartStore((state) => state.items.length);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const cartItems = useCartStore((state) => state.items);
+  const cartItemsCount = cartItems.length;
   const [isDateRangePickerVisible, setIsDateRangePickerVisible] = useState(false);
   const [rentalStartDate, setRentalStartDate] = useState("2026-04-17");
   const [rentalEndDate, setRentalEndDate] = useState("2026-04-20");
@@ -88,7 +90,9 @@ export const useEquipmentListScreen = ({ navigation }: Pick<Props, "navigation">
   };
 
   return {
+    cartItems,
     cartItemsCount,
+    updateQuantity,
     equipment,
     equipmentQuery,
     dateRange,

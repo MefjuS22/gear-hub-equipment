@@ -11,6 +11,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "EquipmentList">;
 
 export const EquipmentListScreen = ({ navigation }: Props) => {
   const {
+    cartItems,
     cartItemsCount,
     equipment,
     equipmentQuery,
@@ -25,6 +26,7 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
     onCreateEquipment,
     refreshing,
     loading,
+    updateQuantity,
   } = useEquipmentListScreen({ navigation });
 
   return (
@@ -67,7 +69,20 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
             </Card>
           )
         }
-        renderItem={({ item }) => <EquipmentListItemCard item={item} onAddToCart={onAddToCart} />}
+        renderItem={({ item }) => {
+          const quantityInCart =
+            cartItems.find((entry) => entry.equipmentId === item.id)?.quantity ?? 0;
+          return (
+            <EquipmentListItemCard
+              item={item}
+              quantityInCart={quantityInCart}
+              onAddToCart={onAddToCart}
+              onUpdateQuantity={(equipmentId: number, delta: number) => {
+                updateQuantity(equipmentId, delta);
+              }}
+            />
+          );
+        }}
       />
 
       <FAB icon="plus" label="New Equipment" style={styles.fab} onPress={onCreateEquipment} />
