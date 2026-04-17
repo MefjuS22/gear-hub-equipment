@@ -16,17 +16,102 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { Heart, LayoutGrid, List, Package, ShoppingCart } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Heart, LayoutGrid, List, Minus, Package, Plus, ShoppingCart } from "lucide-react";
+import { useMemo, useState, type ReactNode } from "react";
 import { formatUsd } from "../../lib/formatCurrency";
 import { PORTAL_HERO, usePortalCatalog } from "../../hooks/portal/usePortalCatalog";
 import { EmptyState, ErrorAlert, LoadingState, PageHeader, StatusChip } from "../common";
 import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
 import { useCart } from "./cartContext";
 
+type CatalogOrderControlProps = {
+  equipmentId: number;
+  name: string;
+  dailyRate: number;
+  isAvailable: boolean;
+  /** Larger tap targets + typography (featured grid card) */
+  featured?: boolean;
+  fullWidth?: boolean;
+};
+
+function CatalogOrderControl({
+  equipmentId,
+  name,
+  dailyRate,
+  isAvailable,
+  featured = false,
+  fullWidth = false,
+}: CatalogOrderControlProps) {
+  const { lines, add, setQuantity } = useCart();
+  const qty = lines.find((l) => l.equipmentId === equipmentId)?.quantity ?? 0;
+  const btnSize = featured ? "large" : "small";
+  const iconBtnSize = featured ? "medium" : "small";
+  const countVariant = featured ? "body1" : "body2";
+
+  if (!isAvailable) {
+    return (
+      <Button variant="outlined" size="small" disabled fullWidth={fullWidth}>
+        Unavailable
+      </Button>
+    );
+  }
+
+  if (qty < 1) {
+    return (
+      <Button
+        variant="containedBlack"
+        size={btnSize}
+        fullWidth={fullWidth}
+        startIcon={<ShoppingCart size={16} aria-hidden />}
+        onClick={() => add({ equipmentId, name, dailyRate })}
+      >
+        Add to order
+      </Button>
+    );
+  }
+
+  const stepper: ReactNode = (
+    <Box
+      sx={{
+        display: "inline-flex",
+        alignItems: "center",
+        border: 1,
+        borderColor: "divider",
+        borderRadius: 1,
+        maxWidth: fullWidth ? "100%" : undefined,
+        width: fullWidth ? "100%" : "inline-flex",
+        justifyContent: fullWidth ? "center" : undefined,
+        boxSizing: "border-box",
+      }}
+    >
+      <IconButton
+        size={iconBtnSize}
+        aria-label="Decrease quantity"
+        onClick={() => setQuantity(equipmentId, qty - 1)}
+      >
+        <Minus size={16} aria-hidden />
+      </IconButton>
+      <Typography variant={countVariant} sx={{ minWidth: 32, textAlign: "center", fontWeight: 600 }}>
+        {qty}
+      </Typography>
+      <IconButton
+        size={iconBtnSize}
+        aria-label="Increase quantity"
+        onClick={() => setQuantity(equipmentId, qty + 1)}
+      >
+        <Plus size={16} aria-hidden />
+      </IconButton>
+    </Box>
+  );
+
+  if (fullWidth) {
+    return <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>{stepper}</Box>;
+  }
+  return stepper;
+}
+
 export function PortalCatalogView() {
   const { equipment } = usePortalCatalog();
-  const { add } = useCart();
   const { search } = usePortalCatalogSearch();
   const [categoryKey, setCategoryKey] = useState<string>("all");
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -124,7 +209,7 @@ export function PortalCatalogView() {
                 <TableCell>Brand</TableCell>
                 <TableCell align="right">Daily rate</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell align="right" width={160} />
+                <TableCell align="right" width={200} />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -138,21 +223,14 @@ export function PortalCatalogView() {
                     <StatusChip status={item.isAvailable ? "available" : "unavailable"} />
                   </TableCell>
                   <TableCell align="right">
-                    <Button
-                      variant={item.isAvailable ? "containedBlack" : "outlined"}
-                      size="small"
-                      disabled={!item.isAvailable}
-                      startIcon={item.isAvailable ? <ShoppingCart size={16} aria-hidden /> : undefined}
-                      onClick={() =>
-                        add({
-                          equipmentId: item.id ?? 0,
-                          name: item.name ?? "",
-                          dailyRate: item.dailyRate ?? 0,
-                        })
-                      }
-                    >
-                      {item.isAvailable ? "Add to order" : "Unavailable"}
-                    </Button>
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      <CatalogOrderControl
+                        equipmentId={item.id ?? 0}
+                        name={item.name ?? ""}
+                        dailyRate={item.dailyRate ?? 0}
+                        isAvailable={!!item.isAvailable}
+                      />
+                    </Box>
                   </TableCell>
                 </TableRow>
               ))}
@@ -239,23 +317,14 @@ export function PortalCatalogView() {
                       </Typography>
                     )}
                     <Box sx={{ mt: "auto" }}>
-                      <Button
+                      <CatalogOrderControl
+                        equipmentId={item.id ?? 0}
+                        name={item.name ?? ""}
+                        dailyRate={item.dailyRate ?? 0}
+                        isAvailable={!!item.isAvailable}
+                        featured={featured}
                         fullWidth={featured}
-                        variant={item.isAvailable ? "containedBlack" : "outlined"}
-                        size={featured ? "large" : "small"}
-                        disabled={!item.isAvailable}
-                        endIcon={item.isAvailable && featured ? <span aria-hidden>→</span> : undefined}
-                        startIcon={item.isAvailable && !featured ? <ShoppingCart size={16} aria-hidden /> : undefined}
-                        onClick={() =>
-                          add({
-                            equipmentId: item.id ?? 0,
-                            name: item.name ?? "",
-                            dailyRate: item.dailyRate ?? 0,
-                          })
-                        }
-                      >
-                        {item.isAvailable ? "Add to order" : "Unavailable"}
-                      </Button>
+                      />
                     </Box>
                   </CardContent>
                 </Card>

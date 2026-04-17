@@ -78,9 +78,10 @@ function PortalTopBar() {
           width: "100%",
           mx: "auto",
           gap: 1,
-          flexWrap: "wrap",
+          flexWrap: "nowrap",
           py: 1.5,
           minHeight: 64,
+          alignItems: "center",
         }}
       >
         <Typography
@@ -91,6 +92,7 @@ function PortalTopBar() {
             fontWeight: 800,
             letterSpacing: "-0.02em",
             mr: 1,
+            flexShrink: 0,
             textDecoration: "none",
             color: "text.primary",
             "&:hover": { color: "primary.main" },
@@ -99,42 +101,46 @@ function PortalTopBar() {
           GearHub
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "stretch" }}>
+        <Box sx={{ display: "flex", alignItems: "stretch", flexShrink: 0 }}>
           <NavTab to="/portal">Catalog</NavTab>
           <NavTab to="/portal/cart">Cart</NavTab>
         </Box>
 
-        <Button component={Link} to="/intranet" variant="text" color="inherit" sx={{ fontWeight: 600 }}>
-          Staff
-        </Button>
+        {/* Reserve the same center slot on catalog + cart (sm+) so the right cluster does not jump */}
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            maxWidth: 420,
+            mx: { xs: 0, sm: 2 },
+            display: { xs: "none", sm: "flex" },
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {isCatalog ? (
+            <TextField
+              placeholder="Search catalog…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              size="small"
+              fullWidth
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search size={18} aria-hidden />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
+          ) : (
+            <Box sx={{ width: "100%", height: 40 }} aria-hidden />
+          )}
+        </Box>
 
-        {isCatalog ? (
-          <TextField
-            placeholder="Search catalog…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            size="small"
-            sx={{
-              flex: "1 1 220px",
-              maxWidth: 420,
-              mx: "auto",
-              display: { xs: "none", sm: "block" },
-            }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search size={18} aria-hidden />
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
-        ) : (
-          <Box sx={{ flex: 1 }} />
-        )}
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: "auto" }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexShrink: 0, ml: { xs: "auto", sm: 0 } }}>
           <Tooltip title="Notifications (coming soon)">
             <span>
               <IconButton size="small" color="inherit" disabled aria-label="Notifications">
@@ -171,8 +177,9 @@ function PortalTopBar() {
           </Badge>
         </Box>
       </Toolbar>
-      {isCatalog ? (
-        <Box sx={{ display: { xs: "block", sm: "none" }, px: 2, pb: 2 }}>
+      {/* Same vertical space on xs whether on catalog or cart — avoids header height jump */}
+      <Box sx={{ display: { xs: "block", sm: "none" }, px: 2, pb: 2, minHeight: 56 }}>
+        {isCatalog ? (
           <TextField
             placeholder="Search catalog…"
             value={search}
@@ -189,8 +196,10 @@ function PortalTopBar() {
               },
             }}
           />
-        </Box>
-      ) : null}
+        ) : (
+          <Box sx={{ height: 40 }} aria-hidden />
+        )}
+      </Box>
     </Box>
   );
 }
