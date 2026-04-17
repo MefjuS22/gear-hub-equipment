@@ -9,14 +9,28 @@ interface ScreenShellProps extends PropsWithChildren {
 }
 
 export const ScreenShell = ({ title, subtitle, children, scrollable = true }: ScreenShellProps) => {
-  const Content = scrollable ? ScrollView : View;
+  if (scrollable) {
+    return (
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        style={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Text variant="headlineSmall" style={styles.title}>
+          {title}
+        </Text>
+        {subtitle ? (
+          <Text variant="bodyMedium" style={styles.subtitle}>
+            {subtitle}
+          </Text>
+        ) : null}
+        {children}
+      </ScrollView>
+    );
+  }
 
   return (
-    <Content
-      contentContainerStyle={styles.contentContainer}
-      style={styles.container}
-      keyboardShouldPersistTaps="handled"
-    >
+    <View style={[styles.container, styles.contentContainer]}>
       <Text variant="headlineSmall" style={styles.title}>
         {title}
       </Text>
@@ -26,7 +40,7 @@ export const ScreenShell = ({ title, subtitle, children, scrollable = true }: Sc
         </Text>
       ) : null}
       {children}
-    </Content>
+    </View>
   );
 };
 

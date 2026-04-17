@@ -80,7 +80,7 @@ const orderFormSchema = orderCreateDtoSchema
 type OrderFormValues = z.infer<typeof orderFormSchema>;
 
 export const CartOrderScreen = ({ navigation }: Props) => {
-  const { showSuccess, showError } = useAppToast();
+  const { showError } = useAppToast();
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
@@ -162,12 +162,15 @@ export const CartOrderScreen = ({ navigation }: Props) => {
     };
 
     try {
+      const itemsCount = items.reduce((total, item) => total + item.quantity, 0);
       await createOrderMutation.mutateAsync({ data: payload });
       clearCart();
-      showSuccess({
-        message: "Rental order has been submitted.",
-        duration: 1800,
-        onDismiss: () => navigation.navigate("EquipmentList"),
+      navigation.replace("OrderConfirmation", {
+        customerName: selectedCustomer?.companyName ?? "Unknown customer",
+        rentalStartDate: values.rentalStartDate,
+        rentalEndDate: values.rentalEndDate,
+        itemsCount,
+        subtotalPerDay: subtotal,
       });
     } catch {
       showError({

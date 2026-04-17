@@ -3,11 +3,19 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CartOrderScreen } from "../screens/CartOrderScreen";
 import { EquipmentFormScreen } from "../screens/EquipmentFormScreen";
 import { EquipmentListScreen } from "../screens/EquipmentListScreen";
+import { OrderConfirmationScreen } from "../screens/OrderConfirmationScreen";
 
 export type RootStackParamList = {
   EquipmentList: undefined;
   EquipmentForm: { equipmentId?: number } | undefined;
   CartOrder: undefined;
+  OrderConfirmation: {
+    customerName: string;
+    rentalStartDate: string;
+    rentalEndDate: string;
+    itemsCount: number;
+    subtotalPerDay: number;
+  };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +45,14 @@ export const AppNavigator = () => {
         name="CartOrder"
         component={CartOrderScreen}
         options={{ title: "Create Rental Order" }}
+      />
+      <Stack.Screen
+        name="OrderConfirmation"
+        component={OrderConfirmationScreen}
+        options={{
+          title: "Order Confirmation",
+          headerBackVisible: false,
+        }}
       />
     </Stack.Navigator>
   );
