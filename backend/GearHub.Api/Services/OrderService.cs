@@ -54,8 +54,8 @@ public class OrderService(
             CustomerId = request.CustomerId,
             UserId = request.UserId,
             OrderDate = DateTime.UtcNow,
-            RentalStartDate = request.RentalStartDate,
-            RentalEndDate = request.RentalEndDate
+            RentalStartDate = NormalizeToUtc(request.RentalStartDate),
+            RentalEndDate = NormalizeToUtc(request.RentalEndDate)
         };
 
         var items = aggregatedItems.Select(item => new RentalOrderItem
@@ -71,4 +71,12 @@ public class OrderService(
         await transaction.CommitAsync(cancellationToken);
         return OrderCreationResult.Created(createdOrder);
     }
+
+    private static DateTime NormalizeToUtc(DateTime dateTime) =>
+        dateTime.Kind switch
+        {
+            DateTimeKind.Utc => dateTime,
+            DateTimeKind.Local => dateTime.ToUniversalTime(),
+            _ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc)
+        };
 }
