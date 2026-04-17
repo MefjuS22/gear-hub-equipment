@@ -8,6 +8,8 @@ import type { Client, RequestConfig, ResponseErrorConfig } from "@kubb/plugin-cl
 import type {
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
+  GetApiBrandQueryResponse,
+  GetApiCategoryQueryResponse,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   PostApiEquipmentMutationRequest,
@@ -20,6 +22,44 @@ import type {
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
 } from "./types.ts";
+
+function getGetApiBrandUrl() {
+  const res = { method: "GET", url: `/api/Brand` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Brand}
+ */
+export async function getApiBrand(config: Partial<RequestConfig> & { client?: Client } = {}) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<GetApiBrandQueryResponse, ResponseErrorConfig<Error>, unknown>({
+    method: "GET",
+    url: getGetApiBrandUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCategoryUrl() {
+  const res = { method: "GET", url: `/api/Category` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Category}
+ */
+export async function getApiCategory(config: Partial<RequestConfig> & { client?: Client } = {}) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<GetApiCategoryQueryResponse, ResponseErrorConfig<Error>, unknown>({
+    method: "GET",
+    url: getGetApiCategoryUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
 
 function getGetApiCustomerUrl() {
   const res = { method: "GET", url: `/api/Customer` as const };
@@ -56,7 +96,6 @@ export async function getApiEquipment(config: Partial<RequestConfig> & { client?
     url: getGetApiEquipmentUrl().url.toString(),
     ...requestConfig,
   });
-  console.log({res})
   return res.data;
 }
 

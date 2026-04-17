@@ -6,5 +6,5 @@
     "description": { "type": "string", "nullable": true }
   },
   "additionalProperties": false,
-  "x-readme-ref-name": "Category"
+  "x-readme-ref-name": "CategoryLookupDto"
 }

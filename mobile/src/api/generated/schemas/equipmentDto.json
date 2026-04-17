@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "integer", "format": "int32" },
+    "name": { "type": "string", "nullable": true },
+    "categoryId": { "type": "integer", "format": "int32" },
+    "categoryName": { "type": "string", "nullable": true },
+    "brandId": { "type": "integer", "format": "int32" },
+    "brandName": { "type": "string", "nullable": true },
+    "warehouseId": { "type": "integer", "format": "int32" },
+    "warehouseName": { "type": "string", "nullable": true },
+    "dailyRate": { "type": "number", "format": "double" },
+    "isAvailable": { "type": "boolean" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "EquipmentDto"
+}

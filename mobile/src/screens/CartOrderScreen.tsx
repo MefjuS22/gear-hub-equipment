@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Divider, Menu, Text, TextInput } from "react-native-paper";
+import { z } from "zod/v4";
 
 import { generatedClientConfig } from "../api/generatedConfig";
 import {
@@ -9,26 +12,70 @@ import {
   usePostApiOrderCreateorder,
 } from "../api/generated/react-query";
 import type { PostApiOrderCreateorderMutationRequest } from "../api/generated/types";
+import { orderCreateDtoSchema } from "../api/generated/zod";
 import { mapApiCustomer } from "../api/mappers";
 import { QuantityControl } from "../components/QuantityControl";
 import { ScreenShell } from "../components/ScreenShell";
 import { RootStackParamList } from "../navigation/AppNavigator";
+import { useAppToast } from "../providers/AppToastProvider";
 import { useCartStore } from "../store/useCartStore";
 import { Customer } from "../types";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CartOrder">;
 const CURRENT_USER_ID = 1;
 
+const orderFormSchema = orderCreateDtoSchema
+  .pick({
+    customerId: true,
+    userId: true,
+    rentalStartDate: true,
+    rentalEndDate: true,
+  })
+  .extend({
+    customerId: z.number().int().positive("Customer is required."),
+    userId: z.number().int().positive(),
+    rentalStartDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format for start date."),
+    rentalEndDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format for end date."),
+  })
+  .superRefine((value, context) => {
+    if (value.rentalEndDate < value.rentalStartDate) {
+      context.addIssue({
+        code: "custom",
+        path: ["rentalEndDate"],
+        message: "Rental end date must be after start date.",
+      });
+    }
+  });
+
+type OrderFormValues = z.infer<typeof orderFormSchema>;
+
 export const CartOrderScreen = ({ navigation }: Props) => {
+  const { showSuccess, showError } = useAppToast();
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const clearCart = useCartStore((state) => state.clearCart);
 
-  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
   const [customerMenuVisible, setCustomerMenuVisible] = useState(false);
-  const [rentalStartDate, setRentalStartDate] = useState("2026-04-17");
-  const [rentalEndDate, setRentalEndDate] = useState("2026-04-20");
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<OrderFormValues>({
+    resolver: zodResolver(orderFormSchema),
+    defaultValues: {
+      customerId: undefined,
+      userId: CURRENT_USER_ID,
+      rentalStartDate: "2026-04-17",
+      rentalEndDate: "2026-04-20",
+    },
+  });
   const customersQuery = useGetApiCustomer({
     client: generatedClientConfig,
     query: {
@@ -39,12 +86,13 @@ export const CartOrderScreen = ({ navigation }: Props) => {
     client: generatedClientConfig,
   });
   const customers: Customer[] = useMemo(() => customersQuery.data ?? [], [customersQuery.data]);
+  const selectedCustomerId = watch("customerId");
 
   useEffect(() => {
     if (!selectedCustomerId && customers.length > 0) {
-      setSelectedCustomerId(customers[0].id);
+      setValue("customerId", customers[0].id);
     }
-  }, [customers, selectedCustomerId]);
+  }, [customers, selectedCustomerId, setValue]);
 
   const selectedCustomer = useMemo(
     () => customers.find((customer) => customer.id === selectedCustomerId),
@@ -59,22 +107,19 @@ export const CartOrderScreen = ({ navigation }: Props) => {
     [items],
   );
 
-  const onConfirmOrder = async () => {
-    if (!selectedCustomerId) {
-      Alert.alert("Validation", "Please select a customer first.");
-      return;
-    }
-
+  const onConfirmOrder = async (values: OrderFormValues) => {
     if (items.length === 0) {
-      Alert.alert("Validation", "Your cart is empty.");
+      showError({
+        message: "Your cart is empty.",
+      });
       return;
     }
 
     const payload: PostApiOrderCreateorderMutationRequest = {
-      customerId: selectedCustomerId,
-      userId: CURRENT_USER_ID,
-      rentalStartDate,
-      rentalEndDate,
+      customerId: values.customerId,
+      userId: values.userId,
+      rentalStartDate: values.rentalStartDate,
+      rentalEndDate: values.rentalEndDate,
       items: items.map((item) => ({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
@@ -84,11 +129,15 @@ export const CartOrderScreen = ({ navigation }: Props) => {
     try {
       await createOrderMutation.mutateAsync({ data: payload });
       clearCart();
-      Alert.alert("Order Confirmed", "Rental order has been submitted.", [
-        { text: "OK", onPress: () => navigation.navigate("EquipmentList") },
-      ]);
+      showSuccess({
+        message: "Rental order has been submitted.",
+        duration: 1800,
+        onDismiss: () => navigation.navigate("EquipmentList"),
+      });
     } catch {
-      Alert.alert("Order Failed", "Unable to post order. Please check API connectivity.");
+      showError({
+        message: "Unable to post order. Please check API connectivity.",
+      });
     }
   };
 
@@ -157,12 +206,16 @@ export const CartOrderScreen = ({ navigation }: Props) => {
                   key={customer.id}
                   title={customer.companyName}
                   onPress={() => {
-                    setSelectedCustomerId(customer.id);
+                    setValue("customerId", customer.id, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    });
                     setCustomerMenuVisible(false);
                   }}
                 />
               ))}
             </Menu>
+            {errors.customerId ? <Text style={styles.errorText}>{errors.customerId.message}</Text> : null}
             {customersQuery.error ? (
               <Text variant="bodySmall" style={styles.errorText}>
                 Failed to load customers from backend.
@@ -170,18 +223,37 @@ export const CartOrderScreen = ({ navigation }: Props) => {
             ) : null}
           </View>
 
-          <TextInput
-            label="Rental Start Date (YYYY-MM-DD)"
-            mode="outlined"
-            value={rentalStartDate}
-            onChangeText={setRentalStartDate}
+          <Controller
+            control={control}
+            name="rentalStartDate"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label="Rental Start Date (YYYY-MM-DD)"
+                mode="outlined"
+                value={value}
+                onChangeText={onChange}
+                error={Boolean(errors.rentalStartDate)}
+              />
+            )}
           />
-          <TextInput
-            label="Rental End Date (YYYY-MM-DD)"
-            mode="outlined"
-            value={rentalEndDate}
-            onChangeText={setRentalEndDate}
+          {errors.rentalStartDate ? (
+            <Text style={styles.errorText}>{errors.rentalStartDate.message}</Text>
+          ) : null}
+
+          <Controller
+            control={control}
+            name="rentalEndDate"
+            render={({ field: { onChange, value } }) => (
+              <TextInput
+                label="Rental End Date (YYYY-MM-DD)"
+                mode="outlined"
+                value={value}
+                onChangeText={onChange}
+                error={Boolean(errors.rentalEndDate)}
+              />
+            )}
           />
+          {errors.rentalEndDate ? <Text style={styles.errorText}>{errors.rentalEndDate.message}</Text> : null}
           <Text variant="titleMedium">Subtotal / day: ${subtotal.toFixed(2)}</Text>
         </Card.Content>
       </Card>
@@ -192,7 +264,7 @@ export const CartOrderScreen = ({ navigation }: Props) => {
         contentStyle={styles.confirmButtonContent}
         loading={createOrderMutation.isPending}
         disabled={createOrderMutation.isPending || items.length === 0 || customersQuery.isPending}
-        onPress={onConfirmOrder}
+        onPress={handleSubmit(onConfirmOrder)}
       >
         Confirm Order
       </Button>

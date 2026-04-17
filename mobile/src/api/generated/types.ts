@@ -3,6 +3,28 @@
  * Do not edit manually.
  */
 
+export type Brand = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+};
+
+export type BrandLookupDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+};
+
 export type Category = {
   /**
    * @type integer | undefined, int32
@@ -16,13 +38,9 @@ export type Category = {
    * @type string
    */
   description?: string | null;
-  /**
-   * @type array
-   */
-  equipmentItems?: Equipment[] | null;
 };
 
-export type Warehouse = {
+export type CategoryLookupDto = {
   /**
    * @type integer | undefined, int32
    */
@@ -34,53 +52,7 @@ export type Warehouse = {
   /**
    * @type string
    */
-  location?: string | null;
-  /**
-   * @type array
-   */
-  equipmentItems?: Equipment[] | null;
-};
-
-export type Maintenance = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type integer | undefined, int32
-   */
-  equipmentId?: number;
-  /**
-   * @type object | undefined
-   */
-  equipment?: Equipment;
-  /**
-   * @type string
-   */
   description?: string | null;
-  /**
-   * @type string | undefined, date-time
-   */
-  date?: string;
-};
-
-export type Customer = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  companyName?: string | null;
-  /**
-   * @type string
-   */
-  contactPerson?: string | null;
-  /**
-   * @type array
-   */
-  rentalOrders?: RentalOrder[] | null;
 };
 
 export type Role = {
@@ -125,54 +97,26 @@ export type User = {
   rentalOrders?: RentalOrder[] | null;
 };
 
-export type RentalOrder = {
+export type Warehouse = {
   /**
    * @type integer | undefined, int32
    */
   id?: number;
   /**
-   * @type integer | undefined, int32
+   * @type string
    */
-  customerId?: number;
+  name?: string | null;
   /**
-   * @type object | undefined
+   * @type string
    */
-  customer?: Customer;
-  /**
-   * @type integer | undefined, int32
-   */
-  userId?: number;
-  /**
-   * @type object | undefined
-   */
-  user?: User;
-  /**
-   * @type string | undefined, date-time
-   */
-  orderDate?: string;
-  /**
-   * @type string | undefined, date-time
-   */
-  rentalStartDate?: string;
-  /**
-   * @type string | undefined, date-time
-   */
-  rentalEndDate?: string;
-  /**
-   * @type array
-   */
-  items?: RentalOrderItem[] | null;
+  location?: string | null;
 };
 
-export type RentalOrderItem = {
+export type Maintenance = {
   /**
    * @type integer | undefined, int32
    */
-  rentalOrderId?: number;
-  /**
-   * @type object | undefined
-   */
-  rentalOrder?: RentalOrder;
+  id?: number;
   /**
    * @type integer | undefined, int32
    */
@@ -182,13 +126,13 @@ export type RentalOrderItem = {
    */
   equipment?: Equipment;
   /**
-   * @type integer | undefined, int32
+   * @type string
    */
-  quantity?: number;
+  description?: string | null;
   /**
-   * @type number | undefined, double
+   * @type string | undefined, date-time
    */
-  unitPrice?: number;
+  date?: string;
 };
 
 export type Equipment = {
@@ -242,7 +186,92 @@ export type Equipment = {
   rentalOrderItems?: RentalOrderItem[] | null;
 };
 
-export type Brand = {
+export type RentalOrderItem = {
+  /**
+   * @type integer | undefined, int32
+   */
+  rentalOrderId?: number;
+  /**
+   * @type object | undefined
+   */
+  rentalOrder?: RentalOrder;
+  /**
+   * @type integer | undefined, int32
+   */
+  equipmentId?: number;
+  /**
+   * @type object | undefined
+   */
+  equipment?: Equipment;
+  /**
+   * @type integer | undefined, int32
+   */
+  quantity?: number;
+  /**
+   * @type number | undefined, double
+   */
+  unitPrice?: number;
+};
+
+export type RentalOrder = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  customerId?: number;
+  /**
+   * @type object | undefined
+   */
+  customer?: Customer;
+  /**
+   * @type integer | undefined, int32
+   */
+  userId?: number;
+  /**
+   * @type object | undefined
+   */
+  user?: User;
+  /**
+   * @type string | undefined, date-time
+   */
+  orderDate?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  rentalStartDate?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  rentalEndDate?: string;
+  /**
+   * @type array
+   */
+  items?: RentalOrderItem[] | null;
+};
+
+export type Customer = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  companyName?: string | null;
+  /**
+   * @type string
+   */
+  contactPerson?: string | null;
+  /**
+   * @type array
+   */
+  rentalOrders?: RentalOrder[] | null;
+};
+
+export type EquipmentDto = {
   /**
    * @type integer | undefined, int32
    */
@@ -252,9 +281,64 @@ export type Brand = {
    */
   name?: string | null;
   /**
-   * @type array
+   * @type integer | undefined, int32
    */
-  equipmentItems?: Equipment[] | null;
+  categoryId?: number;
+  /**
+   * @type string
+   */
+  categoryName?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  brandId?: number;
+  /**
+   * @type string
+   */
+  brandName?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  warehouseId?: number;
+  /**
+   * @type string
+   */
+  warehouseName?: string | null;
+  /**
+   * @type number | undefined, double
+   */
+  dailyRate?: number;
+  /**
+   * @type boolean | undefined
+   */
+  isAvailable?: boolean;
+};
+
+export type EquipmentUpsertDto = {
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  categoryId?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  brandId?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  warehouseId?: number;
+  /**
+   * @type number | undefined, double
+   */
+  dailyRate?: number;
+  /**
+   * @type boolean | undefined
+   */
+  isAvailable?: boolean;
 };
 
 export type OrderItemDto = {
@@ -294,6 +378,30 @@ export type OrderCreateDto = {
 /**
  * @description OK
  */
+export type GetApiBrand200 = BrandLookupDto[];
+
+export type GetApiBrandQueryResponse = GetApiBrand200;
+
+export type GetApiBrandQuery = {
+  Response: GetApiBrand200;
+  Errors: any;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCategory200 = CategoryLookupDto[];
+
+export type GetApiCategoryQueryResponse = GetApiCategory200;
+
+export type GetApiCategoryQuery = {
+  Response: GetApiCategory200;
+  Errors: any;
+};
+
+/**
+ * @description OK
+ */
 export type GetApiCustomer200 = Customer[];
 
 export type GetApiCustomerQueryResponse = GetApiCustomer200;
@@ -306,7 +414,7 @@ export type GetApiCustomerQuery = {
 /**
  * @description OK
  */
-export type GetApiEquipment200 = Equipment[];
+export type GetApiEquipment200 = EquipmentDto[];
 
 export type GetApiEquipmentQueryResponse = GetApiEquipment200;
 
@@ -318,9 +426,9 @@ export type GetApiEquipmentQuery = {
 /**
  * @description OK
  */
-export type PostApiEquipment200 = Equipment;
+export type PostApiEquipment200 = EquipmentDto;
 
-export type PostApiEquipmentMutationRequest = Equipment;
+export type PostApiEquipmentMutationRequest = EquipmentUpsertDto;
 
 export type PostApiEquipmentMutationResponse = PostApiEquipment200;
 
@@ -340,7 +448,7 @@ export type GetApiEquipmentIdPathParams = {
 /**
  * @description OK
  */
-export type GetApiEquipmentId200 = Equipment;
+export type GetApiEquipmentId200 = EquipmentDto;
 
 export type GetApiEquipmentIdQueryResponse = GetApiEquipmentId200;
 
@@ -362,7 +470,7 @@ export type PutApiEquipmentIdPathParams = {
  */
 export type PutApiEquipmentId200 = any;
 
-export type PutApiEquipmentIdMutationRequest = Equipment;
+export type PutApiEquipmentIdMutationRequest = EquipmentUpsertDto;
 
 export type PutApiEquipmentIdMutationResponse = PutApiEquipmentId200;
 

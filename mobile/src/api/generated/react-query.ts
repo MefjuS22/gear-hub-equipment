@@ -17,6 +17,8 @@ import type {
 import type {
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
+  GetApiBrandQueryResponse,
+  GetApiCategoryQueryResponse,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   GetApiEquipmentIdQueryResponse,
@@ -38,6 +40,8 @@ import {
 } from "@tanstack/react-query";
 import {
   deleteApiEquipmentId,
+  getApiBrand,
+  getApiCategory,
   getApiCustomer,
   getApiEquipment,
   getApiEquipmentId,
@@ -45,6 +49,124 @@ import {
   putApiEquipmentId,
   postApiOrderCreateorder,
 } from "./client.ts";
+
+export const getApiBrandQueryKey = () => [{ url: "/api/Brand" }] as const;
+
+export type GetApiBrandQueryKey = ReturnType<typeof getApiBrandQueryKey>;
+
+export function getApiBrandQueryOptions(config: Partial<RequestConfig> & { client?: Client } = {}) {
+  const queryKey = getApiBrandQueryKey();
+  return queryOptions<
+    GetApiBrandQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiBrandQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiBrand({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand}
+ */
+export function useGetApiBrand<
+  TData = GetApiBrandQueryResponse,
+  TQueryData = GetApiBrandQueryResponse,
+  TQueryKey extends QueryKey = GetApiBrandQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiBrandQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiBrandQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiBrandQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCategoryQueryKey = () => [{ url: "/api/Category" }] as const;
+
+export type GetApiCategoryQueryKey = ReturnType<typeof getApiCategoryQueryKey>;
+
+export function getApiCategoryQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCategoryQueryKey();
+  return queryOptions<
+    GetApiCategoryQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiCategoryQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCategory({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Category}
+ */
+export function useGetApiCategory<
+  TData = GetApiCategoryQueryResponse,
+  TQueryData = GetApiCategoryQueryResponse,
+  TQueryKey extends QueryKey = GetApiCategoryQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCategoryQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCategoryQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiCategoryQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
 
 export const getApiCustomerQueryKey = () => [{ url: "/api/Customer" }] as const;
 
@@ -224,6 +346,122 @@ export function useGetApiEquipmentId<
     } as unknown as QueryObserverOptions,
     queryClient,
   ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiBrandSuspenseQueryKey = () => [{ url: "/api/Brand" }] as const;
+
+export type GetApiBrandSuspenseQueryKey = ReturnType<typeof getApiBrandSuspenseQueryKey>;
+
+export function getApiBrandSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiBrandSuspenseQueryKey();
+  return queryOptions<
+    GetApiBrandQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiBrandQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiBrand({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand}
+ */
+export function useGetApiBrandSuspense<
+  TData = GetApiBrandQueryResponse,
+  TQueryKey extends QueryKey = GetApiBrandSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiBrandQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiBrandSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiBrandSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCategorySuspenseQueryKey = () => [{ url: "/api/Category" }] as const;
+
+export type GetApiCategorySuspenseQueryKey = ReturnType<typeof getApiCategorySuspenseQueryKey>;
+
+export function getApiCategorySuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCategorySuspenseQueryKey();
+  return queryOptions<
+    GetApiCategoryQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiCategoryQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCategory({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Category}
+ */
+export function useGetApiCategorySuspense<
+  TData = GetApiCategoryQueryResponse,
+  TQueryKey extends QueryKey = GetApiCategorySuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCategoryQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCategorySuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCategorySuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 

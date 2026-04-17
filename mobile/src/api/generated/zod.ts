@@ -5,41 +5,26 @@
 
 import { z } from "zod/v4";
 
+export const brandSchema = z.object({
+  id: z.optional(z.int()),
+  name: z.string().nullish(),
+});
+
+export const brandLookupDtoSchema = z.object({
+  id: z.optional(z.int()),
+  name: z.string().nullish(),
+});
+
 export const categorySchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
   description: z.string().nullish(),
-  get equipmentItems() {
-    return z.array(equipmentSchema).nullish();
-  },
 });
 
-export const warehouseSchema = z.object({
+export const categoryLookupDtoSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
-  location: z.string().nullish(),
-  get equipmentItems() {
-    return z.array(equipmentSchema).nullish();
-  },
-});
-
-export const maintenanceSchema = z.object({
-  id: z.optional(z.int()),
-  equipmentId: z.optional(z.int()),
-  get equipment() {
-    return equipmentSchema.optional();
-  },
   description: z.string().nullish(),
-  date: z.optional(z.iso.datetime()),
-});
-
-export const customerSchema = z.object({
-  id: z.optional(z.int()),
-  companyName: z.string().nullish(),
-  contactPerson: z.string().nullish(),
-  get rentalOrders() {
-    return z.array(rentalOrderSchema).nullish();
-  },
 });
 
 export const roleSchema = z.object({
@@ -63,35 +48,20 @@ export const userSchema = z.object({
   },
 });
 
-export const rentalOrderSchema = z.object({
+export const warehouseSchema = z.object({
   id: z.optional(z.int()),
-  customerId: z.optional(z.int()),
-  get customer() {
-    return customerSchema.optional();
-  },
-  userId: z.optional(z.int()),
-  get user() {
-    return userSchema.optional();
-  },
-  orderDate: z.optional(z.iso.datetime()),
-  rentalStartDate: z.optional(z.iso.datetime()),
-  rentalEndDate: z.optional(z.iso.datetime()),
-  get items() {
-    return z.array(rentalOrderItemSchema).nullish();
-  },
+  name: z.string().nullish(),
+  location: z.string().nullish(),
 });
 
-export const rentalOrderItemSchema = z.object({
-  rentalOrderId: z.optional(z.int()),
-  get rentalOrder() {
-    return rentalOrderSchema.optional();
-  },
+export const maintenanceSchema = z.object({
+  id: z.optional(z.int()),
   equipmentId: z.optional(z.int()),
   get equipment() {
     return equipmentSchema.optional();
   },
-  quantity: z.optional(z.int()),
-  unitPrice: z.optional(z.number()),
+  description: z.string().nullish(),
+  date: z.optional(z.iso.datetime()),
 });
 
 export const equipmentSchema = z.object({
@@ -119,12 +89,66 @@ export const equipmentSchema = z.object({
   },
 });
 
-export const brandSchema = z.object({
+export const rentalOrderItemSchema = z.object({
+  rentalOrderId: z.optional(z.int()),
+  get rentalOrder() {
+    return rentalOrderSchema.optional();
+  },
+  equipmentId: z.optional(z.int()),
+  get equipment() {
+    return equipmentSchema.optional();
+  },
+  quantity: z.optional(z.int()),
+  unitPrice: z.optional(z.number()),
+});
+
+export const rentalOrderSchema = z.object({
+  id: z.optional(z.int()),
+  customerId: z.optional(z.int()),
+  get customer() {
+    return customerSchema.optional();
+  },
+  userId: z.optional(z.int()),
+  get user() {
+    return userSchema.optional();
+  },
+  orderDate: z.optional(z.iso.datetime()),
+  rentalStartDate: z.optional(z.iso.datetime()),
+  rentalEndDate: z.optional(z.iso.datetime()),
+  get items() {
+    return z.array(rentalOrderItemSchema).nullish();
+  },
+});
+
+export const customerSchema = z.object({
+  id: z.optional(z.int()),
+  companyName: z.string().nullish(),
+  contactPerson: z.string().nullish(),
+  get rentalOrders() {
+    return z.array(rentalOrderSchema).nullish();
+  },
+});
+
+export const equipmentDtoSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
-  get equipmentItems() {
-    return z.array(equipmentSchema).nullish();
-  },
+  categoryId: z.optional(z.int()),
+  categoryName: z.string().nullish(),
+  brandId: z.optional(z.int()),
+  brandName: z.string().nullish(),
+  warehouseId: z.optional(z.int()),
+  warehouseName: z.string().nullish(),
+  dailyRate: z.optional(z.number()),
+  isAvailable: z.optional(z.boolean()),
+});
+
+export const equipmentUpsertDtoSchema = z.object({
+  name: z.string().nullish(),
+  categoryId: z.optional(z.int()),
+  brandId: z.optional(z.int()),
+  warehouseId: z.optional(z.int()),
+  dailyRate: z.optional(z.number()),
+  isAvailable: z.optional(z.boolean()),
 });
 
 export const orderItemDtoSchema = z.object({
@@ -145,6 +169,20 @@ export const orderCreateDtoSchema = z.object({
 /**
  * @description OK
  */
+export const getApiBrand200Schema = z.array(z.lazy(() => brandLookupDtoSchema));
+
+export const getApiBrandQueryResponseSchema = z.lazy(() => getApiBrand200Schema);
+
+/**
+ * @description OK
+ */
+export const getApiCategory200Schema = z.array(z.lazy(() => categoryLookupDtoSchema));
+
+export const getApiCategoryQueryResponseSchema = z.lazy(() => getApiCategory200Schema);
+
+/**
+ * @description OK
+ */
 export const getApiCustomer200Schema = z.array(z.lazy(() => customerSchema));
 
 export const getApiCustomerQueryResponseSchema = z.lazy(() => getApiCustomer200Schema);
@@ -152,16 +190,16 @@ export const getApiCustomerQueryResponseSchema = z.lazy(() => getApiCustomer200S
 /**
  * @description OK
  */
-export const getApiEquipment200Schema = z.array(z.lazy(() => equipmentSchema));
+export const getApiEquipment200Schema = z.array(z.lazy(() => equipmentDtoSchema));
 
 export const getApiEquipmentQueryResponseSchema = z.lazy(() => getApiEquipment200Schema);
 
 /**
  * @description OK
  */
-export const postApiEquipment200Schema = z.lazy(() => equipmentSchema);
+export const postApiEquipment200Schema = z.lazy(() => equipmentDtoSchema);
 
-export const postApiEquipmentMutationRequestSchema = z.lazy(() => equipmentSchema);
+export const postApiEquipmentMutationRequestSchema = z.lazy(() => equipmentUpsertDtoSchema);
 
 export const postApiEquipmentMutationResponseSchema = z.lazy(() => postApiEquipment200Schema);
 
@@ -172,7 +210,7 @@ export const getApiEquipmentIdPathParamsSchema = z.object({
 /**
  * @description OK
  */
-export const getApiEquipmentId200Schema = z.lazy(() => equipmentSchema);
+export const getApiEquipmentId200Schema = z.lazy(() => equipmentDtoSchema);
 
 export const getApiEquipmentIdQueryResponseSchema = z.lazy(() => getApiEquipmentId200Schema);
 
@@ -185,7 +223,7 @@ export const putApiEquipmentIdPathParamsSchema = z.object({
  */
 export const putApiEquipmentId200Schema = z.any();
 
-export const putApiEquipmentIdMutationRequestSchema = z.lazy(() => equipmentSchema);
+export const putApiEquipmentIdMutationRequestSchema = z.lazy(() => equipmentUpsertDtoSchema);
 
 export const putApiEquipmentIdMutationResponseSchema = z.lazy(() => putApiEquipmentId200Schema);
 

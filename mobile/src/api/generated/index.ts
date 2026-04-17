@@ -1,5 +1,9 @@
 export type {
   DeleteApiEquipmentIdMutationKey,
+  GetApiBrandQueryKey,
+  GetApiBrandSuspenseQueryKey,
+  GetApiCategoryQueryKey,
+  GetApiCategorySuspenseQueryKey,
   GetApiCustomerQueryKey,
   GetApiCustomerSuspenseQueryKey,
   GetApiEquipmentIdQueryKey,
@@ -12,13 +16,23 @@ export type {
 } from "./react-query.ts";
 export type {
   Brand,
+  BrandLookupDto,
   Category,
+  CategoryLookupDto,
   Customer,
   DeleteApiEquipmentId200,
   DeleteApiEquipmentIdMutation,
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
   Equipment,
+  EquipmentDto,
+  EquipmentUpsertDto,
+  GetApiBrand200,
+  GetApiBrandQuery,
+  GetApiBrandQueryResponse,
+  GetApiCategory200,
+  GetApiCategoryQuery,
+  GetApiCategoryQueryResponse,
   GetApiCustomer200,
   GetApiCustomerQuery,
   GetApiCustomerQueryResponse,
@@ -53,6 +67,8 @@ export type {
 } from "./types.ts";
 export {
   deleteApiEquipmentId,
+  getApiBrand,
+  getApiCategory,
   getApiCustomer,
   getApiEquipment,
   getApiEquipmentId,
@@ -62,6 +78,14 @@ export {
 } from "./client.ts";
 export { deleteApiEquipmentIdMutationKey } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationOptions } from "./react-query.ts";
+export { getApiBrandQueryKey } from "./react-query.ts";
+export { getApiBrandQueryOptions } from "./react-query.ts";
+export { getApiBrandSuspenseQueryKey } from "./react-query.ts";
+export { getApiBrandSuspenseQueryOptions } from "./react-query.ts";
+export { getApiCategoryQueryKey } from "./react-query.ts";
+export { getApiCategoryQueryOptions } from "./react-query.ts";
+export { getApiCategorySuspenseQueryKey } from "./react-query.ts";
+export { getApiCategorySuspenseQueryOptions } from "./react-query.ts";
 export { getApiCustomerQueryKey } from "./react-query.ts";
 export { getApiCustomerQueryOptions } from "./react-query.ts";
 export { getApiCustomerSuspenseQueryKey } from "./react-query.ts";
@@ -81,6 +105,10 @@ export { postApiOrderCreateorderMutationOptions } from "./react-query.ts";
 export { putApiEquipmentIdMutationKey } from "./react-query.ts";
 export { putApiEquipmentIdMutationOptions } from "./react-query.ts";
 export { useDeleteApiEquipmentId } from "./react-query.ts";
+export { useGetApiBrand } from "./react-query.ts";
+export { useGetApiBrandSuspense } from "./react-query.ts";
+export { useGetApiCategory } from "./react-query.ts";
+export { useGetApiCategorySuspense } from "./react-query.ts";
 export { useGetApiCustomer } from "./react-query.ts";
 export { useGetApiCustomerSuspense } from "./react-query.ts";
 export { useGetApiEquipment } from "./react-query.ts";
@@ -91,13 +119,21 @@ export { usePostApiEquipment } from "./react-query.ts";
 export { usePostApiOrderCreateorder } from "./react-query.ts";
 export { usePutApiEquipmentId } from "./react-query.ts";
 export {
+  brandLookupDtoSchema,
   brandSchema,
+  categoryLookupDtoSchema,
   categorySchema,
   customerSchema,
   deleteApiEquipmentId200Schema,
   deleteApiEquipmentIdMutationResponseSchema,
   deleteApiEquipmentIdPathParamsSchema,
+  equipmentDtoSchema,
   equipmentSchema,
+  equipmentUpsertDtoSchema,
+  getApiBrand200Schema,
+  getApiBrandQueryResponseSchema,
+  getApiCategory200Schema,
+  getApiCategoryQueryResponseSchema,
   getApiCustomer200Schema,
   getApiCustomerQueryResponseSchema,
   getApiEquipment200Schema,

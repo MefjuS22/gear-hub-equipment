@@ -1,6 +1,6 @@
 import type {
   Customer as GeneratedCustomer,
-  Equipment as GeneratedEquipment,
+  EquipmentDto as GeneratedEquipment,
 } from "./generated/types";
 import type { Customer, Equipment } from "../types";
 
