@@ -3,7 +3,6 @@ import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiEquipment } from "../../api/generated/react-query";
 import { warehouseOptionsFromEquipment } from "../../lib/warehouseOptionsFromEquipment";
 
-/** Lista magazynów wyprowadzona z przypisań sprzętu — brak GET /Warehouse w OpenAPI. */
 export function useWarehousesAdmin() {
   const equipment = useGetApiEquipment({ client: gearhubApiClientOptions });
   const rows = useMemo(

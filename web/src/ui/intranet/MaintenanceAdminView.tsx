@@ -1,11 +1,15 @@
+import { Typography } from "@mui/material";
+
 export function MaintenanceAdminView() {
   return (
     <div>
-      <h1 className="h4 mb-3">Serwisy / konserwacja</h1>
-      <p className="text-muted">
-        Brak endpointów konserwacji w obecnym OpenAPI. Po dodaniu ich w backendzie uruchom ponownie{" "}
+      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+        Maintenance
+      </Typography>
+      <Typography color="text.secondary">
+        No maintenance endpoints in the current OpenAPI. After adding them on the backend, run{" "}
         <code>npm run api:generate</code>.
-      </p>
+      </Typography>
     </div>
   );
 }

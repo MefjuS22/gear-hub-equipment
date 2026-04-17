@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import { useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
@@ -15,6 +16,7 @@ import { equipmentFormSchema, type EquipmentFormValues } from "../../lib/formSch
 import { warehouseOptionsFromEquipment } from "../../lib/warehouseOptionsFromEquipment";
 
 export function useEquipmentAdmin() {
+  const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
   const primedDefaults = useRef(false);
 
@@ -55,6 +57,7 @@ export function useEquipmentAdmin() {
     mutation: {
       onSuccess: () => {
         qc.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
+        enqueueSnackbar("Equipment added.", { variant: "success" });
         form.reset({
           name: "",
           categoryId: form.getValues("categoryId"),
@@ -64,13 +67,22 @@ export function useEquipmentAdmin() {
           isAvailable: true,
         });
       },
+      onError: (e) => {
+        enqueueSnackbar(String((e as Error)?.message ?? e), { variant: "error" });
+      },
     },
   });
 
   const remove = useDeleteApiEquipmentId({
     client: gearhubApiClientOptions,
     mutation: {
-      onSuccess: () => qc.invalidateQueries({ queryKey: getApiEquipmentQueryKey() }),
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
+        enqueueSnackbar("Equipment removed.", { variant: "info" });
+      },
+      onError: (e) => {
+        enqueueSnackbar(String((e as Error)?.message ?? e), { variant: "error" });
+      },
     },
   });
 

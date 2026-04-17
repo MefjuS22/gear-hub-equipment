@@ -1,37 +1,37 @@
 import { z } from "zod";
 
 export const categoryFormSchema = z.object({
-  name: z.string().min(1, "Podaj nazwę"),
+  name: z.string().min(1, "Name is required"),
   description: z.string(),
 });
 export type CategoryFormValues = z.infer<typeof categoryFormSchema>;
 
 export const brandFormSchema = z.object({
-  name: z.string().min(1, "Podaj nazwę"),
+  name: z.string().min(1, "Name is required"),
 });
 export type BrandFormValues = z.infer<typeof brandFormSchema>;
 
 export const warehouseFormSchema = z.object({
-  name: z.string().min(1, "Podaj nazwę"),
-  location: z.string().min(1, "Podaj lokalizację"),
+  name: z.string().min(1, "Name is required"),
+  location: z.string().min(1, "Location is required"),
 });
 export type WarehouseFormValues = z.infer<typeof warehouseFormSchema>;
 
 export const customerFormSchema = z.object({
-  companyName: z.string().min(1, "Podaj firmę"),
-  contactPerson: z.string().min(1, "Podaj osobę kontaktową"),
+  companyName: z.string().min(1, "Company name is required"),
+  contactPerson: z.string().min(1, "Contact person is required"),
 });
 export type CustomerFormValues = z.infer<typeof customerFormSchema>;
 
 export const userFormSchema = z.object({
-  name: z.string().min(1, "Podaj nazwę"),
-  email: z.string().email("Podaj poprawny email"),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Enter a valid email"),
   roleId: z.number().int().positive(),
 });
 export type UserFormValues = z.infer<typeof userFormSchema>;
 
 export const equipmentFormSchema = z.object({
-  name: z.string().min(1, "Podaj nazwę"),
+  name: z.string().min(1, "Name is required"),
   categoryId: z.number().int().positive(),
   brandId: z.number().int().positive(),
   warehouseId: z.number().int().positive(),
@@ -42,14 +42,13 @@ export type EquipmentFormValues = z.infer<typeof equipmentFormSchema>;
 
 export const maintenanceFormSchema = z.object({
   equipmentId: z.number().int().positive(),
-  description: z.string().min(1, "Podaj opis"),
-  /** yyyy-MM-dd */
-  date: z.string().min(1, "Podaj datę"),
+  description: z.string().min(1, "Description is required"),
+  date: z.string().min(1, "Date is required"),
 });
 export type MaintenanceFormValues = z.infer<typeof maintenanceFormSchema>;
 
 export const portalTextFormSchema = z.object({
-  key: z.string().min(1, "Podaj klucz"),
+  key: z.string().min(1, "Key is required"),
   title: z.string(),
   body: z.string(),
   sortOrder: z.number().int(),
@@ -63,7 +62,7 @@ export const orderCheckoutFormSchema = z
     rentalEnd: z.string().min(1),
   })
   .refine((d) => new Date(d.rentalEnd) > new Date(d.rentalStart), {
-    message: "Koniec musi być po dacie startu",
+    message: "End date must be after the start date",
     path: ["rentalEnd"],
   });
 export type OrderCheckoutFormValues = z.infer<typeof orderCheckoutFormSchema>;

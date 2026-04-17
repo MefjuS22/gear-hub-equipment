@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useSnackbar } from "notistack";
+import { useEffect, useMemo, useRef } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import {
@@ -13,8 +14,10 @@ import { orderCheckoutFormSchema, type OrderCheckoutFormValues } from "../../lib
 import { useCart } from "../../ui/portal/cartContext";
 
 export function useCartCheckout() {
+  const { enqueueSnackbar } = useSnackbar();
   const { lines, clear, setQuantity, remove } = useCart();
   const queryClient = useQueryClient();
+  const customerPrimed = useRef(false);
 
   const tomorrow = useMemo(() => {
     const d = new Date();
@@ -36,15 +39,26 @@ export function useCartCheckout() {
 
   const customers = useGetApiCustomer({ client: gearhubApiClientOptions });
 
+  useEffect(() => {
+    const rows = customers.data;
+    if (!rows?.length || customerPrimed.current) return;
+    const firstId = rows[0]?.id;
+    if (firstId == null) return;
+    customerPrimed.current = true;
+    form.setValue("customerId", firstId);
+  }, [customers.data, form]);
+
   const submit = usePostApiOrderCreateorder({
     client: gearhubApiClientOptions,
     mutation: {
       onSuccess: () => {
         clear();
         queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
-        alert("Zamówienie złożone.");
+        enqueueSnackbar("Order placed.", { variant: "success" });
       },
-      onError: (e) => alert(String((e as Error)?.message ?? e)),
+      onError: (e) => {
+        enqueueSnackbar(String((e as Error)?.message ?? e), { variant: "error" });
+      },
     },
   });
 

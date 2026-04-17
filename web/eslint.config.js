@@ -23,7 +23,6 @@ export default defineConfig([
   {
     files: ['src/routes/**/*.{ts,tsx}', 'src/ui/portal/cartContext.tsx'],
     rules: {
-      // TanStack Router: pliki tras eksportują `Route` + komponenty layoutu; kontekst eksportuje hook.
       'react-refresh/only-export-components': 'off',
     },
   },

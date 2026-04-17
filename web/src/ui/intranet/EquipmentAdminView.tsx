@@ -1,110 +1,230 @@
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  FormControlLabel,
+  MenuItem,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { PlusCircle, Trash2 } from "lucide-react";
+import { Controller } from "react-hook-form";
+import { formatUsd } from "../../lib/formatCurrency";
 import { useEquipmentAdmin } from "../../hooks/intranet/useEquipmentAdmin";
 
 export function EquipmentAdminView() {
   const { equipment, categories, brands, warehouses, remove, form, handleSubmitForm, create } =
     useEquipmentAdmin();
 
-  if (equipment.isLoading) return <p>Ładowanie…</p>;
+  if (equipment.isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <div>
-      <h1 className="h4 mb-3">Sprzęt</h1>
-      <form onSubmit={handleSubmitForm} className="card mb-3">
-        <div className="card-body row g-2">
-          <div className="col-md-4">
-            <input
-              {...form.register("name")}
-              className={`form-control ${form.formState.errors.name ? "is-invalid" : ""}`}
-              placeholder="Nazwa"
-            />
-            {form.formState.errors.name && (
-              <div className="invalid-feedback d-block">{form.formState.errors.name.message}</div>
+    <Box>
+      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+        Equipment
+      </Typography>
+      <Paper
+        component="form"
+        variant="outlined"
+        onSubmit={handleSubmitForm}
+        noValidate
+        sx={{ p: 2, mb: 3, display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 2,
+            alignItems: "flex-start",
+          }}
+        >
+          <Controller
+            name="name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                label="Name"
+                size="small"
+                sx={{ minWidth: 180, flex: "2 1 180px" }}
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
             )}
-          </div>
-          <div className="col-md-2">
-            <select {...form.register("categoryId", { valueAsNumber: true })} className="form-select">
-              {categories.data?.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-2">
-            <select {...form.register("brandId", { valueAsNumber: true })} className="form-select">
-              {brands.data?.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-2">
-            <select {...form.register("warehouseId", { valueAsNumber: true })} className="form-select">
-              {warehouses.length > 0 ? (
-                warehouses.map((w) => (
-                  <option key={w.id} value={w.id}>
-                    {w.name}
-                  </option>
-                ))
-              ) : (
-                <option value={1}>Magazyn #1 (dodaj najpierw sprzęt w bazie)</option>
-              )}
-            </select>
-          </div>
-          <div className="col-md-1">
-            <input
-              type="number"
-              step="0.01"
-              {...form.register("dailyRate", { valueAsNumber: true })}
-              className={`form-control ${form.formState.errors.dailyRate ? "is-invalid" : ""}`}
-            />
-          </div>
-          <div className="col-md-1 form-check mt-2">
-            <input type="checkbox" className="form-check-input" id="avail" {...form.register("isAvailable")} />
-            <label className="form-check-label" htmlFor="avail">
-              Dost.
-            </label>
-          </div>
-          <div className="col-12">
-            <button type="submit" className="btn btn-primary" disabled={create.isPending}>
-              Dodaj sprzęt
-            </button>
-          </div>
-        </div>
-      </form>
-      <div className="table-responsive">
-        <table className="table table-sm bg-white">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nazwa</th>
-              <th>Stawka</th>
-              <th>Dostępny</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
+          />
+          <Controller
+            name="categoryId"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <TextField
+                select
+                label="Category"
+                size="small"
+                sx={{ minWidth: 140, flex: "1 1 120px" }}
+                value={field.value}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                onBlur={field.onBlur}
+                name={field.name}
+                inputRef={field.ref}
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              >
+                {categories.data?.map((c) => (
+                  <MenuItem key={c.id} value={c.id ?? 0}>
+                    {c.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <Controller
+            name="brandId"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <TextField
+                select
+                label="Brand"
+                size="small"
+                sx={{ minWidth: 140, flex: "1 1 120px" }}
+                value={field.value}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                onBlur={field.onBlur}
+                name={field.name}
+                inputRef={field.ref}
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              >
+                {brands.data?.map((b) => (
+                  <MenuItem key={b.id} value={b.id ?? 0}>
+                    {b.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+          />
+          <Controller
+            name="warehouseId"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <TextField
+                select
+                label="Warehouse"
+                size="small"
+                sx={{ minWidth: 160, flex: "1 1 140px" }}
+                value={field.value}
+                onChange={(e) => field.onChange(Number(e.target.value))}
+                onBlur={field.onBlur}
+                name={field.name}
+                inputRef={field.ref}
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              >
+                {warehouses.length > 0 ? (
+                  warehouses.map((w) => (
+                    <MenuItem key={w.id} value={w.id ?? 0}>
+                      {w.name}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value={1}>Warehouse #1 (add equipment in DB first)</MenuItem>
+                )}
+              </TextField>
+            )}
+          />
+          <Controller
+            name="dailyRate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <TextField
+                label="Daily rate (USD)"
+                type="number"
+                size="small"
+                slotProps={{ htmlInput: { step: "0.01" } }}
+                sx={{ width: 120 }}
+                name={field.name}
+                inputRef={field.ref}
+                value={field.value}
+                onChange={(e) => field.onChange(e.target.value === "" ? 0 : Number(e.target.value))}
+                onBlur={field.onBlur}
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
+            )}
+          />
+          <Controller
+            name="isAvailable"
+            control={form.control}
+            render={({ field }) => (
+              <FormControlLabel
+                sx={{ mt: 0.5 }}
+                control={
+                  <Checkbox
+                    checked={!!field.value}
+                    onChange={(_, v) => field.onChange(v)}
+                    ref={field.ref}
+                    name={field.name}
+                    onBlur={field.onBlur}
+                  />
+                }
+                label="Available"
+              />
+            )}
+          />
+        </Box>
+        <Box>
+          <Button type="submit" variant="contained" disabled={create.isPending} startIcon={<PlusCircle size={18} aria-hidden />}>
+            Add equipment
+          </Button>
+        </Box>
+      </Paper>
+      <TableContainer component={Paper} variant="outlined">
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Daily rate</TableCell>
+              <TableCell>Available</TableCell>
+              <TableCell align="right" width={100} />
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {equipment.data?.map((e) => (
-              <tr key={e.id}>
-                <td>{e.id}</td>
-                <td>{e.name}</td>
-                <td>{e.dailyRate}</td>
-                <td>{e.isAvailable ? "tak" : "nie"}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-outline-danger"
+              <TableRow key={e.id}>
+                <TableCell>{e.id}</TableCell>
+                <TableCell>{e.name}</TableCell>
+                <TableCell align="right">{e.dailyRate != null ? formatUsd(e.dailyRate) : "—"}</TableCell>
+                <TableCell>{e.isAvailable ? "yes" : "no"}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                    startIcon={<Trash2 size={16} aria-hidden />}
                     onClick={() => e.id != null && remove.mutate({ id: e.id })}
                   >
-                    Usuń
-                  </button>
-                </td>
-              </tr>
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }

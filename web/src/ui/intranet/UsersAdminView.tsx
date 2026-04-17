@@ -1,11 +1,15 @@
+import { Typography } from "@mui/material";
+
 export function UsersAdminView() {
   return (
     <div>
-      <h1 className="h4 mb-3">Użytkownicy</h1>
-      <p className="text-muted">
-        Ten ekran wymaga endpointów użytkowników w API — w wygenerowanym OpenAPI ich nie ma. Rozszerz backend
-        (np. GET/POST /api/User), potem ponownie wygeneruj Kubb.
-      </p>
+      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+        Users
+      </Typography>
+      <Typography color="text.secondary">
+        This screen needs user endpoints in the API — they are missing from the generated OpenAPI. Extend the
+        backend (e.g. GET/POST /api/User), then run <code>npm run api:generate</code> again.
+      </Typography>
     </div>
   );
 }
