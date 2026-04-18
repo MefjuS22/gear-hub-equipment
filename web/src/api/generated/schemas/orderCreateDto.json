@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "customerId": { "type": "integer", "format": "int32" },
+    "userId": { "type": "integer", "format": "int32" },
+    "rentalStartDate": { "type": "string", "format": "date-time" },
+    "rentalEndDate": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "equipmentId": { "type": "integer", "format": "int32" },
+          "quantity": { "type": "integer", "format": "int32" }
+        },
+        "additionalProperties": false,
+        "x-readme-ref-name": "OrderItemDto"
+      },
+      "nullable": true
+    }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "OrderCreateDto"
+}

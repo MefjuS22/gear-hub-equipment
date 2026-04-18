@@ -6,7 +6,6 @@ const normalizeApiUrl = (rawUrl: string) => {
     .replace(/^http:\/(?!\/)/i, "http://")
     .replace(/^https:\/(?!\/)/i, "https://");
 
-  // Generated Kubb endpoints already include `/api/...`.
   return fixedProtocolUrl.replace(/\/api\/?$/i, "");
 };
 
