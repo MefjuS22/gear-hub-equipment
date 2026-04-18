@@ -219,7 +219,7 @@ function PortalTopBar() {
           </Badge>
         </Box>
       </Toolbar>
-      {/* Same vertical space on xs whether on catalog or cart — avoids header height jump */}
+
       <Box
         sx={{
           display: { xs: "block", sm: "none" },

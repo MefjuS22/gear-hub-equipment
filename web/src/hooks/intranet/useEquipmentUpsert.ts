@@ -22,7 +22,6 @@ import {
 import { warehouseOptionsFromEquipment } from "../../lib/warehouseOptionsFromEquipment";
 
 export type UseEquipmentUpsertOptions = {
-  /** When set, load this item and save with PUT */
   equipmentId?: number;
 };
 

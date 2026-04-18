@@ -46,7 +46,6 @@ type CatalogOrderControlProps = {
   name: string;
   dailyRate: number;
   isAvailable: boolean;
-  /** Larger tap targets + typography (featured grid card) */
   featured?: boolean;
   fullWidth?: boolean;
 };

@@ -1,4 +1,3 @@
-/* Reserve gutter so showing/hiding the vertical scrollbar does not shift centered layouts */
 html {
   scrollbar-gutter: stable;
 }

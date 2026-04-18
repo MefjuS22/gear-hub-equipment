@@ -5,9 +5,6 @@ export const Route = createRootRoute({
   component: RootLayout,
 });
 
-/**
- * Global shell only: no app bars here. Each area (`/`, `/portal`, `/intranet`) owns its full layout.
- */
 function RootLayout() {
   return (
     <Box
@@ -18,7 +15,6 @@ function RootLayout() {
         bgcolor: "background.default",
       }}
     >
-      {/* Flex child so portal/intranet shells can use flex:1 + minHeight:0 for scroll */}
       <Box
         sx={{
           flex: 1,

@@ -5,9 +5,6 @@ import type { ReactNode } from "react";
 
 const shellMaxWidth = 1200;
 
-/**
- * Marketing / landing shell: own top bar and full-height column. Used only under `/`.
- */
 export function HomeLayout({ children }: { children: ReactNode }) {
   return (
     <Box
