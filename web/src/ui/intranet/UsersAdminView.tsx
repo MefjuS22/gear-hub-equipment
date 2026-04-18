@@ -1,21 +1,14 @@
 import { Typography } from "@mui/material";
+import { UserCog } from "lucide-react";
+import { EmptyState } from "../common";
 
 export function UsersAdminView() {
   return (
     <div>
-      <Typography
-        variant="h5"
-        component="h1"
-        gutterBottom
-        sx={{ fontWeight: 600 }}
-      >
+      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
         Users
       </Typography>
-      <Typography color="text.secondary">
-        This screen needs user endpoints in the API — they are missing from the
-        generated OpenAPI. Extend the backend (e.g. GET/POST /api/User), then
-        run <code>npm run api:generate</code> again.
-      </Typography>
+      <EmptyState title="Coming soon" description="Staff accounts and roles will be manageable here." icon={UserCog} />
     </div>
   );
 }

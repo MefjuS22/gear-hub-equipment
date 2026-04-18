@@ -10,10 +10,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { Users } from "lucide-react";
 import { useCustomersAdmin } from "../../hooks/intranet/useCustomersAdmin";
+import { EmptyState } from "../common";
 
 export function CustomersAdminView() {
   const { list } = useCustomersAdmin();
+  const rows = list.data ?? [];
 
   if (list.isLoading) {
     return (
@@ -33,30 +36,30 @@ export function CustomersAdminView() {
       >
         Customers
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        The API only exposes a customers list (GET) — create/delete would need
-        backend support.
-      </Typography>
-      <TableContainer component={Paper} variant="outlined">
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Company</TableCell>
-              <TableCell>Contact</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {list.data?.map((c) => (
-              <TableRow key={c.id}>
-                <TableCell>{c.id}</TableCell>
-                <TableCell>{c.companyName}</TableCell>
-                <TableCell>{c.contactPerson}</TableCell>
+      {rows.length === 0 ? (
+        <EmptyState title="Coming soon" description="Customer management will appear here once available." icon={Users} />
+      ) : (
+        <TableContainer component={Paper} variant="outlined">
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Company</TableCell>
+                <TableCell>Contact</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {rows.map((c) => (
+                <TableRow key={c.id}>
+                  <TableCell>{c.id}</TableCell>
+                  <TableCell>{c.companyName}</TableCell>
+                  <TableCell>{c.contactPerson}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </div>
   );
 }

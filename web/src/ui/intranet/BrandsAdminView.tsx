@@ -10,10 +10,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { Tag } from "lucide-react";
 import { useBrandsAdmin } from "../../hooks/intranet/useBrandsAdmin";
+import { EmptyState } from "../common";
 
 export function BrandsAdminView() {
   const { list } = useBrandsAdmin();
+  const rows = list.data ?? [];
 
   if (list.isLoading) {
     return (
@@ -33,28 +36,28 @@ export function BrandsAdminView() {
       >
         Brands
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        The API only exposes a brands list (GET) — create/delete would need
-        backend support.
-      </Typography>
-      <TableContainer component={Paper} variant="outlined">
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {list.data?.map((b) => (
-              <TableRow key={b.id}>
-                <TableCell>{b.id}</TableCell>
-                <TableCell>{b.name}</TableCell>
+      {rows.length === 0 ? (
+        <EmptyState title="Coming soon" description="Brand management will appear here once available." icon={Tag} />
+      ) : (
+        <TableContainer component={Paper} variant="outlined">
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Name</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {rows.map((b) => (
+                <TableRow key={b.id}>
+                  <TableCell>{b.id}</TableCell>
+                  <TableCell>{b.name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
     </div>
   );
 }

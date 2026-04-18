@@ -1,20 +1,14 @@
 import { Typography } from "@mui/material";
+import { FileText } from "lucide-react";
+import { EmptyState } from "../common";
 
 export function PortalTextsAdminView() {
   return (
     <div>
-      <Typography
-        variant="h5"
-        component="h1"
-        gutterBottom
-        sx={{ fontWeight: 600 }}
-      >
+      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
         Portal content (CMS)
       </Typography>
-      <Typography color="text.secondary">
-        No portal content endpoints in the generated client. The portal hero is
-        static until the server exposes a suitable API.
-      </Typography>
+      <EmptyState title="Coming soon" description="Edit portal copy and hero content from here when available." icon={FileText} />
     </div>
   );
 }
