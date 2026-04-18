@@ -1,0 +1,16 @@
+{
+  "enum": [
+    "unknown",
+    "validationFailed",
+    "internalError",
+    "equipmentNotFound",
+    "equipmentReferenceInvalid",
+    "equipmentReloadFailed",
+    "orderCustomerNotFound",
+    "orderUserNotFound",
+    "orderEquipmentNotFound",
+    "orderEquipmentUnavailable"
+  ],
+  "type": "string",
+  "x-readme-ref-name": "ApiErrorCode"
+}

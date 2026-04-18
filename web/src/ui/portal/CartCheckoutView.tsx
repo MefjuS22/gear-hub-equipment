@@ -24,7 +24,7 @@ import { Controller } from "react-hook-form";
 import { formatUsd } from "../../lib/formatCurrency";
 import { useCartCheckout } from "../../hooks/portal/useCartCheckout";
 import { PORTAL_CHECKOUT_STAFF_USER_ID } from "../../lib/portalConstants";
-import { EmptyState, PageHeader, SectionCard } from "../common";
+import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
 
 export function CartCheckoutView() {
   const {
@@ -36,6 +36,7 @@ export function CartCheckoutView() {
     customers,
     submit,
     subtotal,
+    orderSubmitError,
   } = useCartCheckout();
 
   if (lines.length === 0) {
@@ -62,6 +63,10 @@ export function CartCheckoutView() {
         title="Order builder"
         subtitle="Configure client details and rental parameters."
       />
+
+      {orderSubmitError ? (
+        <ErrorAlert message={orderSubmitError} sx={{ mb: 2 }} />
+      ) : null}
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 5 }}>

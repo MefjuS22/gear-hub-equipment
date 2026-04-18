@@ -12,19 +12,26 @@ import type {
 import type {
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
+  DeleteApiEquipmentId404,
   GetApiBrandQueryResponse,
   GetApiCategoryQueryResponse,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   PostApiEquipmentMutationRequest,
   PostApiEquipmentMutationResponse,
+  PostApiEquipment400,
+  PostApiEquipment500,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
+  GetApiEquipmentId404,
   PutApiEquipmentIdMutationRequest,
   PutApiEquipmentIdMutationResponse,
   PutApiEquipmentIdPathParams,
+  PutApiEquipmentId400,
+  PutApiEquipmentId404,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
+  PostApiOrderCreateorder400,
 } from "./types.ts";
 
 function getGetApiBrandUrl() {
@@ -147,7 +154,7 @@ export async function postApiEquipment(
 
   const res = await request<
     PostApiEquipmentMutationResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<PostApiEquipment400 | PostApiEquipment500>,
     PostApiEquipmentMutationRequest
   >({
     method: "POST",
@@ -175,7 +182,7 @@ export async function getApiEquipmentId(
 
   const res = await request<
     GetApiEquipmentIdQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiEquipmentId404>,
     unknown
   >({
     method: "GET",
@@ -206,7 +213,7 @@ export async function putApiEquipmentId(
 
   const res = await request<
     PutApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<PutApiEquipmentId400 | PutApiEquipmentId404>,
     PutApiEquipmentIdMutationRequest
   >({
     method: "PUT",
@@ -234,7 +241,7 @@ export async function deleteApiEquipmentId(
 
   const res = await request<
     DeleteApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<DeleteApiEquipmentId404>,
     unknown
   >({
     method: "DELETE",
@@ -264,7 +271,7 @@ export async function postApiOrderCreateorder(
 
   const res = await request<
     PostApiOrderCreateorderMutationResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<PostApiOrderCreateorder400>,
     PostApiOrderCreateorderMutationRequest
   >({
     method: "POST",

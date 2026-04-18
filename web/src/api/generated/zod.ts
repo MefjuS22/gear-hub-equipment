@@ -5,6 +5,27 @@
 
 import { z } from "zod/v4";
 
+export const apiErrorCodeSchema = z.enum([
+  "unknown",
+  "validationFailed",
+  "internalError",
+  "equipmentNotFound",
+  "equipmentReferenceInvalid",
+  "equipmentReloadFailed",
+  "orderCustomerNotFound",
+  "orderUserNotFound",
+  "orderEquipmentNotFound",
+  "orderEquipmentUnavailable",
+]);
+
+export const apiErrorResponseSchema = z.object({
+  get code() {
+    return apiErrorCodeSchema.optional();
+  },
+  message: z.string().nullish(),
+  errors: z.object({}).catchall(z.array(z.string())).nullish(),
+});
+
 export const brandSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
@@ -207,16 +228,26 @@ export const getApiEquipmentQueryResponseSchema = z.lazy(
 );
 
 /**
- * @description OK
+ * @description Created
  */
-export const postApiEquipment200Schema = z.lazy(() => equipmentDtoSchema);
+export const postApiEquipment201Schema = z.lazy(() => equipmentDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiEquipment400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Internal Server Error
+ */
+export const postApiEquipment500Schema = z.lazy(() => apiErrorResponseSchema);
 
 export const postApiEquipmentMutationRequestSchema = z.lazy(
   () => equipmentUpsertDtoSchema,
 );
 
 export const postApiEquipmentMutationResponseSchema = z.lazy(
-  () => postApiEquipment200Schema,
+  () => postApiEquipment201Schema,
 );
 
 export const getApiEquipmentIdPathParamsSchema = z.object({
@@ -228,6 +259,11 @@ export const getApiEquipmentIdPathParamsSchema = z.object({
  */
 export const getApiEquipmentId200Schema = z.lazy(() => equipmentDtoSchema);
 
+/**
+ * @description Not Found
+ */
+export const getApiEquipmentId404Schema = z.lazy(() => apiErrorResponseSchema);
+
 export const getApiEquipmentIdQueryResponseSchema = z.lazy(
   () => getApiEquipmentId200Schema,
 );
@@ -237,16 +273,26 @@ export const putApiEquipmentIdPathParamsSchema = z.object({
 });
 
 /**
- * @description OK
+ * @description No Content
  */
-export const putApiEquipmentId200Schema = z.any();
+export const putApiEquipmentId204Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const putApiEquipmentId400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Not Found
+ */
+export const putApiEquipmentId404Schema = z.lazy(() => apiErrorResponseSchema);
 
 export const putApiEquipmentIdMutationRequestSchema = z.lazy(
   () => equipmentUpsertDtoSchema,
 );
 
 export const putApiEquipmentIdMutationResponseSchema = z.lazy(
-  () => putApiEquipmentId200Schema,
+  () => putApiEquipmentId204Schema,
 );
 
 export const deleteApiEquipmentIdPathParamsSchema = z.object({
@@ -254,23 +300,37 @@ export const deleteApiEquipmentIdPathParamsSchema = z.object({
 });
 
 /**
- * @description OK
+ * @description No Content
  */
-export const deleteApiEquipmentId200Schema = z.any();
+export const deleteApiEquipmentId204Schema = z.any();
+
+/**
+ * @description Not Found
+ */
+export const deleteApiEquipmentId404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
 
 export const deleteApiEquipmentIdMutationResponseSchema = z.lazy(
-  () => deleteApiEquipmentId200Schema,
+  () => deleteApiEquipmentId204Schema,
 );
 
 /**
- * @description OK
+ * @description Created
  */
-export const postApiOrderCreateorder200Schema = z.any();
+export const postApiOrderCreateorder201Schema = z.lazy(() => rentalOrderSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiOrderCreateorder400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
 
 export const postApiOrderCreateorderMutationRequestSchema = z.lazy(
   () => orderCreateDtoSchema,
 );
 
 export const postApiOrderCreateorderMutationResponseSchema = z.lazy(
-  () => postApiOrderCreateorder200Schema,
+  () => postApiOrderCreateorder201Schema,
 );

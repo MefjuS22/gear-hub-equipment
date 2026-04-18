@@ -3,6 +3,41 @@
  * Do not edit manually.
  */
 
+export const apiErrorCodeEnum = {
+  unknown: "unknown",
+  validationFailed: "validationFailed",
+  internalError: "internalError",
+  equipmentNotFound: "equipmentNotFound",
+  equipmentReferenceInvalid: "equipmentReferenceInvalid",
+  equipmentReloadFailed: "equipmentReloadFailed",
+  orderCustomerNotFound: "orderCustomerNotFound",
+  orderUserNotFound: "orderUserNotFound",
+  orderEquipmentNotFound: "orderEquipmentNotFound",
+  orderEquipmentUnavailable: "orderEquipmentUnavailable",
+} as const;
+
+export type ApiErrorCodeEnumKey =
+  (typeof apiErrorCodeEnum)[keyof typeof apiErrorCodeEnum];
+
+export type ApiErrorCode = ApiErrorCodeEnumKey;
+
+export type ApiErrorResponse = {
+  /**
+   * @type string | undefined
+   */
+  code?: ApiErrorCode;
+  /**
+   * @type string
+   */
+  message?: string | null;
+  /**
+   * @type object
+   */
+  errors?: {
+    [key: string]: string[];
+  } | null;
+};
+
 export type Brand = {
   /**
    * @type integer | undefined, int32
@@ -424,18 +459,28 @@ export type GetApiEquipmentQuery = {
 };
 
 /**
- * @description OK
+ * @description Created
  */
-export type PostApiEquipment200 = EquipmentDto;
+export type PostApiEquipment201 = EquipmentDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiEquipment400 = ApiErrorResponse;
+
+/**
+ * @description Internal Server Error
+ */
+export type PostApiEquipment500 = ApiErrorResponse;
 
 export type PostApiEquipmentMutationRequest = EquipmentUpsertDto;
 
-export type PostApiEquipmentMutationResponse = PostApiEquipment200;
+export type PostApiEquipmentMutationResponse = PostApiEquipment201;
 
 export type PostApiEquipmentMutation = {
-  Response: PostApiEquipment200;
+  Response: PostApiEquipment201;
   Request: PostApiEquipmentMutationRequest;
-  Errors: any;
+  Errors: PostApiEquipment400 | PostApiEquipment500;
 };
 
 export type GetApiEquipmentIdPathParams = {
@@ -450,12 +495,17 @@ export type GetApiEquipmentIdPathParams = {
  */
 export type GetApiEquipmentId200 = EquipmentDto;
 
+/**
+ * @description Not Found
+ */
+export type GetApiEquipmentId404 = ApiErrorResponse;
+
 export type GetApiEquipmentIdQueryResponse = GetApiEquipmentId200;
 
 export type GetApiEquipmentIdQuery = {
   Response: GetApiEquipmentId200;
   PathParams: GetApiEquipmentIdPathParams;
-  Errors: any;
+  Errors: GetApiEquipmentId404;
 };
 
 export type PutApiEquipmentIdPathParams = {
@@ -466,19 +516,29 @@ export type PutApiEquipmentIdPathParams = {
 };
 
 /**
- * @description OK
+ * @description No Content
  */
-export type PutApiEquipmentId200 = any;
+export type PutApiEquipmentId204 = any;
+
+/**
+ * @description Bad Request
+ */
+export type PutApiEquipmentId400 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type PutApiEquipmentId404 = ApiErrorResponse;
 
 export type PutApiEquipmentIdMutationRequest = EquipmentUpsertDto;
 
-export type PutApiEquipmentIdMutationResponse = PutApiEquipmentId200;
+export type PutApiEquipmentIdMutationResponse = PutApiEquipmentId204;
 
 export type PutApiEquipmentIdMutation = {
-  Response: PutApiEquipmentId200;
+  Response: PutApiEquipmentId204;
   Request: PutApiEquipmentIdMutationRequest;
   PathParams: PutApiEquipmentIdPathParams;
-  Errors: any;
+  Errors: PutApiEquipmentId400 | PutApiEquipmentId404;
 };
 
 export type DeleteApiEquipmentIdPathParams = {
@@ -489,30 +549,40 @@ export type DeleteApiEquipmentIdPathParams = {
 };
 
 /**
- * @description OK
+ * @description No Content
  */
-export type DeleteApiEquipmentId200 = any;
+export type DeleteApiEquipmentId204 = any;
 
-export type DeleteApiEquipmentIdMutationResponse = DeleteApiEquipmentId200;
+/**
+ * @description Not Found
+ */
+export type DeleteApiEquipmentId404 = ApiErrorResponse;
+
+export type DeleteApiEquipmentIdMutationResponse = DeleteApiEquipmentId204;
 
 export type DeleteApiEquipmentIdMutation = {
-  Response: DeleteApiEquipmentId200;
+  Response: DeleteApiEquipmentId204;
   PathParams: DeleteApiEquipmentIdPathParams;
-  Errors: any;
+  Errors: DeleteApiEquipmentId404;
 };
 
 /**
- * @description OK
+ * @description Created
  */
-export type PostApiOrderCreateorder200 = any;
+export type PostApiOrderCreateorder201 = RentalOrder;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiOrderCreateorder400 = ApiErrorResponse;
 
 export type PostApiOrderCreateorderMutationRequest = OrderCreateDto;
 
 export type PostApiOrderCreateorderMutationResponse =
-  PostApiOrderCreateorder200;
+  PostApiOrderCreateorder201;
 
 export type PostApiOrderCreateorderMutation = {
-  Response: PostApiOrderCreateorder200;
+  Response: PostApiOrderCreateorder201;
   Request: PostApiOrderCreateorderMutationRequest;
-  Errors: any;
+  Errors: PostApiOrderCreateorder400;
 };

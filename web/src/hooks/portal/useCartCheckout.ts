@@ -14,6 +14,7 @@ import {
   orderCheckoutFormSchema,
   type OrderCheckoutFormValues,
 } from "../../lib/formSchemas";
+import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
 import { useCart } from "../../ui/portal/cartContext";
 
 export function useCartCheckout() {
@@ -61,11 +62,6 @@ export function useCartCheckout() {
         queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
         enqueueSnackbar("Order placed.", { variant: "success" });
       },
-      onError: (e) => {
-        enqueueSnackbar(String((e as Error)?.message ?? e), {
-          variant: "error",
-        });
-      },
     },
   });
 
@@ -79,6 +75,11 @@ export function useCartCheckout() {
     );
     return lines.reduce((sum, l) => sum + l.dailyRate * l.quantity, 0) * days;
   }, [lines, rentalStart, rentalEnd]);
+
+  const orderSubmitError = useMemo(() => {
+    if (!submit.error) return null;
+    return formatApiErrorForDisplay(parseApiError(submit.error));
+  }, [submit.error]);
 
   const handleSubmitForm = form.handleSubmit((values) => {
     if (lines.length === 0) return;
@@ -105,5 +106,6 @@ export function useCartCheckout() {
     customers,
     submit,
     subtotal,
+    orderSubmitError,
   };
 }

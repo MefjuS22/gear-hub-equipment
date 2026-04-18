@@ -5,6 +5,7 @@ using GearHub.Api.Middleware;
 using GearHub.Api.Repositories;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;
+using GearHub.Api.Swagger;
 using GearHub.Api.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,10 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     };
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SchemaFilter<ApiErrorCodeSchemaFilter>();
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

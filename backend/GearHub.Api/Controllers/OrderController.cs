@@ -1,4 +1,5 @@
 ﻿using GearHub.Api.DTOs;
+using GearHub.Api.Models;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,9 +8,11 @@ namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
 public class OrderController(IOrderService orderService) : ControllerBase
 {
     [HttpPost("CreateOrder")]
+    [ProducesResponseType(typeof(RentalOrder), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateOrder([FromBody] OrderCreateDto request, CancellationToken cancellationToken)
     {
         var result = await orderService.CreateOrderAsync(request, cancellationToken);

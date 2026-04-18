@@ -11,6 +11,7 @@ namespace GearHub.Api.Controllers;
 public class EquipmentController(IEquipmentRepository equipmentRepository) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(typeof(IReadOnlyList<EquipmentDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<EquipmentDto>>> GetAll(CancellationToken cancellationToken)
     {
         var equipment = await equipmentRepository.GetAllAsync(cancellationToken);
@@ -18,6 +19,8 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
     }
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(EquipmentDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<EquipmentDto>> GetById(int id, CancellationToken cancellationToken)
     {
         var equipment = await equipmentRepository.GetByIdAsync(id, cancellationToken);
@@ -34,6 +37,9 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(EquipmentDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<EquipmentDto>> Create(
         [FromBody] EquipmentUpsertDto request,
         CancellationToken cancellationToken)
@@ -70,6 +76,9 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
     }
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(
         int id,
         [FromBody] EquipmentUpsertDto request,
@@ -107,6 +116,8 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
     }
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var deleted = await equipmentRepository.DeleteAsync(id, cancellationToken);
