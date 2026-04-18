@@ -1,4 +1,15 @@
-import { Box, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useWarehousesAdmin } from "../../hooks/intranet/useWarehousesAdmin";
 
 export function WarehousesAdminView() {
@@ -14,12 +25,18 @@ export function WarehousesAdminView() {
 
   return (
     <div>
-      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+      <Typography
+        variant="h5"
+        component="h1"
+        gutterBottom
+        sx={{ fontWeight: 600 }}
+      >
         Warehouses
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        No warehouses endpoint in OpenAPI — below are unique warehouses inferred from equipment assignments (name +
-        ID). Location is not available on the equipment DTO.
+        No warehouses endpoint in OpenAPI — below are unique warehouses inferred
+        from equipment assignments (name + ID). Location is not available on the
+        equipment DTO.
       </Typography>
       <TableContainer component={Paper} variant="outlined">
         <Table size="small">

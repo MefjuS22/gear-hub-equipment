@@ -19,7 +19,15 @@ function RootLayout() {
       }}
     >
       {/* Flex child so portal/intranet shells can use flex:1 + minHeight:0 for scroll */}
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, minWidth: 0 }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: 0,
+          minWidth: 0,
+        }}
+      >
         <Outlet />
       </Box>
     </Box>

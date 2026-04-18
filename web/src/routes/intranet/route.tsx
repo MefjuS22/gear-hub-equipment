@@ -1,4 +1,9 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import {
   Box,
@@ -58,24 +63,46 @@ function normalizePath(path: string) {
   return path;
 }
 
-function SidebarNav({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+function SidebarNav({
+  pathname,
+  onNavigate,
+}: {
+  pathname: string;
+  onNavigate?: () => void;
+}) {
   return (
     <>
-      <Toolbar sx={{ px: 2, pt: 2, pb: 1.5, flexDirection: "column", alignItems: "stretch", gap: 1.5 }}>
+      <Toolbar
+        sx={{
+          px: 2,
+          pt: 2,
+          pb: 1.5,
+          flexDirection: "column",
+          alignItems: "stretch",
+          gap: 1.5,
+        }}
+      >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <Building2 size={24} strokeWidth={1.75} aria-hidden />
           <Box>
-            <Typography variant="subtitle1" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 800, lineHeight: 1.2 }}
+            >
               GearHub
             </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ display: "block" }}
+            >
               Staff workspace
             </Typography>
           </Box>
         </Box>
         <Button
           component={Link}
-          to="/intranet/equipment"
+          to="/intranet/equipment/new"
           variant="containedBlack"
           fullWidth
           startIcon={<Plus size={18} aria-hidden />}
@@ -114,17 +141,33 @@ function SidebarNav({ pathname, onNavigate }: { pathname: string; onNavigate?: (
               </ListItemIcon>
               <ListItemText
                 primary={item.label}
-                slotProps={{ primary: { sx: { fontWeight: selected ? 600 : 500 } } }}
+                slotProps={{
+                  primary: { sx: { fontWeight: selected ? 600 : 500 } },
+                }}
               />
             </ListItemButton>
           );
         })}
       </List>
       <Box sx={{ p: 1.5, borderTop: 1, borderColor: "divider" }}>
-        <Button component={MuiLink} href="mailto:support@example.com" fullWidth color="inherit" size="small" sx={{ justifyContent: "flex-start" }}>
+        <Button
+          component={MuiLink}
+          href="mailto:support@example.com"
+          fullWidth
+          color="inherit"
+          size="small"
+          sx={{ justifyContent: "flex-start" }}
+        >
           Support
         </Button>
-        <Button component={Link} to="/" fullWidth color="inherit" size="small" sx={{ justifyContent: "flex-start" }}>
+        <Button
+          component={Link}
+          to="/"
+          fullWidth
+          color="inherit"
+          size="small"
+          sx={{ justifyContent: "flex-start" }}
+        >
           Sign out
         </Button>
       </Box>
@@ -136,18 +179,35 @@ function IntranetLayout() {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
-  const pathname = useRouterState({ select: (s) => normalizePath(s.location.pathname) });
+  const pathname = useRouterState({
+    select: (s) => normalizePath(s.location.pathname),
+  });
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   const drawer = (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100%", bgcolor: "background.paper" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        bgcolor: "background.paper",
+      }}
+    >
       <SidebarNav pathname={pathname} onNavigate={closeMobile} />
     </Box>
   );
 
   return (
-    <Box sx={{ display: "flex", flex: 1, minWidth: 0, minHeight: 0, width: "100%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flex: 1,
+        minWidth: 0,
+        minHeight: 0,
+        width: "100%",
+      }}
+    >
       {isMdUp ? (
         <Box
           component="aside"
@@ -172,14 +232,26 @@ function IntranetLayout() {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: "block", md: "none" },
-            "& .MuiDrawer-paper": { width: DRAWER_WIDTH, boxSizing: "border-box" },
+            "& .MuiDrawer-paper": {
+              width: DRAWER_WIDTH,
+              boxSizing: "border-box",
+            },
           }}
         >
           {drawer}
         </Drawer>
       )}
 
-      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, minHeight: 0, bgcolor: "background.default" }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+          minHeight: 0,
+          bgcolor: "background.default",
+        }}
+      >
         <Box
           sx={{
             px: 2,
@@ -194,7 +266,12 @@ function IntranetLayout() {
           }}
         >
           {!isMdUp ? (
-            <IconButton edge="start" color="inherit" aria-label="Open menu" onClick={() => setMobileOpen(true)}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="Open menu"
+              onClick={() => setMobileOpen(true)}
+            >
               <Menu size={22} aria-hidden />
             </IconButton>
           ) : null}
@@ -209,11 +286,18 @@ function IntranetLayout() {
             Site home
           </MuiLink>
           <Divider orientation="vertical" flexItem sx={{ mx: 0.5 }} />
-          <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontWeight: 600 }}
+          >
             Staff
           </Typography>
         </Box>
-        <Box component="main" sx={{ p: { xs: 2, sm: 3 }, flex: 1, overflow: "auto" }}>
+        <Box
+          component="main"
+          sx={{ p: { xs: 2, sm: 3 }, flex: 1, overflow: "auto" }}
+        >
           <Outlet />
         </Box>
       </Box>

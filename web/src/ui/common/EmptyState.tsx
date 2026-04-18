@@ -11,11 +11,23 @@ type EmptyStateProps = {
   action?: EmptyStateAction | ReactNode;
 };
 
-export function EmptyState({ title, description, icon: Icon, action }: EmptyStateProps) {
+export function EmptyState({
+  title,
+  description,
+  icon: Icon,
+  action,
+}: EmptyStateProps) {
   return (
     <Box sx={{ py: 6, px: 2, textAlign: "center", maxWidth: 440, mx: "auto" }}>
       {Icon ? (
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 2, color: "text.secondary" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mb: 2,
+            color: "text.secondary",
+          }}
+        >
           <Icon size={40} strokeWidth={1.5} aria-hidden />
         </Box>
       ) : null}

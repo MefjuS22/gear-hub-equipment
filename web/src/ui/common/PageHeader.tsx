@@ -8,7 +8,12 @@ type PageHeaderProps = {
   titleVariant?: TypographyProps["variant"];
 };
 
-export function PageHeader({ title, subtitle, actions, titleVariant = "h4" }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  subtitle,
+  actions,
+  titleVariant = "h4",
+}: PageHeaderProps) {
   return (
     <Box
       sx={{
@@ -21,16 +26,26 @@ export function PageHeader({ title, subtitle, actions, titleVariant = "h4" }: Pa
       }}
     >
       <Box sx={{ minWidth: 0 }}>
-        <Typography variant={titleVariant} component="h1" sx={{ fontWeight: 700, color: "text.primary" }}>
+        <Typography
+          variant={titleVariant}
+          component="h1"
+          sx={{ fontWeight: 700, color: "text.primary" }}
+        >
           {title}
         </Typography>
         {subtitle ? (
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5, maxWidth: 720 }}>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ mt: 0.5, maxWidth: 720 }}
+          >
             {subtitle}
           </Typography>
         ) : null}
       </Box>
-      {actions ? <Box sx={{ display: "flex", gap: 1, flexShrink: 0 }}>{actions}</Box> : null}
+      {actions ? (
+        <Box sx={{ display: "flex", gap: 1, flexShrink: 0 }}>{actions}</Box>
+      ) : null}
     </Box>
   );
 }

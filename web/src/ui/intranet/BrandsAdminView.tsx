@@ -1,4 +1,15 @@
-import { Box, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useBrandsAdmin } from "../../hooks/intranet/useBrandsAdmin";
 
 export function BrandsAdminView() {
@@ -14,11 +25,17 @@ export function BrandsAdminView() {
 
   return (
     <div>
-      <Typography variant="h5" component="h1" gutterBottom sx={{ fontWeight: 600 }}>
+      <Typography
+        variant="h5"
+        component="h1"
+        gutterBottom
+        sx={{ fontWeight: 600 }}
+      >
         Brands
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        The API only exposes a brands list (GET) — create/delete would need backend support.
+        The API only exposes a brands list (GET) — create/delete would need
+        backend support.
       </Typography>
       <TableContainer component={Paper} variant="outlined">
         <Table size="small">

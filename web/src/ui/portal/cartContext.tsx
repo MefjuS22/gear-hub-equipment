@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 
 export type CartLine = {
   equipmentId: number;
@@ -20,25 +27,30 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
 
-  const add = useCallback((line: Omit<CartLine, "quantity"> & { quantity?: number }) => {
-    const q = line.quantity ?? 1;
-    setLines((prev) => {
-      const i = prev.findIndex((l) => l.equipmentId === line.equipmentId);
-      if (i >= 0) {
-        const next = [...prev];
-        next[i] = { ...next[i], quantity: next[i].quantity + q };
-        return next;
-      }
-      return [...prev, { ...line, quantity: q }];
-    });
-  }, []);
+  const add = useCallback(
+    (line: Omit<CartLine, "quantity"> & { quantity?: number }) => {
+      const q = line.quantity ?? 1;
+      setLines((prev) => {
+        const i = prev.findIndex((l) => l.equipmentId === line.equipmentId);
+        if (i >= 0) {
+          const next = [...prev];
+          next[i] = { ...next[i], quantity: next[i].quantity + q };
+          return next;
+        }
+        return [...prev, { ...line, quantity: q }];
+      });
+    },
+    [],
+  );
 
   const setQuantity = useCallback((equipmentId: number, quantity: number) => {
     if (quantity < 1) {
       setLines((prev) => prev.filter((l) => l.equipmentId !== equipmentId));
       return;
     }
-    setLines((prev) => prev.map((l) => (l.equipmentId === equipmentId ? { ...l, quantity } : l)));
+    setLines((prev) =>
+      prev.map((l) => (l.equipmentId === equipmentId ? { ...l, quantity } : l)),
+    );
   }, []);
 
   const remove = useCallback((equipmentId: number) => {

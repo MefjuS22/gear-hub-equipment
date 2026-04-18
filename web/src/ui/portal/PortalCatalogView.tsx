@@ -16,11 +16,28 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import { Heart, LayoutGrid, List, Minus, Package, Plus, ShoppingCart } from "lucide-react";
+import {
+  Heart,
+  LayoutGrid,
+  List,
+  Minus,
+  Package,
+  Plus,
+  ShoppingCart,
+} from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 import { formatUsd } from "../../lib/formatCurrency";
-import { PORTAL_HERO, usePortalCatalog } from "../../hooks/portal/usePortalCatalog";
-import { EmptyState, ErrorAlert, LoadingState, PageHeader, StatusChip } from "../common";
+import {
+  PORTAL_HERO,
+  usePortalCatalog,
+} from "../../hooks/portal/usePortalCatalog";
+import {
+  EmptyState,
+  ErrorAlert,
+  LoadingState,
+  PageHeader,
+  StatusChip,
+} from "../common";
 import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
 import { useCart } from "./cartContext";
 
@@ -91,7 +108,10 @@ function CatalogOrderControl({
       >
         <Minus size={16} aria-hidden />
       </IconButton>
-      <Typography variant={countVariant} sx={{ minWidth: 32, textAlign: "center", fontWeight: 600 }}>
+      <Typography
+        variant={countVariant}
+        sx={{ minWidth: 32, textAlign: "center", fontWeight: 600 }}
+      >
         {qty}
       </Typography>
       <IconButton
@@ -105,7 +125,11 @@ function CatalogOrderControl({
   );
 
   if (fullWidth) {
-    return <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>{stepper}</Box>;
+    return (
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        {stepper}
+      </Box>
+    );
   }
   return stepper;
 }
@@ -134,7 +158,8 @@ export function PortalCatalogView() {
         if (c !== categoryKey) return false;
       }
       if (!q) return true;
-      const hay = `${item.name ?? ""} ${item.brandName ?? ""} ${item.categoryName ?? ""}`.toLowerCase();
+      const hay =
+        `${item.name ?? ""} ${item.brandName ?? ""} ${item.categoryName ?? ""}`.toLowerCase();
       return hay.includes(q);
     });
   }, [equipment.data, search, categoryKey]);
@@ -143,7 +168,12 @@ export function PortalCatalogView() {
     return <LoadingState message="Loading catalog…" />;
   }
   if (equipment.error) {
-    return <ErrorAlert message="Failed to load catalog. Please try again." sx={{ mb: 2 }} />;
+    return (
+      <ErrorAlert
+        message="Failed to load catalog. Please try again."
+        sx={{ mb: 2 }}
+      />
+    );
   }
 
   return (
@@ -152,7 +182,16 @@ export function PortalCatalogView() {
 
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
-          <Box sx={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 2, mb: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+              mb: 2,
+            }}
+          >
             <Typography variant="subtitle2" color="text.secondary">
               View
             </Typography>
@@ -173,7 +212,14 @@ export function PortalCatalogView() {
               </ToggleButton>
             </ToggleButtonGroup>
           </Box>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, alignItems: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1,
+              alignItems: "center",
+            }}
+          >
             <Chip
               label="All equipment"
               onClick={() => setCategoryKey("all")}
@@ -218,9 +264,13 @@ export function PortalCatalogView() {
                   <TableCell sx={{ fontWeight: 600 }}>{item.name}</TableCell>
                   <TableCell>{item.categoryName}</TableCell>
                   <TableCell>{item.brandName}</TableCell>
-                  <TableCell align="right">{formatUsd(item.dailyRate ?? 0)}</TableCell>
+                  <TableCell align="right">
+                    {formatUsd(item.dailyRate ?? 0)}
+                  </TableCell>
                   <TableCell>
-                    <StatusChip status={item.isAvailable ? "available" : "unavailable"} />
+                    <StatusChip
+                      status={item.isAvailable ? "available" : "unavailable"}
+                    />
                   </TableCell>
                   <TableCell align="right">
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -242,7 +292,11 @@ export function PortalCatalogView() {
           {filtered.map((item, index) => {
             const featured = index === 0;
             const gridSize =
-              featured && filtered.length > 1 ? { xs: 12, md: 8 } : featured && filtered.length === 1 ? { xs: 12, md: 12 } : { xs: 12, sm: 6, md: 4 };
+              featured && filtered.length > 1
+                ? { xs: 12, md: 8 }
+                : featured && filtered.length === 1
+                  ? { xs: 12, md: 12 }
+                  : { xs: 12, sm: 6, md: 4 };
             return (
               <Grid key={item.id} size={gridSize}>
                 <Card
@@ -250,7 +304,9 @@ export function PortalCatalogView() {
                   sx={{
                     height: "100%",
                     display: "flex",
-                    flexDirection: featured ? { xs: "column", md: "row" } : "column",
+                    flexDirection: featured
+                      ? { xs: "column", md: "row" }
+                      : "column",
                     transition: "box-shadow 0.2s, border-color 0.2s",
                     "&:hover": {
                       boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)",
@@ -270,30 +326,70 @@ export function PortalCatalogView() {
                         flexShrink: 0,
                       }}
                     >
-                      <Package size={72} strokeWidth={1} color="#94a3b8" aria-hidden />
+                      <Package
+                        size={72}
+                        strokeWidth={1}
+                        color="#94a3b8"
+                        aria-hidden
+                      />
                     </Box>
                   ) : null}
-                  <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
-                      <StatusChip status={item.isAvailable ? "available" : "unavailable"} />
-                      <IconButton size="small" aria-label="Save to favorites (coming soon)" disabled>
+                  <CardContent
+                    sx={{ flex: 1, display: "flex", flexDirection: "column" }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                        mb: 1,
+                      }}
+                    >
+                      <StatusChip
+                        status={item.isAvailable ? "available" : "unavailable"}
+                      />
+                      <IconButton
+                        size="small"
+                        aria-label="Save to favorites (coming soon)"
+                        disabled
+                      >
                         <Heart size={18} aria-hidden />
                       </IconButton>
                     </Box>
-                    <Typography variant="h6" component="h3" gutterBottom sx={{ fontWeight: 700 }}>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      gutterBottom
+                      sx={{ fontWeight: 700 }}
+                    >
                       {item.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: featured ? 2 : 1 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: featured ? 2 : 1 }}
+                    >
                       {item.categoryName} · {item.brandName}
                     </Typography>
                     {featured ? (
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2, flex: 1 }}>
-                        Reliable rental unit with transparent daily pricing. Add to your order to reserve dates at
-                        checkout.
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 2, flex: 1 }}
+                      >
+                        Reliable rental unit with transparent daily pricing. Add
+                        to your order to reserve dates at checkout.
                       </Typography>
                     ) : null}
                     {featured ? (
-                      <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap", mb: 2 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 3,
+                          flexWrap: "wrap",
+                          mb: 2,
+                        }}
+                      >
                         <Box>
                           <Typography variant="caption" color="text.secondary">
                             Daily rate

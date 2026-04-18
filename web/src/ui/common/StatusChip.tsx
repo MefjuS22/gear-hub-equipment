@@ -7,7 +7,13 @@ type StatusChipProps = {
   label?: string;
 } & Omit<ChipProps, "label" | "color">;
 
-export function StatusChip({ status, label, size = "small", sx, ...rest }: StatusChipProps) {
+export function StatusChip({
+  status,
+  label,
+  size = "small",
+  sx,
+  ...rest
+}: StatusChipProps) {
   const isAvailable = status === "available";
   return (
     <Chip

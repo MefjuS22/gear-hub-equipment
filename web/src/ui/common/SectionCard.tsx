@@ -7,7 +7,13 @@ type SectionCardProps = {
   headerRight?: ReactNode;
 } & Pick<CardProps, "sx" | "variant">;
 
-export function SectionCard({ title, children, headerRight, sx, variant = "outlined" }: SectionCardProps) {
+export function SectionCard({
+  title,
+  children,
+  headerRight,
+  sx,
+  variant = "outlined",
+}: SectionCardProps) {
   const hasHeader = title || headerRight;
   return (
     <Card variant={variant} sx={{ borderRadius: 2, ...sx }}>
@@ -31,7 +37,9 @@ export function SectionCard({ title, children, headerRight, sx, variant = "outli
           {headerRight}
         </CardContent>
       ) : null}
-      <CardContent sx={{ pt: hasHeader ? 0 : undefined }}>{children}</CardContent>
+      <CardContent sx={{ pt: hasHeader ? 0 : undefined }}>
+        {children}
+      </CardContent>
     </Card>
   );
 }

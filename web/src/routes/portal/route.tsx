@@ -1,4 +1,9 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import {
   Avatar,
   Badge,
@@ -14,7 +19,10 @@ import {
 import { Bell, Search, Settings, ShoppingCart } from "lucide-react";
 import { useMemo, type ReactNode } from "react";
 import { CartProvider, useCart } from "../../ui/portal/cartContext";
-import { PortalCatalogSearchProvider, usePortalCatalogSearch } from "../../ui/portal/PortalCatalogSearchContext";
+import {
+  PortalCatalogSearchProvider,
+  usePortalCatalogSearch,
+} from "../../ui/portal/PortalCatalogSearchContext";
 
 export const Route = createFileRoute("/portal")({
   component: PortalLayout,
@@ -26,7 +34,9 @@ function normalizePath(path: string) {
 }
 
 function NavTab({ to, children }: { to: string; children: ReactNode }) {
-  const pathname = useRouterState({ select: (s) => normalizePath(s.location.pathname) });
+  const pathname = useRouterState({
+    select: (s) => normalizePath(s.location.pathname),
+  });
   const active = pathname === normalizePath(to);
   return (
     <Button
@@ -54,11 +64,16 @@ function NavTab({ to, children }: { to: string; children: ReactNode }) {
 }
 
 function PortalTopBar() {
-  const pathname = useRouterState({ select: (s) => normalizePath(s.location.pathname) });
+  const pathname = useRouterState({
+    select: (s) => normalizePath(s.location.pathname),
+  });
   const { lines } = useCart();
   const { search, setSearch } = usePortalCatalogSearch();
 
-  const cartCount = useMemo(() => lines.reduce((n, l) => n + l.quantity, 0), [lines]);
+  const cartCount = useMemo(
+    () => lines.reduce((n, l) => n + l.quantity, 0),
+    [lines],
+  );
   const isCatalog = pathname === "/portal";
 
   return (
@@ -140,29 +155,59 @@ function PortalTopBar() {
           )}
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexShrink: 0, ml: { xs: "auto", sm: 0 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            flexShrink: 0,
+            ml: { xs: "auto", sm: 0 },
+          }}
+        >
           <Tooltip title="Notifications (coming soon)">
             <span>
-              <IconButton size="small" color="inherit" disabled aria-label="Notifications">
+              <IconButton
+                size="small"
+                color="inherit"
+                disabled
+                aria-label="Notifications"
+              >
                 <Bell size={20} aria-hidden />
               </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Settings (coming soon)">
             <span>
-              <IconButton size="small" color="inherit" disabled aria-label="Settings">
+              <IconButton
+                size="small"
+                color="inherit"
+                disabled
+                aria-label="Settings"
+              >
                 <Settings size={20} aria-hidden />
               </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Account">
             <IconButton size="small" color="inherit" aria-label="Account menu">
-              <Avatar sx={{ width: 32, height: 32, fontSize: "0.85rem", bgcolor: "grey.300", color: "text.primary" }}>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  fontSize: "0.85rem",
+                  bgcolor: "grey.300",
+                  color: "text.primary",
+                }}
+              >
                 GH
               </Avatar>
             </IconButton>
           </Tooltip>
-          <Badge badgeContent={cartCount} color="primary" invisible={cartCount === 0}>
+          <Badge
+            badgeContent={cartCount}
+            color="primary"
+            invisible={cartCount === 0}
+          >
             <Button
               component={Link}
               to="/portal/cart"
@@ -178,7 +223,14 @@ function PortalTopBar() {
         </Box>
       </Toolbar>
       {/* Same vertical space on xs whether on catalog or cart — avoids header height jump */}
-      <Box sx={{ display: { xs: "block", sm: "none" }, px: 2, pb: 2, minHeight: 56 }}>
+      <Box
+        sx={{
+          display: { xs: "block", sm: "none" },
+          px: 2,
+          pb: 2,
+          minHeight: 56,
+        }}
+      >
         {isCatalog ? (
           <TextField
             placeholder="Search catalog…"
@@ -206,7 +258,15 @@ function PortalTopBar() {
 
 function PortalLayoutInner() {
   return (
-    <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, bgcolor: "background.default" }}>
+    <Box
+      sx={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        bgcolor: "background.default",
+      }}
+    >
       <PortalTopBar />
       <Box
         component="main"

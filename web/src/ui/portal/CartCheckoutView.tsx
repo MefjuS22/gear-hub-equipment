@@ -27,13 +27,24 @@ import { PORTAL_CHECKOUT_STAFF_USER_ID } from "../../lib/portalConstants";
 import { EmptyState, PageHeader, SectionCard } from "../common";
 
 export function CartCheckoutView() {
-  const { form, handleSubmitForm, lines, setQuantity, remove, customers, submit, subtotal } =
-    useCartCheckout();
+  const {
+    form,
+    handleSubmitForm,
+    lines,
+    setQuantity,
+    remove,
+    customers,
+    submit,
+    subtotal,
+  } = useCartCheckout();
 
   if (lines.length === 0) {
     return (
       <Box>
-        <PageHeader title="Order builder" subtitle="Configure client details and rental parameters, then confirm your equipment cart." />
+        <PageHeader
+          title="Order builder"
+          subtitle="Configure client details and rental parameters, then confirm your equipment cart."
+        />
         <EmptyState
           title="Your cart is empty"
           description="Add items from the catalog to build a rental order."
@@ -47,7 +58,10 @@ export function CartCheckoutView() {
 
   return (
     <Box component="form" onSubmit={handleSubmitForm} noValidate>
-      <PageHeader title="Order builder" subtitle="Configure client details and rental parameters." />
+      <PageHeader
+        title="Order builder"
+        subtitle="Configure client details and rental parameters."
+      />
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 5 }}>
@@ -78,8 +92,13 @@ export function CartCheckoutView() {
                 </TextField>
               )}
             />
-            <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
-              Orders are assigned to system user ID {PORTAL_CHECKOUT_STAFF_USER_ID} until user APIs are available.
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ display: "block" }}
+            >
+              Orders are assigned to system user ID{" "}
+              {PORTAL_CHECKOUT_STAFF_USER_ID} until user APIs are available.
             </Typography>
           </SectionCard>
 
@@ -92,7 +111,9 @@ export function CartCheckoutView() {
                   <DatePicker
                     label="Start date"
                     value={field.value ? dayjs(field.value) : null}
-                    onChange={(d) => field.onChange(d?.isValid() ? d.format("YYYY-MM-DD") : "")}
+                    onChange={(d) =>
+                      field.onChange(d?.isValid() ? d.format("YYYY-MM-DD") : "")
+                    }
                     slotProps={{
                       textField: {
                         name: field.name,
@@ -113,7 +134,9 @@ export function CartCheckoutView() {
                   <DatePicker
                     label="End date"
                     value={field.value ? dayjs(field.value) : null}
-                    onChange={(d) => field.onChange(d?.isValid() ? d.format("YYYY-MM-DD") : "")}
+                    onChange={(d) =>
+                      field.onChange(d?.isValid() ? d.format("YYYY-MM-DD") : "")
+                    }
                     slotProps={{
                       textField: {
                         name: field.name,
@@ -132,13 +155,31 @@ export function CartCheckoutView() {
         </Grid>
 
         <Grid size={{ xs: 12, lg: 7 }}>
-          <Card variant="outlined" sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
-            <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2, gap: 1 }}>
+          <Card
+            variant="outlined"
+            sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+          >
+            <CardContent
+              sx={{ flex: 1, display: "flex", flexDirection: "column" }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  mb: 2,
+                  gap: 1,
+                }}
+              >
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>
                   Equipment cart
                 </Typography>
-                <Chip size="small" color="primary" label={`${lineCount} items`} sx={{ fontWeight: 700 }} />
+                <Chip
+                  size="small"
+                  color="primary"
+                  label={`${lineCount} items`}
+                  sx={{ fontWeight: 700 }}
+                />
               </Box>
 
               <TableContainer sx={{ mb: 2 }}>
@@ -165,29 +206,55 @@ export function CartCheckoutView() {
                           </Typography>
                         </TableCell>
                         <TableCell align="center">
-                          <Box sx={{ display: "inline-flex", alignItems: "center", border: 1, borderColor: "divider", borderRadius: 1 }}>
+                          <Box
+                            sx={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              border: 1,
+                              borderColor: "divider",
+                              borderRadius: 1,
+                            }}
+                          >
                             <IconButton
                               size="small"
                               aria-label="Decrease quantity"
-                              onClick={() => setQuantity(l.equipmentId, l.quantity - 1)}
+                              onClick={() =>
+                                setQuantity(l.equipmentId, l.quantity - 1)
+                              }
                             >
                               <Minus size={16} aria-hidden />
                             </IconButton>
-                            <Typography variant="body2" sx={{ minWidth: 28, textAlign: "center", fontWeight: 600 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                minWidth: 28,
+                                textAlign: "center",
+                                fontWeight: 600,
+                              }}
+                            >
                               {l.quantity}
                             </Typography>
                             <IconButton
                               size="small"
                               aria-label="Increase quantity"
-                              onClick={() => setQuantity(l.equipmentId, l.quantity + 1)}
+                              onClick={() =>
+                                setQuantity(l.equipmentId, l.quantity + 1)
+                              }
                             >
                               <Plus size={16} aria-hidden />
                             </IconButton>
                           </Box>
                         </TableCell>
-                        <TableCell align="right">{formatUsd(l.dailyRate)}</TableCell>
                         <TableCell align="right">
-                          <IconButton color="error" size="small" aria-label="Remove line" onClick={() => remove(l.equipmentId)}>
+                          {formatUsd(l.dailyRate)}
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton
+                            color="error"
+                            size="small"
+                            aria-label="Remove line"
+                            onClick={() => remove(l.equipmentId)}
+                          >
                             <Trash2 size={18} aria-hidden />
                           </IconButton>
                         </TableCell>
@@ -199,7 +266,14 @@ export function CartCheckoutView() {
 
               <Divider sx={{ my: 1 }} />
 
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                  mb: 2,
+                }}
+              >
                 <Typography variant="body2" color="text.secondary">
                   Estimated total (simplified)
                 </Typography>

@@ -10,12 +10,25 @@ const shellMaxWidth = 1200;
  */
 export function HomeLayout({ children }: { children: ReactNode }) {
   return (
-    <Box sx={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, bgcolor: "background.default" }}>
+    <Box
+      sx={{
+        flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        bgcolor: "background.default",
+      }}
+    >
       <AppBar
         position="static"
         color="inherit"
         elevation={0}
-        sx={{ borderBottom: 1, borderColor: "divider", bgcolor: "background.paper", flexShrink: 0 }}
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+          bgcolor: "background.paper",
+          flexShrink: 0,
+        }}
       >
         <Toolbar
           sx={{
@@ -45,11 +58,32 @@ export function HomeLayout({ children }: { children: ReactNode }) {
             <Boxes size={22} strokeWidth={1.75} aria-hidden />
             GearHub
           </Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "flex-end" }}>
-            <Button component={Link} to="/portal" color="primary" variant="contained" size="small" startIcon={<Store size={18} aria-hidden />}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1,
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              component={Link}
+              to="/portal"
+              color="primary"
+              variant="contained"
+              size="small"
+              startIcon={<Store size={18} aria-hidden />}
+            >
               Client portal
             </Button>
-            <Button component={Link} to="/intranet" variant="outlined" color="inherit" size="small" startIcon={<Building2 size={18} aria-hidden />}>
+            <Button
+              component={Link}
+              to="/intranet"
+              variant="outlined"
+              color="inherit"
+              size="small"
+              startIcon={<Building2 size={18} aria-hidden />}
+            >
               Staff
             </Button>
           </Box>

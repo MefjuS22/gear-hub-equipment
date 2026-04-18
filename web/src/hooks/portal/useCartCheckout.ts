@@ -10,7 +10,10 @@ import {
   usePostApiOrderCreateorder,
 } from "../../api/generated/react-query";
 import { PORTAL_CHECKOUT_STAFF_USER_ID } from "../../lib/portalConstants";
-import { orderCheckoutFormSchema, type OrderCheckoutFormValues } from "../../lib/formSchemas";
+import {
+  orderCheckoutFormSchema,
+  type OrderCheckoutFormValues,
+} from "../../lib/formSchemas";
 import { useCart } from "../../ui/portal/cartContext";
 
 export function useCartCheckout() {
@@ -34,8 +37,10 @@ export function useCartCheckout() {
     },
   });
 
-  const rentalStart = useWatch({ control: form.control, name: "rentalStart" }) ?? "";
-  const rentalEnd = useWatch({ control: form.control, name: "rentalEnd" }) ?? "";
+  const rentalStart =
+    useWatch({ control: form.control, name: "rentalStart" }) ?? "";
+  const rentalEnd =
+    useWatch({ control: form.control, name: "rentalEnd" }) ?? "";
 
   const customers = useGetApiCustomer({ client: gearhubApiClientOptions });
 
@@ -57,7 +62,9 @@ export function useCartCheckout() {
         enqueueSnackbar("Order placed.", { variant: "success" });
       },
       onError: (e) => {
-        enqueueSnackbar(String((e as Error)?.message ?? e), { variant: "error" });
+        enqueueSnackbar(String((e as Error)?.message ?? e), {
+          variant: "error",
+        });
       },
     },
   });
@@ -66,7 +73,8 @@ export function useCartCheckout() {
     const days = Math.max(
       1,
       Math.ceil(
-        (new Date(rentalEnd).getTime() - new Date(rentalStart).getTime()) / (1000 * 60 * 60 * 24),
+        (new Date(rentalEnd).getTime() - new Date(rentalStart).getTime()) /
+          (1000 * 60 * 60 * 24),
       ) || 1,
     );
     return lines.reduce((sum, l) => sum + l.dailyRate * l.quantity, 0) * days;
@@ -80,7 +88,10 @@ export function useCartCheckout() {
         userId: PORTAL_CHECKOUT_STAFF_USER_ID,
         rentalStartDate: new Date(values.rentalStart).toISOString(),
         rentalEndDate: new Date(values.rentalEnd).toISOString(),
-        items: lines.map((l) => ({ equipmentId: l.equipmentId, quantity: l.quantity })),
+        items: lines.map((l) => ({
+          equipmentId: l.equipmentId,
+          quantity: l.quantity,
+        })),
       },
     });
   });
