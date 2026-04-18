@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { Link } from "@tanstack/react-router";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { Pencil, PlusCircle, Trash2 } from "lucide-react";
 import { formatUsd } from "../../lib/formatCurrency";
 import { useEquipmentAdmin } from "../../hooks/intranet/useEquipmentAdmin";
 import { LoadingState, PageHeader } from "../common";
@@ -46,7 +46,7 @@ export function EquipmentAdminView() {
               <TableCell>Name</TableCell>
               <TableCell align="right">Daily rate</TableCell>
               <TableCell>Available</TableCell>
-              <TableCell align="right" width={100} />
+              <TableCell align="right" width={200} />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -59,15 +59,27 @@ export function EquipmentAdminView() {
                 </TableCell>
                 <TableCell>{e.isAvailable ? "yes" : "no"}</TableCell>
                 <TableCell align="right">
-                  <Button
-                    size="small"
-                    color="error"
-                    variant="outlined"
-                    startIcon={<Trash2 size={16} aria-hidden />}
-                    onClick={() => e.id != null && remove.mutate({ id: e.id })}
-                  >
-                    Delete
-                  </Button>
+                  <Box sx={{ display: "inline-flex", gap: 1, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                    <Button
+                      component={Link}
+                      to={e.id != null ? `/intranet/equipment/${e.id}/edit` : "/intranet/equipment"}
+                      size="small"
+                      variant="outlined"
+                      startIcon={<Pencil size={16} aria-hidden />}
+                      disabled={e.id == null}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      size="small"
+                      color="error"
+                      variant="outlined"
+                      startIcon={<Trash2 size={16} aria-hidden />}
+                      onClick={() => e.id != null && remove.mutate({ id: e.id })}
+                    >
+                      Delete
+                    </Button>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}

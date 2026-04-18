@@ -26,6 +26,7 @@ import { Route as IntranetBrandsRouteImport } from './routes/intranet/brands'
 import { Route as IntranetEquipmentRouteRouteImport } from './routes/intranet/equipment/route'
 import { Route as IntranetEquipmentIndexRouteImport } from './routes/intranet/equipment/index'
 import { Route as IntranetEquipmentNewRouteImport } from './routes/intranet/equipment/new'
+import { Route as IntranetEquipmentEquipmentIdEditRouteImport } from './routes/intranet/equipment/$equipmentId/edit'
 
 const PortalRouteRoute = PortalRouteRouteImport.update({
   id: '/portal',
@@ -112,6 +113,12 @@ const IntranetEquipmentNewRoute = IntranetEquipmentNewRouteImport.update({
   path: '/new',
   getParentRoute: () => IntranetEquipmentRouteRoute,
 } as any)
+const IntranetEquipmentEquipmentIdEditRoute =
+  IntranetEquipmentEquipmentIdEditRouteImport.update({
+    id: '/$equipmentId/edit',
+    path: '/$equipmentId/edit',
+    getParentRoute: () => IntranetEquipmentRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/portal/': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
   '/intranet/equipment/': typeof IntranetEquipmentIndexRoute
+  '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -147,6 +155,7 @@ export interface FileRoutesByTo {
   '/portal': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
   '/intranet/equipment': typeof IntranetEquipmentIndexRoute
+  '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -167,6 +176,7 @@ export interface FileRoutesById {
   '/portal/': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
   '/intranet/equipment/': typeof IntranetEquipmentIndexRoute
+  '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/portal/'
     | '/intranet/equipment/new'
     | '/intranet/equipment/'
+    | '/intranet/equipment/$equipmentId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/intranet/equipment/new'
     | '/intranet/equipment'
+    | '/intranet/equipment/$equipmentId/edit'
   id:
     | '__root__'
     | '/'
@@ -223,6 +235,7 @@ export interface FileRouteTypes {
     | '/portal/'
     | '/intranet/equipment/new'
     | '/intranet/equipment/'
+    | '/intranet/equipment/$equipmentId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -352,18 +365,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntranetEquipmentNewRouteImport
       parentRoute: typeof IntranetEquipmentRouteRoute
     }
+    '/intranet/equipment/$equipmentId/edit': {
+      id: '/intranet/equipment/$equipmentId/edit'
+      path: '/$equipmentId/edit'
+      fullPath: '/intranet/equipment/$equipmentId/edit'
+      preLoaderRoute: typeof IntranetEquipmentEquipmentIdEditRouteImport
+      parentRoute: typeof IntranetEquipmentRouteRoute
+    }
   }
 }
 
 interface IntranetEquipmentRouteRouteChildren {
   IntranetEquipmentNewRoute: typeof IntranetEquipmentNewRoute
   IntranetEquipmentIndexRoute: typeof IntranetEquipmentIndexRoute
+  IntranetEquipmentEquipmentIdEditRoute: typeof IntranetEquipmentEquipmentIdEditRoute
 }
 
 const IntranetEquipmentRouteRouteChildren: IntranetEquipmentRouteRouteChildren =
   {
     IntranetEquipmentNewRoute: IntranetEquipmentNewRoute,
     IntranetEquipmentIndexRoute: IntranetEquipmentIndexRoute,
+    IntranetEquipmentEquipmentIdEditRoute:
+      IntranetEquipmentEquipmentIdEditRoute,
   }
 
 const IntranetEquipmentRouteRouteWithChildren =
