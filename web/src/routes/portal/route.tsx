@@ -118,15 +118,12 @@ function PortalTopBar() {
 
         <Box sx={{ display: "flex", alignItems: "stretch", flexShrink: 0 }}>
           <NavTab to="/portal">Catalog</NavTab>
-          <NavTab to="/portal/cart">Cart</NavTab>
         </Box>
 
-        {/* Reserve the same center slot on catalog + cart (sm+) so the right cluster does not jump */}
         <Box
           sx={{
             flex: 1,
             minWidth: 0,
-            maxWidth: 420,
             mx: { xs: 0, sm: 2 },
             display: { xs: "none", sm: "flex" },
             justifyContent: "center",
