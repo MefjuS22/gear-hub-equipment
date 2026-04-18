@@ -37,7 +37,11 @@ export function BrandsAdminView() {
         Brands
       </Typography>
       {rows.length === 0 ? (
-        <EmptyState title="Coming soon" description="Brand management will appear here once available." icon={Tag} />
+        <EmptyState
+          title="Coming soon"
+          description="Brand management will appear here once available."
+          icon={Tag}
+        />
       ) : (
         <TableContainer component={Paper} variant="outlined">
           <Table size="small">

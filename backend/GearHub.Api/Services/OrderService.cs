@@ -2,6 +2,7 @@
 using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Repositories;
+using GearHub.Api.Responses;
 
 namespace GearHub.Api.Services;
 
@@ -15,12 +16,12 @@ public class OrderService(
     {
         if (!await orderRepository.CustomerExistsAsync(request.CustomerId, cancellationToken))
         {
-            return OrderCreationResult.Failed("Customer not found.");
+            return OrderCreationResult.Failed(ApiErrorCode.OrderCustomerNotFound, "Customer not found.");
         }
 
         if (!await orderRepository.UserExistsAsync(request.UserId, cancellationToken))
         {
-            return OrderCreationResult.Failed("User not found.");
+            return OrderCreationResult.Failed(ApiErrorCode.OrderUserNotFound, "User not found.");
         }
 
         var aggregatedItems = request.Items
@@ -37,7 +38,9 @@ public class OrderService(
 
         if (equipmentMap.Count != equipmentIds.Distinct().Count())
         {
-            return OrderCreationResult.Failed("One or more equipment items were not found.");
+            return OrderCreationResult.Failed(
+                ApiErrorCode.OrderEquipmentNotFound,
+                "One or more equipment items were not found.");
         }
 
         var rentalStartUtc = NormalizeToUtc(request.RentalStartDate);
@@ -51,6 +54,7 @@ public class OrderService(
         if (!isAvailableForPeriod)
         {
             return OrderCreationResult.Failed(
+                ApiErrorCode.OrderEquipmentUnavailable,
                 "One or more equipment items are unavailable for the selected rental period.");
         }
 

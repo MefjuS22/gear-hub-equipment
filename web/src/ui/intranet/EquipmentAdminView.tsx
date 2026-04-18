@@ -59,10 +59,21 @@ export function EquipmentAdminView() {
                 </TableCell>
                 <TableCell>{e.isAvailable ? "yes" : "no"}</TableCell>
                 <TableCell align="right">
-                  <Box sx={{ display: "inline-flex", gap: 1, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <Box
+                    sx={{
+                      display: "inline-flex",
+                      gap: 1,
+                      flexWrap: "wrap",
+                      justifyContent: "flex-end",
+                    }}
+                  >
                     <Button
                       component={Link}
-                      to={e.id != null ? `/intranet/equipment/${e.id}/edit` : "/intranet/equipment"}
+                      to={
+                        e.id != null
+                          ? `/intranet/equipment/${e.id}/edit`
+                          : "/intranet/equipment"
+                      }
                       size="small"
                       variant="outlined"
                       startIcon={<Pencil size={16} aria-hidden />}
@@ -75,7 +86,9 @@ export function EquipmentAdminView() {
                       color="error"
                       variant="outlined"
                       startIcon={<Trash2 size={16} aria-hidden />}
-                      onClick={() => e.id != null && remove.mutate({ id: e.id })}
+                      onClick={() =>
+                        e.id != null && remove.mutate({ id: e.id })
+                      }
                     >
                       Delete
                     </Button>

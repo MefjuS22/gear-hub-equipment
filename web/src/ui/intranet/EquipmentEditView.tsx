@@ -5,7 +5,11 @@ import { useEquipmentUpsert } from "../../hooks/intranet/useEquipmentUpsert";
 import { ErrorAlert, LoadingState, PageHeader } from "../common";
 import { EquipmentForm } from "./EquipmentForm";
 
-export function EquipmentEditView({ equipmentIdParam }: { equipmentIdParam: string }) {
+export function EquipmentEditView({
+  equipmentIdParam,
+}: {
+  equipmentIdParam: string;
+}) {
   const equipmentId = Number(equipmentIdParam);
   const invalidId = Number.isNaN(equipmentId) || equipmentId < 1;
 

@@ -1,6 +1,7 @@
 ﻿using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Repositories;
+using GearHub.Api.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GearHub.Api.Controllers;
@@ -23,7 +24,10 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
 
         if (equipment is null)
         {
-            return NotFound();
+            return ApiResponses.Error(
+                StatusCodes.Status404NotFound,
+                ApiErrorCode.EquipmentNotFound,
+                $"Equipment with id {id} was not found.");
         }
 
         return Ok(ToDto(equipment));
@@ -41,10 +45,14 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
             cancellationToken);
         if (!referencesExist)
         {
-            return ValidationProblem(new ValidationProblemDetails(new Dictionary<string, string[]>
-            {
-                ["references"] = ["CategoryId, BrandId, or WarehouseId does not exist."]
-            }));
+            return ApiResponses.Error(
+                StatusCodes.Status400BadRequest,
+                ApiErrorCode.EquipmentReferenceInvalid,
+                "CategoryId, BrandId, or WarehouseId does not exist.",
+                new Dictionary<string, string[]>
+                {
+                    ["references"] = ["CategoryId, BrandId, or WarehouseId does not exist."],
+                });
         }
 
         var equipment = ToEntity(request);
@@ -52,7 +60,10 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
         var createdWithRelations = await equipmentRepository.GetByIdAsync(created.Id, cancellationToken);
         if (createdWithRelations is null)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Created equipment could not be reloaded.");
+            return ApiResponses.Error(
+                StatusCodes.Status500InternalServerError,
+                ApiErrorCode.EquipmentReloadFailed,
+                "Created equipment could not be reloaded.");
         }
 
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, ToDto(createdWithRelations));
@@ -71,10 +82,14 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
             cancellationToken);
         if (!referencesExist)
         {
-            return ValidationProblem(new ValidationProblemDetails(new Dictionary<string, string[]>
-            {
-                ["references"] = ["CategoryId, BrandId, or WarehouseId does not exist."]
-            }));
+            return ApiResponses.Error(
+                StatusCodes.Status400BadRequest,
+                ApiErrorCode.EquipmentReferenceInvalid,
+                "CategoryId, BrandId, or WarehouseId does not exist.",
+                new Dictionary<string, string[]>
+                {
+                    ["references"] = ["CategoryId, BrandId, or WarehouseId does not exist."],
+                });
         }
 
         var updatedEquipment = ToEntity(request);
@@ -82,7 +97,10 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
         var updated = await equipmentRepository.UpdateAsync(updatedEquipment, cancellationToken);
         if (!updated)
         {
-            return NotFound();
+            return ApiResponses.Error(
+                StatusCodes.Status404NotFound,
+                ApiErrorCode.EquipmentNotFound,
+                $"Equipment with id {id} was not found.");
         }
 
         return NoContent();
@@ -94,7 +112,10 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
         var deleted = await equipmentRepository.DeleteAsync(id, cancellationToken);
         if (!deleted)
         {
-            return NotFound();
+            return ApiResponses.Error(
+                StatusCodes.Status404NotFound,
+                ApiErrorCode.EquipmentNotFound,
+                $"Equipment with id {id} was not found.");
         }
 
         return NoContent();

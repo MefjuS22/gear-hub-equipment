@@ -37,7 +37,11 @@ export function WarehousesAdminView() {
         Warehouses
       </Typography>
       {rows.length === 0 ? (
-        <EmptyState title="Coming soon" description="Warehouse details will appear here once available." icon={Warehouse} />
+        <EmptyState
+          title="Coming soon"
+          description="Warehouse details will appear here once available."
+          icon={Warehouse}
+        />
       ) : (
         <TableContainer component={Paper} variant="outlined">
           <Table size="small">

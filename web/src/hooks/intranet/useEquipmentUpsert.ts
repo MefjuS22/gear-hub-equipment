@@ -25,11 +25,14 @@ export type UseEquipmentUpsertOptions = {
   equipmentId?: number;
 };
 
-export function useEquipmentUpsert({ equipmentId }: UseEquipmentUpsertOptions = {}) {
+export function useEquipmentUpsert({
+  equipmentId,
+}: UseEquipmentUpsertOptions = {}) {
   const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
   const navigate = useNavigate();
-  const isEdit = equipmentId != null && Number.isFinite(equipmentId) && equipmentId > 0;
+  const isEdit =
+    equipmentId != null && Number.isFinite(equipmentId) && equipmentId > 0;
   const detailId = isEdit ? equipmentId! : 0;
 
   const primedCreateDefaults = useRef(false);
@@ -139,13 +142,18 @@ export function useEquipmentUpsert({ equipmentId }: UseEquipmentUpsertOptions = 
 
   const handleSubmitForm = form.handleSubmit((data) => {
     if (isEdit) {
-      update.mutate({ id: detailId, data }, {
-        onSuccess: () => {
-          qc.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
-          qc.invalidateQueries({ queryKey: getApiEquipmentIdQueryKey(detailId) });
-          navigate({ to: "/intranet/equipment" });
+      update.mutate(
+        { id: detailId, data },
+        {
+          onSuccess: () => {
+            qc.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
+            qc.invalidateQueries({
+              queryKey: getApiEquipmentIdQueryKey(detailId),
+            });
+            navigate({ to: "/intranet/equipment" });
+          },
         },
-      });
+      );
     } else {
       create.mutate({ data });
     }
@@ -158,7 +166,8 @@ export function useEquipmentUpsert({ equipmentId }: UseEquipmentUpsertOptions = 
     (isEdit && equipmentDetail.isLoading);
 
   const isDetailError = isEdit && equipmentDetail.isError;
-  const isDetailMissing = isEdit && equipmentDetail.isSuccess && equipmentDetail.data?.id == null;
+  const isDetailMissing =
+    isEdit && equipmentDetail.isSuccess && equipmentDetail.data?.id == null;
 
   return {
     categories,

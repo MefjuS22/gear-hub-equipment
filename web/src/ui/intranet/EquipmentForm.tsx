@@ -11,7 +11,10 @@ import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import type { BrandLookupDto, CategoryLookupDto } from "../../api/generated/types";
+import type {
+  BrandLookupDto,
+  CategoryLookupDto,
+} from "../../api/generated/types";
 import type { WarehouseOption } from "../../lib/warehouseOptionsFromEquipment";
 import type { EquipmentFormValues } from "../../lib/formSchemas";
 
@@ -145,7 +148,9 @@ export function EquipmentForm({
                 </MenuItem>
               ))
             ) : (
-              <MenuItem value={1}>Warehouse #1 (add equipment in DB first)</MenuItem>
+              <MenuItem value={1}>
+                Warehouse #1 (add equipment in DB first)
+              </MenuItem>
             )}
           </TextField>
         )}
@@ -162,7 +167,9 @@ export function EquipmentForm({
             name={field.name}
             inputRef={field.ref}
             value={field.value}
-            onChange={(e) => field.onChange(e.target.value === "" ? 0 : Number(e.target.value))}
+            onChange={(e) =>
+              field.onChange(e.target.value === "" ? 0 : Number(e.target.value))
+            }
             onBlur={field.onBlur}
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
@@ -196,7 +203,12 @@ export function EquipmentForm({
         >
           {submitLabel}
         </Button>
-        <Button component={Link} to={cancelTo} variant="outlined" disabled={isPending}>
+        <Button
+          component={Link}
+          to={cancelTo}
+          variant="outlined"
+          disabled={isPending}
+        >
           Cancel
         </Button>
       </Box>

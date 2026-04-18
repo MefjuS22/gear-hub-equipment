@@ -37,7 +37,11 @@ export function CategoriesAdminView() {
         Categories
       </Typography>
       {rows.length === 0 ? (
-        <EmptyState title="Coming soon" description="Category management will appear here once available." icon={FolderTree} />
+        <EmptyState
+          title="Coming soon"
+          description="Category management will appear here once available."
+          icon={FolderTree}
+        />
       ) : (
         <TableContainer component={Paper} variant="outlined">
           <Table size="small">

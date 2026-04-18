@@ -37,7 +37,11 @@ export function CustomersAdminView() {
         Customers
       </Typography>
       {rows.length === 0 ? (
-        <EmptyState title="Coming soon" description="Customer management will appear here once available." icon={Users} />
+        <EmptyState
+          title="Coming soon"
+          description="Customer management will appear here once available."
+          icon={Users}
+        />
       ) : (
         <TableContainer component={Paper} variant="outlined">
           <Table size="small">

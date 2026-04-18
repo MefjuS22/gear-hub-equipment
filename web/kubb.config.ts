@@ -13,6 +13,7 @@ export default defineConfig({
   output: {
     path: "./src/api/generated",
     clean: true,
+    format: 'prettier'
   },
   plugins: [
     pluginOas(),
