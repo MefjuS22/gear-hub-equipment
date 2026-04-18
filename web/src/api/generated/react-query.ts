@@ -19,16 +19,47 @@ import type {
   UseMutationResult,
 } from "@tanstack/react-query";
 import type {
-  DeleteApiEquipmentIdMutationResponse,
-  DeleteApiEquipmentIdPathParams,
-  DeleteApiEquipmentId404,
+  DeleteApiBrandIdMutationResponse,
+  DeleteApiBrandIdPathParams,
+  DeleteApiBrandId400,
+  DeleteApiBrandId404,
+  GetApiBrandIdQueryResponse,
+  GetApiBrandIdPathParams,
+  GetApiBrandId404,
   GetApiBrandQueryResponse,
   GetApiCategoryQueryResponse,
+  GetApiCategoryIdQueryResponse,
+  GetApiCategoryIdPathParams,
+  GetApiCategoryId404,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
   GetApiEquipmentId404,
+  GetApiOrderQueryResponse,
+  GetApiOrder400,
+  GetApiWarehouseQueryResponse,
+  GetApiWarehouseIdQueryResponse,
+  GetApiWarehouseIdPathParams,
+  GetApiWarehouseId404,
+  PostApiBrandMutationRequest,
+  PostApiBrandMutationResponse,
+  PostApiBrand400,
+  PutApiBrandIdMutationRequest,
+  PutApiBrandIdMutationResponse,
+  PutApiBrandIdPathParams,
+  PutApiBrandId404,
+  PostApiCategoryMutationRequest,
+  PostApiCategoryMutationResponse,
+  PostApiCategory400,
+  PutApiCategoryIdMutationRequest,
+  PutApiCategoryIdMutationResponse,
+  PutApiCategoryIdPathParams,
+  PutApiCategoryId404,
+  DeleteApiCategoryIdMutationResponse,
+  DeleteApiCategoryIdPathParams,
+  DeleteApiCategoryId400,
+  DeleteApiCategoryId404,
   PostApiEquipmentMutationRequest,
   PostApiEquipmentMutationResponse,
   PostApiEquipment400,
@@ -38,9 +69,23 @@ import type {
   PutApiEquipmentIdPathParams,
   PutApiEquipmentId400,
   PutApiEquipmentId404,
+  DeleteApiEquipmentIdMutationResponse,
+  DeleteApiEquipmentIdPathParams,
+  DeleteApiEquipmentId404,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
+  PostApiWarehouseMutationRequest,
+  PostApiWarehouseMutationResponse,
+  PostApiWarehouse400,
+  PutApiWarehouseIdMutationRequest,
+  PutApiWarehouseIdMutationResponse,
+  PutApiWarehouseIdPathParams,
+  PutApiWarehouseId404,
+  DeleteApiWarehouseIdMutationResponse,
+  DeleteApiWarehouseIdPathParams,
+  DeleteApiWarehouseId400,
+  DeleteApiWarehouseId404,
 } from "./types.ts";
 import {
   mutationOptions,
@@ -50,15 +95,29 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
-  deleteApiEquipmentId,
+  deleteApiBrandId,
   getApiBrand,
+  getApiBrandId,
   getApiCategory,
+  getApiCategoryId,
   getApiCustomer,
   getApiEquipment,
   getApiEquipmentId,
+  getApiOrder,
+  getApiWarehouse,
+  getApiWarehouseId,
+  postApiBrand,
+  putApiBrandId,
+  postApiCategory,
+  putApiCategoryId,
+  deleteApiCategoryId,
   postApiEquipment,
   putApiEquipmentId,
+  deleteApiEquipmentId,
   postApiOrderCreateorder,
+  postApiWarehouse,
+  putApiWarehouseId,
+  deleteApiWarehouseId,
 } from "./client.ts";
 
 export const getApiBrandQueryKey = () => [{ url: "/api/Brand" }] as const;
@@ -123,6 +182,72 @@ export function useGetApiBrand<
   return query;
 }
 
+export const getApiBrandIdQueryKey = (id: GetApiBrandIdPathParams["id"]) =>
+  [{ url: "/api/Brand/:id", params: { id: id } }] as const;
+
+export type GetApiBrandIdQueryKey = ReturnType<typeof getApiBrandIdQueryKey>;
+
+export function getApiBrandIdQueryOptions(
+  id: GetApiBrandIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiBrandIdQueryKey(id);
+  return queryOptions<
+    GetApiBrandIdQueryResponse,
+    ResponseErrorConfig<GetApiBrandId404>,
+    GetApiBrandIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiBrandId(id, { ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export function useGetApiBrandId<
+  TData = GetApiBrandIdQueryResponse,
+  TQueryData = GetApiBrandIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiBrandIdQueryKey,
+>(
+  id: GetApiBrandIdPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiBrandIdQueryResponse,
+        ResponseErrorConfig<GetApiBrandId404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiBrandIdQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiBrandIdQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiBrandId404>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
 export const getApiCategoryQueryKey = () => [{ url: "/api/Category" }] as const;
 
 export type GetApiCategoryQueryKey = ReturnType<typeof getApiCategoryQueryKey>;
@@ -177,6 +302,78 @@ export function useGetApiCategory<
     } as unknown as QueryObserverOptions,
     queryClient,
   ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCategoryIdQueryKey = (
+  id: GetApiCategoryIdPathParams["id"],
+) => [{ url: "/api/Category/:id", params: { id: id } }] as const;
+
+export type GetApiCategoryIdQueryKey = ReturnType<
+  typeof getApiCategoryIdQueryKey
+>;
+
+export function getApiCategoryIdQueryOptions(
+  id: GetApiCategoryIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCategoryIdQueryKey(id);
+  return queryOptions<
+    GetApiCategoryIdQueryResponse,
+    ResponseErrorConfig<GetApiCategoryId404>,
+    GetApiCategoryIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCategoryId(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export function useGetApiCategoryId<
+  TData = GetApiCategoryIdQueryResponse,
+  TQueryData = GetApiCategoryIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiCategoryIdQueryKey,
+>(
+  id: GetApiCategoryIdPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCategoryIdQueryResponse,
+        ResponseErrorConfig<GetApiCategoryId404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCategoryIdQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiCategoryIdQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCategoryId404>> & {
     queryKey: TQueryKey;
   };
 
@@ -384,6 +581,205 @@ export function useGetApiEquipmentId<
   return query;
 }
 
+export const getApiOrderQueryKey = () => [{ url: "/api/Order" }] as const;
+
+export type GetApiOrderQueryKey = ReturnType<typeof getApiOrderQueryKey>;
+
+export function getApiOrderQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderQueryKey();
+  return queryOptions<
+    GetApiOrderQueryResponse,
+    ResponseErrorConfig<GetApiOrder400>,
+    GetApiOrderQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrder({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order}
+ */
+export function useGetApiOrder<
+  TData = GetApiOrderQueryResponse,
+  TQueryData = GetApiOrderQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiOrderQueryResponse,
+        ResponseErrorConfig<GetApiOrder400>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiOrderQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiOrderQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiOrder400>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiWarehouseQueryKey = () =>
+  [{ url: "/api/Warehouse" }] as const;
+
+export type GetApiWarehouseQueryKey = ReturnType<
+  typeof getApiWarehouseQueryKey
+>;
+
+export function getApiWarehouseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiWarehouseQueryKey();
+  return queryOptions<
+    GetApiWarehouseQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiWarehouseQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiWarehouse({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse}
+ */
+export function useGetApiWarehouse<
+  TData = GetApiWarehouseQueryResponse,
+  TQueryData = GetApiWarehouseQueryResponse,
+  TQueryKey extends QueryKey = GetApiWarehouseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiWarehouseQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiWarehouseQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiWarehouseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiWarehouseIdQueryKey = (
+  id: GetApiWarehouseIdPathParams["id"],
+) => [{ url: "/api/Warehouse/:id", params: { id: id } }] as const;
+
+export type GetApiWarehouseIdQueryKey = ReturnType<
+  typeof getApiWarehouseIdQueryKey
+>;
+
+export function getApiWarehouseIdQueryOptions(
+  id: GetApiWarehouseIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiWarehouseIdQueryKey(id);
+  return queryOptions<
+    GetApiWarehouseIdQueryResponse,
+    ResponseErrorConfig<GetApiWarehouseId404>,
+    GetApiWarehouseIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiWarehouseId(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export function useGetApiWarehouseId<
+  TData = GetApiWarehouseIdQueryResponse,
+  TQueryData = GetApiWarehouseIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiWarehouseIdQueryKey,
+>(
+  id: GetApiWarehouseIdPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiWarehouseIdQueryResponse,
+        ResponseErrorConfig<GetApiWarehouseId404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiWarehouseIdQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiWarehouseIdQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiWarehouseId404>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
 export const getApiBrandSuspenseQueryKey = () =>
   [{ url: "/api/Brand" }] as const;
 
@@ -439,6 +835,74 @@ export function useGetApiBrandSuspense<
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
   ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiBrandIdSuspenseQueryKey = (
+  id: GetApiBrandIdPathParams["id"],
+) => [{ url: "/api/Brand/:id", params: { id: id } }] as const;
+
+export type GetApiBrandIdSuspenseQueryKey = ReturnType<
+  typeof getApiBrandIdSuspenseQueryKey
+>;
+
+export function getApiBrandIdSuspenseQueryOptions(
+  id: GetApiBrandIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiBrandIdSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiBrandIdQueryResponse,
+    ResponseErrorConfig<GetApiBrandId404>,
+    GetApiBrandIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiBrandId(id, { ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export function useGetApiBrandIdSuspense<
+  TData = GetApiBrandIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiBrandIdSuspenseQueryKey,
+>(
+  id: GetApiBrandIdPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiBrandIdQueryResponse,
+        ResponseErrorConfig<GetApiBrandId404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiBrandIdSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiBrandIdSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiBrandId404>> & {
     queryKey: TQueryKey;
   };
 
@@ -505,6 +969,78 @@ export function useGetApiCategorySuspense<
   ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
     queryKey: TQueryKey;
   };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCategoryIdSuspenseQueryKey = (
+  id: GetApiCategoryIdPathParams["id"],
+) => [{ url: "/api/Category/:id", params: { id: id } }] as const;
+
+export type GetApiCategoryIdSuspenseQueryKey = ReturnType<
+  typeof getApiCategoryIdSuspenseQueryKey
+>;
+
+export function getApiCategoryIdSuspenseQueryOptions(
+  id: GetApiCategoryIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCategoryIdSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiCategoryIdQueryResponse,
+    ResponseErrorConfig<GetApiCategoryId404>,
+    GetApiCategoryIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCategoryId(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export function useGetApiCategoryIdSuspense<
+  TData = GetApiCategoryIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiCategoryIdSuspenseQueryKey,
+>(
+  id: GetApiCategoryIdPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCategoryIdQueryResponse,
+        ResponseErrorConfig<GetApiCategoryId404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCategoryIdSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCategoryIdSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCategoryId404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -709,6 +1245,666 @@ export function useGetApiEquipmentIdSuspense<
   query.queryKey = queryKey as TQueryKey;
 
   return query;
+}
+
+export const getApiOrderSuspenseQueryKey = () =>
+  [{ url: "/api/Order" }] as const;
+
+export type GetApiOrderSuspenseQueryKey = ReturnType<
+  typeof getApiOrderSuspenseQueryKey
+>;
+
+export function getApiOrderSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderSuspenseQueryKey();
+  return queryOptions<
+    GetApiOrderQueryResponse,
+    ResponseErrorConfig<GetApiOrder400>,
+    GetApiOrderQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrder({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order}
+ */
+export function useGetApiOrderSuspense<
+  TData = GetApiOrderQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiOrderQueryResponse,
+        ResponseErrorConfig<GetApiOrder400>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiOrderSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiOrderSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiOrder400>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiWarehouseSuspenseQueryKey = () =>
+  [{ url: "/api/Warehouse" }] as const;
+
+export type GetApiWarehouseSuspenseQueryKey = ReturnType<
+  typeof getApiWarehouseSuspenseQueryKey
+>;
+
+export function getApiWarehouseSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiWarehouseSuspenseQueryKey();
+  return queryOptions<
+    GetApiWarehouseQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiWarehouseQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiWarehouse({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse}
+ */
+export function useGetApiWarehouseSuspense<
+  TData = GetApiWarehouseQueryResponse,
+  TQueryKey extends QueryKey = GetApiWarehouseSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiWarehouseQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiWarehouseSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiWarehouseSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiWarehouseIdSuspenseQueryKey = (
+  id: GetApiWarehouseIdPathParams["id"],
+) => [{ url: "/api/Warehouse/:id", params: { id: id } }] as const;
+
+export type GetApiWarehouseIdSuspenseQueryKey = ReturnType<
+  typeof getApiWarehouseIdSuspenseQueryKey
+>;
+
+export function getApiWarehouseIdSuspenseQueryOptions(
+  id: GetApiWarehouseIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiWarehouseIdSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiWarehouseIdQueryResponse,
+    ResponseErrorConfig<GetApiWarehouseId404>,
+    GetApiWarehouseIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiWarehouseId(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export function useGetApiWarehouseIdSuspense<
+  TData = GetApiWarehouseIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiWarehouseIdSuspenseQueryKey,
+>(
+  id: GetApiWarehouseIdPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiWarehouseIdQueryResponse,
+        ResponseErrorConfig<GetApiWarehouseId404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiWarehouseIdSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiWarehouseIdSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiWarehouseId404>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const postApiBrandMutationKey = () => [{ url: "/api/Brand" }] as const;
+
+export type PostApiBrandMutationKey = ReturnType<
+  typeof postApiBrandMutationKey
+>;
+
+export function postApiBrandMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiBrandMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiBrandMutationKey();
+  return mutationOptions<
+    PostApiBrandMutationResponse,
+    ResponseErrorConfig<PostApiBrand400>,
+    { data?: PostApiBrandMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiBrand(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand}
+ */
+export function usePostApiBrand<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiBrandMutationResponse,
+      ResponseErrorConfig<PostApiBrand400>,
+      { data?: PostApiBrandMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiBrandMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? postApiBrandMutationKey();
+
+  const baseOptions = postApiBrandMutationOptions(config) as UseMutationOptions<
+    PostApiBrandMutationResponse,
+    ResponseErrorConfig<PostApiBrand400>,
+    { data?: PostApiBrandMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiBrandMutationResponse,
+    ResponseErrorConfig<PostApiBrand400>,
+    { data?: PostApiBrandMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiBrandMutationResponse,
+    ResponseErrorConfig<PostApiBrand400>,
+    { data?: PostApiBrandMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiBrandIdMutationKey = () =>
+  [{ url: "/api/Brand/:id" }] as const;
+
+export type PutApiBrandIdMutationKey = ReturnType<
+  typeof putApiBrandIdMutationKey
+>;
+
+export function putApiBrandIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiBrandIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiBrandIdMutationKey();
+  return mutationOptions<
+    PutApiBrandIdMutationResponse,
+    ResponseErrorConfig<PutApiBrandId404>,
+    { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id, data }) => {
+      return putApiBrandId(id, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export function usePutApiBrandId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiBrandIdMutationResponse,
+      ResponseErrorConfig<PutApiBrandId404>,
+      {
+        id: PutApiBrandIdPathParams["id"];
+        data?: PutApiBrandIdMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiBrandIdMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? putApiBrandIdMutationKey();
+
+  const baseOptions = putApiBrandIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiBrandIdMutationResponse,
+    ResponseErrorConfig<PutApiBrandId404>,
+    { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiBrandIdMutationResponse,
+    ResponseErrorConfig<PutApiBrandId404>,
+    { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiBrandIdMutationResponse,
+    ResponseErrorConfig<PutApiBrandId404>,
+    { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
+    TContext
+  >;
+}
+
+export const deleteApiBrandIdMutationKey = () =>
+  [{ url: "/api/Brand/:id" }] as const;
+
+export type DeleteApiBrandIdMutationKey = ReturnType<
+  typeof deleteApiBrandIdMutationKey
+>;
+
+export function deleteApiBrandIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const mutationKey = deleteApiBrandIdMutationKey();
+  return mutationOptions<
+    DeleteApiBrandIdMutationResponse,
+    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    { id: DeleteApiBrandIdPathParams["id"] },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id }) => {
+      return deleteApiBrandId(id, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export function useDeleteApiBrandId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      DeleteApiBrandIdMutationResponse,
+      ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+      { id: DeleteApiBrandIdPathParams["id"] },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteApiBrandIdMutationKey();
+
+  const baseOptions = deleteApiBrandIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    DeleteApiBrandIdMutationResponse,
+    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    { id: DeleteApiBrandIdPathParams["id"] },
+    TContext
+  >;
+
+  return useMutation<
+    DeleteApiBrandIdMutationResponse,
+    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    { id: DeleteApiBrandIdPathParams["id"] },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    DeleteApiBrandIdMutationResponse,
+    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    { id: DeleteApiBrandIdPathParams["id"] },
+    TContext
+  >;
+}
+
+export const postApiCategoryMutationKey = () =>
+  [{ url: "/api/Category" }] as const;
+
+export type PostApiCategoryMutationKey = ReturnType<
+  typeof postApiCategoryMutationKey
+>;
+
+export function postApiCategoryMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiCategoryMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiCategoryMutationKey();
+  return mutationOptions<
+    PostApiCategoryMutationResponse,
+    ResponseErrorConfig<PostApiCategory400>,
+    { data?: PostApiCategoryMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiCategory(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Category}
+ */
+export function usePostApiCategory<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiCategoryMutationResponse,
+      ResponseErrorConfig<PostApiCategory400>,
+      { data?: PostApiCategoryMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiCategoryMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? postApiCategoryMutationKey();
+
+  const baseOptions = postApiCategoryMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PostApiCategoryMutationResponse,
+    ResponseErrorConfig<PostApiCategory400>,
+    { data?: PostApiCategoryMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiCategoryMutationResponse,
+    ResponseErrorConfig<PostApiCategory400>,
+    { data?: PostApiCategoryMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiCategoryMutationResponse,
+    ResponseErrorConfig<PostApiCategory400>,
+    { data?: PostApiCategoryMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiCategoryIdMutationKey = () =>
+  [{ url: "/api/Category/:id" }] as const;
+
+export type PutApiCategoryIdMutationKey = ReturnType<
+  typeof putApiCategoryIdMutationKey
+>;
+
+export function putApiCategoryIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiCategoryIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiCategoryIdMutationKey();
+  return mutationOptions<
+    PutApiCategoryIdMutationResponse,
+    ResponseErrorConfig<PutApiCategoryId404>,
+    {
+      id: PutApiCategoryIdPathParams["id"];
+      data?: PutApiCategoryIdMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id, data }) => {
+      return putApiCategoryId(id, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export function usePutApiCategoryId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiCategoryIdMutationResponse,
+      ResponseErrorConfig<PutApiCategoryId404>,
+      {
+        id: PutApiCategoryIdPathParams["id"];
+        data?: PutApiCategoryIdMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiCategoryIdMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiCategoryIdMutationKey();
+
+  const baseOptions = putApiCategoryIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiCategoryIdMutationResponse,
+    ResponseErrorConfig<PutApiCategoryId404>,
+    {
+      id: PutApiCategoryIdPathParams["id"];
+      data?: PutApiCategoryIdMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiCategoryIdMutationResponse,
+    ResponseErrorConfig<PutApiCategoryId404>,
+    {
+      id: PutApiCategoryIdPathParams["id"];
+      data?: PutApiCategoryIdMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiCategoryIdMutationResponse,
+    ResponseErrorConfig<PutApiCategoryId404>,
+    {
+      id: PutApiCategoryIdPathParams["id"];
+      data?: PutApiCategoryIdMutationRequest;
+    },
+    TContext
+  >;
+}
+
+export const deleteApiCategoryIdMutationKey = () =>
+  [{ url: "/api/Category/:id" }] as const;
+
+export type DeleteApiCategoryIdMutationKey = ReturnType<
+  typeof deleteApiCategoryIdMutationKey
+>;
+
+export function deleteApiCategoryIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const mutationKey = deleteApiCategoryIdMutationKey();
+  return mutationOptions<
+    DeleteApiCategoryIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    { id: DeleteApiCategoryIdPathParams["id"] },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id }) => {
+      return deleteApiCategoryId(id, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export function useDeleteApiCategoryId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      DeleteApiCategoryIdMutationResponse,
+      ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+      { id: DeleteApiCategoryIdPathParams["id"] },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteApiCategoryIdMutationKey();
+
+  const baseOptions = deleteApiCategoryIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    DeleteApiCategoryIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    { id: DeleteApiCategoryIdPathParams["id"] },
+    TContext
+  >;
+
+  return useMutation<
+    DeleteApiCategoryIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    { id: DeleteApiCategoryIdPathParams["id"] },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    DeleteApiCategoryIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    { id: DeleteApiCategoryIdPathParams["id"] },
+    TContext
+  >;
 }
 
 export const postApiEquipmentMutationKey = () =>
@@ -1022,6 +2218,245 @@ export function usePostApiOrderCreateorder<TContext>(
     PostApiOrderCreateorderMutationResponse,
     ResponseErrorConfig<PostApiOrderCreateorder400>,
     { data?: PostApiOrderCreateorderMutationRequest },
+    TContext
+  >;
+}
+
+export const postApiWarehouseMutationKey = () =>
+  [{ url: "/api/Warehouse" }] as const;
+
+export type PostApiWarehouseMutationKey = ReturnType<
+  typeof postApiWarehouseMutationKey
+>;
+
+export function postApiWarehouseMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiWarehouseMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiWarehouseMutationKey();
+  return mutationOptions<
+    PostApiWarehouseMutationResponse,
+    ResponseErrorConfig<PostApiWarehouse400>,
+    { data?: PostApiWarehouseMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiWarehouse(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse}
+ */
+export function usePostApiWarehouse<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiWarehouseMutationResponse,
+      ResponseErrorConfig<PostApiWarehouse400>,
+      { data?: PostApiWarehouseMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiWarehouseMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? postApiWarehouseMutationKey();
+
+  const baseOptions = postApiWarehouseMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PostApiWarehouseMutationResponse,
+    ResponseErrorConfig<PostApiWarehouse400>,
+    { data?: PostApiWarehouseMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiWarehouseMutationResponse,
+    ResponseErrorConfig<PostApiWarehouse400>,
+    { data?: PostApiWarehouseMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiWarehouseMutationResponse,
+    ResponseErrorConfig<PostApiWarehouse400>,
+    { data?: PostApiWarehouseMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiWarehouseIdMutationKey = () =>
+  [{ url: "/api/Warehouse/:id" }] as const;
+
+export type PutApiWarehouseIdMutationKey = ReturnType<
+  typeof putApiWarehouseIdMutationKey
+>;
+
+export function putApiWarehouseIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiWarehouseIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiWarehouseIdMutationKey();
+  return mutationOptions<
+    PutApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<PutApiWarehouseId404>,
+    {
+      id: PutApiWarehouseIdPathParams["id"];
+      data?: PutApiWarehouseIdMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id, data }) => {
+      return putApiWarehouseId(id, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export function usePutApiWarehouseId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiWarehouseIdMutationResponse,
+      ResponseErrorConfig<PutApiWarehouseId404>,
+      {
+        id: PutApiWarehouseIdPathParams["id"];
+        data?: PutApiWarehouseIdMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiWarehouseIdMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiWarehouseIdMutationKey();
+
+  const baseOptions = putApiWarehouseIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<PutApiWarehouseId404>,
+    {
+      id: PutApiWarehouseIdPathParams["id"];
+      data?: PutApiWarehouseIdMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<PutApiWarehouseId404>,
+    {
+      id: PutApiWarehouseIdPathParams["id"];
+      data?: PutApiWarehouseIdMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<PutApiWarehouseId404>,
+    {
+      id: PutApiWarehouseIdPathParams["id"];
+      data?: PutApiWarehouseIdMutationRequest;
+    },
+    TContext
+  >;
+}
+
+export const deleteApiWarehouseIdMutationKey = () =>
+  [{ url: "/api/Warehouse/:id" }] as const;
+
+export type DeleteApiWarehouseIdMutationKey = ReturnType<
+  typeof deleteApiWarehouseIdMutationKey
+>;
+
+export function deleteApiWarehouseIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const mutationKey = deleteApiWarehouseIdMutationKey();
+  return mutationOptions<
+    DeleteApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    { id: DeleteApiWarehouseIdPathParams["id"] },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id }) => {
+      return deleteApiWarehouseId(id, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export function useDeleteApiWarehouseId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      DeleteApiWarehouseIdMutationResponse,
+      ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+      { id: DeleteApiWarehouseIdPathParams["id"] },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteApiWarehouseIdMutationKey();
+
+  const baseOptions = deleteApiWarehouseIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    DeleteApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    { id: DeleteApiWarehouseIdPathParams["id"] },
+    TContext
+  >;
+
+  return useMutation<
+    DeleteApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    { id: DeleteApiWarehouseIdPathParams["id"] },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    DeleteApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    { id: DeleteApiWarehouseIdPathParams["id"] },
     TContext
   >;
 }

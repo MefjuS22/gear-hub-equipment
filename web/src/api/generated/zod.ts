@@ -16,6 +16,12 @@ export const apiErrorCodeSchema = z.enum([
   "orderUserNotFound",
   "orderEquipmentNotFound",
   "orderEquipmentUnavailable",
+  "brandNotFound",
+  "brandInUse",
+  "categoryNotFound",
+  "categoryInUse",
+  "warehouseNotFound",
+  "warehouseInUse",
 ]);
 
 export const apiErrorResponseSchema = z.object({
@@ -36,6 +42,10 @@ export const brandLookupDtoSchema = z.object({
   name: z.string().nullish(),
 });
 
+export const brandUpsertDtoSchema = z.object({
+  name: z.string().nullish(),
+});
+
 export const categorySchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
@@ -44,6 +54,11 @@ export const categorySchema = z.object({
 
 export const categoryLookupDtoSchema = z.object({
   id: z.optional(z.int()),
+  name: z.string().nullish(),
+  description: z.string().nullish(),
+});
+
+export const categoryUpsertDtoSchema = z.object({
   name: z.string().nullish(),
   description: z.string().nullish(),
 });
@@ -187,6 +202,39 @@ export const orderCreateDtoSchema = z.object({
   },
 });
 
+export const rentalOrderLineDtoSchema = z.object({
+  equipmentId: z.optional(z.int()),
+  equipmentName: z.string().nullish(),
+  quantity: z.optional(z.int()),
+  unitPrice: z.optional(z.number()),
+});
+
+export const rentalOrderListDtoSchema = z.object({
+  id: z.optional(z.int()),
+  customerId: z.optional(z.int()),
+  customerCompanyName: z.string().nullish(),
+  userId: z.optional(z.int()),
+  userName: z.string().nullish(),
+  userEmail: z.string().nullish(),
+  orderDate: z.optional(z.iso.datetime()),
+  rentalStartDate: z.optional(z.iso.datetime()),
+  rentalEndDate: z.optional(z.iso.datetime()),
+  get items() {
+    return z.array(rentalOrderLineDtoSchema).nullish();
+  },
+});
+
+export const warehouseLookupDtoSchema = z.object({
+  id: z.optional(z.int()),
+  name: z.string().nullish(),
+  location: z.string().nullish(),
+});
+
+export const warehouseUpsertDtoSchema = z.object({
+  name: z.string().nullish(),
+  location: z.string().nullish(),
+});
+
 /**
  * @description OK
  */
@@ -194,6 +242,87 @@ export const getApiBrand200Schema = z.array(z.lazy(() => brandLookupDtoSchema));
 
 export const getApiBrandQueryResponseSchema = z.lazy(
   () => getApiBrand200Schema,
+);
+
+/**
+ * @description Created
+ */
+export const postApiBrand201Schema = z.lazy(() => brandLookupDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiBrand400Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const postApiBrandMutationRequestSchema = z.lazy(
+  () => brandUpsertDtoSchema,
+);
+
+export const postApiBrandMutationResponseSchema = z.lazy(
+  () => postApiBrand201Schema,
+);
+
+export const getApiBrandIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiBrandId200Schema = z.lazy(() => brandLookupDtoSchema);
+
+/**
+ * @description Not Found
+ */
+export const getApiBrandId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiBrandIdQueryResponseSchema = z.lazy(
+  () => getApiBrandId200Schema,
+);
+
+export const putApiBrandIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const putApiBrandId204Schema = z.any();
+
+/**
+ * @description Not Found
+ */
+export const putApiBrandId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const putApiBrandIdMutationRequestSchema = z.lazy(
+  () => brandUpsertDtoSchema,
+);
+
+export const putApiBrandIdMutationResponseSchema = z.lazy(
+  () => putApiBrandId204Schema,
+);
+
+export const deleteApiBrandIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const deleteApiBrandId204Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const deleteApiBrandId400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Not Found
+ */
+export const deleteApiBrandId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const deleteApiBrandIdMutationResponseSchema = z.lazy(
+  () => deleteApiBrandId204Schema,
 );
 
 /**
@@ -205,6 +334,91 @@ export const getApiCategory200Schema = z.array(
 
 export const getApiCategoryQueryResponseSchema = z.lazy(
   () => getApiCategory200Schema,
+);
+
+/**
+ * @description Created
+ */
+export const postApiCategory201Schema = z.lazy(() => categoryLookupDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiCategory400Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const postApiCategoryMutationRequestSchema = z.lazy(
+  () => categoryUpsertDtoSchema,
+);
+
+export const postApiCategoryMutationResponseSchema = z.lazy(
+  () => postApiCategory201Schema,
+);
+
+export const getApiCategoryIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiCategoryId200Schema = z.lazy(() => categoryLookupDtoSchema);
+
+/**
+ * @description Not Found
+ */
+export const getApiCategoryId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiCategoryIdQueryResponseSchema = z.lazy(
+  () => getApiCategoryId200Schema,
+);
+
+export const putApiCategoryIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const putApiCategoryId204Schema = z.any();
+
+/**
+ * @description Not Found
+ */
+export const putApiCategoryId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const putApiCategoryIdMutationRequestSchema = z.lazy(
+  () => categoryUpsertDtoSchema,
+);
+
+export const putApiCategoryIdMutationResponseSchema = z.lazy(
+  () => putApiCategoryId204Schema,
+);
+
+export const deleteApiCategoryIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const deleteApiCategoryId204Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const deleteApiCategoryId400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+/**
+ * @description Not Found
+ */
+export const deleteApiCategoryId404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+export const deleteApiCategoryIdMutationResponseSchema = z.lazy(
+  () => deleteApiCategoryId204Schema,
 );
 
 /**
@@ -316,6 +530,22 @@ export const deleteApiEquipmentIdMutationResponseSchema = z.lazy(
 );
 
 /**
+ * @description OK
+ */
+export const getApiOrder200Schema = z.array(
+  z.lazy(() => rentalOrderListDtoSchema),
+);
+
+/**
+ * @description Bad Request
+ */
+export const getApiOrder400Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiOrderQueryResponseSchema = z.lazy(
+  () => getApiOrder200Schema,
+);
+
+/**
  * @description Created
  */
 export const postApiOrderCreateorder201Schema = z.lazy(() => rentalOrderSchema);
@@ -333,4 +563,102 @@ export const postApiOrderCreateorderMutationRequestSchema = z.lazy(
 
 export const postApiOrderCreateorderMutationResponseSchema = z.lazy(
   () => postApiOrderCreateorder201Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiWarehouse200Schema = z.array(
+  z.lazy(() => warehouseLookupDtoSchema),
+);
+
+export const getApiWarehouseQueryResponseSchema = z.lazy(
+  () => getApiWarehouse200Schema,
+);
+
+/**
+ * @description Created
+ */
+export const postApiWarehouse201Schema = z.lazy(() => warehouseLookupDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiWarehouse400Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const postApiWarehouseMutationRequestSchema = z.lazy(
+  () => warehouseUpsertDtoSchema,
+);
+
+export const postApiWarehouseMutationResponseSchema = z.lazy(
+  () => postApiWarehouse201Schema,
+);
+
+export const getApiWarehouseIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiWarehouseId200Schema = z.lazy(
+  () => warehouseLookupDtoSchema,
+);
+
+/**
+ * @description Not Found
+ */
+export const getApiWarehouseId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiWarehouseIdQueryResponseSchema = z.lazy(
+  () => getApiWarehouseId200Schema,
+);
+
+export const putApiWarehouseIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const putApiWarehouseId204Schema = z.any();
+
+/**
+ * @description Not Found
+ */
+export const putApiWarehouseId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const putApiWarehouseIdMutationRequestSchema = z.lazy(
+  () => warehouseUpsertDtoSchema,
+);
+
+export const putApiWarehouseIdMutationResponseSchema = z.lazy(
+  () => putApiWarehouseId204Schema,
+);
+
+export const deleteApiWarehouseIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const deleteApiWarehouseId204Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const deleteApiWarehouseId400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+/**
+ * @description Not Found
+ */
+export const deleteApiWarehouseId404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+export const deleteApiWarehouseIdMutationResponseSchema = z.lazy(
+  () => deleteApiWarehouseId204Schema,
 );

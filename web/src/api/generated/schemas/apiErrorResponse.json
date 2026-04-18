@@ -12,7 +12,13 @@
         "orderCustomerNotFound",
         "orderUserNotFound",
         "orderEquipmentNotFound",
-        "orderEquipmentUnavailable"
+        "orderEquipmentUnavailable",
+        "brandNotFound",
+        "brandInUse",
+        "categoryNotFound",
+        "categoryInUse",
+        "warehouseNotFound",
+        "warehouseInUse"
       ],
       "type": "string",
       "x-readme-ref-name": "ApiErrorCode"

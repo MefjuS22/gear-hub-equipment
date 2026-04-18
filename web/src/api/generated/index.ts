@@ -1,7 +1,14 @@
 export type {
+  DeleteApiBrandIdMutationKey,
+  DeleteApiCategoryIdMutationKey,
   DeleteApiEquipmentIdMutationKey,
+  DeleteApiWarehouseIdMutationKey,
+  GetApiBrandIdQueryKey,
+  GetApiBrandIdSuspenseQueryKey,
   GetApiBrandQueryKey,
   GetApiBrandSuspenseQueryKey,
+  GetApiCategoryIdQueryKey,
+  GetApiCategoryIdSuspenseQueryKey,
   GetApiCategoryQueryKey,
   GetApiCategorySuspenseQueryKey,
   GetApiCustomerQueryKey,
@@ -10,9 +17,21 @@ export type {
   GetApiEquipmentIdSuspenseQueryKey,
   GetApiEquipmentQueryKey,
   GetApiEquipmentSuspenseQueryKey,
+  GetApiOrderQueryKey,
+  GetApiOrderSuspenseQueryKey,
+  GetApiWarehouseIdQueryKey,
+  GetApiWarehouseIdSuspenseQueryKey,
+  GetApiWarehouseQueryKey,
+  GetApiWarehouseSuspenseQueryKey,
+  PostApiBrandMutationKey,
+  PostApiCategoryMutationKey,
   PostApiEquipmentMutationKey,
   PostApiOrderCreateorderMutationKey,
+  PostApiWarehouseMutationKey,
+  PutApiBrandIdMutationKey,
+  PutApiCategoryIdMutationKey,
   PutApiEquipmentIdMutationKey,
+  PutApiWarehouseIdMutationKey,
 } from "./react-query.ts";
 export type {
   ApiErrorCode,
@@ -20,21 +39,51 @@ export type {
   ApiErrorResponse,
   Brand,
   BrandLookupDto,
+  BrandUpsertDto,
   Category,
   CategoryLookupDto,
+  CategoryUpsertDto,
   Customer,
+  DeleteApiBrandId204,
+  DeleteApiBrandId400,
+  DeleteApiBrandId404,
+  DeleteApiBrandIdMutation,
+  DeleteApiBrandIdMutationResponse,
+  DeleteApiBrandIdPathParams,
+  DeleteApiCategoryId204,
+  DeleteApiCategoryId400,
+  DeleteApiCategoryId404,
+  DeleteApiCategoryIdMutation,
+  DeleteApiCategoryIdMutationResponse,
+  DeleteApiCategoryIdPathParams,
   DeleteApiEquipmentId204,
   DeleteApiEquipmentId404,
   DeleteApiEquipmentIdMutation,
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
+  DeleteApiWarehouseId204,
+  DeleteApiWarehouseId400,
+  DeleteApiWarehouseId404,
+  DeleteApiWarehouseIdMutation,
+  DeleteApiWarehouseIdMutationResponse,
+  DeleteApiWarehouseIdPathParams,
   Equipment,
   EquipmentDto,
   EquipmentUpsertDto,
   GetApiBrand200,
+  GetApiBrandId200,
+  GetApiBrandId404,
+  GetApiBrandIdPathParams,
+  GetApiBrandIdQuery,
+  GetApiBrandIdQueryResponse,
   GetApiBrandQuery,
   GetApiBrandQueryResponse,
   GetApiCategory200,
+  GetApiCategoryId200,
+  GetApiCategoryId404,
+  GetApiCategoryIdPathParams,
+  GetApiCategoryIdQuery,
+  GetApiCategoryIdQueryResponse,
   GetApiCategoryQuery,
   GetApiCategoryQueryResponse,
   GetApiCustomer200,
@@ -48,9 +97,31 @@ export type {
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentQuery,
   GetApiEquipmentQueryResponse,
+  GetApiOrder200,
+  GetApiOrder400,
+  GetApiOrderQuery,
+  GetApiOrderQueryResponse,
+  GetApiWarehouse200,
+  GetApiWarehouseId200,
+  GetApiWarehouseId404,
+  GetApiWarehouseIdPathParams,
+  GetApiWarehouseIdQuery,
+  GetApiWarehouseIdQueryResponse,
+  GetApiWarehouseQuery,
+  GetApiWarehouseQueryResponse,
   Maintenance,
   OrderCreateDto,
   OrderItemDto,
+  PostApiBrand201,
+  PostApiBrand400,
+  PostApiBrandMutation,
+  PostApiBrandMutationRequest,
+  PostApiBrandMutationResponse,
+  PostApiCategory201,
+  PostApiCategory400,
+  PostApiCategoryMutation,
+  PostApiCategoryMutationRequest,
+  PostApiCategoryMutationResponse,
   PostApiEquipment201,
   PostApiEquipment400,
   PostApiEquipment500,
@@ -62,6 +133,23 @@ export type {
   PostApiOrderCreateorderMutation,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
+  PostApiWarehouse201,
+  PostApiWarehouse400,
+  PostApiWarehouseMutation,
+  PostApiWarehouseMutationRequest,
+  PostApiWarehouseMutationResponse,
+  PutApiBrandId204,
+  PutApiBrandId404,
+  PutApiBrandIdMutation,
+  PutApiBrandIdMutationRequest,
+  PutApiBrandIdMutationResponse,
+  PutApiBrandIdPathParams,
+  PutApiCategoryId204,
+  PutApiCategoryId404,
+  PutApiCategoryIdMutation,
+  PutApiCategoryIdMutationRequest,
+  PutApiCategoryIdMutationResponse,
+  PutApiCategoryIdPathParams,
   PutApiEquipmentId204,
   PutApiEquipmentId400,
   PutApiEquipmentId404,
@@ -69,29 +157,67 @@ export type {
   PutApiEquipmentIdMutationRequest,
   PutApiEquipmentIdMutationResponse,
   PutApiEquipmentIdPathParams,
+  PutApiWarehouseId204,
+  PutApiWarehouseId404,
+  PutApiWarehouseIdMutation,
+  PutApiWarehouseIdMutationRequest,
+  PutApiWarehouseIdMutationResponse,
+  PutApiWarehouseIdPathParams,
   RentalOrder,
   RentalOrderItem,
+  RentalOrderLineDto,
+  RentalOrderListDto,
   Role,
   User,
   Warehouse,
+  WarehouseLookupDto,
+  WarehouseUpsertDto,
 } from "./types.ts";
 export {
+  deleteApiBrandId,
+  deleteApiCategoryId,
   deleteApiEquipmentId,
+  deleteApiWarehouseId,
   getApiBrand,
+  getApiBrandId,
   getApiCategory,
+  getApiCategoryId,
   getApiCustomer,
   getApiEquipment,
   getApiEquipmentId,
+  getApiOrder,
+  getApiWarehouse,
+  getApiWarehouseId,
+  postApiBrand,
+  postApiCategory,
   postApiEquipment,
   postApiOrderCreateorder,
+  postApiWarehouse,
+  putApiBrandId,
+  putApiCategoryId,
   putApiEquipmentId,
+  putApiWarehouseId,
 } from "./client.ts";
+export { deleteApiBrandIdMutationKey } from "./react-query.ts";
+export { deleteApiBrandIdMutationOptions } from "./react-query.ts";
+export { deleteApiCategoryIdMutationKey } from "./react-query.ts";
+export { deleteApiCategoryIdMutationOptions } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationKey } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationOptions } from "./react-query.ts";
+export { deleteApiWarehouseIdMutationKey } from "./react-query.ts";
+export { deleteApiWarehouseIdMutationOptions } from "./react-query.ts";
+export { getApiBrandIdQueryKey } from "./react-query.ts";
+export { getApiBrandIdQueryOptions } from "./react-query.ts";
+export { getApiBrandIdSuspenseQueryKey } from "./react-query.ts";
+export { getApiBrandIdSuspenseQueryOptions } from "./react-query.ts";
 export { getApiBrandQueryKey } from "./react-query.ts";
 export { getApiBrandQueryOptions } from "./react-query.ts";
 export { getApiBrandSuspenseQueryKey } from "./react-query.ts";
 export { getApiBrandSuspenseQueryOptions } from "./react-query.ts";
+export { getApiCategoryIdQueryKey } from "./react-query.ts";
+export { getApiCategoryIdQueryOptions } from "./react-query.ts";
+export { getApiCategoryIdSuspenseQueryKey } from "./react-query.ts";
+export { getApiCategoryIdSuspenseQueryOptions } from "./react-query.ts";
 export { getApiCategoryQueryKey } from "./react-query.ts";
 export { getApiCategoryQueryOptions } from "./react-query.ts";
 export { getApiCategorySuspenseQueryKey } from "./react-query.ts";
@@ -108,16 +234,47 @@ export { getApiEquipmentQueryKey } from "./react-query.ts";
 export { getApiEquipmentQueryOptions } from "./react-query.ts";
 export { getApiEquipmentSuspenseQueryKey } from "./react-query.ts";
 export { getApiEquipmentSuspenseQueryOptions } from "./react-query.ts";
+export { getApiOrderQueryKey } from "./react-query.ts";
+export { getApiOrderQueryOptions } from "./react-query.ts";
+export { getApiOrderSuspenseQueryKey } from "./react-query.ts";
+export { getApiOrderSuspenseQueryOptions } from "./react-query.ts";
+export { getApiWarehouseIdQueryKey } from "./react-query.ts";
+export { getApiWarehouseIdQueryOptions } from "./react-query.ts";
+export { getApiWarehouseIdSuspenseQueryKey } from "./react-query.ts";
+export { getApiWarehouseIdSuspenseQueryOptions } from "./react-query.ts";
+export { getApiWarehouseQueryKey } from "./react-query.ts";
+export { getApiWarehouseQueryOptions } from "./react-query.ts";
+export { getApiWarehouseSuspenseQueryKey } from "./react-query.ts";
+export { getApiWarehouseSuspenseQueryOptions } from "./react-query.ts";
+export { postApiBrandMutationKey } from "./react-query.ts";
+export { postApiBrandMutationOptions } from "./react-query.ts";
+export { postApiCategoryMutationKey } from "./react-query.ts";
+export { postApiCategoryMutationOptions } from "./react-query.ts";
 export { postApiEquipmentMutationKey } from "./react-query.ts";
 export { postApiEquipmentMutationOptions } from "./react-query.ts";
 export { postApiOrderCreateorderMutationKey } from "./react-query.ts";
 export { postApiOrderCreateorderMutationOptions } from "./react-query.ts";
+export { postApiWarehouseMutationKey } from "./react-query.ts";
+export { postApiWarehouseMutationOptions } from "./react-query.ts";
+export { putApiBrandIdMutationKey } from "./react-query.ts";
+export { putApiBrandIdMutationOptions } from "./react-query.ts";
+export { putApiCategoryIdMutationKey } from "./react-query.ts";
+export { putApiCategoryIdMutationOptions } from "./react-query.ts";
 export { putApiEquipmentIdMutationKey } from "./react-query.ts";
 export { putApiEquipmentIdMutationOptions } from "./react-query.ts";
+export { putApiWarehouseIdMutationKey } from "./react-query.ts";
+export { putApiWarehouseIdMutationOptions } from "./react-query.ts";
+export { useDeleteApiBrandId } from "./react-query.ts";
+export { useDeleteApiCategoryId } from "./react-query.ts";
 export { useDeleteApiEquipmentId } from "./react-query.ts";
+export { useDeleteApiWarehouseId } from "./react-query.ts";
 export { useGetApiBrand } from "./react-query.ts";
+export { useGetApiBrandId } from "./react-query.ts";
+export { useGetApiBrandIdSuspense } from "./react-query.ts";
 export { useGetApiBrandSuspense } from "./react-query.ts";
 export { useGetApiCategory } from "./react-query.ts";
+export { useGetApiCategoryId } from "./react-query.ts";
+export { useGetApiCategoryIdSuspense } from "./react-query.ts";
 export { useGetApiCategorySuspense } from "./react-query.ts";
 export { useGetApiCustomer } from "./react-query.ts";
 export { useGetApiCustomerSuspense } from "./react-query.ts";
@@ -125,28 +282,65 @@ export { useGetApiEquipment } from "./react-query.ts";
 export { useGetApiEquipmentId } from "./react-query.ts";
 export { useGetApiEquipmentIdSuspense } from "./react-query.ts";
 export { useGetApiEquipmentSuspense } from "./react-query.ts";
+export { useGetApiOrder } from "./react-query.ts";
+export { useGetApiOrderSuspense } from "./react-query.ts";
+export { useGetApiWarehouse } from "./react-query.ts";
+export { useGetApiWarehouseId } from "./react-query.ts";
+export { useGetApiWarehouseIdSuspense } from "./react-query.ts";
+export { useGetApiWarehouseSuspense } from "./react-query.ts";
+export { usePostApiBrand } from "./react-query.ts";
+export { usePostApiCategory } from "./react-query.ts";
 export { usePostApiEquipment } from "./react-query.ts";
 export { usePostApiOrderCreateorder } from "./react-query.ts";
+export { usePostApiWarehouse } from "./react-query.ts";
+export { usePutApiBrandId } from "./react-query.ts";
+export { usePutApiCategoryId } from "./react-query.ts";
 export { usePutApiEquipmentId } from "./react-query.ts";
+export { usePutApiWarehouseId } from "./react-query.ts";
 export { apiErrorCodeEnum } from "./types.ts";
 export {
   apiErrorCodeSchema,
   apiErrorResponseSchema,
   brandLookupDtoSchema,
   brandSchema,
+  brandUpsertDtoSchema,
   categoryLookupDtoSchema,
   categorySchema,
+  categoryUpsertDtoSchema,
   customerSchema,
+  deleteApiBrandId204Schema,
+  deleteApiBrandId400Schema,
+  deleteApiBrandId404Schema,
+  deleteApiBrandIdMutationResponseSchema,
+  deleteApiBrandIdPathParamsSchema,
+  deleteApiCategoryId204Schema,
+  deleteApiCategoryId400Schema,
+  deleteApiCategoryId404Schema,
+  deleteApiCategoryIdMutationResponseSchema,
+  deleteApiCategoryIdPathParamsSchema,
   deleteApiEquipmentId204Schema,
   deleteApiEquipmentId404Schema,
   deleteApiEquipmentIdMutationResponseSchema,
   deleteApiEquipmentIdPathParamsSchema,
+  deleteApiWarehouseId204Schema,
+  deleteApiWarehouseId400Schema,
+  deleteApiWarehouseId404Schema,
+  deleteApiWarehouseIdMutationResponseSchema,
+  deleteApiWarehouseIdPathParamsSchema,
   equipmentDtoSchema,
   equipmentSchema,
   equipmentUpsertDtoSchema,
   getApiBrand200Schema,
+  getApiBrandId200Schema,
+  getApiBrandId404Schema,
+  getApiBrandIdPathParamsSchema,
+  getApiBrandIdQueryResponseSchema,
   getApiBrandQueryResponseSchema,
   getApiCategory200Schema,
+  getApiCategoryId200Schema,
+  getApiCategoryId404Schema,
+  getApiCategoryIdPathParamsSchema,
+  getApiCategoryIdQueryResponseSchema,
   getApiCategoryQueryResponseSchema,
   getApiCustomer200Schema,
   getApiCustomerQueryResponseSchema,
@@ -156,9 +350,26 @@ export {
   getApiEquipmentIdPathParamsSchema,
   getApiEquipmentIdQueryResponseSchema,
   getApiEquipmentQueryResponseSchema,
+  getApiOrder200Schema,
+  getApiOrder400Schema,
+  getApiOrderQueryResponseSchema,
+  getApiWarehouse200Schema,
+  getApiWarehouseId200Schema,
+  getApiWarehouseId404Schema,
+  getApiWarehouseIdPathParamsSchema,
+  getApiWarehouseIdQueryResponseSchema,
+  getApiWarehouseQueryResponseSchema,
   maintenanceSchema,
   orderCreateDtoSchema,
   orderItemDtoSchema,
+  postApiBrand201Schema,
+  postApiBrand400Schema,
+  postApiBrandMutationRequestSchema,
+  postApiBrandMutationResponseSchema,
+  postApiCategory201Schema,
+  postApiCategory400Schema,
+  postApiCategoryMutationRequestSchema,
+  postApiCategoryMutationResponseSchema,
   postApiEquipment201Schema,
   postApiEquipment400Schema,
   postApiEquipment500Schema,
@@ -168,15 +379,38 @@ export {
   postApiOrderCreateorder400Schema,
   postApiOrderCreateorderMutationRequestSchema,
   postApiOrderCreateorderMutationResponseSchema,
+  postApiWarehouse201Schema,
+  postApiWarehouse400Schema,
+  postApiWarehouseMutationRequestSchema,
+  postApiWarehouseMutationResponseSchema,
+  putApiBrandId204Schema,
+  putApiBrandId404Schema,
+  putApiBrandIdMutationRequestSchema,
+  putApiBrandIdMutationResponseSchema,
+  putApiBrandIdPathParamsSchema,
+  putApiCategoryId204Schema,
+  putApiCategoryId404Schema,
+  putApiCategoryIdMutationRequestSchema,
+  putApiCategoryIdMutationResponseSchema,
+  putApiCategoryIdPathParamsSchema,
   putApiEquipmentId204Schema,
   putApiEquipmentId400Schema,
   putApiEquipmentId404Schema,
   putApiEquipmentIdMutationRequestSchema,
   putApiEquipmentIdMutationResponseSchema,
   putApiEquipmentIdPathParamsSchema,
+  putApiWarehouseId204Schema,
+  putApiWarehouseId404Schema,
+  putApiWarehouseIdMutationRequestSchema,
+  putApiWarehouseIdMutationResponseSchema,
+  putApiWarehouseIdPathParamsSchema,
   rentalOrderItemSchema,
+  rentalOrderLineDtoSchema,
+  rentalOrderListDtoSchema,
   rentalOrderSchema,
   roleSchema,
   userSchema,
+  warehouseLookupDtoSchema,
   warehouseSchema,
+  warehouseUpsertDtoSchema,
 } from "./zod.ts";

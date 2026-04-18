@@ -4,6 +4,8 @@ namespace GearHub.Api.Repositories;
 
 public interface IOrderRepository
 {
+    Task<IReadOnlyList<RentalOrder>> GetAllOrdersWithDetailsAsync(CancellationToken cancellationToken = default);
+
     Task<bool> CustomerExistsAsync(int customerId, CancellationToken cancellationToken = default);
     Task<bool> UserExistsAsync(int userId, CancellationToken cancellationToken = default);
     Task<Dictionary<int, Equipment>> GetEquipmentMapAsync(IEnumerable<int> equipmentIds, CancellationToken cancellationToken = default);

@@ -14,6 +14,12 @@ export const apiErrorCodeEnum = {
   orderUserNotFound: "orderUserNotFound",
   orderEquipmentNotFound: "orderEquipmentNotFound",
   orderEquipmentUnavailable: "orderEquipmentUnavailable",
+  brandNotFound: "brandNotFound",
+  brandInUse: "brandInUse",
+  categoryNotFound: "categoryNotFound",
+  categoryInUse: "categoryInUse",
+  warehouseNotFound: "warehouseNotFound",
+  warehouseInUse: "warehouseInUse",
 } as const;
 
 export type ApiErrorCodeEnumKey =
@@ -60,6 +66,13 @@ export type BrandLookupDto = {
   name?: string | null;
 };
 
+export type BrandUpsertDto = {
+  /**
+   * @type string
+   */
+  name?: string | null;
+};
+
 export type Category = {
   /**
    * @type integer | undefined, int32
@@ -80,6 +93,17 @@ export type CategoryLookupDto = {
    * @type integer | undefined, int32
    */
   id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type string
+   */
+  description?: string | null;
+};
+
+export type CategoryUpsertDto = {
   /**
    * @type string
    */
@@ -410,6 +434,94 @@ export type OrderCreateDto = {
   items?: OrderItemDto[] | null;
 };
 
+export type RentalOrderLineDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  equipmentId?: number;
+  /**
+   * @type string
+   */
+  equipmentName?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  quantity?: number;
+  /**
+   * @type number | undefined, double
+   */
+  unitPrice?: number;
+};
+
+export type RentalOrderListDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  customerId?: number;
+  /**
+   * @type string
+   */
+  customerCompanyName?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  userId?: number;
+  /**
+   * @type string
+   */
+  userName?: string | null;
+  /**
+   * @type string
+   */
+  userEmail?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  orderDate?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  rentalStartDate?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  rentalEndDate?: string;
+  /**
+   * @type array
+   */
+  items?: RentalOrderLineDto[] | null;
+};
+
+export type WarehouseLookupDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type string
+   */
+  location?: string | null;
+};
+
+export type WarehouseUpsertDto = {
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type string
+   */
+  location?: string | null;
+};
+
 /**
  * @description OK
  */
@@ -423,6 +535,109 @@ export type GetApiBrandQuery = {
 };
 
 /**
+ * @description Created
+ */
+export type PostApiBrand201 = BrandLookupDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiBrand400 = ApiErrorResponse;
+
+export type PostApiBrandMutationRequest = BrandUpsertDto;
+
+export type PostApiBrandMutationResponse = PostApiBrand201;
+
+export type PostApiBrandMutation = {
+  Response: PostApiBrand201;
+  Request: PostApiBrandMutationRequest;
+  Errors: PostApiBrand400;
+};
+
+export type GetApiBrandIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiBrandId200 = BrandLookupDto;
+
+/**
+ * @description Not Found
+ */
+export type GetApiBrandId404 = ApiErrorResponse;
+
+export type GetApiBrandIdQueryResponse = GetApiBrandId200;
+
+export type GetApiBrandIdQuery = {
+  Response: GetApiBrandId200;
+  PathParams: GetApiBrandIdPathParams;
+  Errors: GetApiBrandId404;
+};
+
+export type PutApiBrandIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type PutApiBrandId204 = any;
+
+/**
+ * @description Not Found
+ */
+export type PutApiBrandId404 = ApiErrorResponse;
+
+export type PutApiBrandIdMutationRequest = BrandUpsertDto;
+
+export type PutApiBrandIdMutationResponse = PutApiBrandId204;
+
+export type PutApiBrandIdMutation = {
+  Response: PutApiBrandId204;
+  Request: PutApiBrandIdMutationRequest;
+  PathParams: PutApiBrandIdPathParams;
+  Errors: PutApiBrandId404;
+};
+
+export type DeleteApiBrandIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type DeleteApiBrandId204 = any;
+
+/**
+ * @description Bad Request
+ */
+export type DeleteApiBrandId400 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type DeleteApiBrandId404 = ApiErrorResponse;
+
+export type DeleteApiBrandIdMutationResponse = DeleteApiBrandId204;
+
+export type DeleteApiBrandIdMutation = {
+  Response: DeleteApiBrandId204;
+  PathParams: DeleteApiBrandIdPathParams;
+  Errors: DeleteApiBrandId400 | DeleteApiBrandId404;
+};
+
+/**
  * @description OK
  */
 export type GetApiCategory200 = CategoryLookupDto[];
@@ -432,6 +647,109 @@ export type GetApiCategoryQueryResponse = GetApiCategory200;
 export type GetApiCategoryQuery = {
   Response: GetApiCategory200;
   Errors: any;
+};
+
+/**
+ * @description Created
+ */
+export type PostApiCategory201 = CategoryLookupDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiCategory400 = ApiErrorResponse;
+
+export type PostApiCategoryMutationRequest = CategoryUpsertDto;
+
+export type PostApiCategoryMutationResponse = PostApiCategory201;
+
+export type PostApiCategoryMutation = {
+  Response: PostApiCategory201;
+  Request: PostApiCategoryMutationRequest;
+  Errors: PostApiCategory400;
+};
+
+export type GetApiCategoryIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCategoryId200 = CategoryLookupDto;
+
+/**
+ * @description Not Found
+ */
+export type GetApiCategoryId404 = ApiErrorResponse;
+
+export type GetApiCategoryIdQueryResponse = GetApiCategoryId200;
+
+export type GetApiCategoryIdQuery = {
+  Response: GetApiCategoryId200;
+  PathParams: GetApiCategoryIdPathParams;
+  Errors: GetApiCategoryId404;
+};
+
+export type PutApiCategoryIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type PutApiCategoryId204 = any;
+
+/**
+ * @description Not Found
+ */
+export type PutApiCategoryId404 = ApiErrorResponse;
+
+export type PutApiCategoryIdMutationRequest = CategoryUpsertDto;
+
+export type PutApiCategoryIdMutationResponse = PutApiCategoryId204;
+
+export type PutApiCategoryIdMutation = {
+  Response: PutApiCategoryId204;
+  Request: PutApiCategoryIdMutationRequest;
+  PathParams: PutApiCategoryIdPathParams;
+  Errors: PutApiCategoryId404;
+};
+
+export type DeleteApiCategoryIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type DeleteApiCategoryId204 = any;
+
+/**
+ * @description Bad Request
+ */
+export type DeleteApiCategoryId400 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type DeleteApiCategoryId404 = ApiErrorResponse;
+
+export type DeleteApiCategoryIdMutationResponse = DeleteApiCategoryId204;
+
+export type DeleteApiCategoryIdMutation = {
+  Response: DeleteApiCategoryId204;
+  PathParams: DeleteApiCategoryIdPathParams;
+  Errors: DeleteApiCategoryId400 | DeleteApiCategoryId404;
 };
 
 /**
@@ -567,6 +885,23 @@ export type DeleteApiEquipmentIdMutation = {
 };
 
 /**
+ * @description OK
+ */
+export type GetApiOrder200 = RentalOrderListDto[];
+
+/**
+ * @description Bad Request
+ */
+export type GetApiOrder400 = ApiErrorResponse;
+
+export type GetApiOrderQueryResponse = GetApiOrder200;
+
+export type GetApiOrderQuery = {
+  Response: GetApiOrder200;
+  Errors: GetApiOrder400;
+};
+
+/**
  * @description Created
  */
 export type PostApiOrderCreateorder201 = RentalOrder;
@@ -585,4 +920,119 @@ export type PostApiOrderCreateorderMutation = {
   Response: PostApiOrderCreateorder201;
   Request: PostApiOrderCreateorderMutationRequest;
   Errors: PostApiOrderCreateorder400;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiWarehouse200 = WarehouseLookupDto[];
+
+export type GetApiWarehouseQueryResponse = GetApiWarehouse200;
+
+export type GetApiWarehouseQuery = {
+  Response: GetApiWarehouse200;
+  Errors: any;
+};
+
+/**
+ * @description Created
+ */
+export type PostApiWarehouse201 = WarehouseLookupDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiWarehouse400 = ApiErrorResponse;
+
+export type PostApiWarehouseMutationRequest = WarehouseUpsertDto;
+
+export type PostApiWarehouseMutationResponse = PostApiWarehouse201;
+
+export type PostApiWarehouseMutation = {
+  Response: PostApiWarehouse201;
+  Request: PostApiWarehouseMutationRequest;
+  Errors: PostApiWarehouse400;
+};
+
+export type GetApiWarehouseIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiWarehouseId200 = WarehouseLookupDto;
+
+/**
+ * @description Not Found
+ */
+export type GetApiWarehouseId404 = ApiErrorResponse;
+
+export type GetApiWarehouseIdQueryResponse = GetApiWarehouseId200;
+
+export type GetApiWarehouseIdQuery = {
+  Response: GetApiWarehouseId200;
+  PathParams: GetApiWarehouseIdPathParams;
+  Errors: GetApiWarehouseId404;
+};
+
+export type PutApiWarehouseIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type PutApiWarehouseId204 = any;
+
+/**
+ * @description Not Found
+ */
+export type PutApiWarehouseId404 = ApiErrorResponse;
+
+export type PutApiWarehouseIdMutationRequest = WarehouseUpsertDto;
+
+export type PutApiWarehouseIdMutationResponse = PutApiWarehouseId204;
+
+export type PutApiWarehouseIdMutation = {
+  Response: PutApiWarehouseId204;
+  Request: PutApiWarehouseIdMutationRequest;
+  PathParams: PutApiWarehouseIdPathParams;
+  Errors: PutApiWarehouseId404;
+};
+
+export type DeleteApiWarehouseIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type DeleteApiWarehouseId204 = any;
+
+/**
+ * @description Bad Request
+ */
+export type DeleteApiWarehouseId400 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type DeleteApiWarehouseId404 = ApiErrorResponse;
+
+export type DeleteApiWarehouseIdMutationResponse = DeleteApiWarehouseId204;
+
+export type DeleteApiWarehouseIdMutation = {
+  Response: DeleteApiWarehouseId204;
+  PathParams: DeleteApiWarehouseIdPathParams;
+  Errors: DeleteApiWarehouseId400 | DeleteApiWarehouseId404;
 };

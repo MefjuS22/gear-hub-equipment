@@ -14,4 +14,11 @@ public enum ApiErrorCode
     OrderUserNotFound = 201,
     OrderEquipmentNotFound = 202,
     OrderEquipmentUnavailable = 203,
+
+    BrandNotFound = 300,
+    BrandInUse = 301,
+    CategoryNotFound = 302,
+    CategoryInUse = 303,
+    WarehouseNotFound = 304,
+    WarehouseInUse = 305,
 }
