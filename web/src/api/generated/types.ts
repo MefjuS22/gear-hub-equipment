@@ -20,6 +20,8 @@ export const apiErrorCodeEnum = {
   categoryInUse: "categoryInUse",
   warehouseNotFound: "warehouseNotFound",
   warehouseInUse: "warehouseInUse",
+  cmsPostNotFound: "cmsPostNotFound",
+  cmsPostSlugTaken: "cmsPostSlugTaken",
 } as const;
 
 export type ApiErrorCodeEnumKey =
@@ -112,6 +114,153 @@ export type CategoryUpsertDto = {
    * @type string
    */
   description?: string | null;
+};
+
+export type CmsPostDetailDto = {
+  /**
+   * @type string | undefined, uuid
+   */
+  id?: string;
+  /**
+   * @type string
+   */
+  slug?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  excerpt?: string | null;
+  /**
+   * @type string
+   */
+  bodyHtml?: string | null;
+  /**
+   * @type boolean | undefined
+   */
+  isPublished?: boolean;
+  /**
+   * @type string, date-time
+   */
+  publishedAtUtc?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  createdAtUtc?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  updatedAtUtc?: string;
+};
+
+export type CmsPostListDto = {
+  /**
+   * @type string | undefined, uuid
+   */
+  id?: string;
+  /**
+   * @type string
+   */
+  slug?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  excerpt?: string | null;
+  /**
+   * @type boolean | undefined
+   */
+  isPublished?: boolean;
+  /**
+   * @type string, date-time
+   */
+  publishedAtUtc?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  updatedAtUtc?: string;
+};
+
+export type CmsPostPublicDetailDto = {
+  /**
+   * @type string | undefined, uuid
+   */
+  id?: string;
+  /**
+   * @type string
+   */
+  slug?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  excerpt?: string | null;
+  /**
+   * @type string
+   */
+  bodyHtml?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  publishedAtUtc?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  updatedAtUtc?: string;
+};
+
+export type CmsPostPublicSummaryDto = {
+  /**
+   * @type string | undefined, uuid
+   */
+  id?: string;
+  /**
+   * @type string
+   */
+  slug?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  excerpt?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  publishedAtUtc?: string;
+};
+
+export type CmsPostUpsertDto = {
+  /**
+   * @type string
+   */
+  slug?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  excerpt?: string | null;
+  /**
+   * @type string
+   */
+  bodyHtml?: string | null;
+  /**
+   * @type boolean | undefined
+   */
+  isPublished?: boolean;
 };
 
 export type Role = {
@@ -750,6 +899,159 @@ export type DeleteApiCategoryIdMutation = {
   Response: DeleteApiCategoryId204;
   PathParams: DeleteApiCategoryIdPathParams;
   Errors: DeleteApiCategoryId400 | DeleteApiCategoryId404;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCmspost200 = CmsPostListDto[];
+
+export type GetApiCmspostQueryResponse = GetApiCmspost200;
+
+export type GetApiCmspostQuery = {
+  Response: GetApiCmspost200;
+  Errors: any;
+};
+
+/**
+ * @description Created
+ */
+export type PostApiCmspost201 = CmsPostDetailDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiCmspost400 = ApiErrorResponse;
+
+export type PostApiCmspostMutationRequest = CmsPostUpsertDto;
+
+export type PostApiCmspostMutationResponse = PostApiCmspost201;
+
+export type PostApiCmspostMutation = {
+  Response: PostApiCmspost201;
+  Request: PostApiCmspostMutationRequest;
+  Errors: PostApiCmspost400;
+};
+
+export type GetApiCmspostIdPathParams = {
+  /**
+   * @type string, uuid
+   */
+  id: string;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCmspostId200 = CmsPostDetailDto;
+
+/**
+ * @description Not Found
+ */
+export type GetApiCmspostId404 = ApiErrorResponse;
+
+export type GetApiCmspostIdQueryResponse = GetApiCmspostId200;
+
+export type GetApiCmspostIdQuery = {
+  Response: GetApiCmspostId200;
+  PathParams: GetApiCmspostIdPathParams;
+  Errors: GetApiCmspostId404;
+};
+
+export type PutApiCmspostIdPathParams = {
+  /**
+   * @type string, uuid
+   */
+  id: string;
+};
+
+/**
+ * @description OK
+ */
+export type PutApiCmspostId200 = CmsPostDetailDto;
+
+/**
+ * @description Bad Request
+ */
+export type PutApiCmspostId400 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type PutApiCmspostId404 = ApiErrorResponse;
+
+export type PutApiCmspostIdMutationRequest = CmsPostUpsertDto;
+
+export type PutApiCmspostIdMutationResponse = PutApiCmspostId200;
+
+export type PutApiCmspostIdMutation = {
+  Response: PutApiCmspostId200;
+  Request: PutApiCmspostIdMutationRequest;
+  PathParams: PutApiCmspostIdPathParams;
+  Errors: PutApiCmspostId400 | PutApiCmspostId404;
+};
+
+export type DeleteApiCmspostIdPathParams = {
+  /**
+   * @type string, uuid
+   */
+  id: string;
+};
+
+/**
+ * @description No Content
+ */
+export type DeleteApiCmspostId204 = any;
+
+/**
+ * @description Not Found
+ */
+export type DeleteApiCmspostId404 = ApiErrorResponse;
+
+export type DeleteApiCmspostIdMutationResponse = DeleteApiCmspostId204;
+
+export type DeleteApiCmspostIdMutation = {
+  Response: DeleteApiCmspostId204;
+  PathParams: DeleteApiCmspostIdPathParams;
+  Errors: DeleteApiCmspostId404;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCmspostPublished200 = CmsPostPublicSummaryDto[];
+
+export type GetApiCmspostPublishedQueryResponse = GetApiCmspostPublished200;
+
+export type GetApiCmspostPublishedQuery = {
+  Response: GetApiCmspostPublished200;
+  Errors: any;
+};
+
+export type GetApiCmspostPublishedSlugPathParams = {
+  /**
+   * @type string
+   */
+  slug: string;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCmspostPublishedSlug200 = CmsPostPublicDetailDto;
+
+/**
+ * @description Not Found
+ */
+export type GetApiCmspostPublishedSlug404 = ApiErrorResponse;
+
+export type GetApiCmspostPublishedSlugQueryResponse =
+  GetApiCmspostPublishedSlug200;
+
+export type GetApiCmspostPublishedSlugQuery = {
+  Response: GetApiCmspostPublishedSlug200;
+  PathParams: GetApiCmspostPublishedSlugPathParams;
+  Errors: GetApiCmspostPublishedSlug404;
 };
 
 /**

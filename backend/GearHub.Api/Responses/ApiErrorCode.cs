@@ -21,4 +21,7 @@ public enum ApiErrorCode
     CategoryInUse = 303,
     WarehouseNotFound = 304,
     WarehouseInUse = 305,
+
+    CmsPostNotFound = 306,
+    CmsPostSlugTaken = 307,
 }

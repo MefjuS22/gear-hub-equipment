@@ -22,6 +22,8 @@ export const apiErrorCodeSchema = z.enum([
   "categoryInUse",
   "warehouseNotFound",
   "warehouseInUse",
+  "cmsPostNotFound",
+  "cmsPostSlugTaken",
 ]);
 
 export const apiErrorResponseSchema = z.object({
@@ -61,6 +63,54 @@ export const categoryLookupDtoSchema = z.object({
 export const categoryUpsertDtoSchema = z.object({
   name: z.string().nullish(),
   description: z.string().nullish(),
+});
+
+export const cmsPostDetailDtoSchema = z.object({
+  id: z.optional(z.uuid()),
+  slug: z.string().nullish(),
+  title: z.string().nullish(),
+  excerpt: z.string().nullish(),
+  bodyHtml: z.string().nullish(),
+  isPublished: z.optional(z.boolean()),
+  publishedAtUtc: z.iso.datetime().nullish(),
+  createdAtUtc: z.optional(z.iso.datetime()),
+  updatedAtUtc: z.optional(z.iso.datetime()),
+});
+
+export const cmsPostListDtoSchema = z.object({
+  id: z.optional(z.uuid()),
+  slug: z.string().nullish(),
+  title: z.string().nullish(),
+  excerpt: z.string().nullish(),
+  isPublished: z.optional(z.boolean()),
+  publishedAtUtc: z.iso.datetime().nullish(),
+  updatedAtUtc: z.optional(z.iso.datetime()),
+});
+
+export const cmsPostPublicDetailDtoSchema = z.object({
+  id: z.optional(z.uuid()),
+  slug: z.string().nullish(),
+  title: z.string().nullish(),
+  excerpt: z.string().nullish(),
+  bodyHtml: z.string().nullish(),
+  publishedAtUtc: z.optional(z.iso.datetime()),
+  updatedAtUtc: z.optional(z.iso.datetime()),
+});
+
+export const cmsPostPublicSummaryDtoSchema = z.object({
+  id: z.optional(z.uuid()),
+  slug: z.string().nullish(),
+  title: z.string().nullish(),
+  excerpt: z.string().nullish(),
+  publishedAtUtc: z.optional(z.iso.datetime()),
+});
+
+export const cmsPostUpsertDtoSchema = z.object({
+  slug: z.string().nullish(),
+  title: z.string().nullish(),
+  excerpt: z.string().nullish(),
+  bodyHtml: z.string().nullish(),
+  isPublished: z.optional(z.boolean()),
 });
 
 export const roleSchema = z.object({
@@ -419,6 +469,131 @@ export const deleteApiCategoryId404Schema = z.lazy(
 
 export const deleteApiCategoryIdMutationResponseSchema = z.lazy(
   () => deleteApiCategoryId204Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiCmspost200Schema = z.array(
+  z.lazy(() => cmsPostListDtoSchema),
+);
+
+export const getApiCmspostQueryResponseSchema = z.lazy(
+  () => getApiCmspost200Schema,
+);
+
+/**
+ * @description Created
+ */
+export const postApiCmspost201Schema = z.lazy(() => cmsPostDetailDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiCmspost400Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const postApiCmspostMutationRequestSchema = z.lazy(
+  () => cmsPostUpsertDtoSchema,
+);
+
+export const postApiCmspostMutationResponseSchema = z.lazy(
+  () => postApiCmspost201Schema,
+);
+
+export const getApiCmspostIdPathParamsSchema = z.object({
+  id: z.uuid(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiCmspostId200Schema = z.lazy(() => cmsPostDetailDtoSchema);
+
+/**
+ * @description Not Found
+ */
+export const getApiCmspostId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiCmspostIdQueryResponseSchema = z.lazy(
+  () => getApiCmspostId200Schema,
+);
+
+export const putApiCmspostIdPathParamsSchema = z.object({
+  id: z.uuid(),
+});
+
+/**
+ * @description OK
+ */
+export const putApiCmspostId200Schema = z.lazy(() => cmsPostDetailDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const putApiCmspostId400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Not Found
+ */
+export const putApiCmspostId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const putApiCmspostIdMutationRequestSchema = z.lazy(
+  () => cmsPostUpsertDtoSchema,
+);
+
+export const putApiCmspostIdMutationResponseSchema = z.lazy(
+  () => putApiCmspostId200Schema,
+);
+
+export const deleteApiCmspostIdPathParamsSchema = z.object({
+  id: z.uuid(),
+});
+
+/**
+ * @description No Content
+ */
+export const deleteApiCmspostId204Schema = z.any();
+
+/**
+ * @description Not Found
+ */
+export const deleteApiCmspostId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const deleteApiCmspostIdMutationResponseSchema = z.lazy(
+  () => deleteApiCmspostId204Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiCmspostPublished200Schema = z.array(
+  z.lazy(() => cmsPostPublicSummaryDtoSchema),
+);
+
+export const getApiCmspostPublishedQueryResponseSchema = z.lazy(
+  () => getApiCmspostPublished200Schema,
+);
+
+export const getApiCmspostPublishedSlugPathParamsSchema = z.object({
+  slug: z.string(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiCmspostPublishedSlug200Schema = z.lazy(
+  () => cmsPostPublicDetailDtoSchema,
+);
+
+/**
+ * @description Not Found
+ */
+export const getApiCmspostPublishedSlug404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+export const getApiCmspostPublishedSlugQueryResponseSchema = z.lazy(
+  () => getApiCmspostPublishedSlug200Schema,
 );
 
 /**

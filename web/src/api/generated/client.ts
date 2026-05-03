@@ -40,6 +40,25 @@ import type {
   DeleteApiCategoryIdPathParams,
   DeleteApiCategoryId400,
   DeleteApiCategoryId404,
+  GetApiCmspostQueryResponse,
+  PostApiCmspostMutationRequest,
+  PostApiCmspostMutationResponse,
+  PostApiCmspost400,
+  GetApiCmspostIdQueryResponse,
+  GetApiCmspostIdPathParams,
+  GetApiCmspostId404,
+  PutApiCmspostIdMutationRequest,
+  PutApiCmspostIdMutationResponse,
+  PutApiCmspostIdPathParams,
+  PutApiCmspostId400,
+  PutApiCmspostId404,
+  DeleteApiCmspostIdMutationResponse,
+  DeleteApiCmspostIdPathParams,
+  DeleteApiCmspostId404,
+  GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublishedSlugQueryResponse,
+  GetApiCmspostPublishedSlugPathParams,
+  GetApiCmspostPublishedSlug404,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   PostApiEquipmentMutationRequest,
@@ -358,6 +377,201 @@ export async function deleteApiCategoryId(
   >({
     method: "DELETE",
     url: getDeleteApiCategoryIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCmspostUrl() {
+  const res = { method: "GET", url: `/api/CmsPost` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export async function getApiCmspost(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostQueryResponse,
+    ResponseErrorConfig<Error>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPostApiCmspostUrl() {
+  const res = { method: "POST", url: `/api/CmsPost` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export async function postApiCmspost(
+  data?: PostApiCmspostMutationRequest,
+  config: Partial<RequestConfig<PostApiCmspostMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PostApiCmspostMutationResponse,
+    ResponseErrorConfig<PostApiCmspost400>,
+    PostApiCmspostMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiCmspostUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiCmspostIdUrl(id: GetApiCmspostIdPathParams["id"]) {
+  const res = { method: "GET", url: `/api/CmsPost/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export async function getApiCmspostId(
+  id: GetApiCmspostIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostIdQueryResponse,
+    ResponseErrorConfig<GetApiCmspostId404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiCmspostIdUrl(id: PutApiCmspostIdPathParams["id"]) {
+  const res = { method: "PUT", url: `/api/CmsPost/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export async function putApiCmspostId(
+  id: PutApiCmspostIdPathParams["id"],
+  data?: PutApiCmspostIdMutationRequest,
+  config: Partial<RequestConfig<PutApiCmspostIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiCmspostIdMutationResponse,
+    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    PutApiCmspostIdMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiCmspostIdUrl(id).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getDeleteApiCmspostIdUrl(id: DeleteApiCmspostIdPathParams["id"]) {
+  const res = { method: "DELETE", url: `/api/CmsPost/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export async function deleteApiCmspostId(
+  id: DeleteApiCmspostIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    DeleteApiCmspostIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCmspostId404>,
+    unknown
+  >({
+    method: "DELETE",
+    url: getDeleteApiCmspostIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCmspostPublishedUrl() {
+  const res = { method: "GET", url: `/api/CmsPost/Published` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/Published}
+ */
+export async function getApiCmspostPublished(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostPublishedQueryResponse,
+    ResponseErrorConfig<Error>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostPublishedUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCmspostPublishedSlugUrl(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+) {
+  const res = { method: "GET", url: `/api/CmsPost/Published/${slug}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/Published/:slug}
+ */
+export async function getApiCmspostPublishedSlug(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostPublishedSlugQueryResponse,
+    ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostPublishedSlugUrl(slug).url.toString(),
     ...requestConfig,
   });
   return res.data;

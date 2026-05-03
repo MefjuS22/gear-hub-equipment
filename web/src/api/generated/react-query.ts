@@ -31,6 +31,14 @@ import type {
   GetApiCategoryIdQueryResponse,
   GetApiCategoryIdPathParams,
   GetApiCategoryId404,
+  GetApiCmspostQueryResponse,
+  GetApiCmspostIdQueryResponse,
+  GetApiCmspostIdPathParams,
+  GetApiCmspostId404,
+  GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublishedSlugQueryResponse,
+  GetApiCmspostPublishedSlugPathParams,
+  GetApiCmspostPublishedSlug404,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   GetApiEquipmentIdQueryResponse,
@@ -60,6 +68,17 @@ import type {
   DeleteApiCategoryIdPathParams,
   DeleteApiCategoryId400,
   DeleteApiCategoryId404,
+  PostApiCmspostMutationRequest,
+  PostApiCmspostMutationResponse,
+  PostApiCmspost400,
+  PutApiCmspostIdMutationRequest,
+  PutApiCmspostIdMutationResponse,
+  PutApiCmspostIdPathParams,
+  PutApiCmspostId400,
+  PutApiCmspostId404,
+  DeleteApiCmspostIdMutationResponse,
+  DeleteApiCmspostIdPathParams,
+  DeleteApiCmspostId404,
   PostApiEquipmentMutationRequest,
   PostApiEquipmentMutationResponse,
   PostApiEquipment400,
@@ -100,6 +119,10 @@ import {
   getApiBrandId,
   getApiCategory,
   getApiCategoryId,
+  getApiCmspost,
+  getApiCmspostId,
+  getApiCmspostPublished,
+  getApiCmspostPublishedSlug,
   getApiCustomer,
   getApiEquipment,
   getApiEquipmentId,
@@ -111,6 +134,9 @@ import {
   postApiCategory,
   putApiCategoryId,
   deleteApiCategoryId,
+  postApiCmspost,
+  putApiCmspostId,
+  deleteApiCmspostId,
   postApiEquipment,
   putApiEquipmentId,
   deleteApiEquipmentId,
@@ -376,6 +402,282 @@ export function useGetApiCategoryId<
   ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCategoryId404>> & {
     queryKey: TQueryKey;
   };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostQueryKey = () => [{ url: "/api/CmsPost" }] as const;
+
+export type GetApiCmspostQueryKey = ReturnType<typeof getApiCmspostQueryKey>;
+
+export function getApiCmspostQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostQueryKey();
+  return queryOptions<
+    GetApiCmspostQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiCmspostQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspost({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export function useGetApiCmspost<
+  TData = GetApiCmspostQueryResponse,
+  TQueryData = GetApiCmspostQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCmspostQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCmspostQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiCmspostQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostIdQueryKey = (id: GetApiCmspostIdPathParams["id"]) =>
+  [{ url: "/api/CmsPost/:id", params: { id: id } }] as const;
+
+export type GetApiCmspostIdQueryKey = ReturnType<
+  typeof getApiCmspostIdQueryKey
+>;
+
+export function getApiCmspostIdQueryOptions(
+  id: GetApiCmspostIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostIdQueryKey(id);
+  return queryOptions<
+    GetApiCmspostIdQueryResponse,
+    ResponseErrorConfig<GetApiCmspostId404>,
+    GetApiCmspostIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspostId(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export function useGetApiCmspostId<
+  TData = GetApiCmspostIdQueryResponse,
+  TQueryData = GetApiCmspostIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostIdQueryKey,
+>(
+  id: GetApiCmspostIdPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCmspostIdQueryResponse,
+        ResponseErrorConfig<GetApiCmspostId404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCmspostIdQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiCmspostIdQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCmspostId404>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostPublishedQueryKey = () =>
+  [{ url: "/api/CmsPost/Published" }] as const;
+
+export type GetApiCmspostPublishedQueryKey = ReturnType<
+  typeof getApiCmspostPublishedQueryKey
+>;
+
+export function getApiCmspostPublishedQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostPublishedQueryKey();
+  return queryOptions<
+    GetApiCmspostPublishedQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiCmspostPublishedQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspostPublished({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/Published}
+ */
+export function useGetApiCmspostPublished<
+  TData = GetApiCmspostPublishedQueryResponse,
+  TQueryData = GetApiCmspostPublishedQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostPublishedQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCmspostPublishedQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCmspostPublishedQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiCmspostPublishedQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostPublishedSlugQueryKey = (
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+) => [{ url: "/api/CmsPost/Published/:slug", params: { slug: slug } }] as const;
+
+export type GetApiCmspostPublishedSlugQueryKey = ReturnType<
+  typeof getApiCmspostPublishedSlugQueryKey
+>;
+
+export function getApiCmspostPublishedSlugQueryOptions(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostPublishedSlugQueryKey(slug);
+  return queryOptions<
+    GetApiCmspostPublishedSlugQueryResponse,
+    ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+    GetApiCmspostPublishedSlugQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!slug,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspostPublishedSlug(slug, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/Published/:slug}
+ */
+export function useGetApiCmspostPublishedSlug<
+  TData = GetApiCmspostPublishedSlugQueryResponse,
+  TQueryData = GetApiCmspostPublishedSlugQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostPublishedSlugQueryKey,
+>(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCmspostPublishedSlugQueryResponse,
+        ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCmspostPublishedSlugQueryKey(slug);
+
+  const query = useQuery(
+    {
+      ...getApiCmspostPublishedSlugQueryOptions(slug, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCmspostPublishedSlug404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1040,6 +1342,281 @@ export function useGetApiCategoryIdSuspense<
   ) as UseSuspenseQueryResult<
     TData,
     ResponseErrorConfig<GetApiCategoryId404>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostSuspenseQueryKey = () =>
+  [{ url: "/api/CmsPost" }] as const;
+
+export type GetApiCmspostSuspenseQueryKey = ReturnType<
+  typeof getApiCmspostSuspenseQueryKey
+>;
+
+export function getApiCmspostSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostSuspenseQueryKey();
+  return queryOptions<
+    GetApiCmspostQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiCmspostQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspost({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export function useGetApiCmspostSuspense<
+  TData = GetApiCmspostQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCmspostQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCmspostSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCmspostSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostIdSuspenseQueryKey = (
+  id: GetApiCmspostIdPathParams["id"],
+) => [{ url: "/api/CmsPost/:id", params: { id: id } }] as const;
+
+export type GetApiCmspostIdSuspenseQueryKey = ReturnType<
+  typeof getApiCmspostIdSuspenseQueryKey
+>;
+
+export function getApiCmspostIdSuspenseQueryOptions(
+  id: GetApiCmspostIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostIdSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiCmspostIdQueryResponse,
+    ResponseErrorConfig<GetApiCmspostId404>,
+    GetApiCmspostIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspostId(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export function useGetApiCmspostIdSuspense<
+  TData = GetApiCmspostIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostIdSuspenseQueryKey,
+>(
+  id: GetApiCmspostIdPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCmspostIdQueryResponse,
+        ResponseErrorConfig<GetApiCmspostId404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCmspostIdSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCmspostIdSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCmspostId404>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostPublishedSuspenseQueryKey = () =>
+  [{ url: "/api/CmsPost/Published" }] as const;
+
+export type GetApiCmspostPublishedSuspenseQueryKey = ReturnType<
+  typeof getApiCmspostPublishedSuspenseQueryKey
+>;
+
+export function getApiCmspostPublishedSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostPublishedSuspenseQueryKey();
+  return queryOptions<
+    GetApiCmspostPublishedQueryResponse,
+    ResponseErrorConfig<Error>,
+    GetApiCmspostPublishedQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspostPublished({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/Published}
+ */
+export function useGetApiCmspostPublishedSuspense<
+  TData = GetApiCmspostPublishedQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostPublishedSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCmspostPublishedQueryResponse,
+        ResponseErrorConfig<Error>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCmspostPublishedSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCmspostPublishedSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCmspostPublishedSlugSuspenseQueryKey = (
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+) => [{ url: "/api/CmsPost/Published/:slug", params: { slug: slug } }] as const;
+
+export type GetApiCmspostPublishedSlugSuspenseQueryKey = ReturnType<
+  typeof getApiCmspostPublishedSlugSuspenseQueryKey
+>;
+
+export function getApiCmspostPublishedSlugSuspenseQueryOptions(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCmspostPublishedSlugSuspenseQueryKey(slug);
+  return queryOptions<
+    GetApiCmspostPublishedSlugQueryResponse,
+    ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+    GetApiCmspostPublishedSlugQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!slug,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCmspostPublishedSlug(slug, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/Published/:slug}
+ */
+export function useGetApiCmspostPublishedSlugSuspense<
+  TData = GetApiCmspostPublishedSlugQueryResponse,
+  TQueryKey extends QueryKey = GetApiCmspostPublishedSlugSuspenseQueryKey,
+>(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCmspostPublishedSlugQueryResponse,
+        ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ??
+    getApiCmspostPublishedSlugSuspenseQueryKey(slug);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCmspostPublishedSlugSuspenseQueryOptions(slug, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCmspostPublishedSlug404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -1903,6 +2480,245 @@ export function useDeleteApiCategoryId<TContext>(
     DeleteApiCategoryIdMutationResponse,
     ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
     { id: DeleteApiCategoryIdPathParams["id"] },
+    TContext
+  >;
+}
+
+export const postApiCmspostMutationKey = () =>
+  [{ url: "/api/CmsPost" }] as const;
+
+export type PostApiCmspostMutationKey = ReturnType<
+  typeof postApiCmspostMutationKey
+>;
+
+export function postApiCmspostMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiCmspostMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiCmspostMutationKey();
+  return mutationOptions<
+    PostApiCmspostMutationResponse,
+    ResponseErrorConfig<PostApiCmspost400>,
+    { data?: PostApiCmspostMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiCmspost(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export function usePostApiCmspost<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiCmspostMutationResponse,
+      ResponseErrorConfig<PostApiCmspost400>,
+      { data?: PostApiCmspostMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiCmspostMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? postApiCmspostMutationKey();
+
+  const baseOptions = postApiCmspostMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PostApiCmspostMutationResponse,
+    ResponseErrorConfig<PostApiCmspost400>,
+    { data?: PostApiCmspostMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiCmspostMutationResponse,
+    ResponseErrorConfig<PostApiCmspost400>,
+    { data?: PostApiCmspostMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiCmspostMutationResponse,
+    ResponseErrorConfig<PostApiCmspost400>,
+    { data?: PostApiCmspostMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiCmspostIdMutationKey = () =>
+  [{ url: "/api/CmsPost/:id" }] as const;
+
+export type PutApiCmspostIdMutationKey = ReturnType<
+  typeof putApiCmspostIdMutationKey
+>;
+
+export function putApiCmspostIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiCmspostIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiCmspostIdMutationKey();
+  return mutationOptions<
+    PutApiCmspostIdMutationResponse,
+    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    {
+      id: PutApiCmspostIdPathParams["id"];
+      data?: PutApiCmspostIdMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id, data }) => {
+      return putApiCmspostId(id, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export function usePutApiCmspostId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiCmspostIdMutationResponse,
+      ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+      {
+        id: PutApiCmspostIdPathParams["id"];
+        data?: PutApiCmspostIdMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiCmspostIdMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiCmspostIdMutationKey();
+
+  const baseOptions = putApiCmspostIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiCmspostIdMutationResponse,
+    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    {
+      id: PutApiCmspostIdPathParams["id"];
+      data?: PutApiCmspostIdMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiCmspostIdMutationResponse,
+    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    {
+      id: PutApiCmspostIdPathParams["id"];
+      data?: PutApiCmspostIdMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiCmspostIdMutationResponse,
+    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    {
+      id: PutApiCmspostIdPathParams["id"];
+      data?: PutApiCmspostIdMutationRequest;
+    },
+    TContext
+  >;
+}
+
+export const deleteApiCmspostIdMutationKey = () =>
+  [{ url: "/api/CmsPost/:id" }] as const;
+
+export type DeleteApiCmspostIdMutationKey = ReturnType<
+  typeof deleteApiCmspostIdMutationKey
+>;
+
+export function deleteApiCmspostIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const mutationKey = deleteApiCmspostIdMutationKey();
+  return mutationOptions<
+    DeleteApiCmspostIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCmspostId404>,
+    { id: DeleteApiCmspostIdPathParams["id"] },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id }) => {
+      return deleteApiCmspostId(id, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export function useDeleteApiCmspostId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      DeleteApiCmspostIdMutationResponse,
+      ResponseErrorConfig<DeleteApiCmspostId404>,
+      { id: DeleteApiCmspostIdPathParams["id"] },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteApiCmspostIdMutationKey();
+
+  const baseOptions = deleteApiCmspostIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    DeleteApiCmspostIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCmspostId404>,
+    { id: DeleteApiCmspostIdPathParams["id"] },
+    TContext
+  >;
+
+  return useMutation<
+    DeleteApiCmspostIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCmspostId404>,
+    { id: DeleteApiCmspostIdPathParams["id"] },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    DeleteApiCmspostIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCmspostId404>,
+    { id: DeleteApiCmspostIdPathParams["id"] },
     TContext
   >;
 }

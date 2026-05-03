@@ -11,6 +11,7 @@ public sealed class CategoryUpsertDtoValidator : AbstractValidator<CategoryUpser
             .NotEmpty()
             .MaximumLength(200);
         RuleFor(x => x.Description)
+            .NotNull()
             .MaximumLength(2000);
     }
 }

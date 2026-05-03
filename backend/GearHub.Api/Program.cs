@@ -87,6 +87,8 @@ using (var scope = app.Services.CreateScope())
     {
         dbContext.Database.EnsureCreated();
     }
+
+    CmsTableBootstrap.EnsureCmsPostsTable(dbContext);
 }
 
 app.Run();

@@ -52,7 +52,7 @@ public class CategoryController(ApplicationDbContext dbContext) : ControllerBase
         var entity = new Models.Category
         {
             Name = request.Name.Trim(),
-            Description = request.Description.Trim(),
+            Description = (request.Description ?? string.Empty).Trim(),
         };
         dbContext.Categories.Add(entity);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -79,7 +79,7 @@ public class CategoryController(ApplicationDbContext dbContext) : ControllerBase
         }
 
         category.Name = request.Name.Trim();
-        category.Description = request.Description.Trim();
+        category.Description = (request.Description ?? string.Empty).Trim();
         await dbContext.SaveChangesAsync(cancellationToken);
         return NoContent();
     }

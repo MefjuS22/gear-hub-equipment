@@ -18,7 +18,9 @@
         "categoryNotFound",
         "categoryInUse",
         "warehouseNotFound",
-        "warehouseInUse"
+        "warehouseInUse",
+        "cmsPostNotFound",
+        "cmsPostSlugTaken"
       ],
       "type": "string",
       "x-readme-ref-name": "ApiErrorCode"

@@ -55,6 +55,15 @@ export const portalTextFormSchema = z.object({
 });
 export type PortalTextFormValues = z.infer<typeof portalTextFormSchema>;
 
+export const cmsPostFormSchema = z.object({
+  slug: z.string().max(200),
+  title: z.string().min(1, "Title is required").max(300),
+  excerpt: z.string().max(2000),
+  bodyHtml: z.string().max(512_000),
+  isPublished: z.boolean(),
+});
+export type CmsPostFormValues = z.infer<typeof cmsPostFormSchema>;
+
 export const orderCheckoutFormSchema = z
   .object({
     customerId: z.number().int().positive(),

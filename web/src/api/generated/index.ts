@@ -1,6 +1,7 @@
 export type {
   DeleteApiBrandIdMutationKey,
   DeleteApiCategoryIdMutationKey,
+  DeleteApiCmspostIdMutationKey,
   DeleteApiEquipmentIdMutationKey,
   DeleteApiWarehouseIdMutationKey,
   GetApiBrandIdQueryKey,
@@ -11,6 +12,14 @@ export type {
   GetApiCategoryIdSuspenseQueryKey,
   GetApiCategoryQueryKey,
   GetApiCategorySuspenseQueryKey,
+  GetApiCmspostIdQueryKey,
+  GetApiCmspostIdSuspenseQueryKey,
+  GetApiCmspostPublishedQueryKey,
+  GetApiCmspostPublishedSlugQueryKey,
+  GetApiCmspostPublishedSlugSuspenseQueryKey,
+  GetApiCmspostPublishedSuspenseQueryKey,
+  GetApiCmspostQueryKey,
+  GetApiCmspostSuspenseQueryKey,
   GetApiCustomerQueryKey,
   GetApiCustomerSuspenseQueryKey,
   GetApiEquipmentIdQueryKey,
@@ -25,11 +34,13 @@ export type {
   GetApiWarehouseSuspenseQueryKey,
   PostApiBrandMutationKey,
   PostApiCategoryMutationKey,
+  PostApiCmspostMutationKey,
   PostApiEquipmentMutationKey,
   PostApiOrderCreateorderMutationKey,
   PostApiWarehouseMutationKey,
   PutApiBrandIdMutationKey,
   PutApiCategoryIdMutationKey,
+  PutApiCmspostIdMutationKey,
   PutApiEquipmentIdMutationKey,
   PutApiWarehouseIdMutationKey,
 } from "./react-query.ts";
@@ -43,6 +54,11 @@ export type {
   Category,
   CategoryLookupDto,
   CategoryUpsertDto,
+  CmsPostDetailDto,
+  CmsPostListDto,
+  CmsPostPublicDetailDto,
+  CmsPostPublicSummaryDto,
+  CmsPostUpsertDto,
   Customer,
   DeleteApiBrandId204,
   DeleteApiBrandId400,
@@ -56,6 +72,11 @@ export type {
   DeleteApiCategoryIdMutation,
   DeleteApiCategoryIdMutationResponse,
   DeleteApiCategoryIdPathParams,
+  DeleteApiCmspostId204,
+  DeleteApiCmspostId404,
+  DeleteApiCmspostIdMutation,
+  DeleteApiCmspostIdMutationResponse,
+  DeleteApiCmspostIdPathParams,
   DeleteApiEquipmentId204,
   DeleteApiEquipmentId404,
   DeleteApiEquipmentIdMutation,
@@ -86,6 +107,22 @@ export type {
   GetApiCategoryIdQueryResponse,
   GetApiCategoryQuery,
   GetApiCategoryQueryResponse,
+  GetApiCmspost200,
+  GetApiCmspostId200,
+  GetApiCmspostId404,
+  GetApiCmspostIdPathParams,
+  GetApiCmspostIdQuery,
+  GetApiCmspostIdQueryResponse,
+  GetApiCmspostPublished200,
+  GetApiCmspostPublishedQuery,
+  GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublishedSlug200,
+  GetApiCmspostPublishedSlug404,
+  GetApiCmspostPublishedSlugPathParams,
+  GetApiCmspostPublishedSlugQuery,
+  GetApiCmspostPublishedSlugQueryResponse,
+  GetApiCmspostQuery,
+  GetApiCmspostQueryResponse,
   GetApiCustomer200,
   GetApiCustomerQuery,
   GetApiCustomerQueryResponse,
@@ -122,6 +159,11 @@ export type {
   PostApiCategoryMutation,
   PostApiCategoryMutationRequest,
   PostApiCategoryMutationResponse,
+  PostApiCmspost201,
+  PostApiCmspost400,
+  PostApiCmspostMutation,
+  PostApiCmspostMutationRequest,
+  PostApiCmspostMutationResponse,
   PostApiEquipment201,
   PostApiEquipment400,
   PostApiEquipment500,
@@ -150,6 +192,13 @@ export type {
   PutApiCategoryIdMutationRequest,
   PutApiCategoryIdMutationResponse,
   PutApiCategoryIdPathParams,
+  PutApiCmspostId200,
+  PutApiCmspostId400,
+  PutApiCmspostId404,
+  PutApiCmspostIdMutation,
+  PutApiCmspostIdMutationRequest,
+  PutApiCmspostIdMutationResponse,
+  PutApiCmspostIdPathParams,
   PutApiEquipmentId204,
   PutApiEquipmentId400,
   PutApiEquipmentId404,
@@ -176,12 +225,17 @@ export type {
 export {
   deleteApiBrandId,
   deleteApiCategoryId,
+  deleteApiCmspostId,
   deleteApiEquipmentId,
   deleteApiWarehouseId,
   getApiBrand,
   getApiBrandId,
   getApiCategory,
   getApiCategoryId,
+  getApiCmspost,
+  getApiCmspostId,
+  getApiCmspostPublished,
+  getApiCmspostPublishedSlug,
   getApiCustomer,
   getApiEquipment,
   getApiEquipmentId,
@@ -190,11 +244,13 @@ export {
   getApiWarehouseId,
   postApiBrand,
   postApiCategory,
+  postApiCmspost,
   postApiEquipment,
   postApiOrderCreateorder,
   postApiWarehouse,
   putApiBrandId,
   putApiCategoryId,
+  putApiCmspostId,
   putApiEquipmentId,
   putApiWarehouseId,
 } from "./client.ts";
@@ -202,6 +258,8 @@ export { deleteApiBrandIdMutationKey } from "./react-query.ts";
 export { deleteApiBrandIdMutationOptions } from "./react-query.ts";
 export { deleteApiCategoryIdMutationKey } from "./react-query.ts";
 export { deleteApiCategoryIdMutationOptions } from "./react-query.ts";
+export { deleteApiCmspostIdMutationKey } from "./react-query.ts";
+export { deleteApiCmspostIdMutationOptions } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationKey } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationOptions } from "./react-query.ts";
 export { deleteApiWarehouseIdMutationKey } from "./react-query.ts";
@@ -222,6 +280,22 @@ export { getApiCategoryQueryKey } from "./react-query.ts";
 export { getApiCategoryQueryOptions } from "./react-query.ts";
 export { getApiCategorySuspenseQueryKey } from "./react-query.ts";
 export { getApiCategorySuspenseQueryOptions } from "./react-query.ts";
+export { getApiCmspostIdQueryKey } from "./react-query.ts";
+export { getApiCmspostIdQueryOptions } from "./react-query.ts";
+export { getApiCmspostIdSuspenseQueryKey } from "./react-query.ts";
+export { getApiCmspostIdSuspenseQueryOptions } from "./react-query.ts";
+export { getApiCmspostPublishedQueryKey } from "./react-query.ts";
+export { getApiCmspostPublishedQueryOptions } from "./react-query.ts";
+export { getApiCmspostPublishedSlugQueryKey } from "./react-query.ts";
+export { getApiCmspostPublishedSlugQueryOptions } from "./react-query.ts";
+export { getApiCmspostPublishedSlugSuspenseQueryKey } from "./react-query.ts";
+export { getApiCmspostPublishedSlugSuspenseQueryOptions } from "./react-query.ts";
+export { getApiCmspostPublishedSuspenseQueryKey } from "./react-query.ts";
+export { getApiCmspostPublishedSuspenseQueryOptions } from "./react-query.ts";
+export { getApiCmspostQueryKey } from "./react-query.ts";
+export { getApiCmspostQueryOptions } from "./react-query.ts";
+export { getApiCmspostSuspenseQueryKey } from "./react-query.ts";
+export { getApiCmspostSuspenseQueryOptions } from "./react-query.ts";
 export { getApiCustomerQueryKey } from "./react-query.ts";
 export { getApiCustomerQueryOptions } from "./react-query.ts";
 export { getApiCustomerSuspenseQueryKey } from "./react-query.ts";
@@ -250,6 +324,8 @@ export { postApiBrandMutationKey } from "./react-query.ts";
 export { postApiBrandMutationOptions } from "./react-query.ts";
 export { postApiCategoryMutationKey } from "./react-query.ts";
 export { postApiCategoryMutationOptions } from "./react-query.ts";
+export { postApiCmspostMutationKey } from "./react-query.ts";
+export { postApiCmspostMutationOptions } from "./react-query.ts";
 export { postApiEquipmentMutationKey } from "./react-query.ts";
 export { postApiEquipmentMutationOptions } from "./react-query.ts";
 export { postApiOrderCreateorderMutationKey } from "./react-query.ts";
@@ -260,12 +336,15 @@ export { putApiBrandIdMutationKey } from "./react-query.ts";
 export { putApiBrandIdMutationOptions } from "./react-query.ts";
 export { putApiCategoryIdMutationKey } from "./react-query.ts";
 export { putApiCategoryIdMutationOptions } from "./react-query.ts";
+export { putApiCmspostIdMutationKey } from "./react-query.ts";
+export { putApiCmspostIdMutationOptions } from "./react-query.ts";
 export { putApiEquipmentIdMutationKey } from "./react-query.ts";
 export { putApiEquipmentIdMutationOptions } from "./react-query.ts";
 export { putApiWarehouseIdMutationKey } from "./react-query.ts";
 export { putApiWarehouseIdMutationOptions } from "./react-query.ts";
 export { useDeleteApiBrandId } from "./react-query.ts";
 export { useDeleteApiCategoryId } from "./react-query.ts";
+export { useDeleteApiCmspostId } from "./react-query.ts";
 export { useDeleteApiEquipmentId } from "./react-query.ts";
 export { useDeleteApiWarehouseId } from "./react-query.ts";
 export { useGetApiBrand } from "./react-query.ts";
@@ -276,6 +355,14 @@ export { useGetApiCategory } from "./react-query.ts";
 export { useGetApiCategoryId } from "./react-query.ts";
 export { useGetApiCategoryIdSuspense } from "./react-query.ts";
 export { useGetApiCategorySuspense } from "./react-query.ts";
+export { useGetApiCmspost } from "./react-query.ts";
+export { useGetApiCmspostId } from "./react-query.ts";
+export { useGetApiCmspostIdSuspense } from "./react-query.ts";
+export { useGetApiCmspostPublished } from "./react-query.ts";
+export { useGetApiCmspostPublishedSlug } from "./react-query.ts";
+export { useGetApiCmspostPublishedSlugSuspense } from "./react-query.ts";
+export { useGetApiCmspostPublishedSuspense } from "./react-query.ts";
+export { useGetApiCmspostSuspense } from "./react-query.ts";
 export { useGetApiCustomer } from "./react-query.ts";
 export { useGetApiCustomerSuspense } from "./react-query.ts";
 export { useGetApiEquipment } from "./react-query.ts";
@@ -290,11 +377,13 @@ export { useGetApiWarehouseIdSuspense } from "./react-query.ts";
 export { useGetApiWarehouseSuspense } from "./react-query.ts";
 export { usePostApiBrand } from "./react-query.ts";
 export { usePostApiCategory } from "./react-query.ts";
+export { usePostApiCmspost } from "./react-query.ts";
 export { usePostApiEquipment } from "./react-query.ts";
 export { usePostApiOrderCreateorder } from "./react-query.ts";
 export { usePostApiWarehouse } from "./react-query.ts";
 export { usePutApiBrandId } from "./react-query.ts";
 export { usePutApiCategoryId } from "./react-query.ts";
+export { usePutApiCmspostId } from "./react-query.ts";
 export { usePutApiEquipmentId } from "./react-query.ts";
 export { usePutApiWarehouseId } from "./react-query.ts";
 export { apiErrorCodeEnum } from "./types.ts";
@@ -307,6 +396,11 @@ export {
   categoryLookupDtoSchema,
   categorySchema,
   categoryUpsertDtoSchema,
+  cmsPostDetailDtoSchema,
+  cmsPostListDtoSchema,
+  cmsPostPublicDetailDtoSchema,
+  cmsPostPublicSummaryDtoSchema,
+  cmsPostUpsertDtoSchema,
   customerSchema,
   deleteApiBrandId204Schema,
   deleteApiBrandId400Schema,
@@ -318,6 +412,10 @@ export {
   deleteApiCategoryId404Schema,
   deleteApiCategoryIdMutationResponseSchema,
   deleteApiCategoryIdPathParamsSchema,
+  deleteApiCmspostId204Schema,
+  deleteApiCmspostId404Schema,
+  deleteApiCmspostIdMutationResponseSchema,
+  deleteApiCmspostIdPathParamsSchema,
   deleteApiEquipmentId204Schema,
   deleteApiEquipmentId404Schema,
   deleteApiEquipmentIdMutationResponseSchema,
@@ -342,6 +440,18 @@ export {
   getApiCategoryIdPathParamsSchema,
   getApiCategoryIdQueryResponseSchema,
   getApiCategoryQueryResponseSchema,
+  getApiCmspost200Schema,
+  getApiCmspostId200Schema,
+  getApiCmspostId404Schema,
+  getApiCmspostIdPathParamsSchema,
+  getApiCmspostIdQueryResponseSchema,
+  getApiCmspostPublished200Schema,
+  getApiCmspostPublishedQueryResponseSchema,
+  getApiCmspostPublishedSlug200Schema,
+  getApiCmspostPublishedSlug404Schema,
+  getApiCmspostPublishedSlugPathParamsSchema,
+  getApiCmspostPublishedSlugQueryResponseSchema,
+  getApiCmspostQueryResponseSchema,
   getApiCustomer200Schema,
   getApiCustomerQueryResponseSchema,
   getApiEquipment200Schema,
@@ -370,6 +480,10 @@ export {
   postApiCategory400Schema,
   postApiCategoryMutationRequestSchema,
   postApiCategoryMutationResponseSchema,
+  postApiCmspost201Schema,
+  postApiCmspost400Schema,
+  postApiCmspostMutationRequestSchema,
+  postApiCmspostMutationResponseSchema,
   postApiEquipment201Schema,
   postApiEquipment400Schema,
   postApiEquipment500Schema,
@@ -393,6 +507,12 @@ export {
   putApiCategoryIdMutationRequestSchema,
   putApiCategoryIdMutationResponseSchema,
   putApiCategoryIdPathParamsSchema,
+  putApiCmspostId200Schema,
+  putApiCmspostId400Schema,
+  putApiCmspostId404Schema,
+  putApiCmspostIdMutationRequestSchema,
+  putApiCmspostIdMutationResponseSchema,
+  putApiCmspostIdPathParamsSchema,
   putApiEquipmentId204Schema,
   putApiEquipmentId400Schema,
   putApiEquipmentId404Schema,

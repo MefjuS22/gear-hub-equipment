@@ -15,6 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<RentalOrder> RentalOrders => Set<RentalOrder>();
     public DbSet<RentalOrderItem> RentalOrderItems => Set<RentalOrderItem>();
+    public DbSet<CmsPost> CmsPosts => Set<CmsPost>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,6 +23,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         modelBuilder.Entity<RentalOrderItem>()
             .HasKey(item => new { item.RentalOrderId, item.EquipmentId });
+
+        modelBuilder.Entity<CmsPost>(entity =>
+        {
+            entity.HasIndex(post => post.Slug).IsUnique();
+            entity.Property(post => post.Id).HasDefaultValueSql("gen_random_uuid()");
+        });
 
         modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Name = "Admin" },
