@@ -118,6 +118,7 @@ function PortalTopBar() {
 
         <Box sx={{ display: "flex", alignItems: "stretch", flexShrink: 0 }}>
           <NavTab to="/portal">Catalog</NavTab>
+          <NavTab to="/portal/news">News</NavTab>
         </Box>
 
         <Box

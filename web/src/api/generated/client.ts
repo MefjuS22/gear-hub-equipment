@@ -10,11 +10,55 @@ import type {
   ResponseErrorConfig,
 } from "@kubb/plugin-client/clients/axios";
 import type {
-  DeleteApiEquipmentIdMutationResponse,
-  DeleteApiEquipmentIdPathParams,
-  DeleteApiEquipmentId404,
+  DeleteApiBrandIdMutationResponse,
+  DeleteApiBrandIdPathParams,
+  DeleteApiBrandId400,
+  DeleteApiBrandId404,
+  GetApiBrandIdQueryResponse,
+  GetApiBrandIdPathParams,
+  GetApiBrandId404,
   GetApiBrandQueryResponse,
+  PostApiBrandMutationRequest,
+  PostApiBrandMutationResponse,
+  PostApiBrand400,
+  PutApiBrandIdMutationRequest,
+  PutApiBrandIdMutationResponse,
+  PutApiBrandIdPathParams,
+  PutApiBrandId404,
   GetApiCategoryQueryResponse,
+  PostApiCategoryMutationRequest,
+  PostApiCategoryMutationResponse,
+  PostApiCategory400,
+  GetApiCategoryIdQueryResponse,
+  GetApiCategoryIdPathParams,
+  GetApiCategoryId404,
+  PutApiCategoryIdMutationRequest,
+  PutApiCategoryIdMutationResponse,
+  PutApiCategoryIdPathParams,
+  PutApiCategoryId404,
+  DeleteApiCategoryIdMutationResponse,
+  DeleteApiCategoryIdPathParams,
+  DeleteApiCategoryId400,
+  DeleteApiCategoryId404,
+  GetApiCmspostQueryResponse,
+  PostApiCmspostMutationRequest,
+  PostApiCmspostMutationResponse,
+  PostApiCmspost400,
+  GetApiCmspostIdQueryResponse,
+  GetApiCmspostIdPathParams,
+  GetApiCmspostId404,
+  PutApiCmspostIdMutationRequest,
+  PutApiCmspostIdMutationResponse,
+  PutApiCmspostIdPathParams,
+  PutApiCmspostId400,
+  PutApiCmspostId404,
+  DeleteApiCmspostIdMutationResponse,
+  DeleteApiCmspostIdPathParams,
+  DeleteApiCmspostId404,
+  GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublishedSlugQueryResponse,
+  GetApiCmspostPublishedSlugPathParams,
+  GetApiCmspostPublishedSlug404,
   GetApiCustomerQueryResponse,
   GetApiEquipmentQueryResponse,
   PostApiEquipmentMutationRequest,
@@ -29,10 +73,34 @@ import type {
   PutApiEquipmentIdPathParams,
   PutApiEquipmentId400,
   PutApiEquipmentId404,
+  DeleteApiEquipmentIdMutationResponse,
+  DeleteApiEquipmentIdPathParams,
+  DeleteApiEquipmentId404,
+  PostApiFilesUploadMutationRequest,
+  PostApiFilesUploadMutationResponse,
+  PostApiFilesUpload400,
+  GetApiOrderQueryResponse,
+  GetApiOrder400,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
+  GetApiWarehouseQueryResponse,
+  PostApiWarehouseMutationRequest,
+  PostApiWarehouseMutationResponse,
+  PostApiWarehouse400,
+  GetApiWarehouseIdQueryResponse,
+  GetApiWarehouseIdPathParams,
+  GetApiWarehouseId404,
+  PutApiWarehouseIdMutationRequest,
+  PutApiWarehouseIdMutationResponse,
+  PutApiWarehouseIdPathParams,
+  PutApiWarehouseId404,
+  DeleteApiWarehouseIdMutationResponse,
+  DeleteApiWarehouseIdPathParams,
+  DeleteApiWarehouseId400,
+  DeleteApiWarehouseId404,
 } from "./types.ts";
+import { buildFormData } from "./.kubb/config.ts";
 
 function getGetApiBrandUrl() {
   const res = { method: "GET", url: `/api/Brand` as const };
@@ -59,6 +127,123 @@ export async function getApiBrand(
   return res.data;
 }
 
+function getPostApiBrandUrl() {
+  const res = { method: "POST", url: `/api/Brand` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Brand}
+ */
+export async function postApiBrand(
+  data?: PostApiBrandMutationRequest,
+  config: Partial<RequestConfig<PostApiBrandMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PostApiBrandMutationResponse,
+    ResponseErrorConfig<PostApiBrand400>,
+    PostApiBrandMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiBrandUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiBrandIdUrl(id: GetApiBrandIdPathParams["id"]) {
+  const res = { method: "GET", url: `/api/Brand/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export async function getApiBrandId(
+  id: GetApiBrandIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiBrandIdQueryResponse,
+    ResponseErrorConfig<GetApiBrandId404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiBrandIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiBrandIdUrl(id: PutApiBrandIdPathParams["id"]) {
+  const res = { method: "PUT", url: `/api/Brand/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export async function putApiBrandId(
+  id: PutApiBrandIdPathParams["id"],
+  data?: PutApiBrandIdMutationRequest,
+  config: Partial<RequestConfig<PutApiBrandIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiBrandIdMutationResponse,
+    ResponseErrorConfig<PutApiBrandId404>,
+    PutApiBrandIdMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiBrandIdUrl(id).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getDeleteApiBrandIdUrl(id: DeleteApiBrandIdPathParams["id"]) {
+  const res = { method: "DELETE", url: `/api/Brand/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Brand/:id}
+ */
+export async function deleteApiBrandId(
+  id: DeleteApiBrandIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    DeleteApiBrandIdMutationResponse,
+    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    unknown
+  >({
+    method: "DELETE",
+    url: getDeleteApiBrandIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
 function getGetApiCategoryUrl() {
   const res = { method: "GET", url: `/api/Category` as const };
   return res;
@@ -79,6 +264,318 @@ export async function getApiCategory(
   >({
     method: "GET",
     url: getGetApiCategoryUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPostApiCategoryUrl() {
+  const res = { method: "POST", url: `/api/Category` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Category}
+ */
+export async function postApiCategory(
+  data?: PostApiCategoryMutationRequest,
+  config: Partial<RequestConfig<PostApiCategoryMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PostApiCategoryMutationResponse,
+    ResponseErrorConfig<PostApiCategory400>,
+    PostApiCategoryMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiCategoryUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiCategoryIdUrl(id: GetApiCategoryIdPathParams["id"]) {
+  const res = { method: "GET", url: `/api/Category/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export async function getApiCategoryId(
+  id: GetApiCategoryIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCategoryIdQueryResponse,
+    ResponseErrorConfig<GetApiCategoryId404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCategoryIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiCategoryIdUrl(id: PutApiCategoryIdPathParams["id"]) {
+  const res = { method: "PUT", url: `/api/Category/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export async function putApiCategoryId(
+  id: PutApiCategoryIdPathParams["id"],
+  data?: PutApiCategoryIdMutationRequest,
+  config: Partial<RequestConfig<PutApiCategoryIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiCategoryIdMutationResponse,
+    ResponseErrorConfig<PutApiCategoryId404>,
+    PutApiCategoryIdMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiCategoryIdUrl(id).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getDeleteApiCategoryIdUrl(id: DeleteApiCategoryIdPathParams["id"]) {
+  const res = { method: "DELETE", url: `/api/Category/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Category/:id}
+ */
+export async function deleteApiCategoryId(
+  id: DeleteApiCategoryIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    DeleteApiCategoryIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    unknown
+  >({
+    method: "DELETE",
+    url: getDeleteApiCategoryIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCmspostUrl() {
+  const res = { method: "GET", url: `/api/CmsPost` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export async function getApiCmspost(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostQueryResponse,
+    ResponseErrorConfig<Error>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPostApiCmspostUrl() {
+  const res = { method: "POST", url: `/api/CmsPost` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost}
+ */
+export async function postApiCmspost(
+  data?: PostApiCmspostMutationRequest,
+  config: Partial<RequestConfig<PostApiCmspostMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PostApiCmspostMutationResponse,
+    ResponseErrorConfig<PostApiCmspost400>,
+    PostApiCmspostMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiCmspostUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiCmspostIdUrl(id: GetApiCmspostIdPathParams["id"]) {
+  const res = { method: "GET", url: `/api/CmsPost/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export async function getApiCmspostId(
+  id: GetApiCmspostIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostIdQueryResponse,
+    ResponseErrorConfig<GetApiCmspostId404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiCmspostIdUrl(id: PutApiCmspostIdPathParams["id"]) {
+  const res = { method: "PUT", url: `/api/CmsPost/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export async function putApiCmspostId(
+  id: PutApiCmspostIdPathParams["id"],
+  data?: PutApiCmspostIdMutationRequest,
+  config: Partial<RequestConfig<PutApiCmspostIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiCmspostIdMutationResponse,
+    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    PutApiCmspostIdMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiCmspostIdUrl(id).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getDeleteApiCmspostIdUrl(id: DeleteApiCmspostIdPathParams["id"]) {
+  const res = { method: "DELETE", url: `/api/CmsPost/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/:id}
+ */
+export async function deleteApiCmspostId(
+  id: DeleteApiCmspostIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    DeleteApiCmspostIdMutationResponse,
+    ResponseErrorConfig<DeleteApiCmspostId404>,
+    unknown
+  >({
+    method: "DELETE",
+    url: getDeleteApiCmspostIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCmspostPublishedUrl() {
+  const res = { method: "GET", url: `/api/CmsPost/Published` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/Published}
+ */
+export async function getApiCmspostPublished(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostPublishedQueryResponse,
+    ResponseErrorConfig<Error>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostPublishedUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCmspostPublishedSlugUrl(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+) {
+  const res = { method: "GET", url: `/api/CmsPost/Published/${slug}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/CmsPost/Published/:slug}
+ */
+export async function getApiCmspostPublishedSlug(
+  slug: GetApiCmspostPublishedSlugPathParams["slug"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCmspostPublishedSlugQueryResponse,
+    ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCmspostPublishedSlugUrl(slug).url.toString(),
     ...requestConfig,
   });
   return res.data;
@@ -251,6 +748,62 @@ export async function deleteApiEquipmentId(
   return res.data;
 }
 
+function getPostApiFilesUploadUrl() {
+  const res = { method: "POST", url: `/api/Files/upload` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Files/upload}
+ */
+export async function postApiFilesUpload(
+  data?: PostApiFilesUploadMutationRequest,
+  config: Partial<RequestConfig<PostApiFilesUploadMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+  const formData = buildFormData(requestData);
+  const res = await request<
+    PostApiFilesUploadMutationResponse,
+    ResponseErrorConfig<PostApiFilesUpload400>,
+    PostApiFilesUploadMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiFilesUploadUrl().url.toString(),
+    data: formData as FormData,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiOrderUrl() {
+  const res = { method: "GET", url: `/api/Order` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Order}
+ */
+export async function getApiOrder(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiOrderQueryResponse,
+    ResponseErrorConfig<GetApiOrder400>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiOrderUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
 function getPostApiOrderCreateorderUrl() {
   const res = { method: "POST", url: `/api/Order/CreateOrder` as const };
   return res;
@@ -279,6 +832,148 @@ export async function postApiOrderCreateorder(
     data: requestData,
     ...requestConfig,
     headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiWarehouseUrl() {
+  const res = { method: "GET", url: `/api/Warehouse` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Warehouse}
+ */
+export async function getApiWarehouse(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiWarehouseQueryResponse,
+    ResponseErrorConfig<Error>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiWarehouseUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPostApiWarehouseUrl() {
+  const res = { method: "POST", url: `/api/Warehouse` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Warehouse}
+ */
+export async function postApiWarehouse(
+  data?: PostApiWarehouseMutationRequest,
+  config: Partial<RequestConfig<PostApiWarehouseMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PostApiWarehouseMutationResponse,
+    ResponseErrorConfig<PostApiWarehouse400>,
+    PostApiWarehouseMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiWarehouseUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiWarehouseIdUrl(id: GetApiWarehouseIdPathParams["id"]) {
+  const res = { method: "GET", url: `/api/Warehouse/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export async function getApiWarehouseId(
+  id: GetApiWarehouseIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiWarehouseIdQueryResponse,
+    ResponseErrorConfig<GetApiWarehouseId404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiWarehouseIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiWarehouseIdUrl(id: PutApiWarehouseIdPathParams["id"]) {
+  const res = { method: "PUT", url: `/api/Warehouse/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export async function putApiWarehouseId(
+  id: PutApiWarehouseIdPathParams["id"],
+  data?: PutApiWarehouseIdMutationRequest,
+  config: Partial<RequestConfig<PutApiWarehouseIdMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<PutApiWarehouseId404>,
+    PutApiWarehouseIdMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiWarehouseIdUrl(id).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getDeleteApiWarehouseIdUrl(id: DeleteApiWarehouseIdPathParams["id"]) {
+  const res = { method: "DELETE", url: `/api/Warehouse/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Warehouse/:id}
+ */
+export async function deleteApiWarehouseId(
+  id: DeleteApiWarehouseIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    DeleteApiWarehouseIdMutationResponse,
+    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    unknown
+  >({
+    method: "DELETE",
+    url: getDeleteApiWarehouseIdUrl(id).url.toString(),
+    ...requestConfig,
   });
   return res.data;
 }

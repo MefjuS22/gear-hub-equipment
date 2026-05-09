@@ -480,3 +480,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# API local media uploads
+GearHub.Api/App_Data/uploads/

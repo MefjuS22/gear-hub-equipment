@@ -2,17 +2,31 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using GearHub.Api.Data;
 using GearHub.Api.Middleware;
+using GearHub.Api.Options;
 using GearHub.Api.Repositories;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;
 using GearHub.Api.Swagger;
 using GearHub.Api.Validators;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+const long maxUploadBytes = 20 * 1024 * 1024;
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = maxUploadBytes;
+});
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = maxUploadBytes;
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -55,6 +69,11 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
+builder.Services.Configure<FileStorageOptions>(
+    builder.Configuration.GetSection(FileStorageOptions.SectionName));
+builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowMobileApp", policy =>
@@ -73,6 +92,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowMobileApp");
 app.UseHttpsRedirection();
+
+var fileStorageOptions = app.Services.GetRequiredService<IOptions<FileStorageOptions>>().Value;
+var uploadsRoot = FileStoragePathHelper.ResolveAbsoluteRoot(
+    app.Environment.ContentRootPath,
+    fileStorageOptions.RootPath);
+Directory.CreateDirectory(uploadsRoot);
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsRoot),
+    RequestPath = new PathString(fileStorageOptions.PublicRequestPath),
+});
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 
@@ -87,6 +119,9 @@ using (var scope = app.Services.CreateScope())
     {
         dbContext.Database.EnsureCreated();
     }
+
+    CmsTableBootstrap.EnsureCmsPostsTable(dbContext);
+    MediaColumnsBootstrap.EnsureMediaColumns(dbContext);
 }
 
 app.Run();

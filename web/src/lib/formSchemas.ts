@@ -37,6 +37,7 @@ export const equipmentFormSchema = z.object({
   warehouseId: z.number().int().positive(),
   dailyRate: z.number().nonnegative(),
   isAvailable: z.boolean(),
+  imageUrl: z.string().max(2000),
 });
 export type EquipmentFormValues = z.infer<typeof equipmentFormSchema>;
 
@@ -54,6 +55,16 @@ export const portalTextFormSchema = z.object({
   sortOrder: z.number().int(),
 });
 export type PortalTextFormValues = z.infer<typeof portalTextFormSchema>;
+
+export const cmsPostFormSchema = z.object({
+  slug: z.string().max(200),
+  title: z.string().min(1, "Title is required").max(300),
+  excerpt: z.string().max(2000),
+  coverImageUrl: z.string().max(2000),
+  bodyHtml: z.string().max(512_000),
+  isPublished: z.boolean(),
+});
+export type CmsPostFormValues = z.infer<typeof cmsPostFormSchema>;
 
 export const orderCheckoutFormSchema = z
   .object({

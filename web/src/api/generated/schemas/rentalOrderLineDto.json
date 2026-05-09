@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "equipmentId": { "type": "integer", "format": "int32" },
+    "equipmentName": { "type": "string", "nullable": true },
+    "quantity": { "type": "integer", "format": "int32" },
+    "unitPrice": { "type": "number", "format": "double" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "RentalOrderLineDto"
+}

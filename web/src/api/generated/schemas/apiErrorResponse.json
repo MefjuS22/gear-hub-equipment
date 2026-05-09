@@ -12,7 +12,16 @@
         "orderCustomerNotFound",
         "orderUserNotFound",
         "orderEquipmentNotFound",
-        "orderEquipmentUnavailable"
+        "orderEquipmentUnavailable",
+        "brandNotFound",
+        "brandInUse",
+        "categoryNotFound",
+        "categoryInUse",
+        "warehouseNotFound",
+        "warehouseInUse",
+        "cmsPostNotFound",
+        "cmsPostSlugTaken",
+        "fileUploadInvalid"
       ],
       "type": "string",
       "x-readme-ref-name": "ApiErrorCode"

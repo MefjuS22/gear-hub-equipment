@@ -17,6 +17,7 @@ import type {
 } from "../../api/generated/types";
 import type { WarehouseOption } from "../../lib/warehouseOptionsFromEquipment";
 import type { EquipmentFormValues } from "../../lib/formSchemas";
+import { ImageUrlField } from "../common/ImageUrlField";
 
 type EquipmentFormProps = {
   control: Control<EquipmentFormValues>;
@@ -71,6 +72,14 @@ export function EquipmentForm({
             helperText={fieldState.error?.message}
           />
         )}
+      />
+      <ImageUrlField
+        control={control}
+        name="imageUrl"
+        label="Product image"
+        uploadFolder="equipment"
+        disabled={isPending}
+        helperText="Optional. Upload or paste a URL (e.g. /files/equipment/…)."
       />
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         <Controller

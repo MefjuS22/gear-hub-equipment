@@ -10,8 +10,8 @@ import {
   getApiEquipmentQueryKey,
   useGetApiBrand,
   useGetApiCategory,
-  useGetApiEquipment,
   useGetApiEquipmentId,
+  useGetApiWarehouse,
   usePostApiEquipment,
   usePutApiEquipmentId,
 } from "../../api/generated/react-query";
@@ -19,7 +19,7 @@ import {
   equipmentFormSchema,
   type EquipmentFormValues,
 } from "../../lib/formSchemas";
-import { warehouseOptionsFromEquipment } from "../../lib/warehouseOptionsFromEquipment";
+import type { WarehouseOption } from "../../lib/warehouseOptionsFromEquipment";
 
 export type UseEquipmentUpsertOptions = {
   equipmentId?: number;
@@ -47,19 +47,22 @@ export function useEquipmentUpsert({
       warehouseId: 1,
       dailyRate: 100,
       isAvailable: true,
+      imageUrl: "",
     },
   });
 
-  const equipmentList = useGetApiEquipment({ client: gearhubApiClientOptions });
   const equipmentDetail = useGetApiEquipmentId(detailId, {
     client: gearhubApiClientOptions,
     query: { enabled: isEdit },
   });
   const categories = useGetApiCategory({ client: gearhubApiClientOptions });
   const brands = useGetApiBrand({ client: gearhubApiClientOptions });
+  const warehouseQuery = useGetApiWarehouse({ client: gearhubApiClientOptions });
 
-  const warehouses = useMemo(() => {
-    const fromList = warehouseOptionsFromEquipment(equipmentList.data);
+  const warehouses = useMemo((): WarehouseOption[] => {
+    const fromList: WarehouseOption[] = (warehouseQuery.data ?? [])
+      .filter((w) => w.id != null)
+      .map((w) => ({ id: w.id!, name: w.name?.trim() || `Warehouse #${w.id}` }));
     if (!isEdit || !equipmentDetail.data) return fromList;
     const wid = equipmentDetail.data.warehouseId;
     if (wid == null) return fromList;
@@ -71,7 +74,7 @@ export function useEquipmentUpsert({
       },
       ...fromList,
     ];
-  }, [equipmentList.data, isEdit, equipmentDetail.data]);
+  }, [warehouseQuery.data, isEdit, equipmentDetail.data]);
 
   useEffect(() => {
     if (isEdit) {
@@ -105,6 +108,7 @@ export function useEquipmentUpsert({
       warehouseId: d.warehouseId ?? 1,
       dailyRate: d.dailyRate ?? 0,
       isAvailable: d.isAvailable ?? true,
+      imageUrl: d.imageUrl ?? "",
     });
   }, [isEdit, equipmentDetail.data, form]);
 
@@ -160,7 +164,7 @@ export function useEquipmentUpsert({
   });
 
   const isLoading =
-    equipmentList.isLoading ||
+    warehouseQuery.isLoading ||
     categories.isLoading ||
     brands.isLoading ||
     (isEdit && equipmentDetail.isLoading);

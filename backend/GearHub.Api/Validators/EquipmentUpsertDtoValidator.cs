@@ -22,5 +22,9 @@ public class EquipmentUpsertDtoValidator : AbstractValidator<EquipmentUpsertDto>
 
         RuleFor(equipment => equipment.DailyRate)
             .GreaterThan(0);
+
+        RuleFor(equipment => equipment.ImageUrl)
+            .MaximumLength(2000)
+            .When(e => !string.IsNullOrEmpty(e.ImageUrl));
     }
 }

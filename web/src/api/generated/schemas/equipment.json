@@ -37,6 +37,7 @@
     },
     "dailyRate": { "type": "number", "format": "double" },
     "isAvailable": { "type": "boolean" },
+    "imageUrl": { "type": "string", "nullable": true },
     "maintenances": {
       "type": "array",
       "items": { "$ref": "#/components/schemas/Maintenance" },

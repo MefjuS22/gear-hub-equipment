@@ -17,6 +17,9 @@ public class Equipment
     public decimal DailyRate { get; set; }
     public bool IsAvailable { get; set; }
 
+    /// <summary>Optional catalog image (URL or path such as /files/equipment/…).</summary>
+    public string? ImageUrl { get; set; }
+
     public ICollection<Maintenance> Maintenances { get; set; } = new List<Maintenance>();
     public ICollection<RentalOrderItem> RentalOrderItems { get; set; } = new List<RentalOrderItem>();
 }

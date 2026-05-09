@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "id": { "type": "string", "format": "uuid" },
+    "slug": { "type": "string", "nullable": true },
+    "title": { "type": "string", "nullable": true },
+    "excerpt": { "type": "string", "nullable": true },
+    "coverImageUrl": { "type": "string", "nullable": true },
+    "isPublished": { "type": "boolean" },
+    "publishedAtUtc": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true
+    },
+    "updatedAtUtc": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "CmsPostListDto"
+}

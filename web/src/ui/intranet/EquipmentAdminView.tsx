@@ -12,6 +12,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { Pencil, PlusCircle, Trash2 } from "lucide-react";
 import { formatUsd } from "../../lib/formatCurrency";
+import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { useEquipmentAdmin } from "../../hooks/intranet/useEquipmentAdmin";
 import { LoadingState, PageHeader } from "../common";
 
@@ -42,6 +43,7 @@ export function EquipmentAdminView() {
         <Table size="small">
           <TableHead>
             <TableRow>
+              <TableCell width={56}>Photo</TableCell>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell align="right">Daily rate</TableCell>
@@ -52,6 +54,24 @@ export function EquipmentAdminView() {
           <TableBody>
             {equipment.data?.map((e) => (
               <TableRow key={e.id}>
+                <TableCell>
+                  {resolveMediaSrc(e.imageUrl) ? (
+                    <Box
+                      component="img"
+                      src={resolveMediaSrc(e.imageUrl)}
+                      alt=""
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        objectFit: "cover",
+                        borderRadius: 0.5,
+                        display: "block",
+                      }}
+                    />
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
                 <TableCell>{e.id}</TableCell>
                 <TableCell>{e.name}</TableCell>
                 <TableCell align="right">

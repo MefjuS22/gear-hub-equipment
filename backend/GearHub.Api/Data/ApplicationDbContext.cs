@@ -15,6 +15,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<RentalOrder> RentalOrders => Set<RentalOrder>();
     public DbSet<RentalOrderItem> RentalOrderItems => Set<RentalOrderItem>();
+    public DbSet<CmsPost> CmsPosts => Set<CmsPost>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,6 +23,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         modelBuilder.Entity<RentalOrderItem>()
             .HasKey(item => new { item.RentalOrderId, item.EquipmentId });
+
+        modelBuilder.Entity<CmsPost>(entity =>
+        {
+            entity.HasIndex(post => post.Slug).IsUnique();
+            entity.Property(post => post.Id).HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(post => post.CoverImageUrl).HasMaxLength(2000);
+        });
 
         modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Name = "Admin" },
@@ -50,7 +58,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new Customer { Id = 1, CompanyName = "Atlas Construction Ltd.", ContactPerson = "John Smith" }
         );
 
-        modelBuilder.Entity<Equipment>().HasData(
+        modelBuilder.Entity<Equipment>(entity =>
+        {
+            entity.Property(e => e.ImageUrl).HasMaxLength(2000);
+            entity.HasData(
             new Equipment
             {
                 Id = 1,
@@ -80,7 +91,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 WarehouseId = 1,
                 DailyRate = 60m,
                 IsAvailable = true
-            }
-        );
+            });
+        });
     }
 }

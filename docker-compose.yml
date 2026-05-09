@@ -31,6 +31,9 @@ services:
       ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=GearHubDb;Username=postgres;Password=SecretPassword123!
     ports:
       - "5000:8080"
+    volumes:
+      - gearhub-uploads:/app/App_Data/uploads
 
 volumes:
   gearhub-postgres-data:
+  gearhub-uploads:
