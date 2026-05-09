@@ -91,6 +91,9 @@ import type {
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
   DeleteApiEquipmentId404,
+  PostApiFilesUploadMutationRequest,
+  PostApiFilesUploadMutationResponse,
+  PostApiFilesUpload400,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
@@ -140,6 +143,7 @@ import {
   postApiEquipment,
   putApiEquipmentId,
   deleteApiEquipmentId,
+  postApiFilesUpload,
   postApiOrderCreateorder,
   postApiWarehouse,
   putApiWarehouseId,
@@ -2958,6 +2962,82 @@ export function useDeleteApiEquipmentId<TContext>(
     DeleteApiEquipmentIdMutationResponse,
     ResponseErrorConfig<DeleteApiEquipmentId404>,
     { id: DeleteApiEquipmentIdPathParams["id"] },
+    TContext
+  >;
+}
+
+export const postApiFilesUploadMutationKey = () =>
+  [{ url: "/api/Files/upload" }] as const;
+
+export type PostApiFilesUploadMutationKey = ReturnType<
+  typeof postApiFilesUploadMutationKey
+>;
+
+export function postApiFilesUploadMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiFilesUploadMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiFilesUploadMutationKey();
+  return mutationOptions<
+    PostApiFilesUploadMutationResponse,
+    ResponseErrorConfig<PostApiFilesUpload400>,
+    { data?: PostApiFilesUploadMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiFilesUpload(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Files/upload}
+ */
+export function usePostApiFilesUpload<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiFilesUploadMutationResponse,
+      ResponseErrorConfig<PostApiFilesUpload400>,
+      { data?: PostApiFilesUploadMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiFilesUploadMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? postApiFilesUploadMutationKey();
+
+  const baseOptions = postApiFilesUploadMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PostApiFilesUploadMutationResponse,
+    ResponseErrorConfig<PostApiFilesUpload400>,
+    { data?: PostApiFilesUploadMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiFilesUploadMutationResponse,
+    ResponseErrorConfig<PostApiFilesUpload400>,
+    { data?: PostApiFilesUploadMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiFilesUploadMutationResponse,
+    ResponseErrorConfig<PostApiFilesUpload400>,
+    { data?: PostApiFilesUploadMutationRequest },
     TContext
   >;
 }

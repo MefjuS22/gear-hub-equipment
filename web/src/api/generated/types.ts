@@ -22,6 +22,7 @@ export const apiErrorCodeEnum = {
   warehouseInUse: "warehouseInUse",
   cmsPostNotFound: "cmsPostNotFound",
   cmsPostSlugTaken: "cmsPostSlugTaken",
+  fileUploadInvalid: "fileUploadInvalid",
 } as const;
 
 export type ApiErrorCodeEnumKey =
@@ -136,6 +137,10 @@ export type CmsPostDetailDto = {
   /**
    * @type string
    */
+  coverImageUrl?: string | null;
+  /**
+   * @type string
+   */
   bodyHtml?: string | null;
   /**
    * @type boolean | undefined
@@ -173,6 +178,10 @@ export type CmsPostListDto = {
    */
   excerpt?: string | null;
   /**
+   * @type string
+   */
+  coverImageUrl?: string | null;
+  /**
    * @type boolean | undefined
    */
   isPublished?: boolean;
@@ -206,6 +215,10 @@ export type CmsPostPublicDetailDto = {
   /**
    * @type string
    */
+  coverImageUrl?: string | null;
+  /**
+   * @type string
+   */
   bodyHtml?: string | null;
   /**
    * @type string | undefined, date-time
@@ -235,6 +248,10 @@ export type CmsPostPublicSummaryDto = {
    */
   excerpt?: string | null;
   /**
+   * @type string
+   */
+  coverImageUrl?: string | null;
+  /**
    * @type string | undefined, date-time
    */
   publishedAtUtc?: string;
@@ -253,6 +270,10 @@ export type CmsPostUpsertDto = {
    * @type string
    */
   excerpt?: string | null;
+  /**
+   * @type string
+   */
+  coverImageUrl?: string | null;
   /**
    * @type string
    */
@@ -384,6 +405,10 @@ export type Equipment = {
    * @type boolean | undefined
    */
   isAvailable?: boolean;
+  /**
+   * @type string
+   */
+  imageUrl?: string | null;
   /**
    * @type array
    */
@@ -520,6 +545,10 @@ export type EquipmentDto = {
    * @type boolean | undefined
    */
   isAvailable?: boolean;
+  /**
+   * @type string
+   */
+  imageUrl?: string | null;
 };
 
 export type EquipmentUpsertDto = {
@@ -547,6 +576,25 @@ export type EquipmentUpsertDto = {
    * @type boolean | undefined
    */
   isAvailable?: boolean;
+  /**
+   * @type string
+   */
+  imageUrl?: string | null;
+};
+
+export type FileUploadResponseDto = {
+  /**
+   * @type string
+   */
+  relativePath?: string | null;
+  /**
+   * @type string
+   */
+  publicPath?: string | null;
+  /**
+   * @type string
+   */
+  absoluteUrl?: string | null;
 };
 
 export type OrderItemDto = {
@@ -1184,6 +1232,36 @@ export type DeleteApiEquipmentIdMutation = {
   Response: DeleteApiEquipmentId204;
   PathParams: DeleteApiEquipmentIdPathParams;
   Errors: DeleteApiEquipmentId404;
+};
+
+/**
+ * @description OK
+ */
+export type PostApiFilesUpload200 = FileUploadResponseDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiFilesUpload400 = ApiErrorResponse;
+
+export type PostApiFilesUploadMutationRequest = {
+  /**
+   * @type string | undefined, binary
+   */
+  file?: Blob;
+  /**
+   * @default "general"
+   * @type string | undefined
+   */
+  folder?: string;
+};
+
+export type PostApiFilesUploadMutationResponse = PostApiFilesUpload200;
+
+export type PostApiFilesUploadMutation = {
+  Response: PostApiFilesUpload200;
+  Request: PostApiFilesUploadMutationRequest;
+  Errors: PostApiFilesUpload400;
 };
 
 /**

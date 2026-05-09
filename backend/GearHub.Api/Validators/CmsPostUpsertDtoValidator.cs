@@ -10,6 +10,9 @@ public sealed class CmsPostUpsertDtoValidator : AbstractValidator<CmsPostUpsertD
         RuleFor(x => x.Slug).MaximumLength(200);
         RuleFor(x => x.Title).NotEmpty().MaximumLength(300);
         RuleFor(x => x.Excerpt).MaximumLength(2000);
+        RuleFor(x => x.CoverImageUrl)
+            .MaximumLength(2000)
+            .When(x => !string.IsNullOrEmpty(x.CoverImageUrl));
         RuleFor(x => x.BodyHtml).MaximumLength(512_000);
     }
 }

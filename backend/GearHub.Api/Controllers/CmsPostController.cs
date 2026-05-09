@@ -61,6 +61,7 @@ public class CmsPostController(
                 Slug = p.Slug,
                 Title = p.Title,
                 Excerpt = p.Excerpt,
+                CoverImageUrl = p.CoverImageUrl,
                 PublishedAtUtc = p.PublishedAtUtc!.Value,
             })
             .ToListAsync(cancellationToken);
@@ -126,6 +127,9 @@ public class CmsPostController(
             Slug = slug,
             Title = title,
             Excerpt = string.IsNullOrWhiteSpace(request.Excerpt) ? null : request.Excerpt.Trim(),
+            CoverImageUrl = string.IsNullOrWhiteSpace(request.CoverImageUrl)
+                ? null
+                : request.CoverImageUrl.Trim(),
             BodyHtml = request.BodyHtml ?? string.Empty,
             IsPublished = request.IsPublished,
             PublishedAtUtc = request.IsPublished ? now : null,
@@ -193,6 +197,9 @@ public class CmsPostController(
         entity.Slug = slug;
         entity.Title = title;
         entity.Excerpt = string.IsNullOrWhiteSpace(request.Excerpt) ? null : request.Excerpt.Trim();
+        entity.CoverImageUrl = string.IsNullOrWhiteSpace(request.CoverImageUrl)
+            ? null
+            : request.CoverImageUrl.Trim();
         entity.BodyHtml = request.BodyHtml ?? string.Empty;
 
         if (request.IsPublished)
@@ -313,6 +320,7 @@ public class CmsPostController(
             Slug = p.Slug,
             Title = p.Title,
             Excerpt = p.Excerpt,
+            CoverImageUrl = p.CoverImageUrl,
             IsPublished = p.IsPublished,
             PublishedAtUtc = p.PublishedAtUtc,
             UpdatedAtUtc = p.UpdatedAtUtc,
@@ -325,6 +333,7 @@ public class CmsPostController(
             Slug = p.Slug,
             Title = p.Title,
             Excerpt = p.Excerpt,
+            CoverImageUrl = p.CoverImageUrl,
             BodyHtml = p.BodyHtml,
             IsPublished = p.IsPublished,
             PublishedAtUtc = p.PublishedAtUtc,
@@ -339,6 +348,7 @@ public class CmsPostController(
             Slug = p.Slug,
             Title = p.Title,
             Excerpt = p.Excerpt,
+            CoverImageUrl = p.CoverImageUrl,
             BodyHtml = p.BodyHtml,
             PublishedAtUtc = p.PublishedAtUtc!.Value,
             UpdatedAtUtc = p.UpdatedAtUtc,

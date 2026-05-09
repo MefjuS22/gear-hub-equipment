@@ -76,6 +76,9 @@ import type {
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
   DeleteApiEquipmentId404,
+  PostApiFilesUploadMutationRequest,
+  PostApiFilesUploadMutationResponse,
+  PostApiFilesUpload400,
   GetApiOrderQueryResponse,
   GetApiOrder400,
   PostApiOrderCreateorderMutationRequest,
@@ -97,6 +100,7 @@ import type {
   DeleteApiWarehouseId400,
   DeleteApiWarehouseId404,
 } from "./types.ts";
+import { buildFormData } from "./.kubb/config.ts";
 
 function getGetApiBrandUrl() {
   const res = { method: "GET", url: `/api/Brand` as const };
@@ -739,6 +743,37 @@ export async function deleteApiEquipmentId(
   >({
     method: "DELETE",
     url: getDeleteApiEquipmentIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPostApiFilesUploadUrl() {
+  const res = { method: "POST", url: `/api/Files/upload` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Files/upload}
+ */
+export async function postApiFilesUpload(
+  data?: PostApiFilesUploadMutationRequest,
+  config: Partial<RequestConfig<PostApiFilesUploadMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+  const formData = buildFormData(requestData);
+  const res = await request<
+    PostApiFilesUploadMutationResponse,
+    ResponseErrorConfig<PostApiFilesUpload400>,
+    PostApiFilesUploadMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiFilesUploadUrl().url.toString(),
+    data: formData as FormData,
     ...requestConfig,
   });
   return res.data;

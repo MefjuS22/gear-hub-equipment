@@ -36,6 +36,7 @@ export type {
   PostApiCategoryMutationKey,
   PostApiCmspostMutationKey,
   PostApiEquipmentMutationKey,
+  PostApiFilesUploadMutationKey,
   PostApiOrderCreateorderMutationKey,
   PostApiWarehouseMutationKey,
   PutApiBrandIdMutationKey,
@@ -91,6 +92,7 @@ export type {
   Equipment,
   EquipmentDto,
   EquipmentUpsertDto,
+  FileUploadResponseDto,
   GetApiBrand200,
   GetApiBrandId200,
   GetApiBrandId404,
@@ -170,6 +172,11 @@ export type {
   PostApiEquipmentMutation,
   PostApiEquipmentMutationRequest,
   PostApiEquipmentMutationResponse,
+  PostApiFilesUpload200,
+  PostApiFilesUpload400,
+  PostApiFilesUploadMutation,
+  PostApiFilesUploadMutationRequest,
+  PostApiFilesUploadMutationResponse,
   PostApiOrderCreateorder201,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorderMutation,
@@ -246,6 +253,7 @@ export {
   postApiCategory,
   postApiCmspost,
   postApiEquipment,
+  postApiFilesUpload,
   postApiOrderCreateorder,
   postApiWarehouse,
   putApiBrandId,
@@ -328,6 +336,8 @@ export { postApiCmspostMutationKey } from "./react-query.ts";
 export { postApiCmspostMutationOptions } from "./react-query.ts";
 export { postApiEquipmentMutationKey } from "./react-query.ts";
 export { postApiEquipmentMutationOptions } from "./react-query.ts";
+export { postApiFilesUploadMutationKey } from "./react-query.ts";
+export { postApiFilesUploadMutationOptions } from "./react-query.ts";
 export { postApiOrderCreateorderMutationKey } from "./react-query.ts";
 export { postApiOrderCreateorderMutationOptions } from "./react-query.ts";
 export { postApiWarehouseMutationKey } from "./react-query.ts";
@@ -379,6 +389,7 @@ export { usePostApiBrand } from "./react-query.ts";
 export { usePostApiCategory } from "./react-query.ts";
 export { usePostApiCmspost } from "./react-query.ts";
 export { usePostApiEquipment } from "./react-query.ts";
+export { usePostApiFilesUpload } from "./react-query.ts";
 export { usePostApiOrderCreateorder } from "./react-query.ts";
 export { usePostApiWarehouse } from "./react-query.ts";
 export { usePutApiBrandId } from "./react-query.ts";
@@ -428,6 +439,7 @@ export {
   equipmentDtoSchema,
   equipmentSchema,
   equipmentUpsertDtoSchema,
+  fileUploadResponseDtoSchema,
   getApiBrand200Schema,
   getApiBrandId200Schema,
   getApiBrandId404Schema,
@@ -489,6 +501,10 @@ export {
   postApiEquipment500Schema,
   postApiEquipmentMutationRequestSchema,
   postApiEquipmentMutationResponseSchema,
+  postApiFilesUpload200Schema,
+  postApiFilesUpload400Schema,
+  postApiFilesUploadMutationRequestSchema,
+  postApiFilesUploadMutationResponseSchema,
   postApiOrderCreateorder201Schema,
   postApiOrderCreateorder400Schema,
   postApiOrderCreateorderMutationRequestSchema,

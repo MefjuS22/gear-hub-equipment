@@ -17,7 +17,8 @@
     "warehouseNotFound",
     "warehouseInUse",
     "cmsPostNotFound",
-    "cmsPostSlugTaken"
+    "cmsPostSlugTaken",
+    "fileUploadInvalid"
   ],
   "type": "string",
   "x-readme-ref-name": "ApiErrorCode"

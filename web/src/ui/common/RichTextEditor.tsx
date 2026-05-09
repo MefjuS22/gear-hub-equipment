@@ -1,12 +1,15 @@
+import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Box, IconButton, Paper, Tooltip } from "@mui/material";
+import { useSnackbar } from "notistack";
 import {
   Bold,
   Heading2,
+  Image as ImageIcon,
   Italic,
   Link as LinkIcon,
   List,
@@ -14,7 +17,7 @@ import {
   Strikethrough,
   Underline as UnderlineIcon,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 type RichTextEditorProps = {
   value: string;
@@ -22,6 +25,8 @@ type RichTextEditorProps = {
   placeholder?: string;
   disabled?: boolean;
   error?: boolean;
+  /** When set, toolbar includes image upload (stores returned URL in HTML). */
+  onUploadImage?: (file: File) => Promise<string>;
 };
 
 export function RichTextEditor({
@@ -30,7 +35,13 @@ export function RichTextEditor({
   placeholder = "Write the article body…",
   disabled = false,
   error = false,
+  onUploadImage,
 }: RichTextEditorProps) {
+  const { enqueueSnackbar } = useSnackbar();
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const uploadRef = useRef(onUploadImage);
+  uploadRef.current = onUploadImage;
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -38,6 +49,10 @@ export function RichTextEditor({
         heading: { levels: [2, 3] },
       }),
       Underline,
+      Image.configure({
+        allowBase64: false,
+        HTMLAttributes: { class: "cms-inline-image" },
+      }),
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -189,6 +204,38 @@ export function RichTextEditor({
             <LinkIcon size={18} aria-hidden />
           </IconButton>
         </Tooltip>
+        {onUploadImage ? (
+          <>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                e.target.value = "";
+                const fn = uploadRef.current;
+                if (!file || !fn || !editor) return;
+                try {
+                  const src = await fn(file);
+                  editor.chain().focus().setImage({ src }).run();
+                } catch {
+                  enqueueSnackbar("Image upload failed.", { variant: "error" });
+                }
+              }}
+            />
+            <Tooltip title="Insert image">
+              <IconButton
+                size="small"
+                disabled={disabled}
+                onClick={() => imageInputRef.current?.click()}
+                aria-label="Insert image"
+              >
+                <ImageIcon size={18} aria-hidden />
+              </IconButton>
+            </Tooltip>
+          </>
+        ) : null}
       </Box>
       <Box
         sx={{
@@ -204,6 +251,7 @@ export function RichTextEditor({
               height: 0,
               pointerEvents: "none",
             },
+            "& img": { maxWidth: "100%", height: "auto", borderRadius: 4 },
           },
         }}
       >

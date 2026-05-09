@@ -15,6 +15,7 @@ const config: Config = {
     "h4",
     "hr",
     "i",
+    "img",
     "li",
     "ol",
     "p",
@@ -27,7 +28,19 @@ const config: Config = {
     "u",
     "ul",
   ],
-  ALLOWED_ATTR: ["href", "target", "rel", "class"],
+  ALLOWED_ATTR: [
+    "href",
+    "target",
+    "rel",
+    "class",
+    "src",
+    "alt",
+    "title",
+    "width",
+    "height",
+    "loading",
+    "decoding",
+  ],
   ALLOW_DATA_ATTR: false,
 };
 

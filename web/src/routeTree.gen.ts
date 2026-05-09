@@ -17,18 +17,21 @@ import { Route as IntranetIndexRouteImport } from './routes/intranet/index'
 import { Route as PortalCartRouteImport } from './routes/portal/cart'
 import { Route as IntranetWarehousesRouteImport } from './routes/intranet/warehouses'
 import { Route as IntranetUsersRouteImport } from './routes/intranet/users'
-import { Route as IntranetPortalTextsRouteImport } from './routes/intranet/portal-texts'
 import { Route as IntranetOrdersRouteImport } from './routes/intranet/orders'
 import { Route as IntranetMaintenanceRouteImport } from './routes/intranet/maintenance'
 import { Route as IntranetCustomersRouteImport } from './routes/intranet/customers'
 import { Route as IntranetCategoriesRouteImport } from './routes/intranet/categories'
 import { Route as IntranetBrandsRouteImport } from './routes/intranet/brands'
 import { Route as PortalNewsRouteRouteImport } from './routes/portal/news/route'
+import { Route as IntranetPortalTextsRouteRouteImport } from './routes/intranet/portal-texts/route'
 import { Route as IntranetEquipmentRouteRouteImport } from './routes/intranet/equipment/route'
 import { Route as PortalNewsIndexRouteImport } from './routes/portal/news/index'
+import { Route as IntranetPortalTextsIndexRouteImport } from './routes/intranet/portal-texts/index'
 import { Route as IntranetEquipmentIndexRouteImport } from './routes/intranet/equipment/index'
 import { Route as PortalNewsSlugRouteImport } from './routes/portal/news/$slug'
+import { Route as IntranetPortalTextsNewRouteImport } from './routes/intranet/portal-texts/new'
 import { Route as IntranetEquipmentNewRouteImport } from './routes/intranet/equipment/new'
+import { Route as IntranetPortalTextsPostIdEditRouteImport } from './routes/intranet/portal-texts/$postId/edit'
 import { Route as IntranetEquipmentEquipmentIdEditRouteImport } from './routes/intranet/equipment/$equipmentId/edit'
 
 const PortalRouteRoute = PortalRouteRouteImport.update({
@@ -71,11 +74,6 @@ const IntranetUsersRoute = IntranetUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => IntranetRouteRoute,
 } as any)
-const IntranetPortalTextsRoute = IntranetPortalTextsRouteImport.update({
-  id: '/portal-texts',
-  path: '/portal-texts',
-  getParentRoute: () => IntranetRouteRoute,
-} as any)
 const IntranetOrdersRoute = IntranetOrdersRouteImport.update({
   id: '/orders',
   path: '/orders',
@@ -106,6 +104,12 @@ const PortalNewsRouteRoute = PortalNewsRouteRouteImport.update({
   path: '/news',
   getParentRoute: () => PortalRouteRoute,
 } as any)
+const IntranetPortalTextsRouteRoute =
+  IntranetPortalTextsRouteRouteImport.update({
+    id: '/portal-texts',
+    path: '/portal-texts',
+    getParentRoute: () => IntranetRouteRoute,
+  } as any)
 const IntranetEquipmentRouteRoute = IntranetEquipmentRouteRouteImport.update({
   id: '/equipment',
   path: '/equipment',
@@ -116,6 +120,12 @@ const PortalNewsIndexRoute = PortalNewsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PortalNewsRouteRoute,
 } as any)
+const IntranetPortalTextsIndexRoute =
+  IntranetPortalTextsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => IntranetPortalTextsRouteRoute,
+  } as any)
 const IntranetEquipmentIndexRoute = IntranetEquipmentIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -126,11 +136,22 @@ const PortalNewsSlugRoute = PortalNewsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => PortalNewsRouteRoute,
 } as any)
+const IntranetPortalTextsNewRoute = IntranetPortalTextsNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => IntranetPortalTextsRouteRoute,
+} as any)
 const IntranetEquipmentNewRoute = IntranetEquipmentNewRouteImport.update({
   id: '/new',
   path: '/new',
   getParentRoute: () => IntranetEquipmentRouteRoute,
 } as any)
+const IntranetPortalTextsPostIdEditRoute =
+  IntranetPortalTextsPostIdEditRouteImport.update({
+    id: '/$postId/edit',
+    path: '/$postId/edit',
+    getParentRoute: () => IntranetPortalTextsRouteRoute,
+  } as any)
 const IntranetEquipmentEquipmentIdEditRoute =
   IntranetEquipmentEquipmentIdEditRouteImport.update({
     id: '/$equipmentId/edit',
@@ -143,23 +164,26 @@ export interface FileRoutesByFullPath {
   '/intranet': typeof IntranetRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/intranet/equipment': typeof IntranetEquipmentRouteRouteWithChildren
+  '/intranet/portal-texts': typeof IntranetPortalTextsRouteRouteWithChildren
   '/portal/news': typeof PortalNewsRouteRouteWithChildren
   '/intranet/brands': typeof IntranetBrandsRoute
   '/intranet/categories': typeof IntranetCategoriesRoute
   '/intranet/customers': typeof IntranetCustomersRoute
   '/intranet/maintenance': typeof IntranetMaintenanceRoute
   '/intranet/orders': typeof IntranetOrdersRoute
-  '/intranet/portal-texts': typeof IntranetPortalTextsRoute
   '/intranet/users': typeof IntranetUsersRoute
   '/intranet/warehouses': typeof IntranetWarehousesRoute
   '/portal/cart': typeof PortalCartRoute
   '/intranet/': typeof IntranetIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
+  '/intranet/portal-texts/new': typeof IntranetPortalTextsNewRoute
   '/portal/news/$slug': typeof PortalNewsSlugRoute
   '/intranet/equipment/': typeof IntranetEquipmentIndexRoute
+  '/intranet/portal-texts/': typeof IntranetPortalTextsIndexRoute
   '/portal/news/': typeof PortalNewsIndexRoute
   '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
+  '/intranet/portal-texts/$postId/edit': typeof IntranetPortalTextsPostIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -168,17 +192,19 @@ export interface FileRoutesByTo {
   '/intranet/customers': typeof IntranetCustomersRoute
   '/intranet/maintenance': typeof IntranetMaintenanceRoute
   '/intranet/orders': typeof IntranetOrdersRoute
-  '/intranet/portal-texts': typeof IntranetPortalTextsRoute
   '/intranet/users': typeof IntranetUsersRoute
   '/intranet/warehouses': typeof IntranetWarehousesRoute
   '/portal/cart': typeof PortalCartRoute
   '/intranet': typeof IntranetIndexRoute
   '/portal': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
+  '/intranet/portal-texts/new': typeof IntranetPortalTextsNewRoute
   '/portal/news/$slug': typeof PortalNewsSlugRoute
   '/intranet/equipment': typeof IntranetEquipmentIndexRoute
+  '/intranet/portal-texts': typeof IntranetPortalTextsIndexRoute
   '/portal/news': typeof PortalNewsIndexRoute
   '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
+  '/intranet/portal-texts/$postId/edit': typeof IntranetPortalTextsPostIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -186,23 +212,26 @@ export interface FileRoutesById {
   '/intranet': typeof IntranetRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
   '/intranet/equipment': typeof IntranetEquipmentRouteRouteWithChildren
+  '/intranet/portal-texts': typeof IntranetPortalTextsRouteRouteWithChildren
   '/portal/news': typeof PortalNewsRouteRouteWithChildren
   '/intranet/brands': typeof IntranetBrandsRoute
   '/intranet/categories': typeof IntranetCategoriesRoute
   '/intranet/customers': typeof IntranetCustomersRoute
   '/intranet/maintenance': typeof IntranetMaintenanceRoute
   '/intranet/orders': typeof IntranetOrdersRoute
-  '/intranet/portal-texts': typeof IntranetPortalTextsRoute
   '/intranet/users': typeof IntranetUsersRoute
   '/intranet/warehouses': typeof IntranetWarehousesRoute
   '/portal/cart': typeof PortalCartRoute
   '/intranet/': typeof IntranetIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
+  '/intranet/portal-texts/new': typeof IntranetPortalTextsNewRoute
   '/portal/news/$slug': typeof PortalNewsSlugRoute
   '/intranet/equipment/': typeof IntranetEquipmentIndexRoute
+  '/intranet/portal-texts/': typeof IntranetPortalTextsIndexRoute
   '/portal/news/': typeof PortalNewsIndexRoute
   '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
+  '/intranet/portal-texts/$postId/edit': typeof IntranetPortalTextsPostIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -211,23 +240,26 @@ export interface FileRouteTypes {
     | '/intranet'
     | '/portal'
     | '/intranet/equipment'
+    | '/intranet/portal-texts'
     | '/portal/news'
     | '/intranet/brands'
     | '/intranet/categories'
     | '/intranet/customers'
     | '/intranet/maintenance'
     | '/intranet/orders'
-    | '/intranet/portal-texts'
     | '/intranet/users'
     | '/intranet/warehouses'
     | '/portal/cart'
     | '/intranet/'
     | '/portal/'
     | '/intranet/equipment/new'
+    | '/intranet/portal-texts/new'
     | '/portal/news/$slug'
     | '/intranet/equipment/'
+    | '/intranet/portal-texts/'
     | '/portal/news/'
     | '/intranet/equipment/$equipmentId/edit'
+    | '/intranet/portal-texts/$postId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -236,40 +268,45 @@ export interface FileRouteTypes {
     | '/intranet/customers'
     | '/intranet/maintenance'
     | '/intranet/orders'
-    | '/intranet/portal-texts'
     | '/intranet/users'
     | '/intranet/warehouses'
     | '/portal/cart'
     | '/intranet'
     | '/portal'
     | '/intranet/equipment/new'
+    | '/intranet/portal-texts/new'
     | '/portal/news/$slug'
     | '/intranet/equipment'
+    | '/intranet/portal-texts'
     | '/portal/news'
     | '/intranet/equipment/$equipmentId/edit'
+    | '/intranet/portal-texts/$postId/edit'
   id:
     | '__root__'
     | '/'
     | '/intranet'
     | '/portal'
     | '/intranet/equipment'
+    | '/intranet/portal-texts'
     | '/portal/news'
     | '/intranet/brands'
     | '/intranet/categories'
     | '/intranet/customers'
     | '/intranet/maintenance'
     | '/intranet/orders'
-    | '/intranet/portal-texts'
     | '/intranet/users'
     | '/intranet/warehouses'
     | '/portal/cart'
     | '/intranet/'
     | '/portal/'
     | '/intranet/equipment/new'
+    | '/intranet/portal-texts/new'
     | '/portal/news/$slug'
     | '/intranet/equipment/'
+    | '/intranet/portal-texts/'
     | '/portal/news/'
     | '/intranet/equipment/$equipmentId/edit'
+    | '/intranet/portal-texts/$postId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -336,13 +373,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntranetUsersRouteImport
       parentRoute: typeof IntranetRouteRoute
     }
-    '/intranet/portal-texts': {
-      id: '/intranet/portal-texts'
-      path: '/portal-texts'
-      fullPath: '/intranet/portal-texts'
-      preLoaderRoute: typeof IntranetPortalTextsRouteImport
-      parentRoute: typeof IntranetRouteRoute
-    }
     '/intranet/orders': {
       id: '/intranet/orders'
       path: '/orders'
@@ -385,6 +415,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalNewsRouteRouteImport
       parentRoute: typeof PortalRouteRoute
     }
+    '/intranet/portal-texts': {
+      id: '/intranet/portal-texts'
+      path: '/portal-texts'
+      fullPath: '/intranet/portal-texts'
+      preLoaderRoute: typeof IntranetPortalTextsRouteRouteImport
+      parentRoute: typeof IntranetRouteRoute
+    }
     '/intranet/equipment': {
       id: '/intranet/equipment'
       path: '/equipment'
@@ -398,6 +435,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/news/'
       preLoaderRoute: typeof PortalNewsIndexRouteImport
       parentRoute: typeof PortalNewsRouteRoute
+    }
+    '/intranet/portal-texts/': {
+      id: '/intranet/portal-texts/'
+      path: '/'
+      fullPath: '/intranet/portal-texts/'
+      preLoaderRoute: typeof IntranetPortalTextsIndexRouteImport
+      parentRoute: typeof IntranetPortalTextsRouteRoute
     }
     '/intranet/equipment/': {
       id: '/intranet/equipment/'
@@ -413,12 +457,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalNewsSlugRouteImport
       parentRoute: typeof PortalNewsRouteRoute
     }
+    '/intranet/portal-texts/new': {
+      id: '/intranet/portal-texts/new'
+      path: '/new'
+      fullPath: '/intranet/portal-texts/new'
+      preLoaderRoute: typeof IntranetPortalTextsNewRouteImport
+      parentRoute: typeof IntranetPortalTextsRouteRoute
+    }
     '/intranet/equipment/new': {
       id: '/intranet/equipment/new'
       path: '/new'
       fullPath: '/intranet/equipment/new'
       preLoaderRoute: typeof IntranetEquipmentNewRouteImport
       parentRoute: typeof IntranetEquipmentRouteRoute
+    }
+    '/intranet/portal-texts/$postId/edit': {
+      id: '/intranet/portal-texts/$postId/edit'
+      path: '/$postId/edit'
+      fullPath: '/intranet/portal-texts/$postId/edit'
+      preLoaderRoute: typeof IntranetPortalTextsPostIdEditRouteImport
+      parentRoute: typeof IntranetPortalTextsRouteRoute
     }
     '/intranet/equipment/$equipmentId/edit': {
       id: '/intranet/equipment/$equipmentId/edit'
@@ -449,14 +507,32 @@ const IntranetEquipmentRouteRouteWithChildren =
     IntranetEquipmentRouteRouteChildren,
   )
 
+interface IntranetPortalTextsRouteRouteChildren {
+  IntranetPortalTextsNewRoute: typeof IntranetPortalTextsNewRoute
+  IntranetPortalTextsIndexRoute: typeof IntranetPortalTextsIndexRoute
+  IntranetPortalTextsPostIdEditRoute: typeof IntranetPortalTextsPostIdEditRoute
+}
+
+const IntranetPortalTextsRouteRouteChildren: IntranetPortalTextsRouteRouteChildren =
+  {
+    IntranetPortalTextsNewRoute: IntranetPortalTextsNewRoute,
+    IntranetPortalTextsIndexRoute: IntranetPortalTextsIndexRoute,
+    IntranetPortalTextsPostIdEditRoute: IntranetPortalTextsPostIdEditRoute,
+  }
+
+const IntranetPortalTextsRouteRouteWithChildren =
+  IntranetPortalTextsRouteRoute._addFileChildren(
+    IntranetPortalTextsRouteRouteChildren,
+  )
+
 interface IntranetRouteRouteChildren {
   IntranetEquipmentRouteRoute: typeof IntranetEquipmentRouteRouteWithChildren
+  IntranetPortalTextsRouteRoute: typeof IntranetPortalTextsRouteRouteWithChildren
   IntranetBrandsRoute: typeof IntranetBrandsRoute
   IntranetCategoriesRoute: typeof IntranetCategoriesRoute
   IntranetCustomersRoute: typeof IntranetCustomersRoute
   IntranetMaintenanceRoute: typeof IntranetMaintenanceRoute
   IntranetOrdersRoute: typeof IntranetOrdersRoute
-  IntranetPortalTextsRoute: typeof IntranetPortalTextsRoute
   IntranetUsersRoute: typeof IntranetUsersRoute
   IntranetWarehousesRoute: typeof IntranetWarehousesRoute
   IntranetIndexRoute: typeof IntranetIndexRoute
@@ -464,12 +540,12 @@ interface IntranetRouteRouteChildren {
 
 const IntranetRouteRouteChildren: IntranetRouteRouteChildren = {
   IntranetEquipmentRouteRoute: IntranetEquipmentRouteRouteWithChildren,
+  IntranetPortalTextsRouteRoute: IntranetPortalTextsRouteRouteWithChildren,
   IntranetBrandsRoute: IntranetBrandsRoute,
   IntranetCategoriesRoute: IntranetCategoriesRoute,
   IntranetCustomersRoute: IntranetCustomersRoute,
   IntranetMaintenanceRoute: IntranetMaintenanceRoute,
   IntranetOrdersRoute: IntranetOrdersRoute,
-  IntranetPortalTextsRoute: IntranetPortalTextsRoute,
   IntranetUsersRoute: IntranetUsersRoute,
   IntranetWarehousesRoute: IntranetWarehousesRoute,
   IntranetIndexRoute: IntranetIndexRoute,

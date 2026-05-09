@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 import { formatUsd } from "../../lib/formatCurrency";
+import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import {
   PORTAL_HERO,
   usePortalCatalog,
@@ -249,6 +250,7 @@ export function PortalCatalogView() {
           <Table size="small">
             <TableHead>
               <TableRow>
+                <TableCell width={72} />
                 <TableCell>Name</TableCell>
                 <TableCell>Category</TableCell>
                 <TableCell>Brand</TableCell>
@@ -260,6 +262,36 @@ export function PortalCatalogView() {
             <TableBody>
               {filtered.map((item) => (
                 <TableRow key={item.id} hover>
+                  <TableCell sx={{ py: 0.5 }}>
+                    {resolveMediaSrc(item.imageUrl) ? (
+                      <Box
+                        component="img"
+                        src={resolveMediaSrc(item.imageUrl)}
+                        alt=""
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          objectFit: "cover",
+                          borderRadius: 1,
+                          display: "block",
+                        }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: 1,
+                          bgcolor: "grey.200",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Package size={22} color="#94a3b8" aria-hidden />
+                      </Box>
+                    )}
+                  </TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>{item.name}</TableCell>
                   <TableCell>{item.categoryName}</TableCell>
                   <TableCell>{item.brandName}</TableCell>
@@ -296,6 +328,7 @@ export function PortalCatalogView() {
                 : featured && filtered.length === 1
                   ? { xs: 12, md: 12 }
                   : { xs: 12, sm: 6, md: 4 };
+            const catalogImg = resolveMediaSrc(item.imageUrl);
             return (
               <Grid key={item.id} size={gridSize}>
                 <Card
@@ -323,16 +356,63 @@ export function PortalCatalogView() {
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
+                        overflow: "hidden",
                       }}
                     >
-                      <Package
-                        size={72}
-                        strokeWidth={1}
-                        color="#94a3b8"
-                        aria-hidden
-                      />
+                      {catalogImg ? (
+                        <Box
+                          component="img"
+                          src={catalogImg}
+                          alt=""
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            minHeight: 200,
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <Package
+                          size={72}
+                          strokeWidth={1}
+                          color="#94a3b8"
+                          aria-hidden
+                        />
+                      )}
                     </Box>
-                  ) : null}
+                  ) : (
+                    <Box
+                      sx={{
+                        height: 140,
+                        bgcolor: "grey.200",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {catalogImg ? (
+                        <Box
+                          component="img"
+                          src={catalogImg}
+                          alt=""
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <Package
+                          size={48}
+                          strokeWidth={1}
+                          color="#94a3b8"
+                          aria-hidden
+                        />
+                      )}
+                    </Box>
+                  )}
                   <CardContent
                     sx={{ flex: 1, display: "flex", flexDirection: "column" }}
                   >

@@ -24,6 +24,7 @@ export const apiErrorCodeSchema = z.enum([
   "warehouseInUse",
   "cmsPostNotFound",
   "cmsPostSlugTaken",
+  "fileUploadInvalid",
 ]);
 
 export const apiErrorResponseSchema = z.object({
@@ -70,6 +71,7 @@ export const cmsPostDetailDtoSchema = z.object({
   slug: z.string().nullish(),
   title: z.string().nullish(),
   excerpt: z.string().nullish(),
+  coverImageUrl: z.string().nullish(),
   bodyHtml: z.string().nullish(),
   isPublished: z.optional(z.boolean()),
   publishedAtUtc: z.iso.datetime().nullish(),
@@ -82,6 +84,7 @@ export const cmsPostListDtoSchema = z.object({
   slug: z.string().nullish(),
   title: z.string().nullish(),
   excerpt: z.string().nullish(),
+  coverImageUrl: z.string().nullish(),
   isPublished: z.optional(z.boolean()),
   publishedAtUtc: z.iso.datetime().nullish(),
   updatedAtUtc: z.optional(z.iso.datetime()),
@@ -92,6 +95,7 @@ export const cmsPostPublicDetailDtoSchema = z.object({
   slug: z.string().nullish(),
   title: z.string().nullish(),
   excerpt: z.string().nullish(),
+  coverImageUrl: z.string().nullish(),
   bodyHtml: z.string().nullish(),
   publishedAtUtc: z.optional(z.iso.datetime()),
   updatedAtUtc: z.optional(z.iso.datetime()),
@@ -102,6 +106,7 @@ export const cmsPostPublicSummaryDtoSchema = z.object({
   slug: z.string().nullish(),
   title: z.string().nullish(),
   excerpt: z.string().nullish(),
+  coverImageUrl: z.string().nullish(),
   publishedAtUtc: z.optional(z.iso.datetime()),
 });
 
@@ -109,6 +114,7 @@ export const cmsPostUpsertDtoSchema = z.object({
   slug: z.string().nullish(),
   title: z.string().nullish(),
   excerpt: z.string().nullish(),
+  coverImageUrl: z.string().nullish(),
   bodyHtml: z.string().nullish(),
   isPublished: z.optional(z.boolean()),
 });
@@ -167,6 +173,7 @@ export const equipmentSchema = z.object({
   },
   dailyRate: z.optional(z.number()),
   isAvailable: z.optional(z.boolean()),
+  imageUrl: z.string().nullish(),
   get maintenances() {
     return z.array(maintenanceSchema).nullish();
   },
@@ -226,6 +233,7 @@ export const equipmentDtoSchema = z.object({
   warehouseName: z.string().nullish(),
   dailyRate: z.optional(z.number()),
   isAvailable: z.optional(z.boolean()),
+  imageUrl: z.string().nullish(),
 });
 
 export const equipmentUpsertDtoSchema = z.object({
@@ -235,6 +243,13 @@ export const equipmentUpsertDtoSchema = z.object({
   warehouseId: z.optional(z.int()),
   dailyRate: z.optional(z.number()),
   isAvailable: z.optional(z.boolean()),
+  imageUrl: z.string().nullish(),
+});
+
+export const fileUploadResponseDtoSchema = z.object({
+  relativePath: z.string().nullish(),
+  publicPath: z.string().nullish(),
+  absoluteUrl: z.string().nullish(),
 });
 
 export const orderItemDtoSchema = z.object({
@@ -702,6 +717,27 @@ export const deleteApiEquipmentId404Schema = z.lazy(
 
 export const deleteApiEquipmentIdMutationResponseSchema = z.lazy(
   () => deleteApiEquipmentId204Schema,
+);
+
+/**
+ * @description OK
+ */
+export const postApiFilesUpload200Schema = z.lazy(
+  () => fileUploadResponseDtoSchema,
+);
+
+/**
+ * @description Bad Request
+ */
+export const postApiFilesUpload400Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const postApiFilesUploadMutationRequestSchema = z.object({
+  file: z.optional(z.instanceof(File)),
+  folder: z.optional(z.string().default("general")),
+});
+
+export const postApiFilesUploadMutationResponseSchema = z.lazy(
+  () => postApiFilesUpload200Schema,
 );
 
 /**

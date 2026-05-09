@@ -39,6 +39,7 @@ public static class CmsTableBootstrap
                 "Slug" character varying(200) NOT NULL,
                 "Title" character varying(300) NOT NULL,
                 "Excerpt" character varying(2000),
+                "CoverImageUrl" character varying(2000) NULL,
                 "BodyHtml" text NOT NULL DEFAULT '',
                 "IsPublished" boolean NOT NULL DEFAULT FALSE,
                 "PublishedAtUtc" timestamp with time zone NULL,

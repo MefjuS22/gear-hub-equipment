@@ -140,7 +140,10 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
             BrandId = request.BrandId,
             WarehouseId = request.WarehouseId,
             DailyRate = request.DailyRate,
-            IsAvailable = request.IsAvailable
+            IsAvailable = request.IsAvailable,
+            ImageUrl = string.IsNullOrWhiteSpace(request.ImageUrl)
+                ? null
+                : request.ImageUrl.Trim(),
         };
 
     private static EquipmentDto ToDto(Equipment equipment) =>
@@ -155,6 +158,7 @@ public class EquipmentController(IEquipmentRepository equipmentRepository) : Con
             WarehouseId = equipment.WarehouseId,
             WarehouseName = equipment.Warehouse?.Name,
             DailyRate = equipment.DailyRate,
-            IsAvailable = equipment.IsAvailable
+            IsAvailable = equipment.IsAvailable,
+            ImageUrl = equipment.ImageUrl,
         };
 }

@@ -5,6 +5,7 @@
     "slug": { "type": "string", "nullable": true },
     "title": { "type": "string", "nullable": true },
     "excerpt": { "type": "string", "nullable": true },
+    "coverImageUrl": { "type": "string", "nullable": true },
     "bodyHtml": { "type": "string", "nullable": true },
     "publishedAtUtc": { "type": "string", "format": "date-time" },
     "updatedAtUtc": { "type": "string", "format": "date-time" }

@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiCmspostPublishedSlug } from "../../api/generated/react-query";
+import { resolveMediaInCmsHtml } from "../../lib/resolveMediaInCmsHtml";
+import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { sanitizeCmsHtml } from "../../lib/sanitizeCmsHtml";
 import { LoadingState } from "../common";
 
@@ -45,7 +47,8 @@ export function PortalNewsPostView({ slug }: PortalNewsPostViewProps) {
     );
   }
 
-  const safe = sanitizeCmsHtml(data?.bodyHtml ?? "");
+  const safe = sanitizeCmsHtml(resolveMediaInCmsHtml(data?.bodyHtml ?? ""));
+  const coverSrc = resolveMediaSrc(data?.coverImageUrl);
 
   return (
     <Box>
@@ -57,6 +60,22 @@ export function PortalNewsPostView({ slug }: PortalNewsPostViewProps) {
       >
         Back to news
       </Button>
+      {coverSrc ? (
+        <Box
+          component="img"
+          src={coverSrc}
+          alt=""
+          sx={{
+            width: "100%",
+            maxWidth: 720,
+            maxHeight: 360,
+            objectFit: "cover",
+            borderRadius: 1,
+            mb: 2,
+            display: "block",
+          }}
+        />
+      ) : null}
       <Typography variant="overline" color="text.secondary" sx={{ display: "block" }}>
         {formatPublished(data?.publishedAtUtc)}
       </Typography>
@@ -108,6 +127,7 @@ export function PortalNewsPostView({ slug }: PortalNewsPostViewProps) {
             overflow: "auto",
             fontSize: "0.875rem",
           },
+          "& img": { maxWidth: "100%", height: "auto", borderRadius: 1 },
         }}
         dangerouslySetInnerHTML={{ __html: safe }}
       />

@@ -24,4 +24,6 @@ public enum ApiErrorCode
 
     CmsPostNotFound = 306,
     CmsPostSlugTaken = 307,
+
+    FileUploadInvalid = 308,
 }

@@ -6,5 +6,6 @@ public class CmsPostPublicSummaryDto
     public string Slug { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string? Excerpt { get; set; }
+    public string? CoverImageUrl { get; set; }
     public DateTime PublishedAtUtc { get; set; }
 }
