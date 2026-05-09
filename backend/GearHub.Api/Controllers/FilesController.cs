@@ -8,7 +8,7 @@ namespace GearHub.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 public class FilesController(
-    IFileStorageService fileStorage,
+    IFileUploadService fileUploadService,
     IHttpContextAccessor httpContextAccessor) : ControllerBase
 {
     private const long UploadSizeLimitBytes = 20 * 1024 * 1024;
@@ -23,35 +23,20 @@ public class FilesController(
         [FromForm] string folder = "general",
         CancellationToken cancellationToken = default)
     {
-        if (file is null || file.Length == 0)
+        var result = await fileUploadService.UploadAsync(
+            file,
+            folder,
+            httpContextAccessor.HttpContext?.Request,
+            cancellationToken);
+
+        if (!result.Success)
         {
             return ApiResponses.Error(
                 StatusCodes.Status400BadRequest,
-                ApiErrorCode.FileUploadInvalid,
-                "No file was uploaded.");
+                result.Error!.Code,
+                result.Error.Message);
         }
 
-        try
-        {
-            var result = await fileStorage.SaveAsync(file, folder, cancellationToken);
-            var http = httpContextAccessor.HttpContext?.Request;
-            var absolute = http is null
-                ? result.PublicPath
-                : $"{http.Scheme}://{http.Host.Value}{result.PublicPath}";
-
-            return Ok(new FileUploadResponseDto
-            {
-                RelativePath = result.RelativePath,
-                PublicPath = result.PublicPath,
-                AbsoluteUrl = absolute,
-            });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return ApiResponses.Error(
-                StatusCodes.Status400BadRequest,
-                ApiErrorCode.FileUploadInvalid,
-                ex.Message);
-        }
+        return Ok(result.Value);
     }
 }

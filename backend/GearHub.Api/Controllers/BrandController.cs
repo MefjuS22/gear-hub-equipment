@@ -1,45 +1,31 @@
-using GearHub.Api.Data;
 using GearHub.Api.DTOs;
 using GearHub.Api.Responses;
+using GearHub.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BrandController(ApplicationDbContext dbContext) : ControllerBase
+public class BrandController(IBrandService brandService) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<BrandLookupDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<BrandLookupDto>>> GetAll(CancellationToken cancellationToken)
-    {
-        var brands = await dbContext.Brands
-            .AsNoTracking()
-            .OrderBy(brand => brand.Name)
-            .ToListAsync(cancellationToken);
-
-        return Ok(brands.Select(ToLookupDto).ToList());
-    }
+    public async Task<ActionResult<IEnumerable<BrandLookupDto>>> GetAll(CancellationToken cancellationToken) =>
+        Ok(await brandService.GetAllAsync(cancellationToken));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(BrandLookupDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BrandLookupDto>> GetById(int id, CancellationToken cancellationToken)
     {
-        var brand = await dbContext.Brands
-            .AsNoTracking()
-            .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
-
-        if (brand is null)
+        var result = await brandService.GetByIdAsync(id, cancellationToken);
+        if (!result.Success)
         {
-            return ApiResponses.Error(
-                StatusCodes.Status404NotFound,
-                ApiErrorCode.BrandNotFound,
-                $"Brand with id {id} was not found.");
+            return ApiResponses.Error(StatusCodes.Status404NotFound, result.Error!.Code, result.Error.Message);
         }
 
-        return Ok(ToLookupDto(brand));
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -49,12 +35,8 @@ public class BrandController(ApplicationDbContext dbContext) : ControllerBase
         [FromBody] BrandUpsertDto request,
         CancellationToken cancellationToken)
     {
-        var entity = new Models.Brand { Name = request.Name.Trim() };
-        dbContext.Brands.Add(entity);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        var dto = new BrandLookupDto { Id = entity.Id, Name = entity.Name };
-        return CreatedAtAction(nameof(GetById), new { id = entity.Id }, dto);
+        var created = await brandService.CreateAsync(request, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
@@ -65,17 +47,12 @@ public class BrandController(ApplicationDbContext dbContext) : ControllerBase
         [FromBody] BrandUpsertDto request,
         CancellationToken cancellationToken)
     {
-        var brand = await dbContext.Brands.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
-        if (brand is null)
+        var result = await brandService.UpdateAsync(id, request, cancellationToken);
+        if (!result.Success)
         {
-            return ApiResponses.Error(
-                StatusCodes.Status404NotFound,
-                ApiErrorCode.BrandNotFound,
-                $"Brand with id {id} was not found.");
+            return ApiResponses.Error(StatusCodes.Status404NotFound, result.Error!.Code, result.Error.Message);
         }
 
-        brand.Name = request.Name.Trim();
-        await dbContext.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
 
@@ -85,29 +62,15 @@ public class BrandController(ApplicationDbContext dbContext) : ControllerBase
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var brand = await dbContext.Brands.FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
-        if (brand is null)
+        var result = await brandService.DeleteAsync(id, cancellationToken);
+        if (!result.Success)
         {
-            return ApiResponses.Error(
-                StatusCodes.Status404NotFound,
-                ApiErrorCode.BrandNotFound,
-                $"Brand with id {id} was not found.");
+            var statusCode = result.Error!.Code == ApiErrorCode.BrandInUse
+                ? StatusCodes.Status400BadRequest
+                : StatusCodes.Status404NotFound;
+            return ApiResponses.Error(statusCode, result.Error.Code, result.Error.Message);
         }
 
-        var inUse = await dbContext.Equipment.AnyAsync(e => e.BrandId == id, cancellationToken);
-        if (inUse)
-        {
-            return ApiResponses.Error(
-                StatusCodes.Status400BadRequest,
-                ApiErrorCode.BrandInUse,
-                "This brand is still assigned to one or more equipment items.");
-        }
-
-        dbContext.Brands.Remove(brand);
-        await dbContext.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
-
-    private static BrandLookupDto ToLookupDto(Models.Brand brand) =>
-        new() { Id = brand.Id, Name = brand.Name };
 }

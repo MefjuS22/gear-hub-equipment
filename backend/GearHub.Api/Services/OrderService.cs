@@ -10,6 +10,12 @@ public class OrderService(
     ApplicationDbContext dbContext,
     IOrderRepository orderRepository) : IOrderService
 {
+    public async Task<IReadOnlyList<RentalOrderListDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        var orders = await orderRepository.GetAllOrdersWithDetailsAsync(cancellationToken);
+        return orders.Select(ToListDto).ToList();
+    }
+
     public async Task<OrderCreationResult> CreateOrderAsync(
         OrderCreateDto request,
         CancellationToken cancellationToken = default)
@@ -90,4 +96,32 @@ public class OrderService(
             DateTimeKind.Local => dateTime.ToUniversalTime(),
             _ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc)
         };
+
+    private static RentalOrderListDto ToListDto(RentalOrder order)
+    {
+        var items = order.Items
+            .Select(
+                item => new RentalOrderLineDto
+                {
+                    EquipmentId = item.EquipmentId,
+                    EquipmentName = item.Equipment?.Name ?? $"#{item.EquipmentId}",
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                })
+            .ToList();
+
+        return new RentalOrderListDto
+        {
+            Id = order.Id,
+            CustomerId = order.CustomerId,
+            CustomerCompanyName = order.Customer?.CompanyName ?? string.Empty,
+            UserId = order.UserId,
+            UserName = order.User?.Name ?? string.Empty,
+            UserEmail = order.User?.Email ?? string.Empty,
+            OrderDate = order.OrderDate,
+            RentalStartDate = order.RentalStartDate,
+            RentalEndDate = order.RentalEndDate,
+            Items = items,
+        };
+    }
 }

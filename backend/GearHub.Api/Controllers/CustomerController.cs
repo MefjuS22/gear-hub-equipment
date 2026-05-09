@@ -1,21 +1,14 @@
-using GearHub.Api.Data;
 using GearHub.Api.Models;
+using GearHub.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CustomerController(ApplicationDbContext dbContext) : ControllerBase
+public class CustomerController(ICustomerService customerService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Customer>>> GetAll(CancellationToken cancellationToken)
-    {
-        var customers = await dbContext.Customers
-            .OrderBy(customer => customer.CompanyName)
-            .ToListAsync(cancellationToken);
-
-        return Ok(customers);
-    }
+    public async Task<ActionResult<IEnumerable<Customer>>> GetAll(CancellationToken cancellationToken) =>
+        Ok(await customerService.GetAllAsync(cancellationToken));
 }

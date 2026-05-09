@@ -1,45 +1,34 @@
-using GearHub.Api.Data;
 using GearHub.Api.DTOs;
 using GearHub.Api.Responses;
+using GearHub.Api.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoryController(ApplicationDbContext dbContext) : ControllerBase
+public class CategoryController(ICategoryService categoryService) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<CategoryLookupDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<CategoryLookupDto>>> GetAll(CancellationToken cancellationToken)
-    {
-        var categories = await dbContext.Categories
-            .AsNoTracking()
-            .OrderBy(category => category.Name)
-            .ToListAsync(cancellationToken);
-
-        return Ok(categories.Select(ToLookupDto).ToList());
-    }
+    public async Task<ActionResult<IEnumerable<CategoryLookupDto>>> GetAll(CancellationToken cancellationToken) =>
+        Ok(await categoryService.GetAllAsync(cancellationToken));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(CategoryLookupDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CategoryLookupDto>> GetById(int id, CancellationToken cancellationToken)
     {
-        var category = await dbContext.Categories
-            .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
-
-        if (category is null)
+        var result = await categoryService.GetByIdAsync(id, cancellationToken);
+        if (!result.Success)
         {
             return ApiResponses.Error(
                 StatusCodes.Status404NotFound,
-                ApiErrorCode.CategoryNotFound,
-                $"Category with id {id} was not found.");
+                result.Error!.Code,
+                result.Error.Message);
         }
 
-        return Ok(ToLookupDto(category));
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -49,16 +38,8 @@ public class CategoryController(ApplicationDbContext dbContext) : ControllerBase
         [FromBody] CategoryUpsertDto request,
         CancellationToken cancellationToken)
     {
-        var entity = new Models.Category
-        {
-            Name = request.Name.Trim(),
-            Description = (request.Description ?? string.Empty).Trim(),
-        };
-        dbContext.Categories.Add(entity);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        var dto = ToLookupDto(entity);
-        return CreatedAtAction(nameof(GetById), new { id = entity.Id }, dto);
+        var created = await categoryService.CreateAsync(request, cancellationToken);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:int}")]
@@ -69,18 +50,14 @@ public class CategoryController(ApplicationDbContext dbContext) : ControllerBase
         [FromBody] CategoryUpsertDto request,
         CancellationToken cancellationToken)
     {
-        var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
-        if (category is null)
+        var result = await categoryService.UpdateAsync(id, request, cancellationToken);
+        if (!result.Success)
         {
             return ApiResponses.Error(
                 StatusCodes.Status404NotFound,
-                ApiErrorCode.CategoryNotFound,
-                $"Category with id {id} was not found.");
+                result.Error!.Code,
+                result.Error.Message);
         }
-
-        category.Name = request.Name.Trim();
-        category.Description = (request.Description ?? string.Empty).Trim();
-        await dbContext.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
 
@@ -90,34 +67,17 @@ public class CategoryController(ApplicationDbContext dbContext) : ControllerBase
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var category = await dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
-        if (category is null)
+        var result = await categoryService.DeleteAsync(id, cancellationToken);
+        if (!result.Success)
         {
+            var statusCode = result.Error!.Code == ApiErrorCode.CategoryInUse
+                ? StatusCodes.Status400BadRequest
+                : StatusCodes.Status404NotFound;
             return ApiResponses.Error(
-                StatusCodes.Status404NotFound,
-                ApiErrorCode.CategoryNotFound,
-                $"Category with id {id} was not found.");
+                statusCode,
+                result.Error.Code,
+                result.Error.Message);
         }
-
-        var inUse = await dbContext.Equipment.AnyAsync(e => e.CategoryId == id, cancellationToken);
-        if (inUse)
-        {
-            return ApiResponses.Error(
-                StatusCodes.Status400BadRequest,
-                ApiErrorCode.CategoryInUse,
-                "This category is still assigned to one or more equipment items.");
-        }
-
-        dbContext.Categories.Remove(category);
-        await dbContext.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
-
-    private static CategoryLookupDto ToLookupDto(Models.Category category) =>
-        new()
-        {
-            Id = category.Id,
-            Name = category.Name,
-            Description = category.Description,
-        };
 }
