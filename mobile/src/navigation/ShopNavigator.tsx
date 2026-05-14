@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { IconButton } from "react-native-paper";
 
 import { CartOrderScreen } from "../screens/CartOrderScreen";
+import { EquipmentDetailScreen } from "../screens/EquipmentDetailScreen";
 import { EquipmentListScreen } from "../screens/EquipmentListScreen";
 import { OrderConfirmationScreen } from "../screens/OrderConfirmationScreen";
 import type { ShopStackParamList } from "./navigationTypes";
@@ -38,6 +39,11 @@ export const ShopNavigator = () => {
         name="EquipmentList"
         component={EquipmentListScreen}
         options={{ title: "Browse equipment" }}
+      />
+      <Stack.Screen
+        name="EquipmentDetail"
+        component={EquipmentDetailScreen}
+        options={{ title: "Equipment" }}
       />
       <Stack.Screen
         name="CartOrder"

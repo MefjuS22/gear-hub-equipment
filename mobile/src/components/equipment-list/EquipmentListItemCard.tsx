@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { Button, Card, Chip, Text } from "react-native-paper";
 
 import { resolvePublicFileUrl } from "../../api/resolvePublicFileUrl";
@@ -11,6 +11,7 @@ type Props = {
   quantityInCart: number;
   onAddToCart: (equipmentId: number) => void;
   onUpdateQuantity: (equipmentId: number, delta: number) => void;
+  onOpenDetails: (equipmentId: number) => void;
 };
 
 export const EquipmentListItemCard = ({
@@ -18,6 +19,7 @@ export const EquipmentListItemCard = ({
   quantityInCart,
   onAddToCart,
   onUpdateQuantity,
+  onOpenDetails,
 }: Props) => {
   const inCart = quantityInCart > 0;
   const thumbUri = item.imageUrl ? resolvePublicFileUrl(item.imageUrl) : "";
@@ -25,7 +27,12 @@ export const EquipmentListItemCard = ({
   return (
     <Card style={styles.card}>
       <Card.Content style={styles.cardContent}>
-        <View style={styles.topRow}>
+        <Pressable
+          onPress={() => onOpenDetails(item.id)}
+          style={({ pressed }) => [styles.topRow, pressed && styles.topRowPressed]}
+          accessibilityRole="button"
+          accessibilityLabel={`View details for ${item.name}`}
+        >
           {thumbUri ? (
             <Image source={{ uri: thumbUri }} style={styles.thumb} resizeMode="cover" />
           ) : (
@@ -39,7 +46,7 @@ export const EquipmentListItemCard = ({
               Unit #{item.id}
             </Text>
           </View>
-        </View>
+        </Pressable>
         <View style={styles.metaRow}>
           <Chip compact>Category #{item.categoryId}</Chip>
           <Chip compact>Brand #{item.brandId}</Chip>
@@ -93,6 +100,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     alignItems: "center",
+  },
+  topRowPressed: {
+    opacity: 0.85,
   },
   thumb: {
     width: 88,

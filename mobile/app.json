@@ -21,7 +21,10 @@
     "ios": {
       "supportsTablet": true,
       "jsEngine": "jsc",
-      "bundleIdentifier": "com.gearhub.mobile"
+      "bundleIdentifier": "com.gearhub.mobile",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow GearHub to choose photos for equipment catalog images."
+      }
     },
     "android": {
       "package": "com.gearhub.mobile"

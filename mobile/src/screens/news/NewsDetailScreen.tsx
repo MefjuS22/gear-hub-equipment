@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text } from "react-native-paper";
 import RenderHtml from "react-native-render-html";
 
-import { resolvePublicFileUrl } from "../../api/resolvePublicFileUrl";
+import { resolvePublicFileUrl, rewriteCmsBodyHtmlForNative } from "../../api/resolvePublicFileUrl";
 import { generatedClientConfig } from "../../api/generatedConfig";
 import { useGetApiCmspostPublishedSlug } from "../../api/generated/react-query";
 import { ScreenShell } from "../../components/ScreenShell";
@@ -23,7 +23,10 @@ export const NewsDetailScreen = ({ route }: Props) => {
     [post?.coverImageUrl],
   );
 
-  const htmlSource = useMemo(() => ({ html: post?.bodyHtml ?? "<p></p>" }), [post?.bodyHtml]);
+  const htmlSource = useMemo(() => {
+    const raw = post?.bodyHtml ?? "<p></p>";
+    return { html: rewriteCmsBodyHtmlForNative(raw) };
+  }, [post?.bodyHtml]);
 
   if (detailQuery.isPending) {
     return (

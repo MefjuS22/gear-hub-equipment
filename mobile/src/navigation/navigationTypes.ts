@@ -1,5 +1,6 @@
 export type ShopStackParamList = {
   EquipmentList: undefined;
+  EquipmentDetail: { equipmentId: number };
   CartOrder:
     | {
         initialRentalStartDate?: string;
@@ -24,6 +25,7 @@ export type CatalogStackParamList = {
   WarehouseList: undefined;
   WarehouseForm: { warehouseId?: number } | undefined;
   AdminEquipmentList: undefined;
+  EquipmentDetail: { equipmentId: number };
   EquipmentForm: { equipmentId?: number } | undefined;
 };
 

@@ -127,6 +127,12 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
                   </View>
                 </Card.Content>
                 <Card.Actions style={styles.actions}>
+                  <Button
+                    mode="outlined"
+                    onPress={() => navigation.navigate("EquipmentDetail", { equipmentId: item.id })}
+                  >
+                    Details
+                  </Button>
                   <Button mode="contained-tonal" onPress={() => navigation.navigate("EquipmentForm", { equipmentId: item.id })}>
                     Edit
                   </Button>

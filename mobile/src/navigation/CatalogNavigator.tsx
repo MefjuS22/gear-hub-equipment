@@ -10,6 +10,7 @@ import { CategoryFormScreen } from "../screens/admin/CategoryFormScreen";
 import { CategoryListScreen } from "../screens/admin/CategoryListScreen";
 import { WarehouseFormScreen } from "../screens/admin/WarehouseFormScreen";
 import { WarehouseListScreen } from "../screens/admin/WarehouseListScreen";
+import { EquipmentDetailScreen } from "../screens/EquipmentDetailScreen";
 import { EquipmentFormScreen } from "../screens/EquipmentFormScreen";
 import type { CatalogStackParamList } from "./navigationTypes";
 
@@ -51,6 +52,11 @@ export const CatalogNavigator = () => {
         name="AdminEquipmentList"
         component={AdminEquipmentListScreen}
         options={{ title: "Equipment (admin)" }}
+      />
+      <Stack.Screen
+        name="EquipmentDetail"
+        component={EquipmentDetailScreen}
+        options={{ title: "Equipment" }}
       />
       <Stack.Screen name="EquipmentForm" component={EquipmentFormScreen} options={{ title: "Equipment" }} />
     </Stack.Navigator>

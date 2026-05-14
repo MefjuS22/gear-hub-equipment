@@ -76,6 +76,7 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
               item={item}
               quantityInCart={quantityInCart}
               onAddToCart={onAddToCart}
+              onOpenDetails={(equipmentId) => navigation.navigate("EquipmentDetail", { equipmentId })}
               onUpdateQuantity={(equipmentId: number, delta: number) => {
                 updateQuantity(equipmentId, delta);
               }}

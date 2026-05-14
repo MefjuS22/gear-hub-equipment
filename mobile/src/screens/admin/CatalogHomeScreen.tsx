@@ -7,10 +7,19 @@ import type { CatalogStackParamList } from "../../navigation/navigationTypes";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "CatalogHome">;
 
+type RequiresParams<T extends Record<string, any>> = {
+  [K in keyof T]: T[K] extends undefined ? never : K;
+}[keyof T];
+
+type CatalogHomeLinkTarget = Exclude<
+  keyof CatalogStackParamList,
+  RequiresParams<CatalogStackParamList>
+>;
+
 const rows: {
   title: string;
   subtitle: string;
-  target: keyof CatalogStackParamList;
+  target: CatalogHomeLinkTarget;
 }[] = [
   { title: "Brands", subtitle: "Create, edit, or remove equipment brands.", target: "BrandList" },
   { title: "Categories", subtitle: "Organize catalog items by category.", target: "CategoryList" },
