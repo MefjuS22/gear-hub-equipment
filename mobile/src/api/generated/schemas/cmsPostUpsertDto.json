@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "slug": { "type": "string", "nullable": true },
+    "title": { "type": "string", "nullable": true },
+    "excerpt": { "type": "string", "nullable": true },
+    "coverImageUrl": { "type": "string", "nullable": true },
+    "bodyHtml": { "type": "string", "nullable": true },
+    "isPublished": { "type": "boolean" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "CmsPostUpsertDto"
+}

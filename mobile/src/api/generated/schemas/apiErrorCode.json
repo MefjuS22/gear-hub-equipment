@@ -1,0 +1,25 @@
+{
+  "enum": [
+    "unknown",
+    "validationFailed",
+    "internalError",
+    "equipmentNotFound",
+    "equipmentReferenceInvalid",
+    "equipmentReloadFailed",
+    "orderCustomerNotFound",
+    "orderUserNotFound",
+    "orderEquipmentNotFound",
+    "orderEquipmentUnavailable",
+    "brandNotFound",
+    "brandInUse",
+    "categoryNotFound",
+    "categoryInUse",
+    "warehouseNotFound",
+    "warehouseInUse",
+    "cmsPostNotFound",
+    "cmsPostSlugTaken",
+    "fileUploadInvalid"
+  ],
+  "type": "string",
+  "x-readme-ref-name": "ApiErrorCode"
+}

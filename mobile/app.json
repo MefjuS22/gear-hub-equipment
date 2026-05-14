@@ -6,11 +6,14 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "backgroundColor": "#f8f9fa",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
-       "jsEngine": "jsc"
+      "jsEngine": "jsc",
+      "bundleIdentifier": "com.gearhub.mobile"
     },
     "android": {
       "package": "com.gearhub.mobile"
