@@ -42,9 +42,6 @@ export const CatalogHomeScreen = ({ navigation }: Props) => {
           </Card>
         ))}
       </View>
-      <Text variant="bodySmall" style={styles.hint}>
-        Use the menu (top right) to return to browse, news, or orders.
-      </Text>
     </ScreenShell>
   );
 };

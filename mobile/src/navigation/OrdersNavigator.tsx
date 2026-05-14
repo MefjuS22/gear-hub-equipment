@@ -2,6 +2,7 @@ import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { IconButton } from "react-native-paper";
 
+import { OrderDetailScreen } from "../screens/orders/OrderDetailScreen";
 import { OrderListScreen } from "../screens/orders/OrderListScreen";
 import type { OrdersStackParamList } from "./navigationTypes";
 
@@ -32,6 +33,7 @@ export const OrdersNavigator = () => {
       }}
     >
       <Stack.Screen name="OrderList" component={OrderListScreen} options={{ title: "Rental orders" }} />
+      <Stack.Screen name="OrderDetail" component={OrderDetailScreen} options={{ title: "Order" }} />
     </Stack.Navigator>
   );
 };

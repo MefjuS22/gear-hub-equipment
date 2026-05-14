@@ -36,6 +36,7 @@ export type NewsStackParamList = {
 
 export type OrdersStackParamList = {
   OrderList: undefined;
+  OrderDetail: { orderId: number };
 };
 
 export type DrawerParamList = {

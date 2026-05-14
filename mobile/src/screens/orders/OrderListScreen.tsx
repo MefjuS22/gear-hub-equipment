@@ -11,7 +11,7 @@ import type { OrdersStackParamList } from "../../navigation/navigationTypes";
 
 type Props = NativeStackScreenProps<OrdersStackParamList, "OrderList">;
 
-export const OrderListScreen = (_props: Props) => {
+export const OrderListScreen = ({ navigation }: Props) => {
   const [query, setQuery] = useState("");
   const ordersQuery = useGetApiOrder({ client: generatedClientConfig });
 
@@ -30,7 +30,15 @@ export const OrderListScreen = (_props: Props) => {
   }, [ordersQuery.data, query]);
 
   const renderItem = ({ item }: { item: RentalOrderListDto }) => (
-    <Card style={styles.card} mode="elevated">
+    <Card
+      style={styles.card}
+      mode="elevated"
+      onPress={() => {
+        if (item.id != null) {
+          navigation.navigate("OrderDetail", { orderId: item.id });
+        }
+      }}
+    >
       <Card.Title
         title={`Order #${item.id ?? "?"}`}
         subtitle={item.customerCompanyName ?? "Customer"}

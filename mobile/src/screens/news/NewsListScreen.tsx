@@ -75,7 +75,7 @@ export const NewsListScreen = ({ navigation }: Props) => {
                   <Text variant="bodyMedium">
                     {listQuery.error
                       ? "Check your connection and API URL."
-                      : "Publish content from the web intranet to see it here."}
+                      : "New articles will appear here when published."}
                   </Text>
                 </Card.Content>
               </Card>
