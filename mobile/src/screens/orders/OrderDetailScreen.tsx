@@ -1,7 +1,7 @@
 import { useLayoutEffect, useMemo } from "react";
 import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Button, Card, DataTable, Divider, Text } from "react-native-paper";
+import { Button, Card, Divider, Text } from "react-native-paper";
 
 import { generatedClientConfig } from "../../api/generatedConfig";
 import { useGetApiOrder } from "../../api/generated/react-query";
@@ -150,31 +150,45 @@ export const OrderDetailScreen = ({ navigation, route }: Props) => {
 
       <Card mode="elevated" style={styles.card}>
         <Card.Title title="Line items" subtitle="Equipment linked on this rental" />
-        <Card.Content style={styles.tableWrap}>
+        <Card.Content style={styles.lineCardContent}>
           {order.items?.length ? (
             <>
-              <DataTable>
-                <DataTable.Header>
-                  <DataTable.Title>Equipment</DataTable.Title>
-                  <DataTable.Title numeric>Qty</DataTable.Title>
-                  <DataTable.Title numeric>Unit / day</DataTable.Title>
-                  <DataTable.Title numeric>Line</DataTable.Title>
-                </DataTable.Header>
-                {order.items.map((line) => (
-                  <DataTable.Row key={`${line.equipmentId}-${line.equipmentName}`}>
-                    <DataTable.Cell style={styles.eqCell}>
-                      <Text variant="bodyMedium" numberOfLines={2}>
-                        {line.equipmentName ?? `Equipment ${line.equipmentId ?? "?"}`}
-                      </Text>
-                    </DataTable.Cell>
-                    <DataTable.Cell numeric>{line.quantity ?? 0}</DataTable.Cell>
-                    <DataTable.Cell numeric>${formatCurrency(line.unitPrice ?? 0)}</DataTable.Cell>
-                    <DataTable.Cell numeric>${formatCurrency(lineSubtotal(line))}</DataTable.Cell>
-                  </DataTable.Row>
-                ))}
-              </DataTable>
+              <View style={styles.lineTableHeader}>
+                <Text variant="labelSmall" style={[styles.colEquipment, styles.lineHeaderLabel]}>
+                  Equipment
+                </Text>
+                <Text variant="labelSmall" style={[styles.colQty, styles.lineHeaderLabel]}>
+                  Qty
+                </Text>
+                <Text variant="labelSmall" style={[styles.colUnit, styles.lineHeaderLabel]}>
+                  Unit / day
+                </Text>
+                <Text variant="labelSmall" style={[styles.colLine, styles.lineHeaderLabel]}>
+                  Line
+                </Text>
+              </View>
+              {order.items.map((line) => (
+                <View key={`${line.equipmentId}-${line.equipmentName}`} style={styles.lineRow}>
+                  <View style={styles.colEquipment}>
+                    <Text variant="bodyMedium" numberOfLines={3}>
+                      {line.equipmentName ?? `Equipment ${line.equipmentId ?? "?"}`}
+                    </Text>
+                  </View>
+                  <Text variant="bodyMedium" style={styles.colQty}>
+                    {line.quantity ?? 0}
+                  </Text>
+                  <Text variant="bodyMedium" style={styles.colUnit} numberOfLines={1}>
+                    ${formatCurrency(line.unitPrice ?? 0)}
+                  </Text>
+                  <Text variant="bodyMedium" style={styles.colLine} numberOfLines={1}>
+                    ${formatCurrency(lineSubtotal(line))}
+                  </Text>
+                </View>
+              ))}
               <View style={styles.totalRow}>
-                <Text variant="titleSmall">Estimated line total (qty × unit)</Text>
+                <Text variant="titleSmall" style={styles.totalLabel}>
+                  Estimated line total (qty × unit)
+                </Text>
                 <Text variant="titleMedium">${formatCurrency(lineTotal)}</Text>
               </View>
               <Text variant="bodySmall" style={styles.disclaimer}>
@@ -199,16 +213,37 @@ const styles = StyleSheet.create({
   gap: { gap: 10 },
   row: { flexDirection: "row", justifyContent: "space-between", gap: 12, flexWrap: "wrap" },
   muted: { color: "#64748b" },
-  tableWrap: { paddingHorizontal: 0 },
-  eqCell: { flex: 2, minWidth: 120, paddingRight: 8 },
+  lineCardContent: { paddingTop: 4 },
+  lineTableHeader: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 8,
+    paddingBottom: 8,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#cbd5e1",
+  },
+  lineHeaderLabel: { color: "#64748b", fontWeight: "600" },
+  lineRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 8,
+    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#e2e8f0",
+  },
+  colEquipment: { flex: 1, minWidth: 0 },
+  colQty: { width: 36, textAlign: "right", paddingTop: 2, color: "#0f172a" },
+  colUnit: { width: 88, textAlign: "right", paddingTop: 2, color: "#0f172a" },
+  colLine: { width: 80, textAlign: "right", paddingTop: 2, color: "#0f172a", fontVariant: ["tabular-nums"] },
   totalRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 12,
-    paddingHorizontal: 16,
+    marginTop: 16,
+    gap: 12,
   },
-  disclaimer: { color: "#64748b", marginTop: 8, paddingHorizontal: 16 },
+  totalLabel: { flex: 1, minWidth: 0 },
+  disclaimer: { color: "#64748b", marginTop: 10 },
   centered: {
     flex: 1,
     backgroundColor: "#f8f9fa",
