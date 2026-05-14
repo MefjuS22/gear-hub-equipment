@@ -3,8 +3,13 @@ export interface Equipment {
   name: string;
   categoryId: number;
   brandId: number;
+  warehouseId: number;
   dailyRate: number;
   isAvailable: boolean;
+  imageUrl?: string | null;
+  categoryName?: string | null;
+  brandName?: string | null;
+  warehouseName?: string | null;
 }
 
 export interface Category {

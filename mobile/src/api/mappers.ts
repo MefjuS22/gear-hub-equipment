@@ -9,8 +9,13 @@ export const mapApiEquipment = (equipment: GeneratedEquipment): Equipment => ({
   name: equipment.name ?? "Unknown equipment",
   categoryId: equipment.categoryId ?? 0,
   brandId: equipment.brandId ?? 0,
+  warehouseId: equipment.warehouseId ?? 0,
   dailyRate: equipment.dailyRate ?? 0,
   isAvailable: equipment.isAvailable ?? false,
+  imageUrl: equipment.imageUrl,
+  categoryName: equipment.categoryName,
+  brandName: equipment.brandName,
+  warehouseName: equipment.warehouseName,
 });
 
 export const mapApiCustomer = (customer: GeneratedCustomer): Customer => ({

@@ -4,12 +4,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { generatedClientConfig } from "../api/generatedConfig";
 import { useGetApiEquipment } from "../api/generated/react-query";
 import { mapApiEquipment } from "../api/mappers";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import type { ShopStackParamList } from "../navigation/navigationTypes";
 import { useAppToast } from "../providers/AppToastProvider";
 import { useCartStore } from "../store/useCartStore";
 import { formatDateForApi, formatDateForDisplay, parseDateInput } from "../utils/date";
 
-type Props = NativeStackScreenProps<RootStackParamList, "EquipmentList">;
+type Props = NativeStackScreenProps<ShopStackParamList, "EquipmentList">;
 
 export const useEquipmentListScreen = ({ navigation }: Pick<Props, "navigation">) => {
   const { showInfo } = useAppToast();
@@ -68,10 +68,6 @@ export const useEquipmentListScreen = ({ navigation }: Pick<Props, "navigation">
     });
   };
 
-  const onCreateEquipment = () => {
-    navigation.navigate("EquipmentForm");
-  };
-
   const onAddToCart = (equipmentId: number) => {
     const item = equipment.find((equipmentItem) => equipmentItem.id === equipmentId);
     if (!item) {
@@ -103,7 +99,6 @@ export const useEquipmentListScreen = ({ navigation }: Pick<Props, "navigation">
     onConfirmDateRange,
     onAddToCart,
     onOpenCart,
-    onCreateEquipment,
     refreshing: equipmentQuery.isRefetching,
     loading: equipmentQuery.isPending,
   };

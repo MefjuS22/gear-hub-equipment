@@ -1,6 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { Button, Card, Chip, Text } from "react-native-paper";
 
+import { resolvePublicFileUrl } from "../../api/resolvePublicFileUrl";
+import { EquipmentImagePlaceholder } from "./EquipmentImagePlaceholder";
 import { QuantityControl } from "../QuantityControl";
 import { Equipment } from "../../types";
 
@@ -18,11 +20,26 @@ export const EquipmentListItemCard = ({
   onUpdateQuantity,
 }: Props) => {
   const inCart = quantityInCart > 0;
+  const thumbUri = item.imageUrl ? resolvePublicFileUrl(item.imageUrl) : "";
 
   return (
     <Card style={styles.card}>
-      <Card.Title title={item.name} subtitle={`Unit #${item.id}`} />
       <Card.Content style={styles.cardContent}>
+        <View style={styles.topRow}>
+          {thumbUri ? (
+            <Image source={{ uri: thumbUri }} style={styles.thumb} resizeMode="cover" />
+          ) : (
+            <EquipmentImagePlaceholder size={88} iconSize={36} />
+          )}
+          <View style={styles.titleBlock}>
+            <Text variant="titleMedium" style={styles.title}>
+              {item.name}
+            </Text>
+            <Text variant="bodySmall" style={styles.subtitle}>
+              Unit #{item.id}
+            </Text>
+          </View>
+        </View>
         <View style={styles.metaRow}>
           <Chip compact>Category #{item.categoryId}</Chip>
           <Chip compact>Brand #{item.brandId}</Chip>
@@ -71,6 +88,28 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     gap: 12,
+  },
+  topRow: {
+    flexDirection: "row",
+    gap: 12,
+    alignItems: "center",
+  },
+  thumb: {
+    width: 88,
+    height: 88,
+    borderRadius: 8,
+    backgroundColor: "#e2e8f0",
+  },
+  titleBlock: {
+    flex: 1,
+    gap: 2,
+  },
+  title: {
+    fontWeight: "700",
+    color: "#001f3f",
+  },
+  subtitle: {
+    color: "#64748b",
   },
   metaRow: {
     flexDirection: "row",

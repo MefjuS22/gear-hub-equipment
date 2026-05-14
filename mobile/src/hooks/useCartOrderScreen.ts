@@ -12,33 +12,36 @@ import {
 import type { PostApiOrderCreateorderMutationRequest } from "../api/generated/types";
 import { orderCreateDtoSchema } from "../api/generated/zod";
 import { mapApiCustomer } from "../api/mappers";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import { ShopStackParamList } from "../navigation/navigationTypes";
 import { useAppToast } from "../providers/AppToastProvider";
 import { useCartStore } from "../store/useCartStore";
 import { Customer } from "../types";
 import { formatDateForApi, formatDateForDisplay, parseDateInput } from "../utils/date";
 
-type Props = NativeStackScreenProps<RootStackParamList, "CartOrder">;
+type Props = NativeStackScreenProps<ShopStackParamList, "CartOrder">;
 const CURRENT_USER_ID = 1;
 
 const orderFormSchema = orderCreateDtoSchema
-  .pick({
-    customerId: true,
-    userId: true,
-    rentalStartDate: true,
-    rentalEndDate: true,
-  })
+  .pick({ customerId: true, userId: true, rentalStartDate: true, rentalEndDate: true })
   .extend({
-    customerId: z.number().int().positive("Customer is required."),
-    userId: z.number().int().positive(),
-    rentalStartDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format for start date."),
-    rentalEndDate: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format for end date."),
+    rentalStartDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format for start date."),
+    rentalEndDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD format for end date."),
   })
   .superRefine((value, context) => {
+    if (value.customerId == null || value.customerId <= 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["customerId"],
+        message: "Customer is required.",
+      });
+    }
+    if (value.userId == null || value.userId <= 0) {
+      context.addIssue({
+        code: "custom",
+        path: ["userId"],
+        message: "User is required.",
+      });
+    }
     if (value.rentalEndDate < value.rentalStartDate) {
       context.addIssue({
         code: "custom",

@@ -10,6 +10,14 @@
       "**/*"
     ],
     "jsEngine": "hermes",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow GearHub to choose photos for equipment catalog images."
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "jsEngine": "jsc",

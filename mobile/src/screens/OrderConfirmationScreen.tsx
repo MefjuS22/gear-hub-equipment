@@ -3,9 +3,9 @@ import { StyleSheet, View } from "react-native";
 import { Avatar, Button, Card, Divider, Text } from "react-native-paper";
 
 import { ScreenShell } from "../components/ScreenShell";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import type { ShopStackParamList } from "../navigation/navigationTypes";
 
-type Props = NativeStackScreenProps<RootStackParamList, "OrderConfirmation">;
+type Props = NativeStackScreenProps<ShopStackParamList, "OrderConfirmation">;
 
 const formatDateForDisplay = (value: string) => {
   const parsedDate = new Date(`${value}T00:00:00`);

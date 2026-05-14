@@ -1,13 +1,13 @@
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Card, FAB, Text } from "react-native-paper";
+import { Card, Text } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 
 import { EquipmentListHeader } from "../components/equipment-list/EquipmentListHeader";
 import { EquipmentListItemCard } from "../components/equipment-list/EquipmentListItemCard";
 import { useEquipmentListScreen } from "../hooks/useEquipmentListScreen";
-import { RootStackParamList } from "../navigation/AppNavigator";
-type Props = NativeStackScreenProps<RootStackParamList, "EquipmentList">;
+import type { ShopStackParamList } from "../navigation/navigationTypes";
+type Props = NativeStackScreenProps<ShopStackParamList, "EquipmentList">;
 
 export const EquipmentListScreen = ({ navigation }: Props) => {
   const {
@@ -23,7 +23,6 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
     onConfirmDateRange,
     onAddToCart,
     onOpenCart,
-    onCreateEquipment,
     refreshing,
     loading,
     updateQuantity,
@@ -85,8 +84,6 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
         }}
       />
 
-      <FAB icon="plus" label="New Equipment" style={styles.fab} onPress={onCreateEquipment} />
-
       <DatePickerModal
         locale="en-GB"
         mode="range"
@@ -109,15 +106,10 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: 16,
-    paddingBottom: 88,
+    paddingBottom: 24,
     gap: 12,
   },
   emptyCard: {
     backgroundColor: "#ffffff",
-  },
-  fab: {
-    position: "absolute",
-    right: 16,
-    bottom: 20,
   },
 });

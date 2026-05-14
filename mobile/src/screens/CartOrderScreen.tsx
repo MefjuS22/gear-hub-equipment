@@ -7,9 +7,9 @@ import { CartItemsCard } from "../components/cart-order/CartItemsCard";
 import { OrderDetailsCard } from "../components/cart-order/OrderDetailsCard";
 import { ScreenShell } from "../components/ScreenShell";
 import { useCartOrderScreen } from "../hooks/useCartOrderScreen";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import type { ShopStackParamList } from "../navigation/navigationTypes";
 
-type Props = NativeStackScreenProps<RootStackParamList, "CartOrder">;
+type Props = NativeStackScreenProps<ShopStackParamList, "CartOrder">;
 
 export const CartOrderScreen = ({ navigation, route }: Props) => {
   const {
