@@ -4,6 +4,7 @@ import { isRedirect, redirect } from "@tanstack/react-router";
 import { gearhubApiClientOptions } from "../api/clientOptions";
 import { getApiAuthMeQueryOptions } from "../api/generated/react-query";
 import { gearhubQueryClient } from "./gearhubQueryClient";
+import { AppRoles } from "./appRoles";
 import { getAccessToken } from "../store/authSessionStore";
 
 export function requireStaffSession(redirectPath: string): void {
@@ -15,10 +16,32 @@ export function requireStaffSession(redirectPath: string): void {
   }
 }
 
-/**
- * Loads the current profile via <c>GET /api/Auth/me</c> (cached by React Query).
- * Authoritative permissions come from the API, not from the JWT.
- */
+export async function requireAdminForStaffPortal(
+  redirectPath: string,
+): Promise<void> {
+  requireStaffSession(redirectPath);
+  try {
+    const profile = await gearhubQueryClient.ensureQueryData({
+      ...getApiAuthMeQueryOptions(gearhubApiClientOptions),
+    });
+    const roles = new Set(profile.roles ?? []);
+    if (!roles.has(AppRoles.Admin)) {
+      throw redirect({ to: "/portal" });
+    }
+  } catch (err) {
+    if (isRedirect(err)) {
+      throw err;
+    }
+    if (isAxiosError(err) && err.response?.status === 401) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: redirectPath },
+      });
+    }
+    throw err;
+  }
+}
+
 export async function requireStaffPermission(
   redirectPath: string,
   permission: string,

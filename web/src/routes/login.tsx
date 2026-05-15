@@ -58,7 +58,7 @@ function LoginPage() {
         setSession(data);
         enqueueSnackbar("Signed in.", { variant: "success" });
         const target =
-          redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
+          redirectTo && redirectTo.startsWith("/") ? redirectTo : "/portal";
         void navigate({ to: target });
       },
     },
@@ -69,7 +69,7 @@ function LoginPage() {
       return;
     }
     const target =
-      redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
+      redirectTo && redirectTo.startsWith("/") ? redirectTo : "/portal";
     void navigate({ to: target });
   }, [isAuthenticated, redirectTo, navigate]);
 

@@ -1,5 +1,5 @@
 import type { RentalOrderListDto, UserProfileDto } from "../api/generated/types";
-import { AppRoles } from "./appRoles";
+import { userHasAdminRole } from "./userRoles";
 
 /** Matches backend <c>OrderService.GetByIdForViewerAsync</c>: Admin in DB or placing user. */
 export function canViewIntranetOrderDetail(
@@ -9,8 +9,7 @@ export function canViewIntranetOrderDetail(
   if (!viewer?.id) {
     return false;
   }
-  const roles = new Set(viewer.roles ?? []);
-  if (roles.has(AppRoles.Admin)) {
+  if (userHasAdminRole(viewer)) {
     return true;
   }
   return order.userId === viewer.id;

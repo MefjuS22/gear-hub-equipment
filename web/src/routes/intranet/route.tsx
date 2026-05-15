@@ -1,11 +1,4 @@
-import {
-  createFileRoute,
-  Link,
-  Outlet,
-  redirect,
-  useNavigate,
-  useRouterState,
-} from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Alert,
   Box,
@@ -30,8 +23,8 @@ import { z } from "zod";
 import { usePermissionSet } from "../../hooks/usePermissionSet";
 import { AppPermissions } from "../../lib/appPermissions";
 import { INTRANET_NAV } from "../../lib/intranetNav";
+import { requireAdminForStaffPortal } from "../../lib/intranetRouteGuards";
 import { useAuth } from "../../providers/AuthProvider";
-import { getAccessToken } from "../../store/authSessionStore";
 
 const DRAWER_WIDTH = 260;
 
@@ -41,13 +34,8 @@ const intranetSearchSchema = z.object({
 
 export const Route = createFileRoute("/intranet")({
   validateSearch: (raw) => intranetSearchSchema.parse(raw),
-  beforeLoad: ({ location }) => {
-    if (!getAccessToken()) {
-      throw redirect({
-        to: "/login",
-        search: { redirect: location.pathname },
-      });
-    }
+  beforeLoad: async ({ location }) => {
+    await requireAdminForStaffPortal(location.pathname);
   },
   component: IntranetLayout,
 });

@@ -65,7 +65,7 @@ function RegisterPage() {
           variant: "success",
         });
         const target =
-          redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
+          redirectTo && redirectTo.startsWith("/") ? redirectTo : "/portal";
         void navigate({ to: target });
       },
     },
@@ -76,7 +76,7 @@ function RegisterPage() {
       return;
     }
     const target =
-      redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
+      redirectTo && redirectTo.startsWith("/") ? redirectTo : "/portal";
     void navigate({ to: target });
   }, [isAuthenticated, redirectTo, navigate]);
 
