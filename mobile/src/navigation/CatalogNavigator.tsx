@@ -1,6 +1,4 @@
-import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { IconButton } from "react-native-paper";
 
 import { AdminEquipmentListScreen } from "../screens/admin/AdminEquipmentListScreen";
 import { BrandFormScreen } from "../screens/admin/BrandFormScreen";
@@ -13,33 +11,15 @@ import { WarehouseListScreen } from "../screens/admin/WarehouseListScreen";
 import { EquipmentDetailScreen } from "../screens/EquipmentDetailScreen";
 import { EquipmentFormScreen } from "../screens/EquipmentFormScreen";
 import type { CatalogStackParamList } from "./navigationTypes";
+import { sharedStackScreenOptions } from "./StackLayout.tsx";
 
 const Stack = createNativeStackNavigator<CatalogStackParamList>();
-
-const DrawerMenuButton = () => {
-  const navigation = useNavigation();
-  return (
-    <IconButton
-      icon="menu"
-      iconColor="#ffffff"
-      onPress={() => {
-        navigation.dispatch(DrawerActions.openDrawer());
-      }}
-    />
-  );
-};
 
 export const CatalogNavigator = () => {
   return (
     <Stack.Navigator
       initialRouteName="CatalogHome"
-      screenOptions={{
-        headerStyle: { backgroundColor: "#001f3f" },
-        headerTintColor: "#ffffff",
-        headerTitleStyle: { fontWeight: "700" },
-        contentStyle: { backgroundColor: "#f8f9fa" },
-        headerRight: () => <DrawerMenuButton />,
-      }}
+      screenOptions={sharedStackScreenOptions}
     >
       <Stack.Screen name="CatalogHome" component={CatalogHomeScreen} options={{ title: "Catalog" }} />
       <Stack.Screen name="BrandList" component={BrandListScreen} options={{ title: "Brands" }} />
