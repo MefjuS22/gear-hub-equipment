@@ -5,10 +5,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { setupGearHubApiClient } from "./api/setupGearHubClient";
 import { routeTree } from "./routeTree.gen";
 import { AppNotistackProvider } from "./providers/AppNotistack";
+import { AuthProvider } from "./providers/AuthProvider";
 import { appTheme } from "./theme/appTheme";
 import "./index.css";
+
+setupGearHubApiClient();
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,7 +39,9 @@ createRoot(document.getElementById("root")!).render(
         <CssBaseline />
         <AppNotistackProvider>
           <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
+            <AuthProvider>
+              <RouterProvider router={router} />
+            </AuthProvider>
           </QueryClientProvider>
         </AppNotistackProvider>
       </LocalizationProvider>

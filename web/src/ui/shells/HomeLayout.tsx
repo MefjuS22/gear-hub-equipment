@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
-import { Boxes, Building2, Store } from "lucide-react";
+import { Boxes, Building2, LogIn, Store } from "lucide-react";
 import type { ReactNode } from "react";
 
 const shellMaxWidth = 1200;
@@ -63,6 +63,16 @@ export function HomeLayout({ children }: { children: ReactNode }) {
               justifyContent: "flex-end",
             }}
           >
+            <Button
+              component={Link}
+              to="/login"
+              variant="outlined"
+              color="inherit"
+              size="small"
+              startIcon={<LogIn size={18} aria-hidden />}
+            >
+              Sign in
+            </Button>
             <Button
               component={Link}
               to="/portal"

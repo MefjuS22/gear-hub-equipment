@@ -49,12 +49,13 @@ public class AuthService(
         RegisterUserRequestDto request,
         CancellationToken cancellationToken = default)
     {
-        var role = await roleManager.FindByNameAsync(request.Role);
+        const string roleName = AppRoles.User;
+        var role = await roleManager.FindByNameAsync(roleName);
         if (role is null)
         {
             return ServiceResult<AuthResponseDto>.Fail(
                 ApiErrorCode.AuthRoleNotFound,
-                $"Role '{request.Role}' was not found.");
+                $"Role '{roleName}' was not found.");
         }
 
         var user = new ApplicationUser
@@ -72,7 +73,7 @@ public class AuthService(
             return ServiceResult<AuthResponseDto>.Fail(ApiErrorCode.ValidationFailed, message);
         }
 
-        var addRole = await userManager.AddToRoleAsync(user, request.Role);
+        var addRole = await userManager.AddToRoleAsync(user, roleName);
         if (!addRole.Succeeded)
         {
             await userManager.DeleteAsync(user);

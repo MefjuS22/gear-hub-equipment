@@ -305,7 +305,6 @@ export const registerUserRequestDtoSchema = z.object({
   email: z.string().nullish(),
   password: z.string().nullish(),
   displayName: z.string().nullish(),
-  role: z.string().nullish(),
 });
 
 export const rentalOrderLineDtoSchema = z.object({

@@ -2,6 +2,7 @@ import {
   createFileRoute,
   Link,
   Outlet,
+  useNavigate,
   useRouterState,
 } from "@tanstack/react-router";
 import {
@@ -11,13 +12,15 @@ import {
   Button,
   IconButton,
   InputAdornment,
+  Popover,
   TextField,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { Bell, Search, Settings, ShoppingCart } from "lucide-react";
-import { useMemo, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
+import { useAuth } from "../../providers/AuthProvider";
 import { CartProvider, useCart } from "../../ui/portal/cartContext";
 import {
   PortalCatalogSearchProvider,
@@ -69,6 +72,12 @@ function PortalTopBar() {
   });
   const { lines } = useCart();
   const { search, setSearch } = usePortalCatalogSearch();
+  const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [accountMenuAnchor, setAccountMenuAnchor] = useState<HTMLElement | null>(
+    null,
+  );
+  const accountMenuOpen = Boolean(accountMenuAnchor);
 
   const cartCount = useMemo(
     () => lines.reduce((n, l) => n + l.quantity, 0),
@@ -186,21 +195,90 @@ function PortalTopBar() {
               </IconButton>
             </span>
           </Tooltip>
-          <Tooltip title="Account">
-            <IconButton size="small" color="inherit" aria-label="Account menu">
-              <Avatar
-                sx={{
-                  width: 32,
-                  height: 32,
-                  fontSize: "0.85rem",
-                  bgcolor: "grey.300",
-                  color: "text.primary",
+          {isAuthenticated ? (
+            <>
+              <IconButton
+                size="small"
+                color="inherit"
+                aria-label="Open account menu"
+                aria-controls={accountMenuOpen ? "portal-account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={accountMenuOpen ? true : undefined}
+                onClick={(e) => setAccountMenuAnchor(e.currentTarget)}
+              >
+                <Avatar
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    fontSize: "0.85rem",
+                    bgcolor: "primary.main",
+                    color: "primary.contrastText",
+                  }}
+                >
+                  {(user?.displayName ?? user?.email ?? "?")
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase() || "?"}
+                </Avatar>
+              </IconButton>
+              <Popover
+                id="portal-account-menu"
+                open={accountMenuOpen}
+                anchorEl={accountMenuAnchor}
+                onClose={() => setAccountMenuAnchor(null)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                slotProps={{
+                  paper: {
+                    elevation: 3,
+                    sx: { mt: 1, minWidth: 240, borderRadius: 2 },
+                  },
                 }}
               >
-                GH
-              </Avatar>
-            </IconButton>
-          </Tooltip>
+                <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                      {user?.displayName?.trim() || "Your account"}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ wordBreak: "break-word" }}
+                    >
+                      {user?.email}
+                    </Typography>
+                  </Box>
+                  <Button
+                    variant="outlined"
+                    color="inherit"
+                    size="small"
+                    fullWidth
+                    sx={{ fontWeight: 600 }}
+                    onClick={() => {
+                      setAccountMenuAnchor(null);
+                      logout();
+                    }}
+                  >
+                    Sign out
+                  </Button>
+                </Box>
+              </Popover>
+            </>
+          ) : (
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+              onClick={() => {
+                void navigate({
+                  to: "/login",
+                  search: { redirect: "/portal" },
+                });
+              }}
+            >
+              Sign in
+            </Button>
+          )}
           <Badge
             badgeContent={cartCount}
             color="primary"

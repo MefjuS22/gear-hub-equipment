@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Users } from "lucide-react";
+import type { Customer } from "../../api/generated/types";
 import { useCustomersAdmin } from "../../hooks/intranet/useCustomersAdmin";
 import { EmptyState } from "../common";
 
@@ -53,7 +54,7 @@ export function CustomersAdminView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((c) => (
+              {rows.map((c: Customer) => (
                 <TableRow key={c.id}>
                   <TableCell>{c.id}</TableCell>
                   <TableCell>{c.companyName}</TableCell>

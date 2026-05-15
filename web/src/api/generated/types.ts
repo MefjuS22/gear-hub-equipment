@@ -745,10 +745,6 @@ export type RegisterUserRequestDto = {
    * @type string
    */
   displayName?: string | null;
-  /**
-   * @type string
-   */
-  role?: string | null;
 };
 
 export type RentalOrderLineDto = {

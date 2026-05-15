@@ -2,6 +2,8 @@ import {
   createFileRoute,
   Link,
   Outlet,
+  redirect,
+  useNavigate,
   useRouterState,
 } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
@@ -38,6 +40,8 @@ import {
   Warehouse,
   Wrench,
 } from "lucide-react";
+import { getAccessToken } from "../../store/authSessionStore";
+import { useAuth } from "../../providers/AuthProvider";
 
 const DRAWER_WIDTH = 260;
 
@@ -55,6 +59,14 @@ const NAV: { to: string; label: string; Icon: LucideIcon }[] = [
 ];
 
 export const Route = createFileRoute("/intranet")({
+  beforeLoad: ({ location }) => {
+    if (!getAccessToken()) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.pathname },
+      });
+    }
+  },
   component: IntranetLayout,
 });
 
@@ -70,6 +82,8 @@ function SidebarNav({
   pathname: string;
   onNavigate?: () => void;
 }) {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   return (
     <>
       <Toolbar
@@ -149,7 +163,16 @@ function SidebarNav({
           );
         })}
       </List>
-      <Box sx={{ p: 1.5, borderTop: 1, borderColor: "divider" }}>
+      <Box sx={{ px: 1.5, borderTop: 1, borderColor: "divider", pt: 1 }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: "block", px: 1, mb: 0.5 }}
+          noWrap
+          title={user?.email ?? ""}
+        >
+          {user?.displayName || user?.email || "Signed in"}
+        </Typography>
         <Button
           component={MuiLink}
           href="mailto:support@example.com"
@@ -161,12 +184,15 @@ function SidebarNav({
           Support
         </Button>
         <Button
-          component={Link}
-          to="/"
           fullWidth
           color="inherit"
           size="small"
           sx={{ justifyContent: "flex-start" }}
+          onClick={() => {
+            logout();
+            onNavigate?.();
+            void navigate({ to: "/login" });
+          }}
         >
           Sign out
         </Button>

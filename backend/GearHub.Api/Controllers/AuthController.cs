@@ -1,4 +1,3 @@
-using GearHub.Api.Authorization;
 using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Responses;
@@ -36,7 +35,7 @@ public class AuthController(IAuthService authService, UserManager<ApplicationUse
     }
 
     [HttpPost("register")]
-    [HasPermission(AppPermissions.UsersManage)]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(AuthResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AuthResponseDto>> Register(

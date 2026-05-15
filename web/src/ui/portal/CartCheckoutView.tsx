@@ -21,9 +21,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { Controller } from "react-hook-form";
+import type { Customer } from "../../api/generated/types";
 import { formatUsd } from "../../lib/formatCurrency";
 import { useCartCheckout } from "../../hooks/portal/useCartCheckout";
-import { PORTAL_CHECKOUT_STAFF_USER_ID } from "../../lib/portalConstants";
 import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
 
 export function CartCheckoutView() {
@@ -89,7 +89,7 @@ export function CartCheckoutView() {
                   helperText={fieldState.error?.message}
                   sx={{ mb: 2 }}
                 >
-                  {(customers.data ?? []).map((c) => (
+                  {(customers.data ?? []).map((c: Customer) => (
                     <MenuItem key={c.id} value={c.id ?? 0}>
                       {c.companyName}
                     </MenuItem>
@@ -102,8 +102,8 @@ export function CartCheckoutView() {
               color="text.secondary"
               sx={{ display: "block" }}
             >
-              Orders are assigned to system user ID{" "}
-              {PORTAL_CHECKOUT_STAFF_USER_ID} until user APIs are available.
+              Orders are created under your signed-in account. Sign in from the header if checkout
+              fails with an authorization error.
             </Typography>
           </SectionCard>
 

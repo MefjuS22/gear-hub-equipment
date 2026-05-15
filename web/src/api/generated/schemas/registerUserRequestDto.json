@@ -3,8 +3,7 @@
   "properties": {
     "email": { "type": "string", "nullable": true },
     "password": { "type": "string", "nullable": true },
-    "displayName": { "type": "string", "nullable": true },
-    "role": { "type": "string", "nullable": true }
+    "displayName": { "type": "string", "nullable": true }
   },
   "additionalProperties": false,
   "x-readme-ref-name": "RegisterUserRequestDto"

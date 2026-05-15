@@ -1,1 +1,0 @@
-export const PORTAL_CHECKOUT_STAFF_USER_ID = 1;

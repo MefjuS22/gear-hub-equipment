@@ -9,7 +9,6 @@ import {
   useGetApiCustomer,
   usePostApiOrderCreateorder,
 } from "../../api/generated/react-query";
-import { PORTAL_CHECKOUT_STAFF_USER_ID } from "../../lib/portalConstants";
 import {
   orderCheckoutFormSchema,
   type OrderCheckoutFormValues,
@@ -86,7 +85,6 @@ export function useCartCheckout() {
     submit.mutate({
       data: {
         customerId: values.customerId,
-        userId: PORTAL_CHECKOUT_STAFF_USER_ID,
         rentalStartDate: new Date(values.rentalStart).toISOString(),
         rentalEndDate: new Date(values.rentalEnd).toISOString(),
         items: lines.map((l) => ({

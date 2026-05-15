@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as PortalRouteRouteImport } from './routes/portal/route'
 import { Route as IntranetRouteRouteImport } from './routes/intranet/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -34,6 +36,16 @@ import { Route as IntranetEquipmentNewRouteImport } from './routes/intranet/equi
 import { Route as IntranetPortalTextsPostIdEditRouteImport } from './routes/intranet/portal-texts/$postId/edit'
 import { Route as IntranetEquipmentEquipmentIdEditRouteImport } from './routes/intranet/equipment/$equipmentId/edit'
 
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PortalRouteRoute = PortalRouteRouteImport.update({
   id: '/portal',
   path: '/portal',
@@ -163,6 +175,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/intranet': typeof IntranetRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/intranet/equipment': typeof IntranetEquipmentRouteRouteWithChildren
   '/intranet/portal-texts': typeof IntranetPortalTextsRouteRouteWithChildren
   '/portal/news': typeof PortalNewsRouteRouteWithChildren
@@ -187,6 +201,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/intranet/brands': typeof IntranetBrandsRoute
   '/intranet/categories': typeof IntranetCategoriesRoute
   '/intranet/customers': typeof IntranetCustomersRoute
@@ -211,6 +227,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/intranet': typeof IntranetRouteRouteWithChildren
   '/portal': typeof PortalRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/intranet/equipment': typeof IntranetEquipmentRouteRouteWithChildren
   '/intranet/portal-texts': typeof IntranetPortalTextsRouteRouteWithChildren
   '/portal/news': typeof PortalNewsRouteRouteWithChildren
@@ -239,6 +257,8 @@ export interface FileRouteTypes {
     | '/'
     | '/intranet'
     | '/portal'
+    | '/login'
+    | '/register'
     | '/intranet/equipment'
     | '/intranet/portal-texts'
     | '/portal/news'
@@ -263,6 +283,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/register'
     | '/intranet/brands'
     | '/intranet/categories'
     | '/intranet/customers'
@@ -286,6 +308,8 @@ export interface FileRouteTypes {
     | '/'
     | '/intranet'
     | '/portal'
+    | '/login'
+    | '/register'
     | '/intranet/equipment'
     | '/intranet/portal-texts'
     | '/portal/news'
@@ -313,10 +337,26 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IntranetRouteRoute: typeof IntranetRouteRouteWithChildren
   PortalRouteRoute: typeof PortalRouteRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portal': {
       id: '/portal'
       path: '/portal'
@@ -589,6 +629,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IntranetRouteRoute: IntranetRouteRouteWithChildren,
   PortalRouteRoute: PortalRouteRouteWithChildren,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
