@@ -1,12 +1,15 @@
 ﻿using GearHub.Api.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GearHub.Api.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>(options)
 {
-    public DbSet<Role> Roles => Set<Role>();
-    public DbSet<User> Users => Set<User>();
+    public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<Warehouse> Warehouses => Set<Warehouse>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Brand> Brands => Set<Brand>();
@@ -24,21 +27,36 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<RentalOrderItem>()
             .HasKey(item => new { item.RentalOrderId, item.EquipmentId });
 
+        modelBuilder.Entity<RentalOrder>()
+            .HasOne(order => order.User)
+            .WithMany(user => user.RentalOrders)
+            .HasForeignKey(order => order.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<RolePermission>(entity =>
+        {
+            entity.HasKey(rp => new { rp.RoleId, rp.PermissionId });
+            entity.HasOne(rp => rp.Role)
+                .WithMany()
+                .HasForeignKey(rp => rp.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(rp => rp.Permission)
+                .WithMany(permission => permission.RolePermissions)
+                .HasForeignKey(rp => rp.PermissionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Permission>(entity =>
+        {
+            entity.HasIndex(permission => permission.Name).IsUnique();
+        });
+
         modelBuilder.Entity<CmsPost>(entity =>
         {
             entity.HasIndex(post => post.Slug).IsUnique();
             entity.Property(post => post.Id).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(post => post.CoverImageUrl).HasMaxLength(2000);
         });
-
-        modelBuilder.Entity<Role>().HasData(
-            new Role { Id = 1, Name = "Admin" },
-            new Role { Id = 2, Name = "Operator" }
-        );
-
-        modelBuilder.Entity<User>().HasData(
-            new User { Id = 1, Name = "Alice Carter", Email = "alice.carter@gearhub.com", RoleId = 1 }
-        );
 
         modelBuilder.Entity<Warehouse>().HasData(
             new Warehouse { Id = 1, Name = "Main Warehouse", Location = "Warsaw, Poland" }

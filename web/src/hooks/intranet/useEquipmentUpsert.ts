@@ -57,12 +57,17 @@ export function useEquipmentUpsert({
   });
   const categories = useGetApiCategory({ client: gearhubApiClientOptions });
   const brands = useGetApiBrand({ client: gearhubApiClientOptions });
-  const warehouseQuery = useGetApiWarehouse({ client: gearhubApiClientOptions });
+  const warehouseQuery = useGetApiWarehouse({
+    client: gearhubApiClientOptions,
+  });
 
   const warehouses = useMemo((): WarehouseOption[] => {
     const fromList: WarehouseOption[] = (warehouseQuery.data ?? [])
       .filter((w) => w.id != null)
-      .map((w) => ({ id: w.id!, name: w.name?.trim() || `Warehouse #${w.id}` }));
+      .map((w) => ({
+        id: w.id!,
+        name: w.name?.trim() || `Warehouse #${w.id}`,
+      }));
     if (!isEdit || !equipmentDetail.data) return fromList;
     const wid = equipmentDetail.data.warehouseId;
     if (wid == null) return fromList;

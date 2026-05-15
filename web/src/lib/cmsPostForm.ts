@@ -10,7 +10,9 @@ export const CMS_POST_FORM_DEFAULTS: CmsPostFormValues = {
   isPublished: false,
 };
 
-export function cmsPostDetailToFormValues(d: CmsPostDetailDto): CmsPostFormValues {
+export function cmsPostDetailToFormValues(
+  d: CmsPostDetailDto,
+): CmsPostFormValues {
   return {
     slug: d.slug ?? "",
     title: d.title ?? "",

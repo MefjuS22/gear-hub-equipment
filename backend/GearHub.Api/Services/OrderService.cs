@@ -1,14 +1,17 @@
-﻿using GearHub.Api.Data;
+﻿using GearHub.Api.Authorization;
+using GearHub.Api.Data;
 using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Repositories;
 using GearHub.Api.Responses;
+using Microsoft.AspNetCore.Identity;
 
 namespace GearHub.Api.Services;
 
 public class OrderService(
     ApplicationDbContext dbContext,
-    IOrderRepository orderRepository) : IOrderService
+    IOrderRepository orderRepository,
+    UserManager<ApplicationUser> userManager) : IOrderService
 {
     public async Task<IReadOnlyList<RentalOrderListDto>> GetAllAsync(CancellationToken cancellationToken = default)
     {
@@ -16,16 +19,43 @@ public class OrderService(
         return orders.Select(ToListDto).ToList();
     }
 
-    public async Task<OrderCreationResult> CreateOrderAsync(
-        OrderCreateDto request,
+    public async Task<ServiceResult<RentalOrderListDto>> GetByIdForViewerAsync(
+        int orderId,
+        int viewerUserId,
         CancellationToken cancellationToken = default)
     {
-        if (!await orderRepository.CustomerExistsAsync(request.CustomerId, cancellationToken))
+        var viewer = await userManager.FindByIdAsync(viewerUserId.ToString());
+        if (viewer is null)
         {
-            return OrderCreationResult.Failed(ApiErrorCode.OrderCustomerNotFound, "Customer not found.");
+            return ServiceResult<RentalOrderListDto>.Fail(
+                ApiErrorCode.OrderUserNotFound,
+                "User not found.");
         }
 
-        if (!await orderRepository.UserExistsAsync(request.UserId, cancellationToken))
+        var isAdmin = await userManager.IsInRoleAsync(viewer, AppRoles.Admin);
+
+        var order = await orderRepository.GetOrderByIdWithDetailsAsync(orderId, cancellationToken);
+        if (order is null)
+        {
+            return ServiceResult<RentalOrderListDto>.Fail(ApiErrorCode.OrderNotFound, "Order not found.");
+        }
+
+        if (!isAdmin && order.UserId != viewerUserId)
+        {
+            return ServiceResult<RentalOrderListDto>.Fail(
+                ApiErrorCode.AuthForbidden,
+                "You do not have access to this order.");
+        }
+
+        return ServiceResult<RentalOrderListDto>.Ok(ToListDto(order));
+    }
+
+    public async Task<OrderCreationResult> CreateOrderAsync(
+        OrderCreateDto request,
+        int userId,
+        CancellationToken cancellationToken = default)
+    {
+        if (!await orderRepository.UserExistsAsync(userId, cancellationToken))
         {
             return OrderCreationResult.Failed(ApiErrorCode.OrderUserNotFound, "User not found.");
         }
@@ -66,10 +96,35 @@ public class OrderService(
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
 
+        int customerId;
+        if (request.CustomerId is int existingId and > 0)
+        {
+            if (!await orderRepository.CustomerExistsAsync(existingId, cancellationToken))
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return OrderCreationResult.Failed(ApiErrorCode.OrderCustomerNotFound, "Customer not found.");
+            }
+
+            customerId = existingId;
+        }
+        else
+        {
+            var company = request.CompanyName!.Trim();
+            var contact = request.ContactPerson!.Trim();
+            var customer = new Customer
+            {
+                CompanyName = company,
+                ContactPerson = contact,
+            };
+            dbContext.Customers.Add(customer);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            customerId = customer.Id;
+        }
+
         var order = new RentalOrder
         {
-            CustomerId = request.CustomerId,
-            UserId = request.UserId,
+            CustomerId = customerId,
+            UserId = userId,
             OrderDate = DateTime.UtcNow,
             RentalStartDate = rentalStartUtc,
             RentalEndDate = rentalEndUtc
@@ -116,7 +171,7 @@ public class OrderService(
             CustomerId = order.CustomerId,
             CustomerCompanyName = order.Customer?.CompanyName ?? string.Empty,
             UserId = order.UserId,
-            UserName = order.User?.Name ?? string.Empty,
+            UserName = order.User?.DisplayName ?? string.Empty,
             UserEmail = order.User?.Email ?? string.Empty,
             OrderDate = order.OrderDate,
             RentalStartDate = order.RentalStartDate,

@@ -1,6 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GearHub.Api.Data;
+using GearHub.Api.Extensions;
 using GearHub.Api.Middleware;
 using GearHub.Api.Options;
 using GearHub.Api.Repositories;
@@ -57,13 +58,12 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     };
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SchemaFilter<ApiErrorCodeSchemaFilter>();
-});
+builder.Services.AddGearHubSwaggerWithJwt();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddGearHubAuth(builder.Configuration);
 
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -74,6 +74,8 @@ builder.Services.AddScoped<ICmsPostService, CmsPostService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserAdminService, UserAdminService>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 builder.Services.Configure<FileStorageOptions>(
@@ -112,6 +114,8 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = new PathString(fileStorageOptions.PublicRequestPath),
 });
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 
@@ -129,6 +133,7 @@ using (var scope = app.Services.CreateScope())
 
     CmsTableBootstrap.EnsureCmsPostsTable(dbContext);
     MediaColumnsBootstrap.EnsureMediaColumns(dbContext);
+    await IdentityDataSeeder.SeedAsync(scope.ServiceProvider);
 }
 
 app.Run();

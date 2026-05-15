@@ -9,34 +9,20 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import dayjs from "dayjs";
+import { Link } from "@tanstack/react-router";
 import { ClipboardList } from "lucide-react";
-import type { RentalOrderListDto } from "../../api/generated/types";
 import { useOrdersList } from "../../hooks/intranet/useOrdersList";
-import { formatUsd } from "../../lib/formatCurrency";
+import { canViewIntranetOrderDetail } from "../../lib/intranetOrderAccess";
+import { useAuth } from "../../providers/AuthProvider";
 import { EmptyState, LoadingState, PageHeader } from "../common";
-
-function formatDt(iso?: string | null) {
-  if (!iso) return "—";
-  const d = dayjs(iso);
-  return d.isValid() ? d.format("MMM D, YYYY HH:mm") : "—";
-}
-
-function linesSummary(order: RentalOrderListDto) {
-  const items = order.items ?? [];
-  if (items.length === 0) return "—";
-  return items
-    .map((line) => {
-      const q = line.quantity ?? 0;
-      const name = line.equipmentName ?? `#${line.equipmentId}`;
-      const price = line.unitPrice != null ? formatUsd(line.unitPrice) : "—";
-      return `${q}× ${name} @ ${price}`;
-    })
-    .join(" · ");
-}
+import {
+  formatOrderDateTime,
+  formatOrderLinesSummary,
+} from "./orderDisplayFormat";
 
 export function OrdersListView() {
   const { list } = useOrdersList();
+  const { user } = useAuth();
 
   if (list.isLoading) {
     return <LoadingState message="Loading orders…" />;
@@ -87,7 +73,24 @@ export function OrdersListView() {
             <TableBody>
               {rows.map((o) => (
                 <TableRow key={o.id}>
-                  <TableCell>{o.id}</TableCell>
+                  <TableCell>
+                    {o.id != null && canViewIntranetOrderDetail(user, o) ? (
+                      <Link
+                        to="/intranet/orders/$orderId"
+                        params={{ orderId: String(o.id) }}
+                        style={{
+                          fontWeight: 700,
+                          textDecoration: "underline",
+                          textUnderlineOffset: 3,
+                          color: "inherit",
+                        }}
+                      >
+                        {o.id}
+                      </Link>
+                    ) : (
+                      o.id
+                    )}
+                  </TableCell>
                   <TableCell>
                     {o.customerCompanyName}
                     <Typography
@@ -109,11 +112,11 @@ export function OrdersListView() {
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ whiteSpace: "nowrap" }}>
-                    {formatDt(o.orderDate)}
+                    {formatOrderDateTime(o.orderDate)}
                   </TableCell>
                   <TableCell sx={{ whiteSpace: "nowrap" }}>
-                    {formatDt(o.rentalStartDate)} →{" "}
-                    {formatDt(o.rentalEndDate)}
+                    {formatOrderDateTime(o.rentalStartDate)} →{" "}
+                    {formatOrderDateTime(o.rentalEndDate)}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -122,7 +125,7 @@ export function OrdersListView() {
                       maxWidth: 420,
                     }}
                   >
-                    {linesSummary(o)}
+                    {formatOrderLinesSummary(o)}
                   </TableCell>
                 </TableRow>
               ))}

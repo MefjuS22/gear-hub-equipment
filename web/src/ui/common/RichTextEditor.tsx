@@ -40,7 +40,10 @@ export function RichTextEditor({
   const { enqueueSnackbar } = useSnackbar();
   const imageInputRef = useRef<HTMLInputElement>(null);
   const uploadRef = useRef(onUploadImage);
-  uploadRef.current = onUploadImage;
+
+  useEffect(() => {
+    uploadRef.current = onUploadImage;
+  }, [onUploadImage]);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -162,7 +165,9 @@ export function RichTextEditor({
           <IconButton
             size="small"
             disabled={disabled}
-            color={editor.isActive("heading", { level: 2 }) ? "primary" : "default"}
+            color={
+              editor.isActive("heading", { level: 2 }) ? "primary" : "default"
+            }
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }

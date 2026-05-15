@@ -70,7 +70,9 @@ export function ImageUrlField<T extends FieldValues>({
                     const res = await uploadFile(file, uploadFolder);
                     field.onChange(res.publicPath ?? res.absoluteUrl ?? "");
                   } catch {
-                    enqueueSnackbar("Image upload failed.", { variant: "error" });
+                    enqueueSnackbar("Image upload failed.", {
+                      variant: "error",
+                    });
                   }
                 }}
               />

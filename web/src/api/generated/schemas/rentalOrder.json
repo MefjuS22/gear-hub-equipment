@@ -5,7 +5,7 @@
     "customerId": { "type": "integer", "format": "int32" },
     "customer": { "$ref": "#/components/schemas/Customer" },
     "userId": { "type": "integer", "format": "int32" },
-    "user": { "$ref": "#/components/schemas/User" },
+    "user": { "$ref": "#/components/schemas/ApplicationUser" },
     "orderDate": { "type": "string", "format": "date-time" },
     "rentalStartDate": { "type": "string", "format": "date-time" },
     "rentalEndDate": { "type": "string", "format": "date-time" },

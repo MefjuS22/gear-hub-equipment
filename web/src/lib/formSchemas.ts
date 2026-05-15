@@ -1,5 +1,44 @@
 import { z } from "zod";
 
+const passwordForNewUserSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters.")
+  .regex(/[A-Z]/, "Password must have at least one uppercase letter.")
+  .regex(/[a-z]/, "Password must have at least one lowercase letter.")
+  .regex(/[0-9]/, "Password must have at least one digit.");
+
+export const createStaffUserFormSchema = z
+  .object({
+    email: z.string().min(1, "Email is required").email("Enter a valid email"),
+    password: passwordForNewUserSchema,
+    displayName: z
+      .string()
+      .min(1, "Display name is required")
+      .max(200, "Display name is too long"),
+    admin: z.boolean(),
+    user: z.boolean(),
+  })
+  .refine((d) => d.admin || d.user, {
+    message: "Select at least one role.",
+    path: ["admin"],
+  });
+
+export type CreateStaffUserFormValues = z.infer<typeof createStaffUserFormSchema>;
+
+export const setStaffUserRolesFormSchema = z
+  .object({
+    admin: z.boolean(),
+    user: z.boolean(),
+  })
+  .refine((d) => d.admin || d.user, {
+    message: "Select at least one role.",
+    path: ["admin"],
+  });
+
+export type SetStaffUserRolesFormValues = z.infer<
+  typeof setStaffUserRolesFormSchema
+>;
+
 export const categoryFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string(),
@@ -68,7 +107,8 @@ export type CmsPostFormValues = z.infer<typeof cmsPostFormSchema>;
 
 export const orderCheckoutFormSchema = z
   .object({
-    customerId: z.number().int().positive(),
+    companyName: z.string().min(1, "Company or organization name is required"),
+    contactPerson: z.string().min(1, "Contact person is required"),
     rentalStart: z.string().min(1),
     rentalEnd: z.string().min(1),
   })

@@ -4,6 +4,164 @@
  */
 
 import type {
+  DeleteApiBrandIdMutationResponse,
+  DeleteApiBrandIdPathParams,
+  DeleteApiBrandId400,
+  DeleteApiBrandId401,
+  DeleteApiBrandId404,
+  GetApiAuthMeQueryResponse,
+  GetApiAuthMe401,
+  GetApiBrandQueryResponse,
+  GetApiBrand401,
+  GetApiBrandIdQueryResponse,
+  GetApiBrandIdPathParams,
+  GetApiBrandId401,
+  GetApiBrandId404,
+  GetApiCategoryQueryResponse,
+  GetApiCategory401,
+  GetApiCategoryIdQueryResponse,
+  GetApiCategoryIdPathParams,
+  GetApiCategoryId401,
+  GetApiCategoryId404,
+  GetApiCmspostQueryResponse,
+  GetApiCmspost401,
+  GetApiCmspostIdQueryResponse,
+  GetApiCmspostIdPathParams,
+  GetApiCmspostId401,
+  GetApiCmspostId404,
+  GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublished401,
+  GetApiCmspostPublishedSlugQueryResponse,
+  GetApiCmspostPublishedSlugPathParams,
+  GetApiCmspostPublishedSlug401,
+  GetApiCmspostPublishedSlug404,
+  GetApiCustomerQueryResponse,
+  GetApiCustomer401,
+  GetApiEquipmentQueryResponse,
+  GetApiEquipment401,
+  GetApiEquipmentIdQueryResponse,
+  GetApiEquipmentIdPathParams,
+  GetApiEquipmentId401,
+  GetApiEquipmentId404,
+  GetApiOrderQueryResponse,
+  GetApiOrder400,
+  GetApiOrder401,
+  GetApiOrderIdQueryResponse,
+  GetApiOrderIdPathParams,
+  GetApiOrderId400,
+  GetApiOrderId401,
+  GetApiOrderId403,
+  GetApiOrderId404,
+  GetApiUsersQueryResponse,
+  GetApiUsers401,
+  GetApiUsers403,
+  GetApiWarehouseQueryResponse,
+  GetApiWarehouse401,
+  GetApiWarehouseIdQueryResponse,
+  GetApiWarehouseIdPathParams,
+  GetApiWarehouseId401,
+  GetApiWarehouseId404,
+  PostApiAuthLoginMutationRequest,
+  PostApiAuthLoginMutationResponse,
+  PostApiAuthLogin400,
+  PostApiAuthLogin401,
+  PostApiAuthRegisterMutationRequest,
+  PostApiAuthRegisterMutationResponse,
+  PostApiAuthRegister400,
+  PostApiBrandMutationRequest,
+  PostApiBrandMutationResponse,
+  PostApiBrand400,
+  PostApiBrand401,
+  PutApiBrandIdMutationRequest,
+  PutApiBrandIdMutationResponse,
+  PutApiBrandIdPathParams,
+  PutApiBrandId401,
+  PutApiBrandId404,
+  PostApiCategoryMutationRequest,
+  PostApiCategoryMutationResponse,
+  PostApiCategory400,
+  PostApiCategory401,
+  PutApiCategoryIdMutationRequest,
+  PutApiCategoryIdMutationResponse,
+  PutApiCategoryIdPathParams,
+  PutApiCategoryId401,
+  PutApiCategoryId404,
+  DeleteApiCategoryIdMutationResponse,
+  DeleteApiCategoryIdPathParams,
+  DeleteApiCategoryId400,
+  DeleteApiCategoryId401,
+  DeleteApiCategoryId404,
+  PostApiCmspostMutationRequest,
+  PostApiCmspostMutationResponse,
+  PostApiCmspost400,
+  PostApiCmspost401,
+  PutApiCmspostIdMutationRequest,
+  PutApiCmspostIdMutationResponse,
+  PutApiCmspostIdPathParams,
+  PutApiCmspostId400,
+  PutApiCmspostId401,
+  PutApiCmspostId404,
+  DeleteApiCmspostIdMutationResponse,
+  DeleteApiCmspostIdPathParams,
+  DeleteApiCmspostId401,
+  DeleteApiCmspostId404,
+  PostApiEquipmentMutationRequest,
+  PostApiEquipmentMutationResponse,
+  PostApiEquipment400,
+  PostApiEquipment401,
+  PostApiEquipment500,
+  PutApiEquipmentIdMutationRequest,
+  PutApiEquipmentIdMutationResponse,
+  PutApiEquipmentIdPathParams,
+  PutApiEquipmentId400,
+  PutApiEquipmentId401,
+  PutApiEquipmentId404,
+  DeleteApiEquipmentIdMutationResponse,
+  DeleteApiEquipmentIdPathParams,
+  DeleteApiEquipmentId401,
+  DeleteApiEquipmentId404,
+  PostApiFilesUploadMutationRequest,
+  PostApiFilesUploadMutationResponse,
+  PostApiFilesUpload400,
+  PostApiFilesUpload401,
+  PostApiOrderCreateorderMutationRequest,
+  PostApiOrderCreateorderMutationResponse,
+  PostApiOrderCreateorder400,
+  PostApiOrderCreateorder401,
+  PostApiUsersMutationRequest,
+  PostApiUsersMutationResponse,
+  PostApiUsers400,
+  PostApiUsers401,
+  PostApiUsers403,
+  PutApiUsersIdRolesMutationRequest,
+  PutApiUsersIdRolesMutationResponse,
+  PutApiUsersIdRolesPathParams,
+  PutApiUsersIdRoles400,
+  PutApiUsersIdRoles401,
+  PutApiUsersIdRoles403,
+  PutApiUsersIdRoles404,
+  DeleteApiUsersIdMutationResponse,
+  DeleteApiUsersIdPathParams,
+  DeleteApiUsersId400,
+  DeleteApiUsersId401,
+  DeleteApiUsersId403,
+  DeleteApiUsersId404,
+  PostApiWarehouseMutationRequest,
+  PostApiWarehouseMutationResponse,
+  PostApiWarehouse400,
+  PostApiWarehouse401,
+  PutApiWarehouseIdMutationRequest,
+  PutApiWarehouseIdMutationResponse,
+  PutApiWarehouseIdPathParams,
+  PutApiWarehouseId401,
+  PutApiWarehouseId404,
+  DeleteApiWarehouseIdMutationResponse,
+  DeleteApiWarehouseIdPathParams,
+  DeleteApiWarehouseId400,
+  DeleteApiWarehouseId401,
+  DeleteApiWarehouseId404,
+} from "./types.ts";
+import type {
   Client,
   RequestConfig,
   ResponseErrorConfig,
@@ -18,106 +176,9 @@ import type {
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query";
-import type {
-  DeleteApiBrandIdMutationResponse,
-  DeleteApiBrandIdPathParams,
-  DeleteApiBrandId400,
-  DeleteApiBrandId404,
-  GetApiBrandIdQueryResponse,
-  GetApiBrandIdPathParams,
-  GetApiBrandId404,
-  GetApiBrandQueryResponse,
-  GetApiCategoryQueryResponse,
-  GetApiCategoryIdQueryResponse,
-  GetApiCategoryIdPathParams,
-  GetApiCategoryId404,
-  GetApiCmspostQueryResponse,
-  GetApiCmspostIdQueryResponse,
-  GetApiCmspostIdPathParams,
-  GetApiCmspostId404,
-  GetApiCmspostPublishedQueryResponse,
-  GetApiCmspostPublishedSlugQueryResponse,
-  GetApiCmspostPublishedSlugPathParams,
-  GetApiCmspostPublishedSlug404,
-  GetApiCustomerQueryResponse,
-  GetApiEquipmentQueryResponse,
-  GetApiEquipmentIdQueryResponse,
-  GetApiEquipmentIdPathParams,
-  GetApiEquipmentId404,
-  GetApiOrderQueryResponse,
-  GetApiOrder400,
-  GetApiWarehouseQueryResponse,
-  GetApiWarehouseIdQueryResponse,
-  GetApiWarehouseIdPathParams,
-  GetApiWarehouseId404,
-  PostApiBrandMutationRequest,
-  PostApiBrandMutationResponse,
-  PostApiBrand400,
-  PutApiBrandIdMutationRequest,
-  PutApiBrandIdMutationResponse,
-  PutApiBrandIdPathParams,
-  PutApiBrandId404,
-  PostApiCategoryMutationRequest,
-  PostApiCategoryMutationResponse,
-  PostApiCategory400,
-  PutApiCategoryIdMutationRequest,
-  PutApiCategoryIdMutationResponse,
-  PutApiCategoryIdPathParams,
-  PutApiCategoryId404,
-  DeleteApiCategoryIdMutationResponse,
-  DeleteApiCategoryIdPathParams,
-  DeleteApiCategoryId400,
-  DeleteApiCategoryId404,
-  PostApiCmspostMutationRequest,
-  PostApiCmspostMutationResponse,
-  PostApiCmspost400,
-  PutApiCmspostIdMutationRequest,
-  PutApiCmspostIdMutationResponse,
-  PutApiCmspostIdPathParams,
-  PutApiCmspostId400,
-  PutApiCmspostId404,
-  DeleteApiCmspostIdMutationResponse,
-  DeleteApiCmspostIdPathParams,
-  DeleteApiCmspostId404,
-  PostApiEquipmentMutationRequest,
-  PostApiEquipmentMutationResponse,
-  PostApiEquipment400,
-  PostApiEquipment500,
-  PutApiEquipmentIdMutationRequest,
-  PutApiEquipmentIdMutationResponse,
-  PutApiEquipmentIdPathParams,
-  PutApiEquipmentId400,
-  PutApiEquipmentId404,
-  DeleteApiEquipmentIdMutationResponse,
-  DeleteApiEquipmentIdPathParams,
-  DeleteApiEquipmentId404,
-  PostApiFilesUploadMutationRequest,
-  PostApiFilesUploadMutationResponse,
-  PostApiFilesUpload400,
-  PostApiOrderCreateorderMutationRequest,
-  PostApiOrderCreateorderMutationResponse,
-  PostApiOrderCreateorder400,
-  PostApiWarehouseMutationRequest,
-  PostApiWarehouseMutationResponse,
-  PostApiWarehouse400,
-  PutApiWarehouseIdMutationRequest,
-  PutApiWarehouseIdMutationResponse,
-  PutApiWarehouseIdPathParams,
-  PutApiWarehouseId404,
-  DeleteApiWarehouseIdMutationResponse,
-  DeleteApiWarehouseIdPathParams,
-  DeleteApiWarehouseId400,
-  DeleteApiWarehouseId404,
-} from "./types.ts";
-import {
-  mutationOptions,
-  useMutation,
-  queryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
 import {
   deleteApiBrandId,
+  getApiAuthMe,
   getApiBrand,
   getApiBrandId,
   getApiCategory,
@@ -130,8 +191,12 @@ import {
   getApiEquipment,
   getApiEquipmentId,
   getApiOrder,
+  getApiOrderId,
+  getApiUsers,
   getApiWarehouse,
   getApiWarehouseId,
+  postApiAuthLogin,
+  postApiAuthRegister,
   postApiBrand,
   putApiBrandId,
   postApiCategory,
@@ -145,10 +210,82 @@ import {
   deleteApiEquipmentId,
   postApiFilesUpload,
   postApiOrderCreateorder,
+  postApiUsers,
+  putApiUsersIdRoles,
+  deleteApiUsersId,
   postApiWarehouse,
   putApiWarehouseId,
   deleteApiWarehouseId,
 } from "./client.ts";
+import {
+  mutationOptions,
+  useMutation,
+  queryOptions,
+  useQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+
+export const getApiAuthMeQueryKey = () => [{ url: "/api/Auth/me" }] as const;
+
+export type GetApiAuthMeQueryKey = ReturnType<typeof getApiAuthMeQueryKey>;
+
+export function getApiAuthMeQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiAuthMeQueryKey();
+  return queryOptions<
+    GetApiAuthMeQueryResponse,
+    ResponseErrorConfig<GetApiAuthMe401>,
+    GetApiAuthMeQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiAuthMe({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Auth/me}
+ */
+export function useGetApiAuthMe<
+  TData = GetApiAuthMeQueryResponse,
+  TQueryData = GetApiAuthMeQueryResponse,
+  TQueryKey extends QueryKey = GetApiAuthMeQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiAuthMeQueryResponse,
+        ResponseErrorConfig<GetApiAuthMe401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiAuthMeQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiAuthMeQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiAuthMe401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
 
 export const getApiBrandQueryKey = () => [{ url: "/api/Brand" }] as const;
 
@@ -160,7 +297,7 @@ export function getApiBrandQueryOptions(
   const queryKey = getApiBrandQueryKey();
   return queryOptions<
     GetApiBrandQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiBrand401>,
     GetApiBrandQueryResponse,
     typeof queryKey
   >({
@@ -183,7 +320,7 @@ export function useGetApiBrand<
     query?: Partial<
       QueryObserverOptions<
         GetApiBrandQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiBrand401>,
         TData,
         TQueryData,
         TQueryKey
@@ -203,7 +340,7 @@ export function useGetApiBrand<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiBrand401>> & {
     queryKey: TQueryKey;
   };
 
@@ -224,7 +361,7 @@ export function getApiBrandIdQueryOptions(
   const queryKey = getApiBrandIdQueryKey(id);
   return queryOptions<
     GetApiBrandIdQueryResponse,
-    ResponseErrorConfig<GetApiBrandId404>,
+    ResponseErrorConfig<GetApiBrandId401 | GetApiBrandId404>,
     GetApiBrandIdQueryResponse,
     typeof queryKey
   >({
@@ -249,7 +386,7 @@ export function useGetApiBrandId<
     query?: Partial<
       QueryObserverOptions<
         GetApiBrandIdQueryResponse,
-        ResponseErrorConfig<GetApiBrandId404>,
+        ResponseErrorConfig<GetApiBrandId401 | GetApiBrandId404>,
         TData,
         TQueryData,
         TQueryKey
@@ -269,9 +406,10 @@ export function useGetApiBrandId<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiBrandId404>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiBrandId401 | GetApiBrandId404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -288,7 +426,7 @@ export function getApiCategoryQueryOptions(
   const queryKey = getApiCategoryQueryKey();
   return queryOptions<
     GetApiCategoryQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCategory401>,
     GetApiCategoryQueryResponse,
     typeof queryKey
   >({
@@ -311,7 +449,7 @@ export function useGetApiCategory<
     query?: Partial<
       QueryObserverOptions<
         GetApiCategoryQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCategory401>,
         TData,
         TQueryData,
         TQueryKey
@@ -331,7 +469,7 @@ export function useGetApiCategory<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCategory401>> & {
     queryKey: TQueryKey;
   };
 
@@ -355,7 +493,7 @@ export function getApiCategoryIdQueryOptions(
   const queryKey = getApiCategoryIdQueryKey(id);
   return queryOptions<
     GetApiCategoryIdQueryResponse,
-    ResponseErrorConfig<GetApiCategoryId404>,
+    ResponseErrorConfig<GetApiCategoryId401 | GetApiCategoryId404>,
     GetApiCategoryIdQueryResponse,
     typeof queryKey
   >({
@@ -383,7 +521,7 @@ export function useGetApiCategoryId<
     query?: Partial<
       QueryObserverOptions<
         GetApiCategoryIdQueryResponse,
-        ResponseErrorConfig<GetApiCategoryId404>,
+        ResponseErrorConfig<GetApiCategoryId401 | GetApiCategoryId404>,
         TData,
         TQueryData,
         TQueryKey
@@ -403,9 +541,10 @@ export function useGetApiCategoryId<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCategoryId404>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCategoryId401 | GetApiCategoryId404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -422,7 +561,7 @@ export function getApiCmspostQueryOptions(
   const queryKey = getApiCmspostQueryKey();
   return queryOptions<
     GetApiCmspostQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCmspost401>,
     GetApiCmspostQueryResponse,
     typeof queryKey
   >({
@@ -445,7 +584,7 @@ export function useGetApiCmspost<
     query?: Partial<
       QueryObserverOptions<
         GetApiCmspostQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCmspost401>,
         TData,
         TQueryData,
         TQueryKey
@@ -465,7 +604,7 @@ export function useGetApiCmspost<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCmspost401>> & {
     queryKey: TQueryKey;
   };
 
@@ -488,7 +627,7 @@ export function getApiCmspostIdQueryOptions(
   const queryKey = getApiCmspostIdQueryKey(id);
   return queryOptions<
     GetApiCmspostIdQueryResponse,
-    ResponseErrorConfig<GetApiCmspostId404>,
+    ResponseErrorConfig<GetApiCmspostId401 | GetApiCmspostId404>,
     GetApiCmspostIdQueryResponse,
     typeof queryKey
   >({
@@ -516,7 +655,7 @@ export function useGetApiCmspostId<
     query?: Partial<
       QueryObserverOptions<
         GetApiCmspostIdQueryResponse,
-        ResponseErrorConfig<GetApiCmspostId404>,
+        ResponseErrorConfig<GetApiCmspostId401 | GetApiCmspostId404>,
         TData,
         TQueryData,
         TQueryKey
@@ -536,9 +675,10 @@ export function useGetApiCmspostId<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCmspostId404>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCmspostId401 | GetApiCmspostId404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -558,7 +698,7 @@ export function getApiCmspostPublishedQueryOptions(
   const queryKey = getApiCmspostPublishedQueryKey();
   return queryOptions<
     GetApiCmspostPublishedQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCmspostPublished401>,
     GetApiCmspostPublishedQueryResponse,
     typeof queryKey
   >({
@@ -584,7 +724,7 @@ export function useGetApiCmspostPublished<
     query?: Partial<
       QueryObserverOptions<
         GetApiCmspostPublishedQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCmspostPublished401>,
         TData,
         TQueryData,
         TQueryKey
@@ -605,7 +745,7 @@ export function useGetApiCmspostPublished<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCmspostPublished401>> & {
     queryKey: TQueryKey;
   };
 
@@ -629,7 +769,9 @@ export function getApiCmspostPublishedSlugQueryOptions(
   const queryKey = getApiCmspostPublishedSlugQueryKey(slug);
   return queryOptions<
     GetApiCmspostPublishedSlugQueryResponse,
-    ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+    ResponseErrorConfig<
+      GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404
+    >,
     GetApiCmspostPublishedSlugQueryResponse,
     typeof queryKey
   >({
@@ -657,7 +799,9 @@ export function useGetApiCmspostPublishedSlug<
     query?: Partial<
       QueryObserverOptions<
         GetApiCmspostPublishedSlugQueryResponse,
-        ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+        ResponseErrorConfig<
+          GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404
+        >,
         TData,
         TQueryData,
         TQueryKey
@@ -680,7 +824,9 @@ export function useGetApiCmspostPublishedSlug<
     queryClient,
   ) as UseQueryResult<
     TData,
-    ResponseErrorConfig<GetApiCmspostPublishedSlug404>
+    ResponseErrorConfig<
+      GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404
+    >
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -698,7 +844,7 @@ export function getApiCustomerQueryOptions(
   const queryKey = getApiCustomerQueryKey();
   return queryOptions<
     GetApiCustomerQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCustomer401>,
     GetApiCustomerQueryResponse,
     typeof queryKey
   >({
@@ -721,7 +867,7 @@ export function useGetApiCustomer<
     query?: Partial<
       QueryObserverOptions<
         GetApiCustomerQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCustomer401>,
         TData,
         TQueryData,
         TQueryKey
@@ -741,7 +887,7 @@ export function useGetApiCustomer<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCustomer401>> & {
     queryKey: TQueryKey;
   };
 
@@ -763,7 +909,7 @@ export function getApiEquipmentQueryOptions(
   const queryKey = getApiEquipmentQueryKey();
   return queryOptions<
     GetApiEquipmentQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiEquipment401>,
     GetApiEquipmentQueryResponse,
     typeof queryKey
   >({
@@ -786,7 +932,7 @@ export function useGetApiEquipment<
     query?: Partial<
       QueryObserverOptions<
         GetApiEquipmentQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiEquipment401>,
         TData,
         TQueryData,
         TQueryKey
@@ -806,7 +952,7 @@ export function useGetApiEquipment<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiEquipment401>> & {
     queryKey: TQueryKey;
   };
 
@@ -830,7 +976,7 @@ export function getApiEquipmentIdQueryOptions(
   const queryKey = getApiEquipmentIdQueryKey(id);
   return queryOptions<
     GetApiEquipmentIdQueryResponse,
-    ResponseErrorConfig<GetApiEquipmentId404>,
+    ResponseErrorConfig<GetApiEquipmentId401 | GetApiEquipmentId404>,
     GetApiEquipmentIdQueryResponse,
     typeof queryKey
   >({
@@ -858,7 +1004,7 @@ export function useGetApiEquipmentId<
     query?: Partial<
       QueryObserverOptions<
         GetApiEquipmentIdQueryResponse,
-        ResponseErrorConfig<GetApiEquipmentId404>,
+        ResponseErrorConfig<GetApiEquipmentId401 | GetApiEquipmentId404>,
         TData,
         TQueryData,
         TQueryKey
@@ -878,9 +1024,10 @@ export function useGetApiEquipmentId<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiEquipmentId404>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiEquipmentId401 | GetApiEquipmentId404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -897,7 +1044,7 @@ export function getApiOrderQueryOptions(
   const queryKey = getApiOrderQueryKey();
   return queryOptions<
     GetApiOrderQueryResponse,
-    ResponseErrorConfig<GetApiOrder400>,
+    ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>,
     GetApiOrderQueryResponse,
     typeof queryKey
   >({
@@ -920,7 +1067,7 @@ export function useGetApiOrder<
     query?: Partial<
       QueryObserverOptions<
         GetApiOrderQueryResponse,
-        ResponseErrorConfig<GetApiOrder400>,
+        ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>,
         TData,
         TQueryData,
         TQueryKey
@@ -940,9 +1087,149 @@ export function useGetApiOrder<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiOrder400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderIdQueryKey = (id: GetApiOrderIdPathParams["id"]) =>
+  [{ url: "/api/Order/:id", params: { id: id } }] as const;
+
+export type GetApiOrderIdQueryKey = ReturnType<typeof getApiOrderIdQueryKey>;
+
+export function getApiOrderIdQueryOptions(
+  id: GetApiOrderIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderIdQueryKey(id);
+  return queryOptions<
+    GetApiOrderIdQueryResponse,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >,
+    GetApiOrderIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderId(id, { ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/:id}
+ */
+export function useGetApiOrderId<
+  TData = GetApiOrderIdQueryResponse,
+  TQueryData = GetApiOrderIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderIdQueryKey,
+>(
+  id: GetApiOrderIdPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiOrderIdQueryResponse,
+        ResponseErrorConfig<
+          | GetApiOrderId400
+          | GetApiOrderId401
+          | GetApiOrderId403
+          | GetApiOrderId404
+        >,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiOrderIdQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiOrderIdQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiUsersQueryKey = () => [{ url: "/api/Users" }] as const;
+
+export type GetApiUsersQueryKey = ReturnType<typeof getApiUsersQueryKey>;
+
+export function getApiUsersQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiUsersQueryKey();
+  return queryOptions<
+    GetApiUsersQueryResponse,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+    GetApiUsersQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiUsers({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Users}
+ */
+export function useGetApiUsers<
+  TData = GetApiUsersQueryResponse,
+  TQueryData = GetApiUsersQueryResponse,
+  TQueryKey extends QueryKey = GetApiUsersQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiUsersQueryResponse,
+        ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiUsersQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiUsersQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -962,7 +1249,7 @@ export function getApiWarehouseQueryOptions(
   const queryKey = getApiWarehouseQueryKey();
   return queryOptions<
     GetApiWarehouseQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiWarehouse401>,
     GetApiWarehouseQueryResponse,
     typeof queryKey
   >({
@@ -985,7 +1272,7 @@ export function useGetApiWarehouse<
     query?: Partial<
       QueryObserverOptions<
         GetApiWarehouseQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiWarehouse401>,
         TData,
         TQueryData,
         TQueryKey
@@ -1005,7 +1292,7 @@ export function useGetApiWarehouse<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiWarehouse401>> & {
     queryKey: TQueryKey;
   };
 
@@ -1029,7 +1316,7 @@ export function getApiWarehouseIdQueryOptions(
   const queryKey = getApiWarehouseIdQueryKey(id);
   return queryOptions<
     GetApiWarehouseIdQueryResponse,
-    ResponseErrorConfig<GetApiWarehouseId404>,
+    ResponseErrorConfig<GetApiWarehouseId401 | GetApiWarehouseId404>,
     GetApiWarehouseIdQueryResponse,
     typeof queryKey
   >({
@@ -1057,7 +1344,7 @@ export function useGetApiWarehouseId<
     query?: Partial<
       QueryObserverOptions<
         GetApiWarehouseIdQueryResponse,
-        ResponseErrorConfig<GetApiWarehouseId404>,
+        ResponseErrorConfig<GetApiWarehouseId401 | GetApiWarehouseId404>,
         TData,
         TQueryData,
         TQueryKey
@@ -1077,7 +1364,71 @@ export function useGetApiWarehouseId<
       queryKey,
     } as unknown as QueryObserverOptions,
     queryClient,
-  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiWarehouseId404>> & {
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiWarehouseId401 | GetApiWarehouseId404>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiAuthMeSuspenseQueryKey = () =>
+  [{ url: "/api/Auth/me" }] as const;
+
+export type GetApiAuthMeSuspenseQueryKey = ReturnType<
+  typeof getApiAuthMeSuspenseQueryKey
+>;
+
+export function getApiAuthMeSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiAuthMeSuspenseQueryKey();
+  return queryOptions<
+    GetApiAuthMeQueryResponse,
+    ResponseErrorConfig<GetApiAuthMe401>,
+    GetApiAuthMeQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiAuthMe({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Auth/me}
+ */
+export function useGetApiAuthMeSuspense<
+  TData = GetApiAuthMeQueryResponse,
+  TQueryKey extends QueryKey = GetApiAuthMeSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiAuthMeQueryResponse,
+        ResponseErrorConfig<GetApiAuthMe401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiAuthMeSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiAuthMeSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiAuthMe401>> & {
     queryKey: TQueryKey;
   };
 
@@ -1099,7 +1450,7 @@ export function getApiBrandSuspenseQueryOptions(
   const queryKey = getApiBrandSuspenseQueryKey();
   return queryOptions<
     GetApiBrandQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiBrand401>,
     GetApiBrandQueryResponse,
     typeof queryKey
   >({
@@ -1121,7 +1472,7 @@ export function useGetApiBrandSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiBrandQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiBrand401>,
         TData,
         TQueryKey
       >
@@ -1140,7 +1491,7 @@ export function useGetApiBrandSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiBrand401>> & {
     queryKey: TQueryKey;
   };
 
@@ -1164,7 +1515,7 @@ export function getApiBrandIdSuspenseQueryOptions(
   const queryKey = getApiBrandIdSuspenseQueryKey(id);
   return queryOptions<
     GetApiBrandIdQueryResponse,
-    ResponseErrorConfig<GetApiBrandId404>,
+    ResponseErrorConfig<GetApiBrandId401 | GetApiBrandId404>,
     GetApiBrandIdQueryResponse,
     typeof queryKey
   >({
@@ -1188,7 +1539,7 @@ export function useGetApiBrandIdSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiBrandIdQueryResponse,
-        ResponseErrorConfig<GetApiBrandId404>,
+        ResponseErrorConfig<GetApiBrandId401 | GetApiBrandId404>,
         TData,
         TQueryKey
       >
@@ -1208,9 +1559,10 @@ export function useGetApiBrandIdSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiBrandId404>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiBrandId401 | GetApiBrandId404>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1230,7 +1582,7 @@ export function getApiCategorySuspenseQueryOptions(
   const queryKey = getApiCategorySuspenseQueryKey();
   return queryOptions<
     GetApiCategoryQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCategory401>,
     GetApiCategoryQueryResponse,
     typeof queryKey
   >({
@@ -1252,7 +1604,7 @@ export function useGetApiCategorySuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCategoryQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCategory401>,
         TData,
         TQueryKey
       >
@@ -1272,7 +1624,7 @@ export function useGetApiCategorySuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiCategory401>> & {
     queryKey: TQueryKey;
   };
 
@@ -1296,7 +1648,7 @@ export function getApiCategoryIdSuspenseQueryOptions(
   const queryKey = getApiCategoryIdSuspenseQueryKey(id);
   return queryOptions<
     GetApiCategoryIdQueryResponse,
-    ResponseErrorConfig<GetApiCategoryId404>,
+    ResponseErrorConfig<GetApiCategoryId401 | GetApiCategoryId404>,
     GetApiCategoryIdQueryResponse,
     typeof queryKey
   >({
@@ -1323,7 +1675,7 @@ export function useGetApiCategoryIdSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCategoryIdQueryResponse,
-        ResponseErrorConfig<GetApiCategoryId404>,
+        ResponseErrorConfig<GetApiCategoryId401 | GetApiCategoryId404>,
         TData,
         TQueryKey
       >
@@ -1345,7 +1697,7 @@ export function useGetApiCategoryIdSuspense<
     queryClient,
   ) as UseSuspenseQueryResult<
     TData,
-    ResponseErrorConfig<GetApiCategoryId404>
+    ResponseErrorConfig<GetApiCategoryId401 | GetApiCategoryId404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -1366,7 +1718,7 @@ export function getApiCmspostSuspenseQueryOptions(
   const queryKey = getApiCmspostSuspenseQueryKey();
   return queryOptions<
     GetApiCmspostQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCmspost401>,
     GetApiCmspostQueryResponse,
     typeof queryKey
   >({
@@ -1388,7 +1740,7 @@ export function useGetApiCmspostSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCmspostQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCmspost401>,
         TData,
         TQueryKey
       >
@@ -1407,7 +1759,7 @@ export function useGetApiCmspostSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiCmspost401>> & {
     queryKey: TQueryKey;
   };
 
@@ -1431,7 +1783,7 @@ export function getApiCmspostIdSuspenseQueryOptions(
   const queryKey = getApiCmspostIdSuspenseQueryKey(id);
   return queryOptions<
     GetApiCmspostIdQueryResponse,
-    ResponseErrorConfig<GetApiCmspostId404>,
+    ResponseErrorConfig<GetApiCmspostId401 | GetApiCmspostId404>,
     GetApiCmspostIdQueryResponse,
     typeof queryKey
   >({
@@ -1458,7 +1810,7 @@ export function useGetApiCmspostIdSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCmspostIdQueryResponse,
-        ResponseErrorConfig<GetApiCmspostId404>,
+        ResponseErrorConfig<GetApiCmspostId401 | GetApiCmspostId404>,
         TData,
         TQueryKey
       >
@@ -1480,7 +1832,7 @@ export function useGetApiCmspostIdSuspense<
     queryClient,
   ) as UseSuspenseQueryResult<
     TData,
-    ResponseErrorConfig<GetApiCmspostId404>
+    ResponseErrorConfig<GetApiCmspostId401 | GetApiCmspostId404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -1501,7 +1853,7 @@ export function getApiCmspostPublishedSuspenseQueryOptions(
   const queryKey = getApiCmspostPublishedSuspenseQueryKey();
   return queryOptions<
     GetApiCmspostPublishedQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCmspostPublished401>,
     GetApiCmspostPublishedQueryResponse,
     typeof queryKey
   >({
@@ -1526,7 +1878,7 @@ export function useGetApiCmspostPublishedSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCmspostPublishedQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCmspostPublished401>,
         TData,
         TQueryKey
       >
@@ -1546,9 +1898,10 @@ export function useGetApiCmspostPublishedSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCmspostPublished401>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1570,7 +1923,9 @@ export function getApiCmspostPublishedSlugSuspenseQueryOptions(
   const queryKey = getApiCmspostPublishedSlugSuspenseQueryKey(slug);
   return queryOptions<
     GetApiCmspostPublishedSlugQueryResponse,
-    ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+    ResponseErrorConfig<
+      GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404
+    >,
     GetApiCmspostPublishedSlugQueryResponse,
     typeof queryKey
   >({
@@ -1597,7 +1952,9 @@ export function useGetApiCmspostPublishedSlugSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCmspostPublishedSlugQueryResponse,
-        ResponseErrorConfig<GetApiCmspostPublishedSlug404>,
+        ResponseErrorConfig<
+          GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404
+        >,
         TData,
         TQueryKey
       >
@@ -1620,7 +1977,9 @@ export function useGetApiCmspostPublishedSlugSuspense<
     queryClient,
   ) as UseSuspenseQueryResult<
     TData,
-    ResponseErrorConfig<GetApiCmspostPublishedSlug404>
+    ResponseErrorConfig<
+      GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404
+    >
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -1641,7 +2000,7 @@ export function getApiCustomerSuspenseQueryOptions(
   const queryKey = getApiCustomerSuspenseQueryKey();
   return queryOptions<
     GetApiCustomerQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiCustomer401>,
     GetApiCustomerQueryResponse,
     typeof queryKey
   >({
@@ -1663,7 +2022,7 @@ export function useGetApiCustomerSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiCustomerQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiCustomer401>,
         TData,
         TQueryKey
       >
@@ -1683,7 +2042,7 @@ export function useGetApiCustomerSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
+  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiCustomer401>> & {
     queryKey: TQueryKey;
   };
 
@@ -1705,7 +2064,7 @@ export function getApiEquipmentSuspenseQueryOptions(
   const queryKey = getApiEquipmentSuspenseQueryKey();
   return queryOptions<
     GetApiEquipmentQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiEquipment401>,
     GetApiEquipmentQueryResponse,
     typeof queryKey
   >({
@@ -1727,7 +2086,7 @@ export function useGetApiEquipmentSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiEquipmentQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiEquipment401>,
         TData,
         TQueryKey
       >
@@ -1747,9 +2106,10 @@ export function useGetApiEquipmentSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiEquipment401>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1771,7 +2131,7 @@ export function getApiEquipmentIdSuspenseQueryOptions(
   const queryKey = getApiEquipmentIdSuspenseQueryKey(id);
   return queryOptions<
     GetApiEquipmentIdQueryResponse,
-    ResponseErrorConfig<GetApiEquipmentId404>,
+    ResponseErrorConfig<GetApiEquipmentId401 | GetApiEquipmentId404>,
     GetApiEquipmentIdQueryResponse,
     typeof queryKey
   >({
@@ -1798,7 +2158,7 @@ export function useGetApiEquipmentIdSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiEquipmentIdQueryResponse,
-        ResponseErrorConfig<GetApiEquipmentId404>,
+        ResponseErrorConfig<GetApiEquipmentId401 | GetApiEquipmentId404>,
         TData,
         TQueryKey
       >
@@ -1820,7 +2180,7 @@ export function useGetApiEquipmentIdSuspense<
     queryClient,
   ) as UseSuspenseQueryResult<
     TData,
-    ResponseErrorConfig<GetApiEquipmentId404>
+    ResponseErrorConfig<GetApiEquipmentId401 | GetApiEquipmentId404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -1841,7 +2201,7 @@ export function getApiOrderSuspenseQueryOptions(
   const queryKey = getApiOrderSuspenseQueryKey();
   return queryOptions<
     GetApiOrderQueryResponse,
-    ResponseErrorConfig<GetApiOrder400>,
+    ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>,
     GetApiOrderQueryResponse,
     typeof queryKey
   >({
@@ -1863,7 +2223,7 @@ export function useGetApiOrderSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiOrderQueryResponse,
-        ResponseErrorConfig<GetApiOrder400>,
+        ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>,
         TData,
         TQueryKey
       >
@@ -1882,9 +2242,152 @@ export function useGetApiOrderSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GetApiOrder400>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderIdSuspenseQueryKey = (
+  id: GetApiOrderIdPathParams["id"],
+) => [{ url: "/api/Order/:id", params: { id: id } }] as const;
+
+export type GetApiOrderIdSuspenseQueryKey = ReturnType<
+  typeof getApiOrderIdSuspenseQueryKey
+>;
+
+export function getApiOrderIdSuspenseQueryOptions(
+  id: GetApiOrderIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderIdSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiOrderIdQueryResponse,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >,
+    GetApiOrderIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderId(id, { ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/:id}
+ */
+export function useGetApiOrderIdSuspense<
+  TData = GetApiOrderIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderIdSuspenseQueryKey,
+>(
+  id: GetApiOrderIdPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiOrderIdQueryResponse,
+        ResponseErrorConfig<
+          | GetApiOrderId400
+          | GetApiOrderId401
+          | GetApiOrderId403
+          | GetApiOrderId404
+        >,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderIdSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiOrderIdSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiUsersSuspenseQueryKey = () =>
+  [{ url: "/api/Users" }] as const;
+
+export type GetApiUsersSuspenseQueryKey = ReturnType<
+  typeof getApiUsersSuspenseQueryKey
+>;
+
+export function getApiUsersSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiUsersSuspenseQueryKey();
+  return queryOptions<
+    GetApiUsersQueryResponse,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+    GetApiUsersQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiUsers({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Users}
+ */
+export function useGetApiUsersSuspense<
+  TData = GetApiUsersQueryResponse,
+  TQueryKey extends QueryKey = GetApiUsersSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiUsersQueryResponse,
+        ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiUsersSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiUsersSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1904,7 +2407,7 @@ export function getApiWarehouseSuspenseQueryOptions(
   const queryKey = getApiWarehouseSuspenseQueryKey();
   return queryOptions<
     GetApiWarehouseQueryResponse,
-    ResponseErrorConfig<Error>,
+    ResponseErrorConfig<GetApiWarehouse401>,
     GetApiWarehouseQueryResponse,
     typeof queryKey
   >({
@@ -1926,7 +2429,7 @@ export function useGetApiWarehouseSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiWarehouseQueryResponse,
-        ResponseErrorConfig<Error>,
+        ResponseErrorConfig<GetApiWarehouse401>,
         TData,
         TQueryKey
       >
@@ -1946,9 +2449,10 @@ export function useGetApiWarehouseSuspense<
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
     queryClient,
-  ) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & {
-    queryKey: TQueryKey;
-  };
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiWarehouse401>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1970,7 +2474,7 @@ export function getApiWarehouseIdSuspenseQueryOptions(
   const queryKey = getApiWarehouseIdSuspenseQueryKey(id);
   return queryOptions<
     GetApiWarehouseIdQueryResponse,
-    ResponseErrorConfig<GetApiWarehouseId404>,
+    ResponseErrorConfig<GetApiWarehouseId401 | GetApiWarehouseId404>,
     GetApiWarehouseIdQueryResponse,
     typeof queryKey
   >({
@@ -1997,7 +2501,7 @@ export function useGetApiWarehouseIdSuspense<
     query?: Partial<
       UseSuspenseQueryOptions<
         GetApiWarehouseIdQueryResponse,
-        ResponseErrorConfig<GetApiWarehouseId404>,
+        ResponseErrorConfig<GetApiWarehouseId401 | GetApiWarehouseId404>,
         TData,
         TQueryKey
       >
@@ -2019,12 +2523,164 @@ export function useGetApiWarehouseIdSuspense<
     queryClient,
   ) as UseSuspenseQueryResult<
     TData,
-    ResponseErrorConfig<GetApiWarehouseId404>
+    ResponseErrorConfig<GetApiWarehouseId401 | GetApiWarehouseId404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
   return query;
+}
+
+export const postApiAuthLoginMutationKey = () =>
+  [{ url: "/api/Auth/login" }] as const;
+
+export type PostApiAuthLoginMutationKey = ReturnType<
+  typeof postApiAuthLoginMutationKey
+>;
+
+export function postApiAuthLoginMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiAuthLoginMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiAuthLoginMutationKey();
+  return mutationOptions<
+    PostApiAuthLoginMutationResponse,
+    ResponseErrorConfig<PostApiAuthLogin400 | PostApiAuthLogin401>,
+    { data?: PostApiAuthLoginMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiAuthLogin(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Auth/login}
+ */
+export function usePostApiAuthLogin<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiAuthLoginMutationResponse,
+      ResponseErrorConfig<PostApiAuthLogin400 | PostApiAuthLogin401>,
+      { data?: PostApiAuthLoginMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiAuthLoginMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? postApiAuthLoginMutationKey();
+
+  const baseOptions = postApiAuthLoginMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PostApiAuthLoginMutationResponse,
+    ResponseErrorConfig<PostApiAuthLogin400 | PostApiAuthLogin401>,
+    { data?: PostApiAuthLoginMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiAuthLoginMutationResponse,
+    ResponseErrorConfig<PostApiAuthLogin400 | PostApiAuthLogin401>,
+    { data?: PostApiAuthLoginMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiAuthLoginMutationResponse,
+    ResponseErrorConfig<PostApiAuthLogin400 | PostApiAuthLogin401>,
+    { data?: PostApiAuthLoginMutationRequest },
+    TContext
+  >;
+}
+
+export const postApiAuthRegisterMutationKey = () =>
+  [{ url: "/api/Auth/register" }] as const;
+
+export type PostApiAuthRegisterMutationKey = ReturnType<
+  typeof postApiAuthRegisterMutationKey
+>;
+
+export function postApiAuthRegisterMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiAuthRegisterMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiAuthRegisterMutationKey();
+  return mutationOptions<
+    PostApiAuthRegisterMutationResponse,
+    ResponseErrorConfig<PostApiAuthRegister400>,
+    { data?: PostApiAuthRegisterMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiAuthRegister(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Auth/register}
+ */
+export function usePostApiAuthRegister<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiAuthRegisterMutationResponse,
+      ResponseErrorConfig<PostApiAuthRegister400>,
+      { data?: PostApiAuthRegisterMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiAuthRegisterMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? postApiAuthRegisterMutationKey();
+
+  const baseOptions = postApiAuthRegisterMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PostApiAuthRegisterMutationResponse,
+    ResponseErrorConfig<PostApiAuthRegister400>,
+    { data?: PostApiAuthRegisterMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiAuthRegisterMutationResponse,
+    ResponseErrorConfig<PostApiAuthRegister400>,
+    { data?: PostApiAuthRegisterMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiAuthRegisterMutationResponse,
+    ResponseErrorConfig<PostApiAuthRegister400>,
+    { data?: PostApiAuthRegisterMutationRequest },
+    TContext
+  >;
 }
 
 export const postApiBrandMutationKey = () => [{ url: "/api/Brand" }] as const;
@@ -2041,7 +2697,7 @@ export function postApiBrandMutationOptions<TContext = unknown>(
   const mutationKey = postApiBrandMutationKey();
   return mutationOptions<
     PostApiBrandMutationResponse,
-    ResponseErrorConfig<PostApiBrand400>,
+    ResponseErrorConfig<PostApiBrand400 | PostApiBrand401>,
     { data?: PostApiBrandMutationRequest },
     TContext
   >({
@@ -2059,7 +2715,7 @@ export function usePostApiBrand<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiBrandMutationResponse,
-      ResponseErrorConfig<PostApiBrand400>,
+      ResponseErrorConfig<PostApiBrand400 | PostApiBrand401>,
       { data?: PostApiBrandMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -2074,14 +2730,14 @@ export function usePostApiBrand<TContext>(
 
   const baseOptions = postApiBrandMutationOptions(config) as UseMutationOptions<
     PostApiBrandMutationResponse,
-    ResponseErrorConfig<PostApiBrand400>,
+    ResponseErrorConfig<PostApiBrand400 | PostApiBrand401>,
     { data?: PostApiBrandMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiBrandMutationResponse,
-    ResponseErrorConfig<PostApiBrand400>,
+    ResponseErrorConfig<PostApiBrand400 | PostApiBrand401>,
     { data?: PostApiBrandMutationRequest },
     TContext
   >(
@@ -2093,7 +2749,7 @@ export function usePostApiBrand<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiBrandMutationResponse,
-    ResponseErrorConfig<PostApiBrand400>,
+    ResponseErrorConfig<PostApiBrand400 | PostApiBrand401>,
     { data?: PostApiBrandMutationRequest },
     TContext
   >;
@@ -2114,7 +2770,7 @@ export function putApiBrandIdMutationOptions<TContext = unknown>(
   const mutationKey = putApiBrandIdMutationKey();
   return mutationOptions<
     PutApiBrandIdMutationResponse,
-    ResponseErrorConfig<PutApiBrandId404>,
+    ResponseErrorConfig<PutApiBrandId401 | PutApiBrandId404>,
     { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
     TContext
   >({
@@ -2132,7 +2788,7 @@ export function usePutApiBrandId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PutApiBrandIdMutationResponse,
-      ResponseErrorConfig<PutApiBrandId404>,
+      ResponseErrorConfig<PutApiBrandId401 | PutApiBrandId404>,
       {
         id: PutApiBrandIdPathParams["id"];
         data?: PutApiBrandIdMutationRequest;
@@ -2152,14 +2808,14 @@ export function usePutApiBrandId<TContext>(
     config,
   ) as UseMutationOptions<
     PutApiBrandIdMutationResponse,
-    ResponseErrorConfig<PutApiBrandId404>,
+    ResponseErrorConfig<PutApiBrandId401 | PutApiBrandId404>,
     { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
     TContext
   >;
 
   return useMutation<
     PutApiBrandIdMutationResponse,
-    ResponseErrorConfig<PutApiBrandId404>,
+    ResponseErrorConfig<PutApiBrandId401 | PutApiBrandId404>,
     { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
     TContext
   >(
@@ -2171,7 +2827,7 @@ export function usePutApiBrandId<TContext>(
     queryClient,
   ) as UseMutationResult<
     PutApiBrandIdMutationResponse,
-    ResponseErrorConfig<PutApiBrandId404>,
+    ResponseErrorConfig<PutApiBrandId401 | PutApiBrandId404>,
     { id: PutApiBrandIdPathParams["id"]; data?: PutApiBrandIdMutationRequest },
     TContext
   >;
@@ -2190,7 +2846,9 @@ export function deleteApiBrandIdMutationOptions<TContext = unknown>(
   const mutationKey = deleteApiBrandIdMutationKey();
   return mutationOptions<
     DeleteApiBrandIdMutationResponse,
-    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    ResponseErrorConfig<
+      DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404
+    >,
     { id: DeleteApiBrandIdPathParams["id"] },
     TContext
   >({
@@ -2208,7 +2866,9 @@ export function useDeleteApiBrandId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       DeleteApiBrandIdMutationResponse,
-      ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+      ResponseErrorConfig<
+        DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404
+      >,
       { id: DeleteApiBrandIdPathParams["id"] },
       TContext
     > & { client?: QueryClient };
@@ -2224,14 +2884,18 @@ export function useDeleteApiBrandId<TContext>(
     config,
   ) as UseMutationOptions<
     DeleteApiBrandIdMutationResponse,
-    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    ResponseErrorConfig<
+      DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404
+    >,
     { id: DeleteApiBrandIdPathParams["id"] },
     TContext
   >;
 
   return useMutation<
     DeleteApiBrandIdMutationResponse,
-    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    ResponseErrorConfig<
+      DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404
+    >,
     { id: DeleteApiBrandIdPathParams["id"] },
     TContext
   >(
@@ -2243,7 +2907,9 @@ export function useDeleteApiBrandId<TContext>(
     queryClient,
   ) as UseMutationResult<
     DeleteApiBrandIdMutationResponse,
-    ResponseErrorConfig<DeleteApiBrandId400 | DeleteApiBrandId404>,
+    ResponseErrorConfig<
+      DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404
+    >,
     { id: DeleteApiBrandIdPathParams["id"] },
     TContext
   >;
@@ -2264,7 +2930,7 @@ export function postApiCategoryMutationOptions<TContext = unknown>(
   const mutationKey = postApiCategoryMutationKey();
   return mutationOptions<
     PostApiCategoryMutationResponse,
-    ResponseErrorConfig<PostApiCategory400>,
+    ResponseErrorConfig<PostApiCategory400 | PostApiCategory401>,
     { data?: PostApiCategoryMutationRequest },
     TContext
   >({
@@ -2282,7 +2948,7 @@ export function usePostApiCategory<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiCategoryMutationResponse,
-      ResponseErrorConfig<PostApiCategory400>,
+      ResponseErrorConfig<PostApiCategory400 | PostApiCategory401>,
       { data?: PostApiCategoryMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -2300,14 +2966,14 @@ export function usePostApiCategory<TContext>(
     config,
   ) as UseMutationOptions<
     PostApiCategoryMutationResponse,
-    ResponseErrorConfig<PostApiCategory400>,
+    ResponseErrorConfig<PostApiCategory400 | PostApiCategory401>,
     { data?: PostApiCategoryMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiCategoryMutationResponse,
-    ResponseErrorConfig<PostApiCategory400>,
+    ResponseErrorConfig<PostApiCategory400 | PostApiCategory401>,
     { data?: PostApiCategoryMutationRequest },
     TContext
   >(
@@ -2319,7 +2985,7 @@ export function usePostApiCategory<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiCategoryMutationResponse,
-    ResponseErrorConfig<PostApiCategory400>,
+    ResponseErrorConfig<PostApiCategory400 | PostApiCategory401>,
     { data?: PostApiCategoryMutationRequest },
     TContext
   >;
@@ -2340,7 +3006,7 @@ export function putApiCategoryIdMutationOptions<TContext = unknown>(
   const mutationKey = putApiCategoryIdMutationKey();
   return mutationOptions<
     PutApiCategoryIdMutationResponse,
-    ResponseErrorConfig<PutApiCategoryId404>,
+    ResponseErrorConfig<PutApiCategoryId401 | PutApiCategoryId404>,
     {
       id: PutApiCategoryIdPathParams["id"];
       data?: PutApiCategoryIdMutationRequest;
@@ -2361,7 +3027,7 @@ export function usePutApiCategoryId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PutApiCategoryIdMutationResponse,
-      ResponseErrorConfig<PutApiCategoryId404>,
+      ResponseErrorConfig<PutApiCategoryId401 | PutApiCategoryId404>,
       {
         id: PutApiCategoryIdPathParams["id"];
         data?: PutApiCategoryIdMutationRequest;
@@ -2382,7 +3048,7 @@ export function usePutApiCategoryId<TContext>(
     config,
   ) as UseMutationOptions<
     PutApiCategoryIdMutationResponse,
-    ResponseErrorConfig<PutApiCategoryId404>,
+    ResponseErrorConfig<PutApiCategoryId401 | PutApiCategoryId404>,
     {
       id: PutApiCategoryIdPathParams["id"];
       data?: PutApiCategoryIdMutationRequest;
@@ -2392,7 +3058,7 @@ export function usePutApiCategoryId<TContext>(
 
   return useMutation<
     PutApiCategoryIdMutationResponse,
-    ResponseErrorConfig<PutApiCategoryId404>,
+    ResponseErrorConfig<PutApiCategoryId401 | PutApiCategoryId404>,
     {
       id: PutApiCategoryIdPathParams["id"];
       data?: PutApiCategoryIdMutationRequest;
@@ -2407,7 +3073,7 @@ export function usePutApiCategoryId<TContext>(
     queryClient,
   ) as UseMutationResult<
     PutApiCategoryIdMutationResponse,
-    ResponseErrorConfig<PutApiCategoryId404>,
+    ResponseErrorConfig<PutApiCategoryId401 | PutApiCategoryId404>,
     {
       id: PutApiCategoryIdPathParams["id"];
       data?: PutApiCategoryIdMutationRequest;
@@ -2429,7 +3095,9 @@ export function deleteApiCategoryIdMutationOptions<TContext = unknown>(
   const mutationKey = deleteApiCategoryIdMutationKey();
   return mutationOptions<
     DeleteApiCategoryIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    ResponseErrorConfig<
+      DeleteApiCategoryId400 | DeleteApiCategoryId401 | DeleteApiCategoryId404
+    >,
     { id: DeleteApiCategoryIdPathParams["id"] },
     TContext
   >({
@@ -2447,7 +3115,9 @@ export function useDeleteApiCategoryId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       DeleteApiCategoryIdMutationResponse,
-      ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+      ResponseErrorConfig<
+        DeleteApiCategoryId400 | DeleteApiCategoryId401 | DeleteApiCategoryId404
+      >,
       { id: DeleteApiCategoryIdPathParams["id"] },
       TContext
     > & { client?: QueryClient };
@@ -2463,14 +3133,18 @@ export function useDeleteApiCategoryId<TContext>(
     config,
   ) as UseMutationOptions<
     DeleteApiCategoryIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    ResponseErrorConfig<
+      DeleteApiCategoryId400 | DeleteApiCategoryId401 | DeleteApiCategoryId404
+    >,
     { id: DeleteApiCategoryIdPathParams["id"] },
     TContext
   >;
 
   return useMutation<
     DeleteApiCategoryIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    ResponseErrorConfig<
+      DeleteApiCategoryId400 | DeleteApiCategoryId401 | DeleteApiCategoryId404
+    >,
     { id: DeleteApiCategoryIdPathParams["id"] },
     TContext
   >(
@@ -2482,7 +3156,9 @@ export function useDeleteApiCategoryId<TContext>(
     queryClient,
   ) as UseMutationResult<
     DeleteApiCategoryIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCategoryId400 | DeleteApiCategoryId404>,
+    ResponseErrorConfig<
+      DeleteApiCategoryId400 | DeleteApiCategoryId401 | DeleteApiCategoryId404
+    >,
     { id: DeleteApiCategoryIdPathParams["id"] },
     TContext
   >;
@@ -2503,7 +3179,7 @@ export function postApiCmspostMutationOptions<TContext = unknown>(
   const mutationKey = postApiCmspostMutationKey();
   return mutationOptions<
     PostApiCmspostMutationResponse,
-    ResponseErrorConfig<PostApiCmspost400>,
+    ResponseErrorConfig<PostApiCmspost400 | PostApiCmspost401>,
     { data?: PostApiCmspostMutationRequest },
     TContext
   >({
@@ -2521,7 +3197,7 @@ export function usePostApiCmspost<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiCmspostMutationResponse,
-      ResponseErrorConfig<PostApiCmspost400>,
+      ResponseErrorConfig<PostApiCmspost400 | PostApiCmspost401>,
       { data?: PostApiCmspostMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -2539,14 +3215,14 @@ export function usePostApiCmspost<TContext>(
     config,
   ) as UseMutationOptions<
     PostApiCmspostMutationResponse,
-    ResponseErrorConfig<PostApiCmspost400>,
+    ResponseErrorConfig<PostApiCmspost400 | PostApiCmspost401>,
     { data?: PostApiCmspostMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiCmspostMutationResponse,
-    ResponseErrorConfig<PostApiCmspost400>,
+    ResponseErrorConfig<PostApiCmspost400 | PostApiCmspost401>,
     { data?: PostApiCmspostMutationRequest },
     TContext
   >(
@@ -2558,7 +3234,7 @@ export function usePostApiCmspost<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiCmspostMutationResponse,
-    ResponseErrorConfig<PostApiCmspost400>,
+    ResponseErrorConfig<PostApiCmspost400 | PostApiCmspost401>,
     { data?: PostApiCmspostMutationRequest },
     TContext
   >;
@@ -2579,7 +3255,9 @@ export function putApiCmspostIdMutationOptions<TContext = unknown>(
   const mutationKey = putApiCmspostIdMutationKey();
   return mutationOptions<
     PutApiCmspostIdMutationResponse,
-    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    ResponseErrorConfig<
+      PutApiCmspostId400 | PutApiCmspostId401 | PutApiCmspostId404
+    >,
     {
       id: PutApiCmspostIdPathParams["id"];
       data?: PutApiCmspostIdMutationRequest;
@@ -2600,7 +3278,9 @@ export function usePutApiCmspostId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PutApiCmspostIdMutationResponse,
-      ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+      ResponseErrorConfig<
+        PutApiCmspostId400 | PutApiCmspostId401 | PutApiCmspostId404
+      >,
       {
         id: PutApiCmspostIdPathParams["id"];
         data?: PutApiCmspostIdMutationRequest;
@@ -2621,7 +3301,9 @@ export function usePutApiCmspostId<TContext>(
     config,
   ) as UseMutationOptions<
     PutApiCmspostIdMutationResponse,
-    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    ResponseErrorConfig<
+      PutApiCmspostId400 | PutApiCmspostId401 | PutApiCmspostId404
+    >,
     {
       id: PutApiCmspostIdPathParams["id"];
       data?: PutApiCmspostIdMutationRequest;
@@ -2631,7 +3313,9 @@ export function usePutApiCmspostId<TContext>(
 
   return useMutation<
     PutApiCmspostIdMutationResponse,
-    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    ResponseErrorConfig<
+      PutApiCmspostId400 | PutApiCmspostId401 | PutApiCmspostId404
+    >,
     {
       id: PutApiCmspostIdPathParams["id"];
       data?: PutApiCmspostIdMutationRequest;
@@ -2646,7 +3330,9 @@ export function usePutApiCmspostId<TContext>(
     queryClient,
   ) as UseMutationResult<
     PutApiCmspostIdMutationResponse,
-    ResponseErrorConfig<PutApiCmspostId400 | PutApiCmspostId404>,
+    ResponseErrorConfig<
+      PutApiCmspostId400 | PutApiCmspostId401 | PutApiCmspostId404
+    >,
     {
       id: PutApiCmspostIdPathParams["id"];
       data?: PutApiCmspostIdMutationRequest;
@@ -2668,7 +3354,7 @@ export function deleteApiCmspostIdMutationOptions<TContext = unknown>(
   const mutationKey = deleteApiCmspostIdMutationKey();
   return mutationOptions<
     DeleteApiCmspostIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCmspostId404>,
+    ResponseErrorConfig<DeleteApiCmspostId401 | DeleteApiCmspostId404>,
     { id: DeleteApiCmspostIdPathParams["id"] },
     TContext
   >({
@@ -2686,7 +3372,7 @@ export function useDeleteApiCmspostId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       DeleteApiCmspostIdMutationResponse,
-      ResponseErrorConfig<DeleteApiCmspostId404>,
+      ResponseErrorConfig<DeleteApiCmspostId401 | DeleteApiCmspostId404>,
       { id: DeleteApiCmspostIdPathParams["id"] },
       TContext
     > & { client?: QueryClient };
@@ -2702,14 +3388,14 @@ export function useDeleteApiCmspostId<TContext>(
     config,
   ) as UseMutationOptions<
     DeleteApiCmspostIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCmspostId404>,
+    ResponseErrorConfig<DeleteApiCmspostId401 | DeleteApiCmspostId404>,
     { id: DeleteApiCmspostIdPathParams["id"] },
     TContext
   >;
 
   return useMutation<
     DeleteApiCmspostIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCmspostId404>,
+    ResponseErrorConfig<DeleteApiCmspostId401 | DeleteApiCmspostId404>,
     { id: DeleteApiCmspostIdPathParams["id"] },
     TContext
   >(
@@ -2721,7 +3407,7 @@ export function useDeleteApiCmspostId<TContext>(
     queryClient,
   ) as UseMutationResult<
     DeleteApiCmspostIdMutationResponse,
-    ResponseErrorConfig<DeleteApiCmspostId404>,
+    ResponseErrorConfig<DeleteApiCmspostId401 | DeleteApiCmspostId404>,
     { id: DeleteApiCmspostIdPathParams["id"] },
     TContext
   >;
@@ -2742,7 +3428,9 @@ export function postApiEquipmentMutationOptions<TContext = unknown>(
   const mutationKey = postApiEquipmentMutationKey();
   return mutationOptions<
     PostApiEquipmentMutationResponse,
-    ResponseErrorConfig<PostApiEquipment400 | PostApiEquipment500>,
+    ResponseErrorConfig<
+      PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500
+    >,
     { data?: PostApiEquipmentMutationRequest },
     TContext
   >({
@@ -2760,7 +3448,9 @@ export function usePostApiEquipment<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiEquipmentMutationResponse,
-      ResponseErrorConfig<PostApiEquipment400 | PostApiEquipment500>,
+      ResponseErrorConfig<
+        PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500
+      >,
       { data?: PostApiEquipmentMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -2778,14 +3468,18 @@ export function usePostApiEquipment<TContext>(
     config,
   ) as UseMutationOptions<
     PostApiEquipmentMutationResponse,
-    ResponseErrorConfig<PostApiEquipment400 | PostApiEquipment500>,
+    ResponseErrorConfig<
+      PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500
+    >,
     { data?: PostApiEquipmentMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiEquipmentMutationResponse,
-    ResponseErrorConfig<PostApiEquipment400 | PostApiEquipment500>,
+    ResponseErrorConfig<
+      PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500
+    >,
     { data?: PostApiEquipmentMutationRequest },
     TContext
   >(
@@ -2797,7 +3491,9 @@ export function usePostApiEquipment<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiEquipmentMutationResponse,
-    ResponseErrorConfig<PostApiEquipment400 | PostApiEquipment500>,
+    ResponseErrorConfig<
+      PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500
+    >,
     { data?: PostApiEquipmentMutationRequest },
     TContext
   >;
@@ -2818,7 +3514,9 @@ export function putApiEquipmentIdMutationOptions<TContext = unknown>(
   const mutationKey = putApiEquipmentIdMutationKey();
   return mutationOptions<
     PutApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<PutApiEquipmentId400 | PutApiEquipmentId404>,
+    ResponseErrorConfig<
+      PutApiEquipmentId400 | PutApiEquipmentId401 | PutApiEquipmentId404
+    >,
     {
       id: PutApiEquipmentIdPathParams["id"];
       data?: PutApiEquipmentIdMutationRequest;
@@ -2839,7 +3537,9 @@ export function usePutApiEquipmentId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PutApiEquipmentIdMutationResponse,
-      ResponseErrorConfig<PutApiEquipmentId400 | PutApiEquipmentId404>,
+      ResponseErrorConfig<
+        PutApiEquipmentId400 | PutApiEquipmentId401 | PutApiEquipmentId404
+      >,
       {
         id: PutApiEquipmentIdPathParams["id"];
         data?: PutApiEquipmentIdMutationRequest;
@@ -2860,7 +3560,9 @@ export function usePutApiEquipmentId<TContext>(
     config,
   ) as UseMutationOptions<
     PutApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<PutApiEquipmentId400 | PutApiEquipmentId404>,
+    ResponseErrorConfig<
+      PutApiEquipmentId400 | PutApiEquipmentId401 | PutApiEquipmentId404
+    >,
     {
       id: PutApiEquipmentIdPathParams["id"];
       data?: PutApiEquipmentIdMutationRequest;
@@ -2870,7 +3572,9 @@ export function usePutApiEquipmentId<TContext>(
 
   return useMutation<
     PutApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<PutApiEquipmentId400 | PutApiEquipmentId404>,
+    ResponseErrorConfig<
+      PutApiEquipmentId400 | PutApiEquipmentId401 | PutApiEquipmentId404
+    >,
     {
       id: PutApiEquipmentIdPathParams["id"];
       data?: PutApiEquipmentIdMutationRequest;
@@ -2885,7 +3589,9 @@ export function usePutApiEquipmentId<TContext>(
     queryClient,
   ) as UseMutationResult<
     PutApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<PutApiEquipmentId400 | PutApiEquipmentId404>,
+    ResponseErrorConfig<
+      PutApiEquipmentId400 | PutApiEquipmentId401 | PutApiEquipmentId404
+    >,
     {
       id: PutApiEquipmentIdPathParams["id"];
       data?: PutApiEquipmentIdMutationRequest;
@@ -2907,7 +3613,7 @@ export function deleteApiEquipmentIdMutationOptions<TContext = unknown>(
   const mutationKey = deleteApiEquipmentIdMutationKey();
   return mutationOptions<
     DeleteApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<DeleteApiEquipmentId404>,
+    ResponseErrorConfig<DeleteApiEquipmentId401 | DeleteApiEquipmentId404>,
     { id: DeleteApiEquipmentIdPathParams["id"] },
     TContext
   >({
@@ -2925,7 +3631,7 @@ export function useDeleteApiEquipmentId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       DeleteApiEquipmentIdMutationResponse,
-      ResponseErrorConfig<DeleteApiEquipmentId404>,
+      ResponseErrorConfig<DeleteApiEquipmentId401 | DeleteApiEquipmentId404>,
       { id: DeleteApiEquipmentIdPathParams["id"] },
       TContext
     > & { client?: QueryClient };
@@ -2941,14 +3647,14 @@ export function useDeleteApiEquipmentId<TContext>(
     config,
   ) as UseMutationOptions<
     DeleteApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<DeleteApiEquipmentId404>,
+    ResponseErrorConfig<DeleteApiEquipmentId401 | DeleteApiEquipmentId404>,
     { id: DeleteApiEquipmentIdPathParams["id"] },
     TContext
   >;
 
   return useMutation<
     DeleteApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<DeleteApiEquipmentId404>,
+    ResponseErrorConfig<DeleteApiEquipmentId401 | DeleteApiEquipmentId404>,
     { id: DeleteApiEquipmentIdPathParams["id"] },
     TContext
   >(
@@ -2960,7 +3666,7 @@ export function useDeleteApiEquipmentId<TContext>(
     queryClient,
   ) as UseMutationResult<
     DeleteApiEquipmentIdMutationResponse,
-    ResponseErrorConfig<DeleteApiEquipmentId404>,
+    ResponseErrorConfig<DeleteApiEquipmentId401 | DeleteApiEquipmentId404>,
     { id: DeleteApiEquipmentIdPathParams["id"] },
     TContext
   >;
@@ -2981,7 +3687,7 @@ export function postApiFilesUploadMutationOptions<TContext = unknown>(
   const mutationKey = postApiFilesUploadMutationKey();
   return mutationOptions<
     PostApiFilesUploadMutationResponse,
-    ResponseErrorConfig<PostApiFilesUpload400>,
+    ResponseErrorConfig<PostApiFilesUpload400 | PostApiFilesUpload401>,
     { data?: PostApiFilesUploadMutationRequest },
     TContext
   >({
@@ -2999,7 +3705,7 @@ export function usePostApiFilesUpload<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiFilesUploadMutationResponse,
-      ResponseErrorConfig<PostApiFilesUpload400>,
+      ResponseErrorConfig<PostApiFilesUpload400 | PostApiFilesUpload401>,
       { data?: PostApiFilesUploadMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -3017,14 +3723,14 @@ export function usePostApiFilesUpload<TContext>(
     config,
   ) as UseMutationOptions<
     PostApiFilesUploadMutationResponse,
-    ResponseErrorConfig<PostApiFilesUpload400>,
+    ResponseErrorConfig<PostApiFilesUpload400 | PostApiFilesUpload401>,
     { data?: PostApiFilesUploadMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiFilesUploadMutationResponse,
-    ResponseErrorConfig<PostApiFilesUpload400>,
+    ResponseErrorConfig<PostApiFilesUpload400 | PostApiFilesUpload401>,
     { data?: PostApiFilesUploadMutationRequest },
     TContext
   >(
@@ -3036,7 +3742,7 @@ export function usePostApiFilesUpload<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiFilesUploadMutationResponse,
-    ResponseErrorConfig<PostApiFilesUpload400>,
+    ResponseErrorConfig<PostApiFilesUpload400 | PostApiFilesUpload401>,
     { data?: PostApiFilesUploadMutationRequest },
     TContext
   >;
@@ -3057,7 +3763,9 @@ export function postApiOrderCreateorderMutationOptions<TContext = unknown>(
   const mutationKey = postApiOrderCreateorderMutationKey();
   return mutationOptions<
     PostApiOrderCreateorderMutationResponse,
-    ResponseErrorConfig<PostApiOrderCreateorder400>,
+    ResponseErrorConfig<
+      PostApiOrderCreateorder400 | PostApiOrderCreateorder401
+    >,
     { data?: PostApiOrderCreateorderMutationRequest },
     TContext
   >({
@@ -3075,7 +3783,9 @@ export function usePostApiOrderCreateorder<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiOrderCreateorderMutationResponse,
-      ResponseErrorConfig<PostApiOrderCreateorder400>,
+      ResponseErrorConfig<
+        PostApiOrderCreateorder400 | PostApiOrderCreateorder401
+      >,
       { data?: PostApiOrderCreateorderMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -3093,14 +3803,18 @@ export function usePostApiOrderCreateorder<TContext>(
     config,
   ) as UseMutationOptions<
     PostApiOrderCreateorderMutationResponse,
-    ResponseErrorConfig<PostApiOrderCreateorder400>,
+    ResponseErrorConfig<
+      PostApiOrderCreateorder400 | PostApiOrderCreateorder401
+    >,
     { data?: PostApiOrderCreateorderMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiOrderCreateorderMutationResponse,
-    ResponseErrorConfig<PostApiOrderCreateorder400>,
+    ResponseErrorConfig<
+      PostApiOrderCreateorder400 | PostApiOrderCreateorder401
+    >,
     { data?: PostApiOrderCreateorderMutationRequest },
     TContext
   >(
@@ -3112,8 +3826,295 @@ export function usePostApiOrderCreateorder<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiOrderCreateorderMutationResponse,
-    ResponseErrorConfig<PostApiOrderCreateorder400>,
+    ResponseErrorConfig<
+      PostApiOrderCreateorder400 | PostApiOrderCreateorder401
+    >,
     { data?: PostApiOrderCreateorderMutationRequest },
+    TContext
+  >;
+}
+
+export const postApiUsersMutationKey = () => [{ url: "/api/Users" }] as const;
+
+export type PostApiUsersMutationKey = ReturnType<
+  typeof postApiUsersMutationKey
+>;
+
+export function postApiUsersMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiUsersMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiUsersMutationKey();
+  return mutationOptions<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiUsers(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Users}
+ */
+export function usePostApiUsers<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiUsersMutationResponse,
+      ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+      { data?: PostApiUsersMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiUsersMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? postApiUsersMutationKey();
+
+  const baseOptions = postApiUsersMutationOptions(config) as UseMutationOptions<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiUsersIdRolesMutationKey = () =>
+  [{ url: "/api/Users/:id/roles" }] as const;
+
+export type PutApiUsersIdRolesMutationKey = ReturnType<
+  typeof putApiUsersIdRolesMutationKey
+>;
+
+export function putApiUsersIdRolesMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiUsersIdRolesMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiUsersIdRolesMutationKey();
+  return mutationOptions<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id, data }) => {
+      return putApiUsersIdRoles(id, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Users/:id/roles}
+ */
+export function usePutApiUsersIdRoles<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiUsersIdRolesMutationResponse,
+      ResponseErrorConfig<
+        | PutApiUsersIdRoles400
+        | PutApiUsersIdRoles401
+        | PutApiUsersIdRoles403
+        | PutApiUsersIdRoles404
+      >,
+      {
+        id: PutApiUsersIdRolesPathParams["id"];
+        data?: PutApiUsersIdRolesMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiUsersIdRolesMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiUsersIdRolesMutationKey();
+
+  const baseOptions = putApiUsersIdRolesMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >;
+}
+
+export const deleteApiUsersIdMutationKey = () =>
+  [{ url: "/api/Users/:id" }] as const;
+
+export type DeleteApiUsersIdMutationKey = ReturnType<
+  typeof deleteApiUsersIdMutationKey
+>;
+
+export function deleteApiUsersIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const mutationKey = deleteApiUsersIdMutationKey();
+  return mutationOptions<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id }) => {
+      return deleteApiUsersId(id, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Users/:id}
+ */
+export function useDeleteApiUsersId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      DeleteApiUsersIdMutationResponse,
+      ResponseErrorConfig<
+        | DeleteApiUsersId400
+        | DeleteApiUsersId401
+        | DeleteApiUsersId403
+        | DeleteApiUsersId404
+      >,
+      { id: DeleteApiUsersIdPathParams["id"] },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteApiUsersIdMutationKey();
+
+  const baseOptions = deleteApiUsersIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
+    TContext
+  >;
+
+  return useMutation<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
     TContext
   >;
 }
@@ -3133,7 +4134,7 @@ export function postApiWarehouseMutationOptions<TContext = unknown>(
   const mutationKey = postApiWarehouseMutationKey();
   return mutationOptions<
     PostApiWarehouseMutationResponse,
-    ResponseErrorConfig<PostApiWarehouse400>,
+    ResponseErrorConfig<PostApiWarehouse400 | PostApiWarehouse401>,
     { data?: PostApiWarehouseMutationRequest },
     TContext
   >({
@@ -3151,7 +4152,7 @@ export function usePostApiWarehouse<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PostApiWarehouseMutationResponse,
-      ResponseErrorConfig<PostApiWarehouse400>,
+      ResponseErrorConfig<PostApiWarehouse400 | PostApiWarehouse401>,
       { data?: PostApiWarehouseMutationRequest },
       TContext
     > & { client?: QueryClient };
@@ -3169,14 +4170,14 @@ export function usePostApiWarehouse<TContext>(
     config,
   ) as UseMutationOptions<
     PostApiWarehouseMutationResponse,
-    ResponseErrorConfig<PostApiWarehouse400>,
+    ResponseErrorConfig<PostApiWarehouse400 | PostApiWarehouse401>,
     { data?: PostApiWarehouseMutationRequest },
     TContext
   >;
 
   return useMutation<
     PostApiWarehouseMutationResponse,
-    ResponseErrorConfig<PostApiWarehouse400>,
+    ResponseErrorConfig<PostApiWarehouse400 | PostApiWarehouse401>,
     { data?: PostApiWarehouseMutationRequest },
     TContext
   >(
@@ -3188,7 +4189,7 @@ export function usePostApiWarehouse<TContext>(
     queryClient,
   ) as UseMutationResult<
     PostApiWarehouseMutationResponse,
-    ResponseErrorConfig<PostApiWarehouse400>,
+    ResponseErrorConfig<PostApiWarehouse400 | PostApiWarehouse401>,
     { data?: PostApiWarehouseMutationRequest },
     TContext
   >;
@@ -3209,7 +4210,7 @@ export function putApiWarehouseIdMutationOptions<TContext = unknown>(
   const mutationKey = putApiWarehouseIdMutationKey();
   return mutationOptions<
     PutApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<PutApiWarehouseId404>,
+    ResponseErrorConfig<PutApiWarehouseId401 | PutApiWarehouseId404>,
     {
       id: PutApiWarehouseIdPathParams["id"];
       data?: PutApiWarehouseIdMutationRequest;
@@ -3230,7 +4231,7 @@ export function usePutApiWarehouseId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       PutApiWarehouseIdMutationResponse,
-      ResponseErrorConfig<PutApiWarehouseId404>,
+      ResponseErrorConfig<PutApiWarehouseId401 | PutApiWarehouseId404>,
       {
         id: PutApiWarehouseIdPathParams["id"];
         data?: PutApiWarehouseIdMutationRequest;
@@ -3251,7 +4252,7 @@ export function usePutApiWarehouseId<TContext>(
     config,
   ) as UseMutationOptions<
     PutApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<PutApiWarehouseId404>,
+    ResponseErrorConfig<PutApiWarehouseId401 | PutApiWarehouseId404>,
     {
       id: PutApiWarehouseIdPathParams["id"];
       data?: PutApiWarehouseIdMutationRequest;
@@ -3261,7 +4262,7 @@ export function usePutApiWarehouseId<TContext>(
 
   return useMutation<
     PutApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<PutApiWarehouseId404>,
+    ResponseErrorConfig<PutApiWarehouseId401 | PutApiWarehouseId404>,
     {
       id: PutApiWarehouseIdPathParams["id"];
       data?: PutApiWarehouseIdMutationRequest;
@@ -3276,7 +4277,7 @@ export function usePutApiWarehouseId<TContext>(
     queryClient,
   ) as UseMutationResult<
     PutApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<PutApiWarehouseId404>,
+    ResponseErrorConfig<PutApiWarehouseId401 | PutApiWarehouseId404>,
     {
       id: PutApiWarehouseIdPathParams["id"];
       data?: PutApiWarehouseIdMutationRequest;
@@ -3298,7 +4299,11 @@ export function deleteApiWarehouseIdMutationOptions<TContext = unknown>(
   const mutationKey = deleteApiWarehouseIdMutationKey();
   return mutationOptions<
     DeleteApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    ResponseErrorConfig<
+      | DeleteApiWarehouseId400
+      | DeleteApiWarehouseId401
+      | DeleteApiWarehouseId404
+    >,
     { id: DeleteApiWarehouseIdPathParams["id"] },
     TContext
   >({
@@ -3316,7 +4321,11 @@ export function useDeleteApiWarehouseId<TContext>(
   options: {
     mutation?: UseMutationOptions<
       DeleteApiWarehouseIdMutationResponse,
-      ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+      ResponseErrorConfig<
+        | DeleteApiWarehouseId400
+        | DeleteApiWarehouseId401
+        | DeleteApiWarehouseId404
+      >,
       { id: DeleteApiWarehouseIdPathParams["id"] },
       TContext
     > & { client?: QueryClient };
@@ -3332,14 +4341,22 @@ export function useDeleteApiWarehouseId<TContext>(
     config,
   ) as UseMutationOptions<
     DeleteApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    ResponseErrorConfig<
+      | DeleteApiWarehouseId400
+      | DeleteApiWarehouseId401
+      | DeleteApiWarehouseId404
+    >,
     { id: DeleteApiWarehouseIdPathParams["id"] },
     TContext
   >;
 
   return useMutation<
     DeleteApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    ResponseErrorConfig<
+      | DeleteApiWarehouseId400
+      | DeleteApiWarehouseId401
+      | DeleteApiWarehouseId404
+    >,
     { id: DeleteApiWarehouseIdPathParams["id"] },
     TContext
   >(
@@ -3351,7 +4368,11 @@ export function useDeleteApiWarehouseId<TContext>(
     queryClient,
   ) as UseMutationResult<
     DeleteApiWarehouseIdMutationResponse,
-    ResponseErrorConfig<DeleteApiWarehouseId400 | DeleteApiWarehouseId404>,
+    ResponseErrorConfig<
+      | DeleteApiWarehouseId400
+      | DeleteApiWarehouseId401
+      | DeleteApiWarehouseId404
+    >,
     { id: DeleteApiWarehouseIdPathParams["id"] },
     TContext
   >;

@@ -1,24 +1,23 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { setupGearHubApiClient } from "./api/setupGearHubClient";
+import { gearhubQueryClient } from "./lib/gearhubQueryClient";
 import { routeTree } from "./routeTree.gen";
 import { AppNotistackProvider } from "./providers/AppNotistack";
+import { AuthProvider } from "./providers/AuthProvider";
 import { appTheme } from "./theme/appTheme";
 import "./index.css";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { staleTime: 30_000 },
-  },
-});
+setupGearHubApiClient();
 
 const router = createRouter({
   routeTree,
-  context: { queryClient },
+  context: { queryClient: gearhubQueryClient },
   defaultPreload: "intent",
 });
 
@@ -34,8 +33,10 @@ createRoot(document.getElementById("root")!).render(
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CssBaseline />
         <AppNotistackProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
+          <QueryClientProvider client={gearhubQueryClient}>
+            <AuthProvider>
+              <RouterProvider router={router} />
+            </AuthProvider>
           </QueryClientProvider>
         </AppNotistackProvider>
       </LocalizationProvider>

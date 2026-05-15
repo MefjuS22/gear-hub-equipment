@@ -6,89 +6,25 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import {
-  ClipboardList,
-  FileText,
-  FolderTree,
-  LayoutDashboard,
-  Package,
-  Tag,
-  UserCog,
-  Users,
-  Warehouse,
-  Wrench,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
+
+import { usePermissionSet } from "../../hooks/usePermissionSet";
+import { INTRANET_NAV } from "../../lib/intranetNav";
 import { PageHeader } from "../common";
 
-const TILES: {
-  to: string;
-  label: string;
-  description: string;
-  Icon: LucideIcon;
-}[] = [
-  {
-    to: "/intranet/orders",
-    label: "Orders",
-    description: "Order status and history (read-only for now).",
-    Icon: ClipboardList,
-  },
-  {
-    to: "/intranet/equipment",
-    label: "Equipment",
-    description: "Add, list, and remove rental equipment.",
-    Icon: Package,
-  },
-  {
-    to: "/intranet/categories",
-    label: "Categories",
-    description: "Reference list from the API.",
-    Icon: FolderTree,
-  },
-  {
-    to: "/intranet/brands",
-    label: "Brands",
-    description: "Reference list from the API.",
-    Icon: Tag,
-  },
-  {
-    to: "/intranet/warehouses",
-    label: "Warehouses",
-    description: "Derived from equipment assignments.",
-    Icon: Warehouse,
-  },
-  {
-    to: "/intranet/customers",
-    label: "Customers",
-    description: "Reference list from the API.",
-    Icon: Users,
-  },
-  {
-    to: "/intranet/users",
-    label: "Users",
-    description: "Placeholder until user APIs ship.",
-    Icon: UserCog,
-  },
-  {
-    to: "/intranet/maintenance",
-    label: "Maintenance",
-    description: "Placeholder until maintenance APIs ship.",
-    Icon: Wrench,
-  },
-  {
-    to: "/intranet/portal-texts",
-    label: "Portal content",
-    description: "Placeholder until CMS APIs ship.",
-    Icon: FileText,
-  },
-];
-
 export function DashboardView() {
+  const permissions = usePermissionSet();
+  const tiles = INTRANET_NAV.filter(
+    (item) =>
+      item.to !== "/intranet" &&
+      (!item.permission || permissions.has(item.permission)),
+  );
+
   return (
     <Box>
       <PageHeader
         title="Dashboard"
-        subtitle="Shortcuts to the most-used staff areas. Use the sidebar for the full menu."
+        subtitle="Shortcuts to the staff areas you can access. Use the sidebar for the full menu."
         actions={
           <Box
             sx={{
@@ -114,7 +50,7 @@ export function DashboardView() {
           gap: 2,
         }}
       >
-        {TILES.map(({ to, label, description, Icon }) => (
+        {tiles.map(({ to, label, description, Icon }) => (
           <Card key={to} variant="outlined">
             <CardActionArea
               component={Link}

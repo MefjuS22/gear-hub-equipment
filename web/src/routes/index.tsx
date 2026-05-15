@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { Building2, Store } from "lucide-react";
+import { userHasAdminRole } from "../lib/userRoles";
+import { useAuth } from "../providers/AuthProvider";
 import { HomeLayout } from "../ui/shells/HomeLayout";
 
 export const Route = createFileRoute("/")({
@@ -8,6 +10,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { isAuthenticated, user } = useAuth();
+  const showStaffEntry = isAuthenticated && user && userHasAdminRole(user);
+
   return (
     <HomeLayout>
       <Box sx={{ p: { xs: 2, sm: 4 }, flex: 1 }}>
@@ -30,7 +35,9 @@ function Home() {
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+            gridTemplateColumns: showStaffEntry
+              ? { xs: "1fr", sm: "1fr 1fr" }
+              : "1fr",
             gap: 3,
           }}
         >
@@ -68,38 +75,40 @@ function Home() {
             </CardContent>
           </Card>
 
-          <Card variant="outlined" sx={{ height: "100%" }}>
-            <CardContent
-              sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1.5,
-                  color: "text.primary",
-                }}
+          {showStaffEntry ? (
+            <Card variant="outlined" sx={{ height: "100%" }}>
+              <CardContent
+                sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}
               >
-                <Building2 size={28} strokeWidth={1.75} aria-hidden />
-                <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                  Staff workspace
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    color: "text.primary",
+                  }}
+                >
+                  <Building2 size={28} strokeWidth={1.75} aria-hidden />
+                  <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                    Staff workspace
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                  Manage equipment, reference data, and internal workflows.
                 </Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary">
-                Manage equipment, reference data, and internal workflows.
-              </Typography>
-              <Button
-                component={Link}
-                to="/intranet"
-                variant="outlined"
-                color="inherit"
-                size="large"
-                sx={{ mt: "auto", borderColor: "divider" }}
-              >
-                Open staff app
-              </Button>
-            </CardContent>
-          </Card>
+                <Button
+                  component={Link}
+                  to="/intranet"
+                  variant="outlined"
+                  color="inherit"
+                  size="large"
+                  sx={{ mt: "auto", borderColor: "divider" }}
+                >
+                  Open staff app
+                </Button>
+              </CardContent>
+            </Card>
+          ) : null}
         </Box>
       </Box>
     </HomeLayout>

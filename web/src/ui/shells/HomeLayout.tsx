@@ -1,11 +1,15 @@
 import { Link } from "@tanstack/react-router";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
-import { Boxes, Building2, Store } from "lucide-react";
+import { Boxes, Building2, LogIn, Store } from "lucide-react";
 import type { ReactNode } from "react";
+import { useAuth } from "../../providers/AuthProvider";
+import { userHasAdminRole } from "../../lib/userRoles";
 
 const shellMaxWidth = 1200;
 
 export function HomeLayout({ children }: { children: ReactNode }) {
+  const { isAuthenticated, user } = useAuth();
+  const showStaffEntry = isAuthenticated && user && userHasAdminRole(user);
   return (
     <Box
       sx={{
@@ -63,6 +67,18 @@ export function HomeLayout({ children }: { children: ReactNode }) {
               justifyContent: "flex-end",
             }}
           >
+            {!isAuthenticated ? (
+              <Button
+                component={Link}
+                to="/login"
+                variant="outlined"
+                color="inherit"
+                size="small"
+                startIcon={<LogIn size={18} aria-hidden />}
+              >
+                Sign in
+              </Button>
+            ) : null}
             <Button
               component={Link}
               to="/portal"
@@ -73,16 +89,18 @@ export function HomeLayout({ children }: { children: ReactNode }) {
             >
               Client portal
             </Button>
-            <Button
-              component={Link}
-              to="/intranet"
-              variant="outlined"
-              color="inherit"
-              size="small"
-              startIcon={<Building2 size={18} aria-hidden />}
-            >
-              Staff
-            </Button>
+            {showStaffEntry ? (
+              <Button
+                component={Link}
+                to="/intranet"
+                variant="outlined"
+                color="inherit"
+                size="small"
+                startIcon={<Building2 size={18} aria-hidden />}
+              >
+                Staff
+              </Button>
+            ) : null}
           </Box>
         </Toolbar>
       </AppBar>

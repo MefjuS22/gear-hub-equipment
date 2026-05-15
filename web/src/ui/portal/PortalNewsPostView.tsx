@@ -76,7 +76,11 @@ export function PortalNewsPostView({ slug }: PortalNewsPostViewProps) {
           }}
         />
       ) : null}
-      <Typography variant="overline" color="text.secondary" sx={{ display: "block" }}>
+      <Typography
+        variant="overline"
+        color="text.secondary"
+        sx={{ display: "block" }}
+      >
         {formatPublished(data?.publishedAtUtc)}
       </Typography>
       <Typography variant="h4" component="h1" sx={{ fontWeight: 800, mt: 0.5 }}>

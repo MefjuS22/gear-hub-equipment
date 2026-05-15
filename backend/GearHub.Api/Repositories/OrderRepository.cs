@@ -19,6 +19,19 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<RentalOrder?> GetOrderByIdWithDetailsAsync(
+        int id,
+        CancellationToken cancellationToken = default)
+    {
+        return await dbContext.RentalOrders
+            .AsNoTracking()
+            .Include(order => order.Customer)
+            .Include(order => order.User)
+            .Include(order => order.Items)
+            .ThenInclude(item => item.Equipment)
+            .FirstOrDefaultAsync(order => order.Id == id, cancellationToken);
+    }
+
     public async Task<bool> CustomerExistsAsync(int customerId, CancellationToken cancellationToken = default)
     {
         return await dbContext.Customers.AnyAsync(customer => customer.Id == customerId, cancellationToken);

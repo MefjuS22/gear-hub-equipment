@@ -34,6 +34,7 @@ export function PortalCatalogSearchProvider({
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function usePortalCatalogSearch() {
   const ctx = useContext(PortalCatalogSearchContext);
   if (!ctx) {

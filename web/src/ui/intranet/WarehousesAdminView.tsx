@@ -56,8 +56,7 @@ export function WarehousesAdminView() {
     setEditing(null);
   };
 
-  const pending =
-    create.isPending || update.isPending || remove.isPending;
+  const pending = create.isPending || update.isPending || remove.isPending;
 
   const onSubmit = form.handleSubmit((values) => {
     const id = editing?.id;
@@ -66,15 +65,9 @@ export function WarehousesAdminView() {
       location: values.location,
     };
     if (id != null) {
-      update.mutate(
-        { id, data: payload },
-        { onSuccess: () => closeDialog() },
-      );
+      update.mutate({ id, data: payload }, { onSuccess: () => closeDialog() });
     } else {
-      create.mutate(
-        { data: payload },
-        { onSuccess: () => closeDialog() },
-      );
+      create.mutate({ data: payload }, { onSuccess: () => closeDialog() });
     }
   });
 

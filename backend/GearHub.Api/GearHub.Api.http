@@ -1,6 +1,74 @@
 @GearHub.Api_HostAddress = http://localhost:5206
+@adminToken = {{loginAdmin.response.body.accessToken}}
 
-GET {{GearHub.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+# @name loginAdmin
+POST {{GearHub.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gearhub.com",
+  "password": "Admin123!"
+}
+
+###
+
+# @name loginUser
+POST {{GearHub.Api_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "email": "user@gearhub.com",
+  "password": "User123!"
+}
+
+###
+
+GET {{GearHub.Api_HostAddress}}/api/Auth/me
+Authorization: Bearer {{adminToken}}
+
+###
+
+GET {{GearHub.Api_HostAddress}}/api/Equipment
+Authorization: Bearer {{adminToken}}
+
+###
+
+# Replace id after creating an order
+GET {{GearHub.Api_HostAddress}}/api/Order/1
+Authorization: Bearer {{adminToken}}
+
+###
+
+GET {{GearHub.Api_HostAddress}}/api/Users
+Authorization: Bearer {{adminToken}}
+
+###
+
+POST {{GearHub.Api_HostAddress}}/api/Users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "newstaff@example.com",
+  "password": "TempPass1",
+  "displayName": "New Staff",
+  "roles": ["User"]
+}
+
+###
+
+PUT {{GearHub.Api_HostAddress}}/api/Users/99/roles
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "roles": ["Admin", "User"]
+}
+
+###
+
+# Replace user id; cannot remove last admin or delete users with orders (400)
+DELETE {{GearHub.Api_HostAddress}}/api/Users/99
+Authorization: Bearer {{adminToken}}
 
 ###

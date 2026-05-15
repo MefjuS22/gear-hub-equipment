@@ -50,8 +50,7 @@ export function BrandsAdminView() {
     setEditing(null);
   };
 
-  const pending =
-    create.isPending || update.isPending || remove.isPending;
+  const pending = create.isPending || update.isPending || remove.isPending;
 
   const onSubmit = form.handleSubmit((values) => {
     const id = editing?.id;

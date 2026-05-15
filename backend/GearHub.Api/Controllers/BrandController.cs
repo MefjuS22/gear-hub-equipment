@@ -1,12 +1,17 @@
+using GearHub.Api.Authorization;
 using GearHub.Api.DTOs;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+[HasPermission(AppPermissions.BrandsManage)]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class BrandController(IBrandService brandService) : ControllerBase
 {
     [HttpGet]

@@ -14,6 +14,7 @@ public enum ApiErrorCode
     OrderUserNotFound = 201,
     OrderEquipmentNotFound = 202,
     OrderEquipmentUnavailable = 203,
+    OrderNotFound = 204,
 
     BrandNotFound = 300,
     BrandInUse = 301,
@@ -26,4 +27,13 @@ public enum ApiErrorCode
     CmsPostSlugTaken = 307,
 
     FileUploadInvalid = 308,
+
+    AuthInvalidCredentials = 400,
+    AuthRoleNotFound = 401,
+    AuthForbidden = 403,
+
+    UserNotFound = 410,
+    UserEmailTaken = 411,
+    UserCannotDeleteSelf = 412,
+    UserLastAdmin = 413,
 }

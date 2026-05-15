@@ -1,11 +1,6 @@
+import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  createFileRoute,
-  Link,
-  Outlet,
-  useRouterState,
-} from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -21,40 +16,27 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useCallback, useState } from "react";
-import {
-  Building2,
-  ChevronLeft,
-  ClipboardList,
-  FileText,
-  FolderTree,
-  LayoutDashboard,
-  Menu,
-  Package,
-  Plus,
-  Tag,
-  UserCog,
-  Users,
-  Warehouse,
-  Wrench,
-} from "lucide-react";
+import { Building2, ChevronLeft, Menu, Plus } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { z } from "zod";
+
+import { usePermissionSet } from "../../hooks/usePermissionSet";
+import { AppPermissions } from "../../lib/appPermissions";
+import { INTRANET_NAV } from "../../lib/intranetNav";
+import { requireAdminForStaffPortal } from "../../lib/intranetRouteGuards";
+import { useAuth } from "../../providers/AuthProvider";
 
 const DRAWER_WIDTH = 260;
 
-const NAV: { to: string; label: string; Icon: LucideIcon }[] = [
-  { to: "/intranet", label: "Dashboard", Icon: LayoutDashboard },
-  { to: "/intranet/orders", label: "Orders", Icon: ClipboardList },
-  { to: "/intranet/equipment", label: "Equipment", Icon: Package },
-  { to: "/intranet/categories", label: "Categories", Icon: FolderTree },
-  { to: "/intranet/brands", label: "Brands", Icon: Tag },
-  { to: "/intranet/warehouses", label: "Warehouses", Icon: Warehouse },
-  { to: "/intranet/customers", label: "Customers", Icon: Users },
-  { to: "/intranet/users", label: "Users", Icon: UserCog },
-  { to: "/intranet/maintenance", label: "Maintenance", Icon: Wrench },
-  { to: "/intranet/portal-texts", label: "Portal content", Icon: FileText },
-];
+const intranetSearchSchema = z.object({
+  forbidden: z.string().optional(),
+});
 
 export const Route = createFileRoute("/intranet")({
+  validateSearch: (raw) => intranetSearchSchema.parse(raw),
+  beforeLoad: async ({ location }) => {
+    await requireAdminForStaffPortal(location.pathname);
+  },
   component: IntranetLayout,
 });
 
@@ -70,6 +52,19 @@ function SidebarNav({
   pathname: string;
   onNavigate?: () => void;
 }) {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const permissions = usePermissionSet();
+  const canManageEquipment = permissions.has(AppPermissions.EquipmentManage);
+
+  const visibleNav = useMemo(
+    () =>
+      INTRANET_NAV.filter(
+        (item) => !item.permission || permissions.has(item.permission),
+      ),
+    [permissions],
+  );
+
   return (
     <>
       <Toolbar
@@ -100,19 +95,21 @@ function SidebarNav({
             </Typography>
           </Box>
         </Box>
-        <Button
-          component={Link}
-          to="/intranet/equipment/new"
-          variant="containedBlack"
-          fullWidth
-          startIcon={<Plus size={18} aria-hidden />}
-          onClick={onNavigate}
-        >
-          New equipment
-        </Button>
+        {canManageEquipment ? (
+          <Button
+            component={Link}
+            to="/intranet/equipment/new"
+            variant="containedBlack"
+            fullWidth
+            startIcon={<Plus size={18} aria-hidden />}
+            onClick={onNavigate}
+          >
+            New equipment
+          </Button>
+        ) : null}
       </Toolbar>
       <List dense sx={{ py: 1, overflow: "auto", flex: 1, px: 0.5 }}>
-        {NAV.map((item) => {
+        {visibleNav.map((item) => {
           const isDashboard = item.to === "/intranet";
           const selected = isDashboard
             ? pathname === "/intranet"
@@ -149,7 +146,16 @@ function SidebarNav({
           );
         })}
       </List>
-      <Box sx={{ p: 1.5, borderTop: 1, borderColor: "divider" }}>
+      <Box sx={{ px: 1.5, borderTop: 1, borderColor: "divider", pt: 1 }}>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: "block", px: 1, mb: 0.5 }}
+          noWrap
+          title={user?.email ?? ""}
+        >
+          {user?.displayName || user?.email || "Signed in"}
+        </Typography>
         <Button
           component={MuiLink}
           href="mailto:support@example.com"
@@ -161,12 +167,15 @@ function SidebarNav({
           Support
         </Button>
         <Button
-          component={Link}
-          to="/"
           fullWidth
           color="inherit"
           size="small"
           sx={{ justifyContent: "flex-start" }}
+          onClick={() => {
+            logout();
+            onNavigate?.();
+            void navigate({ to: "/login" });
+          }}
         >
           Sign out
         </Button>
@@ -182,6 +191,8 @@ function IntranetLayout() {
   const pathname = useRouterState({
     select: (s) => normalizePath(s.location.pathname),
   });
+  const navigate = useNavigate();
+  const { forbidden } = Route.useSearch();
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -298,6 +309,17 @@ function IntranetLayout() {
           component="main"
           sx={{ p: { xs: 2, sm: 3 }, flex: 1, overflow: "auto" }}
         >
+          {forbidden ? (
+            <Alert
+              severity="warning"
+              sx={{ mb: 2 }}
+              onClose={() => {
+                void navigate({ to: "/intranet", search: {} });
+              }}
+            >
+              You don&apos;t have permission to open that page.
+            </Alert>
+          ) : null}
           <Outlet />
         </Box>
       </Box>

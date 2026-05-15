@@ -62,7 +62,11 @@ export function PortalTextsListView() {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <PortalTextsRow key={row.id} row={row} onDelete={remove.mutate} />
+                <PortalTextsRow
+                  key={row.id}
+                  row={row}
+                  onDelete={remove.mutate}
+                />
               ))}
             </TableBody>
           </Table>
@@ -122,9 +126,7 @@ function PortalTextsRow({
             disabled={!row.id}
             onClick={() => {
               if (!row.id) return;
-              if (
-                !window.confirm("Delete this post? This cannot be undone.")
-              ) {
+              if (!window.confirm("Delete this post? This cannot be undone.")) {
                 return;
               }
               onDelete({ id: row.id });
