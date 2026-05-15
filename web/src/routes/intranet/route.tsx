@@ -6,8 +6,8 @@ import {
   useNavigate,
   useRouterState,
 } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -23,42 +23,24 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useCallback, useState } from "react";
-import {
-  Building2,
-  ChevronLeft,
-  ClipboardList,
-  FileText,
-  FolderTree,
-  LayoutDashboard,
-  Menu,
-  Package,
-  Plus,
-  Tag,
-  UserCog,
-  Users,
-  Warehouse,
-  Wrench,
-} from "lucide-react";
-import { getAccessToken } from "../../store/authSessionStore";
+import { Building2, ChevronLeft, Menu, Plus } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { z } from "zod";
+
+import { usePermissionSet } from "../../hooks/usePermissionSet";
+import { AppPermissions } from "../../lib/appPermissions";
+import { INTRANET_NAV } from "../../lib/intranetNav";
 import { useAuth } from "../../providers/AuthProvider";
+import { getAccessToken } from "../../store/authSessionStore";
 
 const DRAWER_WIDTH = 260;
 
-const NAV: { to: string; label: string; Icon: LucideIcon }[] = [
-  { to: "/intranet", label: "Dashboard", Icon: LayoutDashboard },
-  { to: "/intranet/orders", label: "Orders", Icon: ClipboardList },
-  { to: "/intranet/equipment", label: "Equipment", Icon: Package },
-  { to: "/intranet/categories", label: "Categories", Icon: FolderTree },
-  { to: "/intranet/brands", label: "Brands", Icon: Tag },
-  { to: "/intranet/warehouses", label: "Warehouses", Icon: Warehouse },
-  { to: "/intranet/customers", label: "Customers", Icon: Users },
-  { to: "/intranet/users", label: "Users", Icon: UserCog },
-  { to: "/intranet/maintenance", label: "Maintenance", Icon: Wrench },
-  { to: "/intranet/portal-texts", label: "Portal content", Icon: FileText },
-];
+const intranetSearchSchema = z.object({
+  forbidden: z.string().optional(),
+});
 
 export const Route = createFileRoute("/intranet")({
+  validateSearch: (raw) => intranetSearchSchema.parse(raw),
   beforeLoad: ({ location }) => {
     if (!getAccessToken()) {
       throw redirect({
@@ -84,6 +66,17 @@ function SidebarNav({
 }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const permissions = usePermissionSet();
+  const canManageEquipment = permissions.has(AppPermissions.EquipmentManage);
+
+  const visibleNav = useMemo(
+    () =>
+      INTRANET_NAV.filter(
+        (item) => !item.permission || permissions.has(item.permission),
+      ),
+    [permissions],
+  );
+
   return (
     <>
       <Toolbar
@@ -114,19 +107,21 @@ function SidebarNav({
             </Typography>
           </Box>
         </Box>
-        <Button
-          component={Link}
-          to="/intranet/equipment/new"
-          variant="containedBlack"
-          fullWidth
-          startIcon={<Plus size={18} aria-hidden />}
-          onClick={onNavigate}
-        >
-          New equipment
-        </Button>
+        {canManageEquipment ? (
+          <Button
+            component={Link}
+            to="/intranet/equipment/new"
+            variant="containedBlack"
+            fullWidth
+            startIcon={<Plus size={18} aria-hidden />}
+            onClick={onNavigate}
+          >
+            New equipment
+          </Button>
+        ) : null}
       </Toolbar>
       <List dense sx={{ py: 1, overflow: "auto", flex: 1, px: 0.5 }}>
-        {NAV.map((item) => {
+        {visibleNav.map((item) => {
           const isDashboard = item.to === "/intranet";
           const selected = isDashboard
             ? pathname === "/intranet"
@@ -208,6 +203,8 @@ function IntranetLayout() {
   const pathname = useRouterState({
     select: (s) => normalizePath(s.location.pathname),
   });
+  const navigate = useNavigate();
+  const { forbidden } = Route.useSearch();
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -324,6 +321,17 @@ function IntranetLayout() {
           component="main"
           sx={{ p: { xs: 2, sm: 3 }, flex: 1, overflow: "auto" }}
         >
+          {forbidden ? (
+            <Alert
+              severity="warning"
+              sx={{ mb: 2 }}
+              onClose={() => {
+                void navigate({ to: "/intranet", search: {} });
+              }}
+            >
+              You don&apos;t have permission to open that page.
+            </Alert>
+          ) : null}
           <Outlet />
         </Box>
       </Box>

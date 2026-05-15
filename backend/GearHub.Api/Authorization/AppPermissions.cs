@@ -1,8 +1,8 @@
 namespace GearHub.Api.Authorization;
 
 /// <summary>
-/// Permission names stored in the database and issued as JWT <c>permission</c> claims.
-/// Authorization policies use the same string as the policy name.
+/// Permission names stored in the database and enforced by <see cref="PermissionAuthorizationHandler"/>.
+/// They are returned to clients on <c>GET /api/Auth/me</c> and in login/register payloads; they are not embedded in JWTs.
 /// </summary>
 public static class AppPermissions
 {

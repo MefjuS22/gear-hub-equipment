@@ -26,6 +26,7 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { formatUsd } from "../../lib/formatCurrency";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import {
@@ -292,7 +293,20 @@ export function PortalCatalogView() {
                       </Box>
                     )}
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>{item.name}</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Link
+                      to="/portal/equipment/$equipmentId"
+                      params={{ equipmentId: String(item.id ?? 0) }}
+                      style={{
+                        color: "inherit",
+                        fontWeight: 600,
+                        textDecoration: "underline",
+                        textUnderlineOffset: 3,
+                      }}
+                    >
+                      {item.name}
+                    </Link>
+                  </TableCell>
                   <TableCell>{item.categoryName}</TableCell>
                   <TableCell>{item.brandName}</TableCell>
                   <TableCell align="right">
@@ -304,7 +318,16 @@ export function PortalCatalogView() {
                     />
                   </TableCell>
                   <TableCell align="right">
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, flexWrap: "wrap" }}>
+                      <Link
+                        to="/portal/equipment/$equipmentId"
+                        params={{ equipmentId: String(item.id ?? 0) }}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <Button size="small" variant="text" sx={{ fontWeight: 600 }}>
+                          Details
+                        </Button>
+                      </Link>
                       <CatalogOrderControl
                         equipmentId={item.id ?? 0}
                         name={item.name ?? ""}
@@ -435,14 +458,23 @@ export function PortalCatalogView() {
                         <Heart size={18} aria-hidden />
                       </IconButton>
                     </Box>
-                    <Typography
-                      variant="h6"
-                      component="h3"
-                      gutterBottom
-                      sx={{ fontWeight: 700 }}
+                    <Link
+                      to="/portal/equipment/$equipmentId"
+                      params={{ equipmentId: String(item.id ?? 0) }}
+                      style={{ textDecoration: "none" }}
                     >
-                      {item.name}
-                    </Typography>
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        sx={{
+                          fontWeight: 700,
+                          color: "text.primary",
+                          "&:hover": { color: "primary.main" },
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                    </Link>
                     <Typography
                       variant="body2"
                       color="text.secondary"
@@ -491,7 +523,23 @@ export function PortalCatalogView() {
                         <strong>{formatUsd(item.dailyRate ?? 0)}</strong> / day
                       </Typography>
                     )}
-                    <Box sx={{ mt: "auto" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        mt: "auto",
+                      }}
+                    >
+                      <Link
+                        to="/portal/equipment/$equipmentId"
+                        params={{ equipmentId: String(item.id ?? 0) }}
+                        style={{ textDecoration: "none", alignSelf: "flex-start" }}
+                      >
+                        <Button size="small" variant="outlined" sx={{ fontWeight: 600 }}>
+                          View details
+                        </Button>
+                      </Link>
                       <CatalogOrderControl
                         equipmentId={item.id ?? 0}
                         name={item.name ?? ""}

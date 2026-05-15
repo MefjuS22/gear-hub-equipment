@@ -31,6 +31,7 @@ import { Route as PortalNewsIndexRouteImport } from './routes/portal/news/index'
 import { Route as IntranetPortalTextsIndexRouteImport } from './routes/intranet/portal-texts/index'
 import { Route as IntranetEquipmentIndexRouteImport } from './routes/intranet/equipment/index'
 import { Route as PortalNewsSlugRouteImport } from './routes/portal/news/$slug'
+import { Route as PortalEquipmentEquipmentIdRouteImport } from './routes/portal/equipment/$equipmentId'
 import { Route as IntranetPortalTextsNewRouteImport } from './routes/intranet/portal-texts/new'
 import { Route as IntranetEquipmentNewRouteImport } from './routes/intranet/equipment/new'
 import { Route as IntranetPortalTextsPostIdEditRouteImport } from './routes/intranet/portal-texts/$postId/edit'
@@ -148,6 +149,12 @@ const PortalNewsSlugRoute = PortalNewsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => PortalNewsRouteRoute,
 } as any)
+const PortalEquipmentEquipmentIdRoute =
+  PortalEquipmentEquipmentIdRouteImport.update({
+    id: '/equipment/$equipmentId',
+    path: '/equipment/$equipmentId',
+    getParentRoute: () => PortalRouteRoute,
+  } as any)
 const IntranetPortalTextsNewRoute = IntranetPortalTextsNewRouteImport.update({
   id: '/new',
   path: '/new',
@@ -192,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/portal/': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
   '/intranet/portal-texts/new': typeof IntranetPortalTextsNewRoute
+  '/portal/equipment/$equipmentId': typeof PortalEquipmentEquipmentIdRoute
   '/portal/news/$slug': typeof PortalNewsSlugRoute
   '/intranet/equipment/': typeof IntranetEquipmentIndexRoute
   '/intranet/portal-texts/': typeof IntranetPortalTextsIndexRoute
@@ -215,6 +223,7 @@ export interface FileRoutesByTo {
   '/portal': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
   '/intranet/portal-texts/new': typeof IntranetPortalTextsNewRoute
+  '/portal/equipment/$equipmentId': typeof PortalEquipmentEquipmentIdRoute
   '/portal/news/$slug': typeof PortalNewsSlugRoute
   '/intranet/equipment': typeof IntranetEquipmentIndexRoute
   '/intranet/portal-texts': typeof IntranetPortalTextsIndexRoute
@@ -244,6 +253,7 @@ export interface FileRoutesById {
   '/portal/': typeof PortalIndexRoute
   '/intranet/equipment/new': typeof IntranetEquipmentNewRoute
   '/intranet/portal-texts/new': typeof IntranetPortalTextsNewRoute
+  '/portal/equipment/$equipmentId': typeof PortalEquipmentEquipmentIdRoute
   '/portal/news/$slug': typeof PortalNewsSlugRoute
   '/intranet/equipment/': typeof IntranetEquipmentIndexRoute
   '/intranet/portal-texts/': typeof IntranetPortalTextsIndexRoute
@@ -274,6 +284,7 @@ export interface FileRouteTypes {
     | '/portal/'
     | '/intranet/equipment/new'
     | '/intranet/portal-texts/new'
+    | '/portal/equipment/$equipmentId'
     | '/portal/news/$slug'
     | '/intranet/equipment/'
     | '/intranet/portal-texts/'
@@ -297,6 +308,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/intranet/equipment/new'
     | '/intranet/portal-texts/new'
+    | '/portal/equipment/$equipmentId'
     | '/portal/news/$slug'
     | '/intranet/equipment'
     | '/intranet/portal-texts'
@@ -325,6 +337,7 @@ export interface FileRouteTypes {
     | '/portal/'
     | '/intranet/equipment/new'
     | '/intranet/portal-texts/new'
+    | '/portal/equipment/$equipmentId'
     | '/portal/news/$slug'
     | '/intranet/equipment/'
     | '/intranet/portal-texts/'
@@ -497,6 +510,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalNewsSlugRouteImport
       parentRoute: typeof PortalNewsRouteRoute
     }
+    '/portal/equipment/$equipmentId': {
+      id: '/portal/equipment/$equipmentId'
+      path: '/equipment/$equipmentId'
+      fullPath: '/portal/equipment/$equipmentId'
+      preLoaderRoute: typeof PortalEquipmentEquipmentIdRouteImport
+      parentRoute: typeof PortalRouteRoute
+    }
     '/intranet/portal-texts/new': {
       id: '/intranet/portal-texts/new'
       path: '/new'
@@ -613,12 +633,14 @@ interface PortalRouteRouteChildren {
   PortalNewsRouteRoute: typeof PortalNewsRouteRouteWithChildren
   PortalCartRoute: typeof PortalCartRoute
   PortalIndexRoute: typeof PortalIndexRoute
+  PortalEquipmentEquipmentIdRoute: typeof PortalEquipmentEquipmentIdRoute
 }
 
 const PortalRouteRouteChildren: PortalRouteRouteChildren = {
   PortalNewsRouteRoute: PortalNewsRouteRouteWithChildren,
   PortalCartRoute: PortalCartRoute,
   PortalIndexRoute: PortalIndexRoute,
+  PortalEquipmentEquipmentIdRoute: PortalEquipmentEquipmentIdRoute,
 }
 
 const PortalRouteRouteWithChildren = PortalRouteRoute._addFileChildren(

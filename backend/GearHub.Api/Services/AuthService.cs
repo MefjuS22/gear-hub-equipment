@@ -137,11 +137,6 @@ public class AuthService(
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        foreach (var permission in profile.Permissions)
-        {
-            claims.Add(new Claim(PermissionAuthorizationHandler.ClaimType, permission));
-        }
-
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(

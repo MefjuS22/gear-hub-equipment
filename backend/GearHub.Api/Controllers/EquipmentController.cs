@@ -14,13 +14,13 @@ namespace GearHub.Api.Controllers;
 public class EquipmentController(IEquipmentService equipmentService) : ControllerBase
 {
     [HttpGet]
-    [HasPermission(AppPermissions.EquipmentRead)]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<EquipmentDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<EquipmentDto>>> GetAll(CancellationToken cancellationToken) =>
         Ok(await equipmentService.GetAllAsync(cancellationToken));
 
     [HttpGet("{id:int}")]
-    [HasPermission(AppPermissions.EquipmentRead)]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(EquipmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<EquipmentDto>> GetById(int id, CancellationToken cancellationToken)
