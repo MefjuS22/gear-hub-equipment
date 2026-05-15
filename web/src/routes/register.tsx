@@ -44,6 +44,9 @@ function RegisterPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { setSession, isAuthenticated } = useAuth();
 
+  const loginSearch =
+    redirectTo && redirectTo.startsWith("/") ? { redirect: redirectTo } : {};
+
   const form = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -103,9 +106,9 @@ function RegisterPage() {
             <Typography variant="body2" color="text.secondary">
               Signing up creates a staff account with the standard{" "}
               <strong>User</strong> role. Already have an account?{" "}
-              <MuiLink component={Link} to="/login">
-                Sign in
-              </MuiLink>
+              <Link to="/login" search={loginSearch}>
+                <MuiLink>Sign in</MuiLink>
+              </Link>
               .
             </Typography>
             <Box
@@ -166,14 +169,11 @@ function RegisterPage() {
               >
                 {registerMutation.isPending ? "Creating…" : "Create account"}
               </Button>
-              <Button
-                component={Link}
-                to="/login"
-                variant="text"
-                color="inherit"
-              >
-                Back to sign in
-              </Button>
+              <Link to="/login" search={loginSearch} style={{ width: "100%" }}>
+                <Button variant="text" color="inherit" fullWidth>
+                  Back to sign in
+                </Button>
+              </Link>
             </Box>
           </CardContent>
         </Card>

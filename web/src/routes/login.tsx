@@ -43,6 +43,9 @@ function LoginPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { setSession, isAuthenticated } = useAuth();
 
+  const registerSearch =
+    redirectTo && redirectTo.startsWith("/") ? { redirect: redirectTo } : {};
+
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -95,9 +98,11 @@ function LoginPage() {
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Use your GearHub staff account. Need an account?{" "}
-              <MuiLink component={Link} to="/register">
-                Create one
-              </MuiLink>
+              <Link to="/register" search={registerSearch}>
+                <MuiLink component="span">
+                  Create one
+                </MuiLink>
+              </Link>
               .
             </Typography>
             <Box

@@ -16,6 +16,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  Stack,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "@tanstack/react-router";
@@ -26,6 +27,9 @@ import { formatUsd } from "../../lib/formatCurrency";
 import { useCartCheckout } from "../../hooks/portal/useCartCheckout";
 import { useAuth } from "../../providers/AuthProvider";
 import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
+
+/** After login or register from checkout, return here (cart is persisted). */
+const CHECKOUT_AUTH_REDIRECT = "/portal/cart";
 
 export function CartCheckoutView() {
   const { isAuthenticated } = useAuth();
@@ -180,27 +184,42 @@ export function CartCheckoutView() {
                 add client details and submit the order.
               </Alert>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Rental orders must be tied to a signed-in account. Use the
-                button below to continue.
+                Rental orders must be tied to a signed-in account. Sign in or create
+                an account to continue.
               </Typography>
-              <Link
-                to="/login"
-                search={{ redirect: "/portal/cart" }}
-                style={{
-                  textDecoration: "none",
-                  width: "100%",
-                  display: "block",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
+              <Stack spacing={1.5}>
+                <Link
+                  to="/login"
+                  search={{ redirect: CHECKOUT_AUTH_REDIRECT }}
+                  style={{
+                    textDecoration: "none",
+                    width: "100%",
+                    display: "block",
+                  }}
                 >
-                  Sign in to place order
-                </Button>
-              </Link>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                  >
+                    Sign in to place order
+                  </Button>
+                </Link>
+                <Link
+                  to="/register"
+                  search={{ redirect: CHECKOUT_AUTH_REDIRECT }}
+                  style={{
+                    textDecoration: "none",
+                    width: "100%",
+                    display: "block",
+                  }}
+                >
+                  <Button variant="outlined" color="primary" size="large" fullWidth>
+                    Create account
+                  </Button>
+                </Link>
+              </Stack>
             </SectionCard>
           )}
         </Grid>
@@ -346,24 +365,39 @@ export function CartCheckoutView() {
                     Confirm rental order
                   </Button>
                 ) : (
-                  <Link
-                    to="/login"
-                    search={{ redirect: "/portal/cart" }}
-                    style={{
-                      textDecoration: "none",
-                      width: "100%",
-                      display: "block",
-                    }}
-                  >
-                    <Button
-                      variant="containedBlack"
-                      size="large"
-                      fullWidth
-                      endIcon={<span aria-hidden>→</span>}
+                  <Stack spacing={1.5}>
+                    <Link
+                      to="/login"
+                      search={{ redirect: CHECKOUT_AUTH_REDIRECT }}
+                      style={{
+                        textDecoration: "none",
+                        width: "100%",
+                        display: "block",
+                      }}
                     >
-                      Sign in to place order
-                    </Button>
-                  </Link>
+                      <Button
+                        variant="containedBlack"
+                        size="large"
+                        fullWidth
+                        endIcon={<span aria-hidden>→</span>}
+                      >
+                        Sign in to place order
+                      </Button>
+                    </Link>
+                    <Link
+                      to="/register"
+                      search={{ redirect: CHECKOUT_AUTH_REDIRECT }}
+                      style={{
+                        textDecoration: "none",
+                        width: "100%",
+                        display: "block",
+                      }}
+                    >
+                      <Button variant="outlined" size="large" fullWidth>
+                        Create account
+                      </Button>
+                    </Link>
+                  </Stack>
                 )}
               </Box>
             </CardContent>
