@@ -10,7 +10,10 @@ import {
 } from "react";
 
 import { gearhubApiClientOptions } from "../api/clientOptions";
-import { getApiAuthMeQueryKey, useGetApiAuthMe } from "../api/generated/react-query";
+import {
+  getApiAuthMeQueryKey,
+  useGetApiAuthMe,
+} from "../api/generated/react-query";
 import type { AuthResponseDto, UserProfileDto } from "../api/generated/types";
 import { useAuthSessionStore } from "../store/authSessionStore";
 
@@ -76,18 +79,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession,
       logout,
     }),
-    [
-      accessToken,
-      meQuery.data,
-      meQuery.isPending,
-      setSession,
-      logout,
-    ],
+    [accessToken, meQuery.data, meQuery.isPending, setSession, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) {

@@ -21,11 +21,7 @@ export default defineConfig([
     },
   },
   {
-    files: [
-      "src/routes/**/*.{ts,tsx}",
-      "src/ui/portal/cartContext.tsx",
-      "src/ui/portal/PortalCatalogSearchContext.tsx",
-    ],
+    files: ["src/routes/**/*.{ts,tsx}"],
     rules: {
       "react-refresh/only-export-components": "off",
     },

@@ -5,10 +5,7 @@ import { OrdersListView } from "../../ui/intranet/OrdersListView";
 
 export const Route = createFileRoute("/intranet/orders")({
   beforeLoad: async ({ location }) => {
-    await requireStaffPermission(
-      location.pathname,
-      AppPermissions.OrdersRead,
-    );
+    await requireStaffPermission(location.pathname, AppPermissions.OrdersRead);
   },
   component: OrdersListView,
 });

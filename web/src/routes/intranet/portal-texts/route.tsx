@@ -4,10 +4,7 @@ import { requireStaffPermission } from "../../../lib/intranetRouteGuards";
 
 export const Route = createFileRoute("/intranet/portal-texts")({
   beforeLoad: async ({ location }) => {
-    await requireStaffPermission(
-      location.pathname,
-      AppPermissions.CmsManage,
-    );
+    await requireStaffPermission(location.pathname, AppPermissions.CmsManage);
   },
   component: PortalTextsSectionLayout,
 });

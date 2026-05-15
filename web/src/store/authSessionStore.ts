@@ -20,7 +20,9 @@ const persistEnvelopeSchema = z.object({
 });
 
 /** Parse the JSON zustand-persist writes to `localStorage`. */
-export function parsePersistedAuthEnvelope(raw: string): AuthSessionPersisted | null {
+export function parsePersistedAuthEnvelope(
+  raw: string,
+): AuthSessionPersisted | null {
   try {
     const data: unknown = JSON.parse(raw);
     const parsed = persistEnvelopeSchema.safeParse(data);

@@ -16,6 +16,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import {
   Heart,
   LayoutGrid,
@@ -41,7 +42,7 @@ import {
   StatusChip,
 } from "../common";
 import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
-import { useCart } from "./cartContext";
+import { useCart } from "../../store/portalCartStore";
 
 type CatalogOrderControlProps = {
   equipmentId: number;
@@ -50,6 +51,7 @@ type CatalogOrderControlProps = {
   isAvailable: boolean;
   featured?: boolean;
   fullWidth?: boolean;
+  centerQuantity?: boolean;
 };
 
 function CatalogOrderControl({
@@ -59,46 +61,86 @@ function CatalogOrderControl({
   isAvailable,
   featured = false,
   fullWidth = false,
+  centerQuantity = true,
 }: CatalogOrderControlProps) {
+  const theme = useTheme();
   const { lines, add, setQuantity } = useCart();
   const qty = lines.find((l) => l.equipmentId === equipmentId)?.quantity ?? 0;
   const btnSize = featured ? "large" : "small";
   const iconBtnSize = featured ? "medium" : "small";
   const countVariant = featured ? "body1" : "body2";
 
+  const catalogSlotMinHeight = centerQuantity
+    ? featured
+      ? theme.spacing(6)
+      : theme.spacing(5)
+    : undefined;
+
+  const wrapCatalogSlot = (node: ReactNode) =>
+    centerQuantity ? (
+      <Box
+        sx={{
+          width: fullWidth ? "100%" : undefined,
+          minHeight: catalogSlotMinHeight,
+          display: "flex",
+          alignItems: "stretch",
+        }}
+      >
+        {node}
+      </Box>
+    ) : (
+      node
+    );
+
+  const fullSizeSx = centerQuantity
+    ? {
+        height: "100%",
+        boxSizing: "border-box" as const,
+      }
+    : undefined;
+
   if (!isAvailable) {
-    return (
-      <Button variant="outlined" size="small" disabled fullWidth={fullWidth}>
+    return wrapCatalogSlot(
+      <Button
+        variant="outlined"
+        size={btnSize}
+        disabled
+        fullWidth={fullWidth}
+        sx={fullSizeSx}
+      >
         Unavailable
-      </Button>
+      </Button>,
     );
   }
 
   if (qty < 1) {
-    return (
+    return wrapCatalogSlot(
       <Button
         variant="containedBlack"
         size={btnSize}
         fullWidth={fullWidth}
         startIcon={<ShoppingCart size={16} aria-hidden />}
+        sx={fullSizeSx}
         onClick={() => add({ equipmentId, name, dailyRate })}
       >
         Add to order
-      </Button>
+      </Button>,
     );
   }
 
-  const stepper: ReactNode = (
+  const stepper = (
     <Box
       sx={{
-        display: "inline-flex",
+        display: "flex",
         alignItems: "center",
+        justifyContent: "center",
+        width: centerQuantity ? "100%" : "fit-content",
+        maxWidth: "100%",
+        minHeight: catalogSlotMinHeight,
+        height: centerQuantity ? "100%" : undefined,
         border: 1,
         borderColor: "divider",
         borderRadius: 1,
-        maxWidth: fullWidth ? "100%" : undefined,
-        width: fullWidth ? "100%" : "inline-flex",
-        justifyContent: fullWidth ? "center" : undefined,
         boxSizing: "border-box",
       }}
     >
@@ -125,14 +167,7 @@ function CatalogOrderControl({
     </Box>
   );
 
-  if (fullWidth) {
-    return (
-      <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        {stepper}
-      </Box>
-    );
-  }
-  return stepper;
+  return wrapCatalogSlot(stepper);
 }
 
 export function PortalCatalogView() {
@@ -318,13 +353,24 @@ export function PortalCatalogView() {
                     />
                   </TableCell>
                   <TableCell align="right">
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, flexWrap: "wrap" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        gap: 1,
+                        flexWrap: "wrap",
+                      }}
+                    >
                       <Link
                         to="/portal/equipment/$equipmentId"
                         params={{ equipmentId: String(item.id ?? 0) }}
                         style={{ textDecoration: "none" }}
                       >
-                        <Button size="small" variant="text" sx={{ fontWeight: 600 }}>
+                        <Button
+                          size="small"
+                          variant="text"
+                          sx={{ fontWeight: 600 }}
+                        >
                           Details
                         </Button>
                       </Link>
@@ -333,6 +379,7 @@ export function PortalCatalogView() {
                         name={item.name ?? ""}
                         dailyRate={item.dailyRate ?? 0}
                         isAvailable={!!item.isAvailable}
+                        centerQuantity={false}
                       />
                     </Box>
                   </TableCell>
@@ -534,9 +581,16 @@ export function PortalCatalogView() {
                       <Link
                         to="/portal/equipment/$equipmentId"
                         params={{ equipmentId: String(item.id ?? 0) }}
-                        style={{ textDecoration: "none", alignSelf: "flex-start" }}
+                        style={{
+                          textDecoration: "none",
+                          alignSelf: "flex-start",
+                        }}
                       >
-                        <Button size="small" variant="outlined" sx={{ fontWeight: 600 }}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          sx={{ fontWeight: 600 }}
+                        >
                           View details
                         </Button>
                       </Link>
@@ -546,7 +600,7 @@ export function PortalCatalogView() {
                         dailyRate={item.dailyRate ?? 0}
                         isAvailable={!!item.isAvailable}
                         featured={featured}
-                        fullWidth={featured}
+                        fullWidth
                       />
                     </Box>
                   </CardContent>

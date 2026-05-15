@@ -283,7 +283,9 @@ export const orderItemDtoSchema = z.object({
 });
 
 export const orderCreateDtoSchema = z.object({
-  customerId: z.optional(z.int()),
+  customerId: z.int().nullish(),
+  companyName: z.string().nullish(),
+  contactPerson: z.string().nullish(),
   rentalStartDate: z.optional(z.iso.datetime()),
   rentalEndDate: z.optional(z.iso.datetime()),
   get items() {

@@ -5,10 +5,7 @@ import { UsersAdminView } from "../../ui/intranet/UsersAdminView";
 
 export const Route = createFileRoute("/intranet/users")({
   beforeLoad: async ({ location }) => {
-    await requireStaffPermission(
-      location.pathname,
-      AppPermissions.UsersManage,
-    );
+    await requireStaffPermission(location.pathname, AppPermissions.UsersManage);
   },
   component: UsersAdminView,
 });

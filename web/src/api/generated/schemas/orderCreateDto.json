@@ -1,7 +1,9 @@
 {
   "type": "object",
   "properties": {
-    "customerId": { "type": "integer", "format": "int32" },
+    "customerId": { "type": "integer", "format": "int32", "nullable": true },
+    "companyName": { "type": "string", "nullable": true },
+    "contactPerson": { "type": "string", "nullable": true },
     "rentalStartDate": { "type": "string", "format": "date-time" },
     "rentalEndDate": { "type": "string", "format": "date-time" },
     "items": {

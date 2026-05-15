@@ -21,11 +21,6 @@ public class OrderService(
         int userId,
         CancellationToken cancellationToken = default)
     {
-        if (!await orderRepository.CustomerExistsAsync(request.CustomerId, cancellationToken))
-        {
-            return OrderCreationResult.Failed(ApiErrorCode.OrderCustomerNotFound, "Customer not found.");
-        }
-
         if (!await orderRepository.UserExistsAsync(userId, cancellationToken))
         {
             return OrderCreationResult.Failed(ApiErrorCode.OrderUserNotFound, "User not found.");
@@ -67,9 +62,34 @@ public class OrderService(
 
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
 
+        int customerId;
+        if (request.CustomerId is int existingId and > 0)
+        {
+            if (!await orderRepository.CustomerExistsAsync(existingId, cancellationToken))
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                return OrderCreationResult.Failed(ApiErrorCode.OrderCustomerNotFound, "Customer not found.");
+            }
+
+            customerId = existingId;
+        }
+        else
+        {
+            var company = request.CompanyName!.Trim();
+            var contact = request.ContactPerson!.Trim();
+            var customer = new Customer
+            {
+                CompanyName = company,
+                ContactPerson = contact,
+            };
+            dbContext.Customers.Add(customer);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            customerId = customer.Id;
+        }
+
         var order = new RentalOrder
         {
-            CustomerId = request.CustomerId,
+            CustomerId = customerId,
             UserId = userId,
             OrderDate = DateTime.UtcNow,
             RentalStartDate = rentalStartUtc,

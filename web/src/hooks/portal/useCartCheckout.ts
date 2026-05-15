@@ -1,12 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import {
   getApiEquipmentQueryKey,
-  useGetApiCustomer,
   usePostApiOrderCreateorder,
 } from "../../api/generated/react-query";
 import {
@@ -14,13 +13,13 @@ import {
   type OrderCheckoutFormValues,
 } from "../../lib/formSchemas";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
-import { useCart } from "../../ui/portal/cartContext";
+import { getAccessToken } from "../../store/authSessionStore";
+import { useCart } from "../../store/portalCartStore";
 
 export function useCartCheckout() {
   const { enqueueSnackbar } = useSnackbar();
   const { lines, clear, setQuantity, remove } = useCart();
   const queryClient = useQueryClient();
-  const customerPrimed = useRef(false);
 
   const tomorrow = useMemo(() => {
     const d = new Date();
@@ -31,7 +30,8 @@ export function useCartCheckout() {
   const form = useForm<OrderCheckoutFormValues>({
     resolver: zodResolver(orderCheckoutFormSchema),
     defaultValues: {
-      customerId: 1,
+      companyName: "",
+      contactPerson: "",
       rentalStart: new Date().toISOString().slice(0, 10),
       rentalEnd: tomorrow,
     },
@@ -41,17 +41,6 @@ export function useCartCheckout() {
     useWatch({ control: form.control, name: "rentalStart" }) ?? "";
   const rentalEnd =
     useWatch({ control: form.control, name: "rentalEnd" }) ?? "";
-
-  const customers = useGetApiCustomer({ client: gearhubApiClientOptions });
-
-  useEffect(() => {
-    const rows = customers.data;
-    if (!rows?.length || customerPrimed.current) return;
-    const firstId = rows[0]?.id;
-    if (firstId == null) return;
-    customerPrimed.current = true;
-    form.setValue("customerId", firstId);
-  }, [customers.data, form]);
 
   const submit = usePostApiOrderCreateorder({
     client: gearhubApiClientOptions,
@@ -82,9 +71,14 @@ export function useCartCheckout() {
 
   const handleSubmitForm = form.handleSubmit((values) => {
     if (lines.length === 0) return;
+    if (!getAccessToken()) {
+      enqueueSnackbar("Sign in to place an order.", { variant: "warning" });
+      return;
+    }
     submit.mutate({
       data: {
-        customerId: values.customerId,
+        companyName: values.companyName.trim(),
+        contactPerson: values.contactPerson.trim(),
         rentalStartDate: new Date(values.rentalStart).toISOString(),
         rentalEndDate: new Date(values.rentalEnd).toISOString(),
         items: lines.map((l) => ({
@@ -101,7 +95,6 @@ export function useCartCheckout() {
     lines,
     setQuantity,
     remove,
-    customers,
     submit,
     subtotal,
     orderSubmitError,

@@ -15,7 +15,7 @@ import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiEquipmentId } from "../../api/generated/react-query";
 import { formatUsd } from "../../lib/formatCurrency";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
-import { useCart } from "./cartContext";
+import { useCart } from "../../store/portalCartStore";
 import { ErrorAlert, LoadingState } from "../common";
 
 type Props = {
@@ -122,7 +122,14 @@ export function PortalEquipmentDetailView({ equipmentId }: Props) {
           <Typography variant="body2" color="text.secondary">
             Unit #{id}
           </Typography>
-          <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.5, flexWrap: "wrap" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: 0.5,
+              flexWrap: "wrap",
+            }}
+          >
             <Typography variant="h6" sx={{ fontWeight: 700 }}>
               {formatUsd(dailyRate)}
             </Typography>

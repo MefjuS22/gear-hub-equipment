@@ -162,7 +162,9 @@ export function RichTextEditor({
           <IconButton
             size="small"
             disabled={disabled}
-            color={editor.isActive("heading", { level: 2 }) ? "primary" : "default"}
+            color={
+              editor.isActive("heading", { level: 2 }) ? "primary" : "default"
+            }
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }

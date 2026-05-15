@@ -691,9 +691,17 @@ export type OrderItemDto = {
 
 export type OrderCreateDto = {
   /**
-   * @type integer | undefined, int32
+   * @type integer, int32
    */
-  customerId?: number;
+  customerId?: number | null;
+  /**
+   * @type string
+   */
+  companyName?: string | null;
+  /**
+   * @type string
+   */
+  contactPerson?: string | null;
   /**
    * @type string | undefined, date-time
    */

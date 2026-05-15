@@ -65,7 +65,8 @@ function LoginPage() {
     if (!isAuthenticated) {
       return;
     }
-    const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
+    const target =
+      redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
     void navigate({ to: target });
   }, [isAuthenticated, redirectTo, navigate]);
 
@@ -81,7 +82,14 @@ function LoginPage() {
         }}
       >
         <Card variant="outlined" sx={{ width: "100%", maxWidth: 420 }}>
-          <CardContent sx={{ p: { xs: 2.5, sm: 3 }, display: "flex", flexDirection: "column", gap: 2 }}>
+          <CardContent
+            sx={{
+              p: { xs: 2.5, sm: 3 },
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
             <Typography variant="h5" sx={{ fontWeight: 800 }}>
               Sign in
             </Typography>
@@ -129,7 +137,9 @@ function LoginPage() {
                 variant="contained"
                 size="large"
                 disabled={login.isPending}
-                startIcon={login.isPending ? <CircularProgress size={18} /> : null}
+                startIcon={
+                  login.isPending ? <CircularProgress size={18} /> : null
+                }
               >
                 {login.isPending ? "Signing in…" : "Sign in"}
               </Button>

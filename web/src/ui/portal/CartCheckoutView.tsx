@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -7,7 +8,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -18,22 +18,23 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { Controller } from "react-hook-form";
-import type { Customer } from "../../api/generated/types";
 import { formatUsd } from "../../lib/formatCurrency";
 import { useCartCheckout } from "../../hooks/portal/useCartCheckout";
+import { useAuth } from "../../providers/AuthProvider";
 import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
 
 export function CartCheckoutView() {
+  const { isAuthenticated } = useAuth();
   const {
     form,
     handleSubmitForm,
     lines,
     setQuantity,
     remove,
-    customers,
     submit,
     subtotal,
     orderSubmitError,
@@ -57,106 +58,151 @@ export function CartCheckoutView() {
 
   const lineCount = lines.reduce((n, l) => n + l.quantity, 0);
 
-  return (
-    <Box component="form" onSubmit={handleSubmitForm} noValidate>
+  const inner = (
+    <>
       <PageHeader
         title="Order builder"
-        subtitle="Configure client details and rental parameters."
+        subtitle={
+          isAuthenticated
+            ? "Configure client details and rental parameters."
+            : "Sign in to enter order details and confirm your rental."
+        }
       />
 
-      {orderSubmitError ? (
+      {orderSubmitError && isAuthenticated ? (
         <ErrorAlert message={orderSubmitError} sx={{ mb: 2 }} />
       ) : null}
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, lg: 5 }}>
-          <SectionCard title="Client information">
-            <Controller
-              name="customerId"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  select
-                  fullWidth
-                  label="Customer"
-                  disabled={customers.isLoading || !customers.data?.length}
-                  value={field.value}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                  inputRef={field.ref}
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message}
-                  sx={{ mb: 2 }}
+          {isAuthenticated ? (
+            <>
+              <SectionCard title="Client information">
+                <Controller
+                  name="companyName"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label="Company / organization"
+                      autoComplete="organization"
+                      error={!!fieldState.error}
+                      helperText={fieldState.error?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
+                />
+                <Controller
+                  name="contactPerson"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label="Contact person"
+                      autoComplete="name"
+                      error={!!fieldState.error}
+                      helperText={fieldState.error?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
+                />
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ display: "block" }}
                 >
-                  {(customers.data ?? []).map((c: Customer) => (
-                    <MenuItem key={c.id} value={c.id ?? 0}>
-                      {c.companyName}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              )}
-            />
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ display: "block" }}
-            >
-              Orders are created under your signed-in account. Sign in from the header if checkout
-              fails with an authorization error.
-            </Typography>
-          </SectionCard>
+                  We&apos;ll create a customer record for this rental. The order
+                  is placed under your signed-in account.
+                </Typography>
+              </SectionCard>
 
-          <SectionCard title="Rental parameters" sx={{ mt: 2 }}>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-              <Controller
-                name="rentalStart"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <DatePicker
-                    label="Start date"
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(d) =>
-                      field.onChange(d?.isValid() ? d.format("YYYY-MM-DD") : "")
-                    }
-                    slotProps={{
-                      textField: {
-                        name: field.name,
-                        inputRef: field.ref,
-                        onBlur: field.onBlur,
-                        error: !!fieldState.error,
-                        helperText: fieldState.error?.message,
-                        sx: { flex: "1 1 200px" },
-                      },
-                    }}
+              <SectionCard title="Rental parameters" sx={{ mt: 2 }}>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+                  <Controller
+                    name="rentalStart"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <DatePicker
+                        label="Start date"
+                        value={field.value ? dayjs(field.value) : null}
+                        onChange={(d) =>
+                          field.onChange(
+                            d?.isValid() ? d.format("YYYY-MM-DD") : "",
+                          )
+                        }
+                        slotProps={{
+                          textField: {
+                            name: field.name,
+                            inputRef: field.ref,
+                            onBlur: field.onBlur,
+                            error: !!fieldState.error,
+                            helperText: fieldState.error?.message,
+                            sx: { flex: "1 1 200px" },
+                          },
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
-              <Controller
-                name="rentalEnd"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <DatePicker
-                    label="End date"
-                    value={field.value ? dayjs(field.value) : null}
-                    onChange={(d) =>
-                      field.onChange(d?.isValid() ? d.format("YYYY-MM-DD") : "")
-                    }
-                    slotProps={{
-                      textField: {
-                        name: field.name,
-                        inputRef: field.ref,
-                        onBlur: field.onBlur,
-                        error: !!fieldState.error,
-                        helperText: fieldState.error?.message,
-                        sx: { flex: "1 1 200px" },
-                      },
-                    }}
+                  <Controller
+                    name="rentalEnd"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <DatePicker
+                        label="End date"
+                        value={field.value ? dayjs(field.value) : null}
+                        onChange={(d) =>
+                          field.onChange(
+                            d?.isValid() ? d.format("YYYY-MM-DD") : "",
+                          )
+                        }
+                        slotProps={{
+                          textField: {
+                            name: field.name,
+                            inputRef: field.ref,
+                            onBlur: field.onBlur,
+                            error: !!fieldState.error,
+                            helperText: fieldState.error?.message,
+                            sx: { flex: "1 1 200px" },
+                          },
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
-            </Box>
-          </SectionCard>
+                </Box>
+              </SectionCard>
+            </>
+          ) : (
+            <SectionCard title="Sign in to continue">
+              <Alert severity="info" sx={{ mb: 2 }}>
+                Your cart is saved in this browser. After you sign in, you can
+                add client details and submit the order.
+              </Alert>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Rental orders must be tied to a signed-in account. Use the
+                button below to continue.
+              </Typography>
+              <Link
+                to="/login"
+                search={{ redirect: "/portal/cart" }}
+                style={{
+                  textDecoration: "none",
+                  width: "100%",
+                  display: "block",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                >
+                  Sign in to place order
+                </Button>
+              </Link>
+            </SectionCard>
+          )}
         </Grid>
 
         <Grid size={{ xs: 12, lg: 7 }}>
@@ -288,21 +334,50 @@ export function CartCheckoutView() {
               </Box>
 
               <Box sx={{ mt: "auto" }}>
-                <Button
-                  type="submit"
-                  variant="containedBlack"
-                  size="large"
-                  fullWidth
-                  disabled={submit.isPending}
-                  endIcon={<span aria-hidden>→</span>}
-                >
-                  Confirm rental order
-                </Button>
+                {isAuthenticated ? (
+                  <Button
+                    type="submit"
+                    variant="containedBlack"
+                    size="large"
+                    fullWidth
+                    disabled={submit.isPending}
+                    endIcon={<span aria-hidden>→</span>}
+                  >
+                    Confirm rental order
+                  </Button>
+                ) : (
+                  <Link
+                    to="/login"
+                    search={{ redirect: "/portal/cart" }}
+                    style={{
+                      textDecoration: "none",
+                      width: "100%",
+                      display: "block",
+                    }}
+                  >
+                    <Button
+                      variant="containedBlack"
+                      size="large"
+                      fullWidth
+                      endIcon={<span aria-hidden>→</span>}
+                    >
+                      Sign in to place order
+                    </Button>
+                  </Link>
+                )}
               </Box>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
+    </>
+  );
+
+  return isAuthenticated ? (
+    <Box component="form" onSubmit={handleSubmitForm} noValidate>
+      {inner}
     </Box>
+  ) : (
+    <Box>{inner}</Box>
   );
 }

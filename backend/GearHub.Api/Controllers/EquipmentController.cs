@@ -1,4 +1,4 @@
-﻿using GearHub.Api.Authorization;
+using GearHub.Api.Authorization;
 using GearHub.Api.DTOs;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;

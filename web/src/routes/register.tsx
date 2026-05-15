@@ -58,7 +58,9 @@ function RegisterPage() {
     mutation: {
       onSuccess: (data) => {
         setSession(data);
-        enqueueSnackbar("Account created. You are signed in.", { variant: "success" });
+        enqueueSnackbar("Account created. You are signed in.", {
+          variant: "success",
+        });
         const target =
           redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
         void navigate({ to: target });
@@ -70,7 +72,8 @@ function RegisterPage() {
     if (!isAuthenticated) {
       return;
     }
-    const target = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
+    const target =
+      redirectTo && redirectTo.startsWith("/") ? redirectTo : "/intranet";
     void navigate({ to: target });
   }, [isAuthenticated, redirectTo, navigate]);
 
@@ -87,14 +90,19 @@ function RegisterPage() {
       >
         <Card variant="outlined" sx={{ width: "100%", maxWidth: 480 }}>
           <CardContent
-            sx={{ p: { xs: 2.5, sm: 3 }, display: "flex", flexDirection: "column", gap: 2 }}
+            sx={{
+              p: { xs: 2.5, sm: 3 },
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
           >
             <Typography variant="h5" sx={{ fontWeight: 800 }}>
               Create account
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Signing up creates a staff account with the standard <strong>User</strong> role. Already
-              have an account?{" "}
+              Signing up creates a staff account with the standard{" "}
+              <strong>User</strong> role. Already have an account?{" "}
               <MuiLink component={Link} to="/login">
                 Sign in
               </MuiLink>
@@ -140,7 +148,9 @@ function RegisterPage() {
               />
               {registerMutation.isError ? (
                 <Alert severity="error">
-                  {formatApiErrorForDisplay(parseApiError(registerMutation.error))}
+                  {formatApiErrorForDisplay(
+                    parseApiError(registerMutation.error),
+                  )}
                 </Alert>
               ) : null}
               <Button
@@ -149,12 +159,19 @@ function RegisterPage() {
                 size="large"
                 disabled={registerMutation.isPending}
                 startIcon={
-                  registerMutation.isPending ? <CircularProgress size={18} /> : null
+                  registerMutation.isPending ? (
+                    <CircularProgress size={18} />
+                  ) : null
                 }
               >
                 {registerMutation.isPending ? "Creating…" : "Create account"}
               </Button>
-              <Button component={Link} to="/login" variant="text" color="inherit">
+              <Button
+                component={Link}
+                to="/login"
+                variant="text"
+                color="inherit"
+              >
                 Back to sign in
               </Button>
             </Box>

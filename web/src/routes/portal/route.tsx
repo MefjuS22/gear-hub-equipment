@@ -21,7 +21,7 @@ import {
 import { Bell, Search, Settings, ShoppingCart } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
 import { useAuth } from "../../providers/AuthProvider";
-import { CartProvider, useCart } from "../../ui/portal/cartContext";
+import { useCart } from "../../store/portalCartStore";
 import {
   PortalCatalogSearchProvider,
   usePortalCatalogSearch,
@@ -74,9 +74,8 @@ function PortalTopBar() {
   const { search, setSearch } = usePortalCatalogSearch();
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
-  const [accountMenuAnchor, setAccountMenuAnchor] = useState<HTMLElement | null>(
-    null,
-  );
+  const [accountMenuAnchor, setAccountMenuAnchor] =
+    useState<HTMLElement | null>(null);
   const accountMenuOpen = Boolean(accountMenuAnchor);
 
   const cartCount = useMemo(
@@ -201,7 +200,9 @@ function PortalTopBar() {
                 size="small"
                 color="inherit"
                 aria-label="Open account menu"
-                aria-controls={accountMenuOpen ? "portal-account-menu" : undefined}
+                aria-controls={
+                  accountMenuOpen ? "portal-account-menu" : undefined
+                }
                 aria-haspopup="true"
                 aria-expanded={accountMenuOpen ? true : undefined}
                 onClick={(e) => setAccountMenuAnchor(e.currentTarget)}
@@ -235,7 +236,14 @@ function PortalTopBar() {
                   },
                 }}
               >
-                <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 1.5 }}>
+                <Box
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1.5,
+                  }}
+                >
                   <Box>
                     <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
                       {user?.displayName?.trim() || "Your account"}
@@ -363,10 +371,8 @@ function PortalLayoutInner() {
 
 function PortalLayout() {
   return (
-    <CartProvider>
-      <PortalCatalogSearchProvider>
-        <PortalLayoutInner />
-      </PortalCatalogSearchProvider>
-    </CartProvider>
+    <PortalCatalogSearchProvider>
+      <PortalLayoutInner />
+    </PortalCatalogSearchProvider>
   );
 }

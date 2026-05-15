@@ -23,7 +23,5 @@ export const Route = createFileRoute("/intranet/portal-texts/$postId/edit")({
 
 function EditCmsPostPage() {
   const { post } = Route.useLoaderData();
-  return (
-    <CmsPostEditorView mode="edit" postId={post.id!} post={post} />
-  );
+  return <CmsPostEditorView mode="edit" postId={post.id!} post={post} />;
 }

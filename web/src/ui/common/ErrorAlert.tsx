@@ -11,7 +11,10 @@ const preLine: SxProps<Theme> = {
 
 export function ErrorAlert({ message, sx }: ErrorAlertProps) {
   return (
-    <Alert severity="error" sx={[preLine, ...(sx !== undefined ? [sx] : [])] as SxProps<Theme>}>
+    <Alert
+      severity="error"
+      sx={[preLine, ...(sx !== undefined ? [sx] : [])] as SxProps<Theme>}
+    >
       {message}
     </Alert>
   );

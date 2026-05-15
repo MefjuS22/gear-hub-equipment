@@ -93,7 +93,11 @@ export function PortalNewsListView() {
                       >
                         {formatPublished(post.publishedAtUtc)}
                       </Typography>
-                      <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>
+                      <Typography
+                        variant="h6"
+                        component="h2"
+                        sx={{ fontWeight: 700 }}
+                      >
                         {post.title}
                       </Typography>
                       {post.excerpt ? (

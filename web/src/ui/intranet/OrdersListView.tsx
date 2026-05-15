@@ -112,8 +112,7 @@ export function OrdersListView() {
                     {formatDt(o.orderDate)}
                   </TableCell>
                   <TableCell sx={{ whiteSpace: "nowrap" }}>
-                    {formatDt(o.rentalStartDate)} →{" "}
-                    {formatDt(o.rentalEndDate)}
+                    {formatDt(o.rentalStartDate)} → {formatDt(o.rentalEndDate)}
                   </TableCell>
                   <TableCell
                     sx={{
