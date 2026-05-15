@@ -2,10 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
 import { Boxes, Building2, LogIn, Store } from "lucide-react";
 import type { ReactNode } from "react";
+import { useAuth } from "../../providers/AuthProvider";
 
 const shellMaxWidth = 1200;
 
 export function HomeLayout({ children }: { children: ReactNode }) {
+  const { isAuthenticated } = useAuth();
   return (
     <Box
       sx={{
@@ -63,16 +65,18 @@ export function HomeLayout({ children }: { children: ReactNode }) {
               justifyContent: "flex-end",
             }}
           >
-            <Button
-              component={Link}
-              to="/login"
-              variant="outlined"
-              color="inherit"
-              size="small"
-              startIcon={<LogIn size={18} aria-hidden />}
-            >
-              Sign in
-            </Button>
+            {!isAuthenticated ? (
+              <Button
+                component={Link}
+                to="/login"
+                variant="outlined"
+                color="inherit"
+                size="small"
+                startIcon={<LogIn size={18} aria-hidden />}
+              >
+                Sign in
+              </Button>
+            ) : null}
             <Button
               component={Link}
               to="/portal"
