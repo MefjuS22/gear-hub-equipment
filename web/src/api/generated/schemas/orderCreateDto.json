@@ -2,7 +2,6 @@
   "type": "object",
   "properties": {
     "customerId": { "type": "integer", "format": "int32" },
-    "userId": { "type": "integer", "format": "int32" },
     "rentalStartDate": { "type": "string", "format": "date-time" },
     "rentalEndDate": { "type": "string", "format": "date-time" },
     "items": {

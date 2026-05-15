@@ -18,6 +18,7 @@ public class OrderService(
 
     public async Task<OrderCreationResult> CreateOrderAsync(
         OrderCreateDto request,
+        int userId,
         CancellationToken cancellationToken = default)
     {
         if (!await orderRepository.CustomerExistsAsync(request.CustomerId, cancellationToken))
@@ -25,7 +26,7 @@ public class OrderService(
             return OrderCreationResult.Failed(ApiErrorCode.OrderCustomerNotFound, "Customer not found.");
         }
 
-        if (!await orderRepository.UserExistsAsync(request.UserId, cancellationToken))
+        if (!await orderRepository.UserExistsAsync(userId, cancellationToken))
         {
             return OrderCreationResult.Failed(ApiErrorCode.OrderUserNotFound, "User not found.");
         }
@@ -69,7 +70,7 @@ public class OrderService(
         var order = new RentalOrder
         {
             CustomerId = request.CustomerId,
-            UserId = request.UserId,
+            UserId = userId,
             OrderDate = DateTime.UtcNow,
             RentalStartDate = rentalStartUtc,
             RentalEndDate = rentalEndUtc
@@ -116,7 +117,7 @@ public class OrderService(
             CustomerId = order.CustomerId,
             CustomerCompanyName = order.Customer?.CompanyName ?? string.Empty,
             UserId = order.UserId,
-            UserName = order.User?.Name ?? string.Empty,
+            UserName = order.User?.DisplayName ?? string.Empty,
             UserEmail = order.User?.Email ?? string.Empty,
             OrderDate = order.OrderDate,
             RentalStartDate = order.RentalStartDate,

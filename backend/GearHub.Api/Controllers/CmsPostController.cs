@@ -1,20 +1,26 @@
+using GearHub.Api.Authorization;
 using GearHub.Api.DTOs;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
 {
     [HttpGet]
+    [HasPermission(AppPermissions.CmsManage)]
     [ProducesResponseType(typeof(IReadOnlyList<CmsPostListDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<CmsPostListDto>>> GetAll(CancellationToken cancellationToken) =>
         Ok(await cmsPostService.GetAllAsync(cancellationToken));
 
     [HttpGet("{id:guid}")]
+    [HasPermission(AppPermissions.CmsManage)]
     [ProducesResponseType(typeof(CmsPostDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CmsPostDetailDto>> GetById(Guid id, CancellationToken cancellationToken)
@@ -32,12 +38,14 @@ public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
     }
 
     [HttpGet("Published")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<CmsPostPublicSummaryDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<CmsPostPublicSummaryDto>>> GetPublished(
         CancellationToken cancellationToken) =>
         Ok(await cmsPostService.GetPublishedAsync(cancellationToken));
 
     [HttpGet("Published/{slug}")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(CmsPostPublicDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CmsPostPublicDetailDto>> GetPublishedBySlug(
@@ -57,6 +65,7 @@ public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
     }
 
     [HttpPost]
+    [HasPermission(AppPermissions.CmsManage)]
     [ProducesResponseType(typeof(CmsPostDetailDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CmsPostDetailDto>> Create(
@@ -76,6 +85,7 @@ public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [HasPermission(AppPermissions.CmsManage)]
     [ProducesResponseType(typeof(CmsPostDetailDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
@@ -97,6 +107,7 @@ public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [HasPermission(AppPermissions.CmsManage)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)

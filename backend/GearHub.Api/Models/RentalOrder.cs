@@ -8,7 +8,7 @@ public class RentalOrder
     public Customer? Customer { get; set; }
 
     public int UserId { get; set; }
-    public User? User { get; set; }
+    public ApplicationUser? User { get; set; }
 
     public DateTime OrderDate { get; set; }
     public DateTime RentalStartDate { get; set; }

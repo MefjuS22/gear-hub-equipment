@@ -1,20 +1,26 @@
-﻿using GearHub.Api.DTOs;
+﻿using GearHub.Api.Authorization;
+using GearHub.Api.DTOs;
 using GearHub.Api.Responses;
 using GearHub.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GearHub.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class EquipmentController(IEquipmentService equipmentService) : ControllerBase
 {
     [HttpGet]
+    [HasPermission(AppPermissions.EquipmentRead)]
     [ProducesResponseType(typeof(IReadOnlyList<EquipmentDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<EquipmentDto>>> GetAll(CancellationToken cancellationToken) =>
         Ok(await equipmentService.GetAllAsync(cancellationToken));
 
     [HttpGet("{id:int}")]
+    [HasPermission(AppPermissions.EquipmentRead)]
     [ProducesResponseType(typeof(EquipmentDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<EquipmentDto>> GetById(int id, CancellationToken cancellationToken)
@@ -32,6 +38,7 @@ public class EquipmentController(IEquipmentService equipmentService) : Controlle
     }
 
     [HttpPost]
+    [HasPermission(AppPermissions.EquipmentManage)]
     [ProducesResponseType(typeof(EquipmentDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -64,6 +71,7 @@ public class EquipmentController(IEquipmentService equipmentService) : Controlle
     }
 
     [HttpPut("{id:int}")]
+    [HasPermission(AppPermissions.EquipmentManage)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
@@ -96,6 +104,7 @@ public class EquipmentController(IEquipmentService equipmentService) : Controlle
     }
 
     [HttpDelete("{id:int}")]
+    [HasPermission(AppPermissions.EquipmentManage)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)

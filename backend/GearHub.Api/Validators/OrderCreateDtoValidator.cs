@@ -10,9 +10,6 @@ public class OrderCreateDtoValidator : AbstractValidator<OrderCreateDto>
         RuleFor(order => order.CustomerId)
             .GreaterThan(0);
 
-        RuleFor(order => order.UserId)
-            .GreaterThan(0);
-
         RuleFor(order => order.RentalStartDate)
             .NotEmpty();
 

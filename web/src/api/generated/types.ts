@@ -23,6 +23,9 @@ export const apiErrorCodeEnum = {
   cmsPostNotFound: "cmsPostNotFound",
   cmsPostSlugTaken: "cmsPostSlugTaken",
   fileUploadInvalid: "fileUploadInvalid",
+  authInvalidCredentials: "authInvalidCredentials",
+  authRoleNotFound: "authRoleNotFound",
+  authForbidden: "authForbidden",
 } as const;
 
 export type ApiErrorCodeEnumKey =
@@ -47,6 +50,40 @@ export type ApiErrorResponse = {
   } | null;
 };
 
+export type Customer = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  companyName?: string | null;
+  /**
+   * @type string
+   */
+  contactPerson?: string | null;
+  /**
+   * @type array
+   */
+  rentalOrders?: RentalOrder[] | null;
+};
+
+export type Category = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type string
+   */
+  description?: string | null;
+};
+
 export type Brand = {
   /**
    * @type integer | undefined, int32
@@ -56,6 +93,274 @@ export type Brand = {
    * @type string
    */
   name?: string | null;
+};
+
+export type Warehouse = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type string
+   */
+  location?: string | null;
+};
+
+export type Maintenance = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  equipmentId?: number;
+  /**
+   * @type object | undefined
+   */
+  equipment?: Equipment;
+  /**
+   * @type string
+   */
+  description?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  date?: string;
+};
+
+export type Equipment = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  name?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  categoryId?: number;
+  /**
+   * @type object | undefined
+   */
+  category?: Category;
+  /**
+   * @type integer | undefined, int32
+   */
+  brandId?: number;
+  /**
+   * @type object | undefined
+   */
+  brand?: Brand;
+  /**
+   * @type integer | undefined, int32
+   */
+  warehouseId?: number;
+  /**
+   * @type object | undefined
+   */
+  warehouse?: Warehouse;
+  /**
+   * @type number | undefined, double
+   */
+  dailyRate?: number;
+  /**
+   * @type boolean | undefined
+   */
+  isAvailable?: boolean;
+  /**
+   * @type string
+   */
+  imageUrl?: string | null;
+  /**
+   * @type array
+   */
+  maintenances?: Maintenance[] | null;
+  /**
+   * @type array
+   */
+  rentalOrderItems?: RentalOrderItem[] | null;
+};
+
+export type RentalOrderItem = {
+  /**
+   * @type integer | undefined, int32
+   */
+  rentalOrderId?: number;
+  /**
+   * @type object | undefined
+   */
+  rentalOrder?: RentalOrder;
+  /**
+   * @type integer | undefined, int32
+   */
+  equipmentId?: number;
+  /**
+   * @type object | undefined
+   */
+  equipment?: Equipment;
+  /**
+   * @type integer | undefined, int32
+   */
+  quantity?: number;
+  /**
+   * @type number | undefined, double
+   */
+  unitPrice?: number;
+};
+
+export type RentalOrder = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  customerId?: number;
+  /**
+   * @type object | undefined
+   */
+  customer?: Customer;
+  /**
+   * @type integer | undefined, int32
+   */
+  userId?: number;
+  /**
+   * @type object | undefined
+   */
+  user?: ApplicationUser;
+  /**
+   * @type string | undefined, date-time
+   */
+  orderDate?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  rentalStartDate?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  rentalEndDate?: string;
+  /**
+   * @type array
+   */
+  items?: RentalOrderItem[] | null;
+};
+
+export type ApplicationUser = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  userName?: string | null;
+  /**
+   * @type string
+   */
+  normalizedUserName?: string | null;
+  /**
+   * @type string
+   */
+  email?: string | null;
+  /**
+   * @type string
+   */
+  normalizedEmail?: string | null;
+  /**
+   * @type boolean | undefined
+   */
+  emailConfirmed?: boolean;
+  /**
+   * @type string
+   */
+  passwordHash?: string | null;
+  /**
+   * @type string
+   */
+  securityStamp?: string | null;
+  /**
+   * @type string
+   */
+  concurrencyStamp?: string | null;
+  /**
+   * @type string
+   */
+  phoneNumber?: string | null;
+  /**
+   * @type boolean | undefined
+   */
+  phoneNumberConfirmed?: boolean;
+  /**
+   * @type boolean | undefined
+   */
+  twoFactorEnabled?: boolean;
+  /**
+   * @type string, date-time
+   */
+  lockoutEnd?: string | null;
+  /**
+   * @type boolean | undefined
+   */
+  lockoutEnabled?: boolean;
+  /**
+   * @type integer | undefined, int32
+   */
+  accessFailedCount?: number;
+  /**
+   * @type string
+   */
+  displayName?: string | null;
+  /**
+   * @type array
+   */
+  rentalOrders?: RentalOrder[] | null;
+};
+
+export type UserProfileDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  email?: string | null;
+  /**
+   * @type string
+   */
+  displayName?: string | null;
+  /**
+   * @type array
+   */
+  roles?: string[] | null;
+  /**
+   * @type array
+   */
+  permissions?: string[] | null;
+};
+
+export type AuthResponseDto = {
+  /**
+   * @type string
+   */
+  accessToken?: string | null;
+  /**
+   * @type string | undefined, date-time
+   */
+  expiresAtUtc?: string;
+  /**
+   * @type object | undefined
+   */
+  user?: UserProfileDto;
 };
 
 export type BrandLookupDto = {
@@ -74,21 +379,6 @@ export type BrandUpsertDto = {
    * @type string
    */
   name?: string | null;
-};
-
-export type Category = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  name?: string | null;
-  /**
-   * @type string
-   */
-  description?: string | null;
 };
 
 export type CategoryLookupDto = {
@@ -284,226 +574,6 @@ export type CmsPostUpsertDto = {
   isPublished?: boolean;
 };
 
-export type Role = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  name?: string | null;
-  /**
-   * @type array
-   */
-  users?: User[] | null;
-};
-
-export type User = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  name?: string | null;
-  /**
-   * @type string
-   */
-  email?: string | null;
-  /**
-   * @type integer | undefined, int32
-   */
-  roleId?: number;
-  /**
-   * @type object | undefined
-   */
-  role?: Role;
-  /**
-   * @type array
-   */
-  rentalOrders?: RentalOrder[] | null;
-};
-
-export type Warehouse = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  name?: string | null;
-  /**
-   * @type string
-   */
-  location?: string | null;
-};
-
-export type Maintenance = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type integer | undefined, int32
-   */
-  equipmentId?: number;
-  /**
-   * @type object | undefined
-   */
-  equipment?: Equipment;
-  /**
-   * @type string
-   */
-  description?: string | null;
-  /**
-   * @type string | undefined, date-time
-   */
-  date?: string;
-};
-
-export type Equipment = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  name?: string | null;
-  /**
-   * @type integer | undefined, int32
-   */
-  categoryId?: number;
-  /**
-   * @type object | undefined
-   */
-  category?: Category;
-  /**
-   * @type integer | undefined, int32
-   */
-  brandId?: number;
-  /**
-   * @type object | undefined
-   */
-  brand?: Brand;
-  /**
-   * @type integer | undefined, int32
-   */
-  warehouseId?: number;
-  /**
-   * @type object | undefined
-   */
-  warehouse?: Warehouse;
-  /**
-   * @type number | undefined, double
-   */
-  dailyRate?: number;
-  /**
-   * @type boolean | undefined
-   */
-  isAvailable?: boolean;
-  /**
-   * @type string
-   */
-  imageUrl?: string | null;
-  /**
-   * @type array
-   */
-  maintenances?: Maintenance[] | null;
-  /**
-   * @type array
-   */
-  rentalOrderItems?: RentalOrderItem[] | null;
-};
-
-export type RentalOrderItem = {
-  /**
-   * @type integer | undefined, int32
-   */
-  rentalOrderId?: number;
-  /**
-   * @type object | undefined
-   */
-  rentalOrder?: RentalOrder;
-  /**
-   * @type integer | undefined, int32
-   */
-  equipmentId?: number;
-  /**
-   * @type object | undefined
-   */
-  equipment?: Equipment;
-  /**
-   * @type integer | undefined, int32
-   */
-  quantity?: number;
-  /**
-   * @type number | undefined, double
-   */
-  unitPrice?: number;
-};
-
-export type RentalOrder = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type integer | undefined, int32
-   */
-  customerId?: number;
-  /**
-   * @type object | undefined
-   */
-  customer?: Customer;
-  /**
-   * @type integer | undefined, int32
-   */
-  userId?: number;
-  /**
-   * @type object | undefined
-   */
-  user?: User;
-  /**
-   * @type string | undefined, date-time
-   */
-  orderDate?: string;
-  /**
-   * @type string | undefined, date-time
-   */
-  rentalStartDate?: string;
-  /**
-   * @type string | undefined, date-time
-   */
-  rentalEndDate?: string;
-  /**
-   * @type array
-   */
-  items?: RentalOrderItem[] | null;
-};
-
-export type Customer = {
-  /**
-   * @type integer | undefined, int32
-   */
-  id?: number;
-  /**
-   * @type string
-   */
-  companyName?: string | null;
-  /**
-   * @type string
-   */
-  contactPerson?: string | null;
-  /**
-   * @type array
-   */
-  rentalOrders?: RentalOrder[] | null;
-};
-
 export type EquipmentDto = {
   /**
    * @type integer | undefined, int32
@@ -597,6 +667,17 @@ export type FileUploadResponseDto = {
   absoluteUrl?: string | null;
 };
 
+export type LoginRequestDto = {
+  /**
+   * @type string
+   */
+  email?: string | null;
+  /**
+   * @type string
+   */
+  password?: string | null;
+};
+
 export type OrderItemDto = {
   /**
    * @type integer | undefined, int32
@@ -614,10 +695,6 @@ export type OrderCreateDto = {
    */
   customerId?: number;
   /**
-   * @type integer | undefined, int32
-   */
-  userId?: number;
-  /**
    * @type string | undefined, date-time
    */
   rentalStartDate?: string;
@@ -629,6 +706,49 @@ export type OrderCreateDto = {
    * @type array
    */
   items?: OrderItemDto[] | null;
+};
+
+export type ProblemDetails = {
+  /**
+   * @type string
+   */
+  type?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type integer, int32
+   */
+  status?: number | null;
+  /**
+   * @type string
+   */
+  detail?: string | null;
+  /**
+   * @type string
+   */
+  instance?: string | null;
+  [key: string]: unknown;
+};
+
+export type RegisterUserRequestDto = {
+  /**
+   * @type string
+   */
+  email?: string | null;
+  /**
+   * @type string
+   */
+  password?: string | null;
+  /**
+   * @type string
+   */
+  displayName?: string | null;
+  /**
+   * @type string
+   */
+  role?: string | null;
 };
 
 export type RentalOrderLineDto = {
@@ -722,13 +842,80 @@ export type WarehouseUpsertDto = {
 /**
  * @description OK
  */
+export type PostApiAuthLogin200 = AuthResponseDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiAuthLogin400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type PostApiAuthLogin401 = ApiErrorResponse;
+
+export type PostApiAuthLoginMutationRequest = LoginRequestDto;
+
+export type PostApiAuthLoginMutationResponse = PostApiAuthLogin200;
+
+export type PostApiAuthLoginMutation = {
+  Response: PostApiAuthLogin200;
+  Request: PostApiAuthLoginMutationRequest;
+  Errors: PostApiAuthLogin400 | PostApiAuthLogin401;
+};
+
+/**
+ * @description Created
+ */
+export type PostApiAuthRegister201 = AuthResponseDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiAuthRegister400 = ApiErrorResponse;
+
+export type PostApiAuthRegisterMutationRequest = RegisterUserRequestDto;
+
+export type PostApiAuthRegisterMutationResponse = PostApiAuthRegister201;
+
+export type PostApiAuthRegisterMutation = {
+  Response: PostApiAuthRegister201;
+  Request: PostApiAuthRegisterMutationRequest;
+  Errors: PostApiAuthRegister400;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiAuthMe200 = UserProfileDto;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiAuthMe401 = ProblemDetails;
+
+export type GetApiAuthMeQueryResponse = GetApiAuthMe200;
+
+export type GetApiAuthMeQuery = {
+  Response: GetApiAuthMe200;
+  Errors: GetApiAuthMe401;
+};
+
+/**
+ * @description OK
+ */
 export type GetApiBrand200 = BrandLookupDto[];
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiBrand401 = ProblemDetails;
 
 export type GetApiBrandQueryResponse = GetApiBrand200;
 
 export type GetApiBrandQuery = {
   Response: GetApiBrand200;
-  Errors: any;
+  Errors: GetApiBrand401;
 };
 
 /**
@@ -741,6 +928,11 @@ export type PostApiBrand201 = BrandLookupDto;
  */
 export type PostApiBrand400 = ApiErrorResponse;
 
+/**
+ * @description Unauthorized
+ */
+export type PostApiBrand401 = ProblemDetails;
+
 export type PostApiBrandMutationRequest = BrandUpsertDto;
 
 export type PostApiBrandMutationResponse = PostApiBrand201;
@@ -748,7 +940,7 @@ export type PostApiBrandMutationResponse = PostApiBrand201;
 export type PostApiBrandMutation = {
   Response: PostApiBrand201;
   Request: PostApiBrandMutationRequest;
-  Errors: PostApiBrand400;
+  Errors: PostApiBrand400 | PostApiBrand401;
 };
 
 export type GetApiBrandIdPathParams = {
@@ -764,6 +956,11 @@ export type GetApiBrandIdPathParams = {
 export type GetApiBrandId200 = BrandLookupDto;
 
 /**
+ * @description Unauthorized
+ */
+export type GetApiBrandId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type GetApiBrandId404 = ApiErrorResponse;
@@ -773,7 +970,7 @@ export type GetApiBrandIdQueryResponse = GetApiBrandId200;
 export type GetApiBrandIdQuery = {
   Response: GetApiBrandId200;
   PathParams: GetApiBrandIdPathParams;
-  Errors: GetApiBrandId404;
+  Errors: GetApiBrandId401 | GetApiBrandId404;
 };
 
 export type PutApiBrandIdPathParams = {
@@ -789,6 +986,11 @@ export type PutApiBrandIdPathParams = {
 export type PutApiBrandId204 = any;
 
 /**
+ * @description Unauthorized
+ */
+export type PutApiBrandId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type PutApiBrandId404 = ApiErrorResponse;
@@ -801,7 +1003,7 @@ export type PutApiBrandIdMutation = {
   Response: PutApiBrandId204;
   Request: PutApiBrandIdMutationRequest;
   PathParams: PutApiBrandIdPathParams;
-  Errors: PutApiBrandId404;
+  Errors: PutApiBrandId401 | PutApiBrandId404;
 };
 
 export type DeleteApiBrandIdPathParams = {
@@ -822,6 +1024,11 @@ export type DeleteApiBrandId204 = any;
 export type DeleteApiBrandId400 = ApiErrorResponse;
 
 /**
+ * @description Unauthorized
+ */
+export type DeleteApiBrandId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type DeleteApiBrandId404 = ApiErrorResponse;
@@ -831,7 +1038,7 @@ export type DeleteApiBrandIdMutationResponse = DeleteApiBrandId204;
 export type DeleteApiBrandIdMutation = {
   Response: DeleteApiBrandId204;
   PathParams: DeleteApiBrandIdPathParams;
-  Errors: DeleteApiBrandId400 | DeleteApiBrandId404;
+  Errors: DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404;
 };
 
 /**
@@ -839,11 +1046,16 @@ export type DeleteApiBrandIdMutation = {
  */
 export type GetApiCategory200 = CategoryLookupDto[];
 
+/**
+ * @description Unauthorized
+ */
+export type GetApiCategory401 = ProblemDetails;
+
 export type GetApiCategoryQueryResponse = GetApiCategory200;
 
 export type GetApiCategoryQuery = {
   Response: GetApiCategory200;
-  Errors: any;
+  Errors: GetApiCategory401;
 };
 
 /**
@@ -856,6 +1068,11 @@ export type PostApiCategory201 = CategoryLookupDto;
  */
 export type PostApiCategory400 = ApiErrorResponse;
 
+/**
+ * @description Unauthorized
+ */
+export type PostApiCategory401 = ProblemDetails;
+
 export type PostApiCategoryMutationRequest = CategoryUpsertDto;
 
 export type PostApiCategoryMutationResponse = PostApiCategory201;
@@ -863,7 +1080,7 @@ export type PostApiCategoryMutationResponse = PostApiCategory201;
 export type PostApiCategoryMutation = {
   Response: PostApiCategory201;
   Request: PostApiCategoryMutationRequest;
-  Errors: PostApiCategory400;
+  Errors: PostApiCategory400 | PostApiCategory401;
 };
 
 export type GetApiCategoryIdPathParams = {
@@ -879,6 +1096,11 @@ export type GetApiCategoryIdPathParams = {
 export type GetApiCategoryId200 = CategoryLookupDto;
 
 /**
+ * @description Unauthorized
+ */
+export type GetApiCategoryId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type GetApiCategoryId404 = ApiErrorResponse;
@@ -888,7 +1110,7 @@ export type GetApiCategoryIdQueryResponse = GetApiCategoryId200;
 export type GetApiCategoryIdQuery = {
   Response: GetApiCategoryId200;
   PathParams: GetApiCategoryIdPathParams;
-  Errors: GetApiCategoryId404;
+  Errors: GetApiCategoryId401 | GetApiCategoryId404;
 };
 
 export type PutApiCategoryIdPathParams = {
@@ -904,6 +1126,11 @@ export type PutApiCategoryIdPathParams = {
 export type PutApiCategoryId204 = any;
 
 /**
+ * @description Unauthorized
+ */
+export type PutApiCategoryId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type PutApiCategoryId404 = ApiErrorResponse;
@@ -916,7 +1143,7 @@ export type PutApiCategoryIdMutation = {
   Response: PutApiCategoryId204;
   Request: PutApiCategoryIdMutationRequest;
   PathParams: PutApiCategoryIdPathParams;
-  Errors: PutApiCategoryId404;
+  Errors: PutApiCategoryId401 | PutApiCategoryId404;
 };
 
 export type DeleteApiCategoryIdPathParams = {
@@ -937,6 +1164,11 @@ export type DeleteApiCategoryId204 = any;
 export type DeleteApiCategoryId400 = ApiErrorResponse;
 
 /**
+ * @description Unauthorized
+ */
+export type DeleteApiCategoryId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type DeleteApiCategoryId404 = ApiErrorResponse;
@@ -946,7 +1178,10 @@ export type DeleteApiCategoryIdMutationResponse = DeleteApiCategoryId204;
 export type DeleteApiCategoryIdMutation = {
   Response: DeleteApiCategoryId204;
   PathParams: DeleteApiCategoryIdPathParams;
-  Errors: DeleteApiCategoryId400 | DeleteApiCategoryId404;
+  Errors:
+    | DeleteApiCategoryId400
+    | DeleteApiCategoryId401
+    | DeleteApiCategoryId404;
 };
 
 /**
@@ -954,11 +1189,16 @@ export type DeleteApiCategoryIdMutation = {
  */
 export type GetApiCmspost200 = CmsPostListDto[];
 
+/**
+ * @description Unauthorized
+ */
+export type GetApiCmspost401 = ProblemDetails;
+
 export type GetApiCmspostQueryResponse = GetApiCmspost200;
 
 export type GetApiCmspostQuery = {
   Response: GetApiCmspost200;
-  Errors: any;
+  Errors: GetApiCmspost401;
 };
 
 /**
@@ -971,6 +1211,11 @@ export type PostApiCmspost201 = CmsPostDetailDto;
  */
 export type PostApiCmspost400 = ApiErrorResponse;
 
+/**
+ * @description Unauthorized
+ */
+export type PostApiCmspost401 = ProblemDetails;
+
 export type PostApiCmspostMutationRequest = CmsPostUpsertDto;
 
 export type PostApiCmspostMutationResponse = PostApiCmspost201;
@@ -978,7 +1223,7 @@ export type PostApiCmspostMutationResponse = PostApiCmspost201;
 export type PostApiCmspostMutation = {
   Response: PostApiCmspost201;
   Request: PostApiCmspostMutationRequest;
-  Errors: PostApiCmspost400;
+  Errors: PostApiCmspost400 | PostApiCmspost401;
 };
 
 export type GetApiCmspostIdPathParams = {
@@ -994,6 +1239,11 @@ export type GetApiCmspostIdPathParams = {
 export type GetApiCmspostId200 = CmsPostDetailDto;
 
 /**
+ * @description Unauthorized
+ */
+export type GetApiCmspostId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type GetApiCmspostId404 = ApiErrorResponse;
@@ -1003,7 +1253,7 @@ export type GetApiCmspostIdQueryResponse = GetApiCmspostId200;
 export type GetApiCmspostIdQuery = {
   Response: GetApiCmspostId200;
   PathParams: GetApiCmspostIdPathParams;
-  Errors: GetApiCmspostId404;
+  Errors: GetApiCmspostId401 | GetApiCmspostId404;
 };
 
 export type PutApiCmspostIdPathParams = {
@@ -1024,6 +1274,11 @@ export type PutApiCmspostId200 = CmsPostDetailDto;
 export type PutApiCmspostId400 = ApiErrorResponse;
 
 /**
+ * @description Unauthorized
+ */
+export type PutApiCmspostId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type PutApiCmspostId404 = ApiErrorResponse;
@@ -1036,7 +1291,7 @@ export type PutApiCmspostIdMutation = {
   Response: PutApiCmspostId200;
   Request: PutApiCmspostIdMutationRequest;
   PathParams: PutApiCmspostIdPathParams;
-  Errors: PutApiCmspostId400 | PutApiCmspostId404;
+  Errors: PutApiCmspostId400 | PutApiCmspostId401 | PutApiCmspostId404;
 };
 
 export type DeleteApiCmspostIdPathParams = {
@@ -1052,6 +1307,11 @@ export type DeleteApiCmspostIdPathParams = {
 export type DeleteApiCmspostId204 = any;
 
 /**
+ * @description Unauthorized
+ */
+export type DeleteApiCmspostId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type DeleteApiCmspostId404 = ApiErrorResponse;
@@ -1061,7 +1321,7 @@ export type DeleteApiCmspostIdMutationResponse = DeleteApiCmspostId204;
 export type DeleteApiCmspostIdMutation = {
   Response: DeleteApiCmspostId204;
   PathParams: DeleteApiCmspostIdPathParams;
-  Errors: DeleteApiCmspostId404;
+  Errors: DeleteApiCmspostId401 | DeleteApiCmspostId404;
 };
 
 /**
@@ -1069,11 +1329,16 @@ export type DeleteApiCmspostIdMutation = {
  */
 export type GetApiCmspostPublished200 = CmsPostPublicSummaryDto[];
 
+/**
+ * @description Unauthorized
+ */
+export type GetApiCmspostPublished401 = ProblemDetails;
+
 export type GetApiCmspostPublishedQueryResponse = GetApiCmspostPublished200;
 
 export type GetApiCmspostPublishedQuery = {
   Response: GetApiCmspostPublished200;
-  Errors: any;
+  Errors: GetApiCmspostPublished401;
 };
 
 export type GetApiCmspostPublishedSlugPathParams = {
@@ -1089,6 +1354,11 @@ export type GetApiCmspostPublishedSlugPathParams = {
 export type GetApiCmspostPublishedSlug200 = CmsPostPublicDetailDto;
 
 /**
+ * @description Unauthorized
+ */
+export type GetApiCmspostPublishedSlug401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type GetApiCmspostPublishedSlug404 = ApiErrorResponse;
@@ -1099,19 +1369,19 @@ export type GetApiCmspostPublishedSlugQueryResponse =
 export type GetApiCmspostPublishedSlugQuery = {
   Response: GetApiCmspostPublishedSlug200;
   PathParams: GetApiCmspostPublishedSlugPathParams;
-  Errors: GetApiCmspostPublishedSlug404;
+  Errors: GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404;
 };
 
 /**
- * @description OK
+ * @description Unauthorized
  */
-export type GetApiCustomer200 = Customer[];
+export type GetApiCustomer401 = ProblemDetails;
 
-export type GetApiCustomerQueryResponse = GetApiCustomer200;
+export type GetApiCustomerQueryResponse = any;
 
 export type GetApiCustomerQuery = {
-  Response: GetApiCustomer200;
-  Errors: any;
+  Response: any;
+  Errors: GetApiCustomer401;
 };
 
 /**
@@ -1119,11 +1389,16 @@ export type GetApiCustomerQuery = {
  */
 export type GetApiEquipment200 = EquipmentDto[];
 
+/**
+ * @description Unauthorized
+ */
+export type GetApiEquipment401 = ProblemDetails;
+
 export type GetApiEquipmentQueryResponse = GetApiEquipment200;
 
 export type GetApiEquipmentQuery = {
   Response: GetApiEquipment200;
-  Errors: any;
+  Errors: GetApiEquipment401;
 };
 
 /**
@@ -1137,6 +1412,11 @@ export type PostApiEquipment201 = EquipmentDto;
 export type PostApiEquipment400 = ApiErrorResponse;
 
 /**
+ * @description Unauthorized
+ */
+export type PostApiEquipment401 = ProblemDetails;
+
+/**
  * @description Internal Server Error
  */
 export type PostApiEquipment500 = ApiErrorResponse;
@@ -1148,7 +1428,7 @@ export type PostApiEquipmentMutationResponse = PostApiEquipment201;
 export type PostApiEquipmentMutation = {
   Response: PostApiEquipment201;
   Request: PostApiEquipmentMutationRequest;
-  Errors: PostApiEquipment400 | PostApiEquipment500;
+  Errors: PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500;
 };
 
 export type GetApiEquipmentIdPathParams = {
@@ -1164,6 +1444,11 @@ export type GetApiEquipmentIdPathParams = {
 export type GetApiEquipmentId200 = EquipmentDto;
 
 /**
+ * @description Unauthorized
+ */
+export type GetApiEquipmentId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type GetApiEquipmentId404 = ApiErrorResponse;
@@ -1173,7 +1458,7 @@ export type GetApiEquipmentIdQueryResponse = GetApiEquipmentId200;
 export type GetApiEquipmentIdQuery = {
   Response: GetApiEquipmentId200;
   PathParams: GetApiEquipmentIdPathParams;
-  Errors: GetApiEquipmentId404;
+  Errors: GetApiEquipmentId401 | GetApiEquipmentId404;
 };
 
 export type PutApiEquipmentIdPathParams = {
@@ -1194,6 +1479,11 @@ export type PutApiEquipmentId204 = any;
 export type PutApiEquipmentId400 = ApiErrorResponse;
 
 /**
+ * @description Unauthorized
+ */
+export type PutApiEquipmentId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type PutApiEquipmentId404 = ApiErrorResponse;
@@ -1206,7 +1496,7 @@ export type PutApiEquipmentIdMutation = {
   Response: PutApiEquipmentId204;
   Request: PutApiEquipmentIdMutationRequest;
   PathParams: PutApiEquipmentIdPathParams;
-  Errors: PutApiEquipmentId400 | PutApiEquipmentId404;
+  Errors: PutApiEquipmentId400 | PutApiEquipmentId401 | PutApiEquipmentId404;
 };
 
 export type DeleteApiEquipmentIdPathParams = {
@@ -1222,6 +1512,11 @@ export type DeleteApiEquipmentIdPathParams = {
 export type DeleteApiEquipmentId204 = any;
 
 /**
+ * @description Unauthorized
+ */
+export type DeleteApiEquipmentId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type DeleteApiEquipmentId404 = ApiErrorResponse;
@@ -1231,7 +1526,7 @@ export type DeleteApiEquipmentIdMutationResponse = DeleteApiEquipmentId204;
 export type DeleteApiEquipmentIdMutation = {
   Response: DeleteApiEquipmentId204;
   PathParams: DeleteApiEquipmentIdPathParams;
-  Errors: DeleteApiEquipmentId404;
+  Errors: DeleteApiEquipmentId401 | DeleteApiEquipmentId404;
 };
 
 /**
@@ -1243,6 +1538,11 @@ export type PostApiFilesUpload200 = FileUploadResponseDto;
  * @description Bad Request
  */
 export type PostApiFilesUpload400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type PostApiFilesUpload401 = ProblemDetails;
 
 export type PostApiFilesUploadMutationRequest = {
   /**
@@ -1261,7 +1561,7 @@ export type PostApiFilesUploadMutationResponse = PostApiFilesUpload200;
 export type PostApiFilesUploadMutation = {
   Response: PostApiFilesUpload200;
   Request: PostApiFilesUploadMutationRequest;
-  Errors: PostApiFilesUpload400;
+  Errors: PostApiFilesUpload400 | PostApiFilesUpload401;
 };
 
 /**
@@ -1274,11 +1574,16 @@ export type GetApiOrder200 = RentalOrderListDto[];
  */
 export type GetApiOrder400 = ApiErrorResponse;
 
+/**
+ * @description Unauthorized
+ */
+export type GetApiOrder401 = ProblemDetails;
+
 export type GetApiOrderQueryResponse = GetApiOrder200;
 
 export type GetApiOrderQuery = {
   Response: GetApiOrder200;
-  Errors: GetApiOrder400;
+  Errors: GetApiOrder400 | GetApiOrder401;
 };
 
 /**
@@ -1291,6 +1596,11 @@ export type PostApiOrderCreateorder201 = RentalOrder;
  */
 export type PostApiOrderCreateorder400 = ApiErrorResponse;
 
+/**
+ * @description Unauthorized
+ */
+export type PostApiOrderCreateorder401 = ProblemDetails;
+
 export type PostApiOrderCreateorderMutationRequest = OrderCreateDto;
 
 export type PostApiOrderCreateorderMutationResponse =
@@ -1299,7 +1609,7 @@ export type PostApiOrderCreateorderMutationResponse =
 export type PostApiOrderCreateorderMutation = {
   Response: PostApiOrderCreateorder201;
   Request: PostApiOrderCreateorderMutationRequest;
-  Errors: PostApiOrderCreateorder400;
+  Errors: PostApiOrderCreateorder400 | PostApiOrderCreateorder401;
 };
 
 /**
@@ -1307,11 +1617,16 @@ export type PostApiOrderCreateorderMutation = {
  */
 export type GetApiWarehouse200 = WarehouseLookupDto[];
 
+/**
+ * @description Unauthorized
+ */
+export type GetApiWarehouse401 = ProblemDetails;
+
 export type GetApiWarehouseQueryResponse = GetApiWarehouse200;
 
 export type GetApiWarehouseQuery = {
   Response: GetApiWarehouse200;
-  Errors: any;
+  Errors: GetApiWarehouse401;
 };
 
 /**
@@ -1324,6 +1639,11 @@ export type PostApiWarehouse201 = WarehouseLookupDto;
  */
 export type PostApiWarehouse400 = ApiErrorResponse;
 
+/**
+ * @description Unauthorized
+ */
+export type PostApiWarehouse401 = ProblemDetails;
+
 export type PostApiWarehouseMutationRequest = WarehouseUpsertDto;
 
 export type PostApiWarehouseMutationResponse = PostApiWarehouse201;
@@ -1331,7 +1651,7 @@ export type PostApiWarehouseMutationResponse = PostApiWarehouse201;
 export type PostApiWarehouseMutation = {
   Response: PostApiWarehouse201;
   Request: PostApiWarehouseMutationRequest;
-  Errors: PostApiWarehouse400;
+  Errors: PostApiWarehouse400 | PostApiWarehouse401;
 };
 
 export type GetApiWarehouseIdPathParams = {
@@ -1347,6 +1667,11 @@ export type GetApiWarehouseIdPathParams = {
 export type GetApiWarehouseId200 = WarehouseLookupDto;
 
 /**
+ * @description Unauthorized
+ */
+export type GetApiWarehouseId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type GetApiWarehouseId404 = ApiErrorResponse;
@@ -1356,7 +1681,7 @@ export type GetApiWarehouseIdQueryResponse = GetApiWarehouseId200;
 export type GetApiWarehouseIdQuery = {
   Response: GetApiWarehouseId200;
   PathParams: GetApiWarehouseIdPathParams;
-  Errors: GetApiWarehouseId404;
+  Errors: GetApiWarehouseId401 | GetApiWarehouseId404;
 };
 
 export type PutApiWarehouseIdPathParams = {
@@ -1372,6 +1697,11 @@ export type PutApiWarehouseIdPathParams = {
 export type PutApiWarehouseId204 = any;
 
 /**
+ * @description Unauthorized
+ */
+export type PutApiWarehouseId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type PutApiWarehouseId404 = ApiErrorResponse;
@@ -1384,7 +1714,7 @@ export type PutApiWarehouseIdMutation = {
   Response: PutApiWarehouseId204;
   Request: PutApiWarehouseIdMutationRequest;
   PathParams: PutApiWarehouseIdPathParams;
-  Errors: PutApiWarehouseId404;
+  Errors: PutApiWarehouseId401 | PutApiWarehouseId404;
 };
 
 export type DeleteApiWarehouseIdPathParams = {
@@ -1405,6 +1735,11 @@ export type DeleteApiWarehouseId204 = any;
 export type DeleteApiWarehouseId400 = ApiErrorResponse;
 
 /**
+ * @description Unauthorized
+ */
+export type DeleteApiWarehouseId401 = ProblemDetails;
+
+/**
  * @description Not Found
  */
 export type DeleteApiWarehouseId404 = ApiErrorResponse;
@@ -1414,5 +1749,8 @@ export type DeleteApiWarehouseIdMutationResponse = DeleteApiWarehouseId204;
 export type DeleteApiWarehouseIdMutation = {
   Response: DeleteApiWarehouseId204;
   PathParams: DeleteApiWarehouseIdPathParams;
-  Errors: DeleteApiWarehouseId400 | DeleteApiWarehouseId404;
+  Errors:
+    | DeleteApiWarehouseId400
+    | DeleteApiWarehouseId401
+    | DeleteApiWarehouseId404;
 };
