@@ -367,6 +367,7 @@ export function PortalCatalogView() {
                         style={{ textDecoration: "none" }}
                       >
                         <Button
+                          component="span"
                           size="small"
                           variant="text"
                           sx={{ fontWeight: 600 }}
@@ -512,6 +513,7 @@ export function PortalCatalogView() {
                     >
                       <Typography
                         variant="h6"
+                        component="h3"
                         gutterBottom
                         sx={{
                           fontWeight: 700,
@@ -587,6 +589,7 @@ export function PortalCatalogView() {
                         }}
                       >
                         <Button
+                          component="span"
                           size="small"
                           variant="outlined"
                           sx={{ fontWeight: 600 }}
