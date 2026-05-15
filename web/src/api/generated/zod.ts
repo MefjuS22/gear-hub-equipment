@@ -29,6 +29,10 @@ export const apiErrorCodeSchema = z.enum([
   "authInvalidCredentials",
   "authRoleNotFound",
   "authForbidden",
+  "userNotFound",
+  "userEmailTaken",
+  "userCannotDeleteSelf",
+  "userLastAdmin",
 ]);
 
 export const apiErrorResponseSchema = z.object({
@@ -243,6 +247,13 @@ export const cmsPostUpsertDtoSchema = z.object({
   isPublished: z.optional(z.boolean()),
 });
 
+export const createUserAdminDtoSchema = z.object({
+  email: z.string().nullish(),
+  password: z.string().nullish(),
+  displayName: z.string().nullish(),
+  roles: z.array(z.string()).nullish(),
+});
+
 export const equipmentDtoSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
@@ -330,6 +341,17 @@ export const rentalOrderListDtoSchema = z.object({
   get items() {
     return z.array(rentalOrderLineDtoSchema).nullish();
   },
+});
+
+export const setUserRolesDtoSchema = z.object({
+  roles: z.array(z.string()).nullish(),
+});
+
+export const userAdminListDtoSchema = z.object({
+  id: z.optional(z.int()),
+  email: z.string().nullish(),
+  displayName: z.string().nullish(),
+  roles: z.array(z.string()).nullish(),
 });
 
 export const warehouseLookupDtoSchema = z.object({
@@ -1036,6 +1058,125 @@ export const postApiOrderCreateorderMutationRequestSchema = z.lazy(
 
 export const postApiOrderCreateorderMutationResponseSchema = z.lazy(
   () => postApiOrderCreateorder201Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiUsers200Schema = z.array(
+  z.lazy(() => userAdminListDtoSchema),
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiUsers401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Forbidden
+ */
+export const getApiUsers403Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiUsersQueryResponseSchema = z.lazy(
+  () => getApiUsers200Schema,
+);
+
+/**
+ * @description Created
+ */
+export const postApiUsers201Schema = z.lazy(() => userAdminListDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const postApiUsers400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Unauthorized
+ */
+export const postApiUsers401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Forbidden
+ */
+export const postApiUsers403Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const postApiUsersMutationRequestSchema = z.lazy(
+  () => createUserAdminDtoSchema,
+);
+
+export const postApiUsersMutationResponseSchema = z.lazy(
+  () => postApiUsers201Schema,
+);
+
+export const putApiUsersIdRolesPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const putApiUsersIdRoles204Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const putApiUsersIdRoles400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Unauthorized
+ */
+export const putApiUsersIdRoles401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Forbidden
+ */
+export const putApiUsersIdRoles403Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Not Found
+ */
+export const putApiUsersIdRoles404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const putApiUsersIdRolesMutationRequestSchema = z.lazy(
+  () => setUserRolesDtoSchema,
+);
+
+export const putApiUsersIdRolesMutationResponseSchema = z.lazy(
+  () => putApiUsersIdRoles204Schema,
+);
+
+export const deleteApiUsersIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description No Content
+ */
+export const deleteApiUsersId204Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const deleteApiUsersId400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Unauthorized
+ */
+export const deleteApiUsersId401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Forbidden
+ */
+export const deleteApiUsersId403Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Not Found
+ */
+export const deleteApiUsersId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const deleteApiUsersIdMutationResponseSchema = z.lazy(
+  () => deleteApiUsersId204Schema,
 );
 
 /**

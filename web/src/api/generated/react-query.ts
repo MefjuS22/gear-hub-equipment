@@ -52,6 +52,9 @@ import type {
   GetApiOrderId401,
   GetApiOrderId403,
   GetApiOrderId404,
+  GetApiUsersQueryResponse,
+  GetApiUsers401,
+  GetApiUsers403,
   GetApiWarehouseQueryResponse,
   GetApiWarehouse401,
   GetApiWarehouseIdQueryResponse,
@@ -125,6 +128,24 @@ import type {
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorder401,
+  PostApiUsersMutationRequest,
+  PostApiUsersMutationResponse,
+  PostApiUsers400,
+  PostApiUsers401,
+  PostApiUsers403,
+  PutApiUsersIdRolesMutationRequest,
+  PutApiUsersIdRolesMutationResponse,
+  PutApiUsersIdRolesPathParams,
+  PutApiUsersIdRoles400,
+  PutApiUsersIdRoles401,
+  PutApiUsersIdRoles403,
+  PutApiUsersIdRoles404,
+  DeleteApiUsersIdMutationResponse,
+  DeleteApiUsersIdPathParams,
+  DeleteApiUsersId400,
+  DeleteApiUsersId401,
+  DeleteApiUsersId403,
+  DeleteApiUsersId404,
   PostApiWarehouseMutationRequest,
   PostApiWarehouseMutationResponse,
   PostApiWarehouse400,
@@ -171,6 +192,7 @@ import {
   getApiEquipmentId,
   getApiOrder,
   getApiOrderId,
+  getApiUsers,
   getApiWarehouse,
   getApiWarehouseId,
   postApiAuthLogin,
@@ -188,6 +210,9 @@ import {
   deleteApiEquipmentId,
   postApiFilesUpload,
   postApiOrderCreateorder,
+  postApiUsers,
+  putApiUsersIdRoles,
+  deleteApiUsersId,
   postApiWarehouse,
   putApiWarehouseId,
   deleteApiWarehouseId,
@@ -1141,6 +1166,69 @@ export function useGetApiOrderId<
     ResponseErrorConfig<
       GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
     >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiUsersQueryKey = () => [{ url: "/api/Users" }] as const;
+
+export type GetApiUsersQueryKey = ReturnType<typeof getApiUsersQueryKey>;
+
+export function getApiUsersQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiUsersQueryKey();
+  return queryOptions<
+    GetApiUsersQueryResponse,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+    GetApiUsersQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiUsers({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Users}
+ */
+export function useGetApiUsers<
+  TData = GetApiUsersQueryResponse,
+  TQueryData = GetApiUsersQueryResponse,
+  TQueryKey extends QueryKey = GetApiUsersQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiUsersQueryResponse,
+        ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiUsersQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiUsersQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -2235,6 +2323,70 @@ export function useGetApiOrderIdSuspense<
     ResponseErrorConfig<
       GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
     >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiUsersSuspenseQueryKey = () =>
+  [{ url: "/api/Users" }] as const;
+
+export type GetApiUsersSuspenseQueryKey = ReturnType<
+  typeof getApiUsersSuspenseQueryKey
+>;
+
+export function getApiUsersSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiUsersSuspenseQueryKey();
+  return queryOptions<
+    GetApiUsersQueryResponse,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+    GetApiUsersQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiUsers({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Users}
+ */
+export function useGetApiUsersSuspense<
+  TData = GetApiUsersQueryResponse,
+  TQueryKey extends QueryKey = GetApiUsersSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiUsersQueryResponse,
+        ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiUsersSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiUsersSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -3678,6 +3830,291 @@ export function usePostApiOrderCreateorder<TContext>(
       PostApiOrderCreateorder400 | PostApiOrderCreateorder401
     >,
     { data?: PostApiOrderCreateorderMutationRequest },
+    TContext
+  >;
+}
+
+export const postApiUsersMutationKey = () => [{ url: "/api/Users" }] as const;
+
+export type PostApiUsersMutationKey = ReturnType<
+  typeof postApiUsersMutationKey
+>;
+
+export function postApiUsersMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PostApiUsersMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = postApiUsersMutationKey();
+  return mutationOptions<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ data }) => {
+      return postApiUsers(data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Users}
+ */
+export function usePostApiUsers<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PostApiUsersMutationResponse,
+      ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+      { data?: PostApiUsersMutationRequest },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PostApiUsersMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey = mutationOptions.mutationKey ?? postApiUsersMutationKey();
+
+  const baseOptions = postApiUsersMutationOptions(config) as UseMutationOptions<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >;
+
+  return useMutation<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    { data?: PostApiUsersMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiUsersIdRolesMutationKey = () =>
+  [{ url: "/api/Users/:id/roles" }] as const;
+
+export type PutApiUsersIdRolesMutationKey = ReturnType<
+  typeof putApiUsersIdRolesMutationKey
+>;
+
+export function putApiUsersIdRolesMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiUsersIdRolesMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiUsersIdRolesMutationKey();
+  return mutationOptions<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id, data }) => {
+      return putApiUsersIdRoles(id, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Users/:id/roles}
+ */
+export function usePutApiUsersIdRoles<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiUsersIdRolesMutationResponse,
+      ResponseErrorConfig<
+        | PutApiUsersIdRoles400
+        | PutApiUsersIdRoles401
+        | PutApiUsersIdRoles403
+        | PutApiUsersIdRoles404
+      >,
+      {
+        id: PutApiUsersIdRolesPathParams["id"];
+        data?: PutApiUsersIdRolesMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiUsersIdRolesMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiUsersIdRolesMutationKey();
+
+  const baseOptions = putApiUsersIdRolesMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    {
+      id: PutApiUsersIdRolesPathParams["id"];
+      data?: PutApiUsersIdRolesMutationRequest;
+    },
+    TContext
+  >;
+}
+
+export const deleteApiUsersIdMutationKey = () =>
+  [{ url: "/api/Users/:id" }] as const;
+
+export type DeleteApiUsersIdMutationKey = ReturnType<
+  typeof deleteApiUsersIdMutationKey
+>;
+
+export function deleteApiUsersIdMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const mutationKey = deleteApiUsersIdMutationKey();
+  return mutationOptions<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ id }) => {
+      return deleteApiUsersId(id, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/Users/:id}
+ */
+export function useDeleteApiUsersId<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      DeleteApiUsersIdMutationResponse,
+      ResponseErrorConfig<
+        | DeleteApiUsersId400
+        | DeleteApiUsersId401
+        | DeleteApiUsersId403
+        | DeleteApiUsersId404
+      >,
+      { id: DeleteApiUsersIdPathParams["id"] },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? deleteApiUsersIdMutationKey();
+
+  const baseOptions = deleteApiUsersIdMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
+    TContext
+  >;
+
+  return useMutation<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    { id: DeleteApiUsersIdPathParams["id"] },
     TContext
   >;
 }

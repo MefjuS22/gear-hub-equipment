@@ -25,7 +25,11 @@
         "fileUploadInvalid",
         "authInvalidCredentials",
         "authRoleNotFound",
-        "authForbidden"
+        "authForbidden",
+        "userNotFound",
+        "userEmailTaken",
+        "userCannotDeleteSelf",
+        "userLastAdmin"
       ],
       "type": "string",
       "x-readme-ref-name": "ApiErrorCode"

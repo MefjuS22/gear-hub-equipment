@@ -27,6 +27,10 @@ export const apiErrorCodeEnum = {
   authInvalidCredentials: "authInvalidCredentials",
   authRoleNotFound: "authRoleNotFound",
   authForbidden: "authForbidden",
+  userNotFound: "userNotFound",
+  userEmailTaken: "userEmailTaken",
+  userCannotDeleteSelf: "userCannotDeleteSelf",
+  userLastAdmin: "userLastAdmin",
 } as const;
 
 export type ApiErrorCodeEnumKey =
@@ -575,6 +579,25 @@ export type CmsPostUpsertDto = {
   isPublished?: boolean;
 };
 
+export type CreateUserAdminDto = {
+  /**
+   * @type string
+   */
+  email?: string | null;
+  /**
+   * @type string
+   */
+  password?: string | null;
+  /**
+   * @type string
+   */
+  displayName?: string | null;
+  /**
+   * @type array
+   */
+  roles?: string[] | null;
+};
+
 export type EquipmentDto = {
   /**
    * @type integer | undefined, int32
@@ -816,6 +839,32 @@ export type RentalOrderListDto = {
    * @type array
    */
   items?: RentalOrderLineDto[] | null;
+};
+
+export type SetUserRolesDto = {
+  /**
+   * @type array
+   */
+  roles?: string[] | null;
+};
+
+export type UserAdminListDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  email?: string | null;
+  /**
+   * @type string
+   */
+  displayName?: string | null;
+  /**
+   * @type array
+   */
+  roles?: string[] | null;
 };
 
 export type WarehouseLookupDto = {
@@ -1659,6 +1708,149 @@ export type PostApiOrderCreateorderMutation = {
   Response: PostApiOrderCreateorder201;
   Request: PostApiOrderCreateorderMutationRequest;
   Errors: PostApiOrderCreateorder400 | PostApiOrderCreateorder401;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiUsers200 = UserAdminListDto[];
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiUsers401 = ProblemDetails;
+
+/**
+ * @description Forbidden
+ */
+export type GetApiUsers403 = ApiErrorResponse;
+
+export type GetApiUsersQueryResponse = GetApiUsers200;
+
+export type GetApiUsersQuery = {
+  Response: GetApiUsers200;
+  Errors: GetApiUsers401 | GetApiUsers403;
+};
+
+/**
+ * @description Created
+ */
+export type PostApiUsers201 = UserAdminListDto;
+
+/**
+ * @description Bad Request
+ */
+export type PostApiUsers400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type PostApiUsers401 = ProblemDetails;
+
+/**
+ * @description Forbidden
+ */
+export type PostApiUsers403 = ApiErrorResponse;
+
+export type PostApiUsersMutationRequest = CreateUserAdminDto;
+
+export type PostApiUsersMutationResponse = PostApiUsers201;
+
+export type PostApiUsersMutation = {
+  Response: PostApiUsers201;
+  Request: PostApiUsersMutationRequest;
+  Errors: PostApiUsers400 | PostApiUsers401 | PostApiUsers403;
+};
+
+export type PutApiUsersIdRolesPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type PutApiUsersIdRoles204 = any;
+
+/**
+ * @description Bad Request
+ */
+export type PutApiUsersIdRoles400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type PutApiUsersIdRoles401 = ProblemDetails;
+
+/**
+ * @description Forbidden
+ */
+export type PutApiUsersIdRoles403 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type PutApiUsersIdRoles404 = ApiErrorResponse;
+
+export type PutApiUsersIdRolesMutationRequest = SetUserRolesDto;
+
+export type PutApiUsersIdRolesMutationResponse = PutApiUsersIdRoles204;
+
+export type PutApiUsersIdRolesMutation = {
+  Response: PutApiUsersIdRoles204;
+  Request: PutApiUsersIdRolesMutationRequest;
+  PathParams: PutApiUsersIdRolesPathParams;
+  Errors:
+    | PutApiUsersIdRoles400
+    | PutApiUsersIdRoles401
+    | PutApiUsersIdRoles403
+    | PutApiUsersIdRoles404;
+};
+
+export type DeleteApiUsersIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description No Content
+ */
+export type DeleteApiUsersId204 = any;
+
+/**
+ * @description Bad Request
+ */
+export type DeleteApiUsersId400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type DeleteApiUsersId401 = ProblemDetails;
+
+/**
+ * @description Forbidden
+ */
+export type DeleteApiUsersId403 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type DeleteApiUsersId404 = ApiErrorResponse;
+
+export type DeleteApiUsersIdMutationResponse = DeleteApiUsersId204;
+
+export type DeleteApiUsersIdMutation = {
+  Response: DeleteApiUsersId204;
+  PathParams: DeleteApiUsersIdPathParams;
+  Errors:
+    | DeleteApiUsersId400
+    | DeleteApiUsersId401
+    | DeleteApiUsersId403
+    | DeleteApiUsersId404;
 };
 
 /**

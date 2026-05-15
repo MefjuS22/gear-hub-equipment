@@ -31,4 +31,9 @@ public enum ApiErrorCode
     AuthInvalidCredentials = 400,
     AuthRoleNotFound = 401,
     AuthForbidden = 403,
+
+    UserNotFound = 410,
+    UserEmailTaken = 411,
+    UserCannotDeleteSelf = 412,
+    UserLastAdmin = 413,
 }

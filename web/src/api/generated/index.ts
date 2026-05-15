@@ -3,6 +3,7 @@ export type {
   DeleteApiCategoryIdMutationKey,
   DeleteApiCmspostIdMutationKey,
   DeleteApiEquipmentIdMutationKey,
+  DeleteApiUsersIdMutationKey,
   DeleteApiWarehouseIdMutationKey,
   GetApiAuthMeQueryKey,
   GetApiAuthMeSuspenseQueryKey,
@@ -32,6 +33,8 @@ export type {
   GetApiOrderIdSuspenseQueryKey,
   GetApiOrderQueryKey,
   GetApiOrderSuspenseQueryKey,
+  GetApiUsersQueryKey,
+  GetApiUsersSuspenseQueryKey,
   GetApiWarehouseIdQueryKey,
   GetApiWarehouseIdSuspenseQueryKey,
   GetApiWarehouseQueryKey,
@@ -44,11 +47,13 @@ export type {
   PostApiEquipmentMutationKey,
   PostApiFilesUploadMutationKey,
   PostApiOrderCreateorderMutationKey,
+  PostApiUsersMutationKey,
   PostApiWarehouseMutationKey,
   PutApiBrandIdMutationKey,
   PutApiCategoryIdMutationKey,
   PutApiCmspostIdMutationKey,
   PutApiEquipmentIdMutationKey,
+  PutApiUsersIdRolesMutationKey,
   PutApiWarehouseIdMutationKey,
 } from "./react-query.ts";
 export type {
@@ -68,6 +73,7 @@ export type {
   CmsPostPublicDetailDto,
   CmsPostPublicSummaryDto,
   CmsPostUpsertDto,
+  CreateUserAdminDto,
   Customer,
   DeleteApiBrandId204,
   DeleteApiBrandId400,
@@ -95,6 +101,14 @@ export type {
   DeleteApiEquipmentIdMutation,
   DeleteApiEquipmentIdMutationResponse,
   DeleteApiEquipmentIdPathParams,
+  DeleteApiUsersId204,
+  DeleteApiUsersId400,
+  DeleteApiUsersId401,
+  DeleteApiUsersId403,
+  DeleteApiUsersId404,
+  DeleteApiUsersIdMutation,
+  DeleteApiUsersIdMutationResponse,
+  DeleteApiUsersIdPathParams,
   DeleteApiWarehouseId204,
   DeleteApiWarehouseId400,
   DeleteApiWarehouseId401,
@@ -176,6 +190,11 @@ export type {
   GetApiOrderIdQueryResponse,
   GetApiOrderQuery,
   GetApiOrderQueryResponse,
+  GetApiUsers200,
+  GetApiUsers401,
+  GetApiUsers403,
+  GetApiUsersQuery,
+  GetApiUsersQueryResponse,
   GetApiWarehouse200,
   GetApiWarehouse401,
   GetApiWarehouseId200,
@@ -238,6 +257,13 @@ export type {
   PostApiOrderCreateorderMutation,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
+  PostApiUsers201,
+  PostApiUsers400,
+  PostApiUsers401,
+  PostApiUsers403,
+  PostApiUsersMutation,
+  PostApiUsersMutationRequest,
+  PostApiUsersMutationResponse,
   PostApiWarehouse201,
   PostApiWarehouse400,
   PostApiWarehouse401,
@@ -275,6 +301,15 @@ export type {
   PutApiEquipmentIdMutationRequest,
   PutApiEquipmentIdMutationResponse,
   PutApiEquipmentIdPathParams,
+  PutApiUsersIdRoles204,
+  PutApiUsersIdRoles400,
+  PutApiUsersIdRoles401,
+  PutApiUsersIdRoles403,
+  PutApiUsersIdRoles404,
+  PutApiUsersIdRolesMutation,
+  PutApiUsersIdRolesMutationRequest,
+  PutApiUsersIdRolesMutationResponse,
+  PutApiUsersIdRolesPathParams,
   PutApiWarehouseId204,
   PutApiWarehouseId401,
   PutApiWarehouseId404,
@@ -287,6 +322,8 @@ export type {
   RentalOrderItem,
   RentalOrderLineDto,
   RentalOrderListDto,
+  SetUserRolesDto,
+  UserAdminListDto,
   UserProfileDto,
   Warehouse,
   WarehouseLookupDto,
@@ -297,6 +334,7 @@ export {
   deleteApiCategoryId,
   deleteApiCmspostId,
   deleteApiEquipmentId,
+  deleteApiUsersId,
   deleteApiWarehouseId,
   getApiAuthMe,
   getApiBrand,
@@ -312,6 +350,7 @@ export {
   getApiEquipmentId,
   getApiOrder,
   getApiOrderId,
+  getApiUsers,
   getApiWarehouse,
   getApiWarehouseId,
   postApiAuthLogin,
@@ -322,11 +361,13 @@ export {
   postApiEquipment,
   postApiFilesUpload,
   postApiOrderCreateorder,
+  postApiUsers,
   postApiWarehouse,
   putApiBrandId,
   putApiCategoryId,
   putApiCmspostId,
   putApiEquipmentId,
+  putApiUsersIdRoles,
   putApiWarehouseId,
 } from "./client.ts";
 export { deleteApiBrandIdMutationKey } from "./react-query.ts";
@@ -337,6 +378,8 @@ export { deleteApiCmspostIdMutationKey } from "./react-query.ts";
 export { deleteApiCmspostIdMutationOptions } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationKey } from "./react-query.ts";
 export { deleteApiEquipmentIdMutationOptions } from "./react-query.ts";
+export { deleteApiUsersIdMutationKey } from "./react-query.ts";
+export { deleteApiUsersIdMutationOptions } from "./react-query.ts";
 export { deleteApiWarehouseIdMutationKey } from "./react-query.ts";
 export { deleteApiWarehouseIdMutationOptions } from "./react-query.ts";
 export { getApiAuthMeQueryKey } from "./react-query.ts";
@@ -395,6 +438,10 @@ export { getApiOrderQueryKey } from "./react-query.ts";
 export { getApiOrderQueryOptions } from "./react-query.ts";
 export { getApiOrderSuspenseQueryKey } from "./react-query.ts";
 export { getApiOrderSuspenseQueryOptions } from "./react-query.ts";
+export { getApiUsersQueryKey } from "./react-query.ts";
+export { getApiUsersQueryOptions } from "./react-query.ts";
+export { getApiUsersSuspenseQueryKey } from "./react-query.ts";
+export { getApiUsersSuspenseQueryOptions } from "./react-query.ts";
 export { getApiWarehouseIdQueryKey } from "./react-query.ts";
 export { getApiWarehouseIdQueryOptions } from "./react-query.ts";
 export { getApiWarehouseIdSuspenseQueryKey } from "./react-query.ts";
@@ -419,6 +466,8 @@ export { postApiFilesUploadMutationKey } from "./react-query.ts";
 export { postApiFilesUploadMutationOptions } from "./react-query.ts";
 export { postApiOrderCreateorderMutationKey } from "./react-query.ts";
 export { postApiOrderCreateorderMutationOptions } from "./react-query.ts";
+export { postApiUsersMutationKey } from "./react-query.ts";
+export { postApiUsersMutationOptions } from "./react-query.ts";
 export { postApiWarehouseMutationKey } from "./react-query.ts";
 export { postApiWarehouseMutationOptions } from "./react-query.ts";
 export { putApiBrandIdMutationKey } from "./react-query.ts";
@@ -429,12 +478,15 @@ export { putApiCmspostIdMutationKey } from "./react-query.ts";
 export { putApiCmspostIdMutationOptions } from "./react-query.ts";
 export { putApiEquipmentIdMutationKey } from "./react-query.ts";
 export { putApiEquipmentIdMutationOptions } from "./react-query.ts";
+export { putApiUsersIdRolesMutationKey } from "./react-query.ts";
+export { putApiUsersIdRolesMutationOptions } from "./react-query.ts";
 export { putApiWarehouseIdMutationKey } from "./react-query.ts";
 export { putApiWarehouseIdMutationOptions } from "./react-query.ts";
 export { useDeleteApiBrandId } from "./react-query.ts";
 export { useDeleteApiCategoryId } from "./react-query.ts";
 export { useDeleteApiCmspostId } from "./react-query.ts";
 export { useDeleteApiEquipmentId } from "./react-query.ts";
+export { useDeleteApiUsersId } from "./react-query.ts";
 export { useDeleteApiWarehouseId } from "./react-query.ts";
 export { useGetApiAuthMe } from "./react-query.ts";
 export { useGetApiAuthMeSuspense } from "./react-query.ts";
@@ -464,6 +516,8 @@ export { useGetApiOrder } from "./react-query.ts";
 export { useGetApiOrderId } from "./react-query.ts";
 export { useGetApiOrderIdSuspense } from "./react-query.ts";
 export { useGetApiOrderSuspense } from "./react-query.ts";
+export { useGetApiUsers } from "./react-query.ts";
+export { useGetApiUsersSuspense } from "./react-query.ts";
 export { useGetApiWarehouse } from "./react-query.ts";
 export { useGetApiWarehouseId } from "./react-query.ts";
 export { useGetApiWarehouseIdSuspense } from "./react-query.ts";
@@ -476,11 +530,13 @@ export { usePostApiCmspost } from "./react-query.ts";
 export { usePostApiEquipment } from "./react-query.ts";
 export { usePostApiFilesUpload } from "./react-query.ts";
 export { usePostApiOrderCreateorder } from "./react-query.ts";
+export { usePostApiUsers } from "./react-query.ts";
 export { usePostApiWarehouse } from "./react-query.ts";
 export { usePutApiBrandId } from "./react-query.ts";
 export { usePutApiCategoryId } from "./react-query.ts";
 export { usePutApiCmspostId } from "./react-query.ts";
 export { usePutApiEquipmentId } from "./react-query.ts";
+export { usePutApiUsersIdRoles } from "./react-query.ts";
 export { usePutApiWarehouseId } from "./react-query.ts";
 export { apiErrorCodeEnum } from "./types.ts";
 export {
@@ -499,6 +555,7 @@ export {
   cmsPostPublicDetailDtoSchema,
   cmsPostPublicSummaryDtoSchema,
   cmsPostUpsertDtoSchema,
+  createUserAdminDtoSchema,
   customerSchema,
   deleteApiBrandId204Schema,
   deleteApiBrandId400Schema,
@@ -522,6 +579,13 @@ export {
   deleteApiEquipmentId404Schema,
   deleteApiEquipmentIdMutationResponseSchema,
   deleteApiEquipmentIdPathParamsSchema,
+  deleteApiUsersId204Schema,
+  deleteApiUsersId400Schema,
+  deleteApiUsersId401Schema,
+  deleteApiUsersId403Schema,
+  deleteApiUsersId404Schema,
+  deleteApiUsersIdMutationResponseSchema,
+  deleteApiUsersIdPathParamsSchema,
   deleteApiWarehouseId204Schema,
   deleteApiWarehouseId400Schema,
   deleteApiWarehouseId401Schema,
@@ -588,6 +652,10 @@ export {
   getApiOrderIdPathParamsSchema,
   getApiOrderIdQueryResponseSchema,
   getApiOrderQueryResponseSchema,
+  getApiUsers200Schema,
+  getApiUsers401Schema,
+  getApiUsers403Schema,
+  getApiUsersQueryResponseSchema,
   getApiWarehouse200Schema,
   getApiWarehouse401Schema,
   getApiWarehouseId200Schema,
@@ -640,6 +708,12 @@ export {
   postApiOrderCreateorder401Schema,
   postApiOrderCreateorderMutationRequestSchema,
   postApiOrderCreateorderMutationResponseSchema,
+  postApiUsers201Schema,
+  postApiUsers400Schema,
+  postApiUsers401Schema,
+  postApiUsers403Schema,
+  postApiUsersMutationRequestSchema,
+  postApiUsersMutationResponseSchema,
   postApiWarehouse201Schema,
   postApiWarehouse400Schema,
   postApiWarehouse401Schema,
@@ -672,6 +746,14 @@ export {
   putApiEquipmentIdMutationRequestSchema,
   putApiEquipmentIdMutationResponseSchema,
   putApiEquipmentIdPathParamsSchema,
+  putApiUsersIdRoles204Schema,
+  putApiUsersIdRoles400Schema,
+  putApiUsersIdRoles401Schema,
+  putApiUsersIdRoles403Schema,
+  putApiUsersIdRoles404Schema,
+  putApiUsersIdRolesMutationRequestSchema,
+  putApiUsersIdRolesMutationResponseSchema,
+  putApiUsersIdRolesPathParamsSchema,
   putApiWarehouseId204Schema,
   putApiWarehouseId401Schema,
   putApiWarehouseId404Schema,
@@ -683,6 +765,8 @@ export {
   rentalOrderLineDtoSchema,
   rentalOrderListDtoSchema,
   rentalOrderSchema,
+  setUserRolesDtoSchema,
+  userAdminListDtoSchema,
   userProfileDtoSchema,
   warehouseLookupDtoSchema,
   warehouseSchema,

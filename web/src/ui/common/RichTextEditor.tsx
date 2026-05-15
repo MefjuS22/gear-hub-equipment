@@ -40,7 +40,10 @@ export function RichTextEditor({
   const { enqueueSnackbar } = useSnackbar();
   const imageInputRef = useRef<HTMLInputElement>(null);
   const uploadRef = useRef(onUploadImage);
-  uploadRef.current = onUploadImage;
+
+  useEffect(() => {
+    uploadRef.current = onUploadImage;
+  }, [onUploadImage]);
 
   const editor = useEditor({
     immediatelyRender: false,

@@ -120,6 +120,27 @@ import type {
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorder401,
+  GetApiUsersQueryResponse,
+  GetApiUsers401,
+  GetApiUsers403,
+  PostApiUsersMutationRequest,
+  PostApiUsersMutationResponse,
+  PostApiUsers400,
+  PostApiUsers401,
+  PostApiUsers403,
+  PutApiUsersIdRolesMutationRequest,
+  PutApiUsersIdRolesMutationResponse,
+  PutApiUsersIdRolesPathParams,
+  PutApiUsersIdRoles400,
+  PutApiUsersIdRoles401,
+  PutApiUsersIdRoles403,
+  PutApiUsersIdRoles404,
+  DeleteApiUsersIdMutationResponse,
+  DeleteApiUsersIdPathParams,
+  DeleteApiUsersId400,
+  DeleteApiUsersId401,
+  DeleteApiUsersId403,
+  DeleteApiUsersId404,
   GetApiWarehouseQueryResponse,
   GetApiWarehouse401,
   PostApiWarehouseMutationRequest,
@@ -1009,6 +1030,132 @@ export async function postApiOrderCreateorder(
     data: requestData,
     ...requestConfig,
     headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiUsersUrl() {
+  const res = { method: "GET", url: `/api/Users` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Users}
+ */
+export async function getApiUsers(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiUsersQueryResponse,
+    ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiUsersUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPostApiUsersUrl() {
+  const res = { method: "POST", url: `/api/Users` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Users}
+ */
+export async function postApiUsers(
+  data?: PostApiUsersMutationRequest,
+  config: Partial<RequestConfig<PostApiUsersMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PostApiUsersMutationResponse,
+    ResponseErrorConfig<PostApiUsers400 | PostApiUsers401 | PostApiUsers403>,
+    PostApiUsersMutationRequest
+  >({
+    method: "POST",
+    url: getPostApiUsersUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getPutApiUsersIdRolesUrl(id: PutApiUsersIdRolesPathParams["id"]) {
+  const res = { method: "PUT", url: `/api/Users/${id}/roles` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Users/:id/roles}
+ */
+export async function putApiUsersIdRoles(
+  id: PutApiUsersIdRolesPathParams["id"],
+  data?: PutApiUsersIdRolesMutationRequest,
+  config: Partial<RequestConfig<PutApiUsersIdRolesMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiUsersIdRolesMutationResponse,
+    ResponseErrorConfig<
+      | PutApiUsersIdRoles400
+      | PutApiUsersIdRoles401
+      | PutApiUsersIdRoles403
+      | PutApiUsersIdRoles404
+    >,
+    PutApiUsersIdRolesMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiUsersIdRolesUrl(id).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getDeleteApiUsersIdUrl(id: DeleteApiUsersIdPathParams["id"]) {
+  const res = { method: "DELETE", url: `/api/Users/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Users/:id}
+ */
+export async function deleteApiUsersId(
+  id: DeleteApiUsersIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    DeleteApiUsersIdMutationResponse,
+    ResponseErrorConfig<
+      | DeleteApiUsersId400
+      | DeleteApiUsersId401
+      | DeleteApiUsersId403
+      | DeleteApiUsersId404
+    >,
+    unknown
+  >({
+    method: "DELETE",
+    url: getDeleteApiUsersIdUrl(id).url.toString(),
+    ...requestConfig,
   });
   return res.data;
 }
