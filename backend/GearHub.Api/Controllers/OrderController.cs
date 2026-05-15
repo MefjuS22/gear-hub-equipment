@@ -22,6 +22,46 @@ public class OrderController(IOrderService orderService) : ControllerBase
     public async Task<ActionResult<IReadOnlyList<RentalOrderListDto>>> GetAll(CancellationToken cancellationToken) =>
         Ok(await orderService.GetAllAsync(cancellationToken));
 
+    /// <summary>
+    /// Order detail for the placing user or a user with the Admin role (resolved from the database).
+    /// </summary>
+    [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(RentalOrderListDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!int.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized();
+        }
+
+        var result = await orderService.GetByIdForViewerAsync(id, userId, cancellationToken);
+        if (!result.Success)
+        {
+            var err = result.Error!;
+            return err.Code switch
+            {
+                ApiErrorCode.OrderNotFound => ApiResponses.Error(
+                    StatusCodes.Status404NotFound,
+                    err.Code,
+                    err.Message),
+                ApiErrorCode.AuthForbidden => ApiResponses.Error(
+                    StatusCodes.Status403Forbidden,
+                    err.Code,
+                    err.Message),
+                ApiErrorCode.OrderUserNotFound => ApiResponses.Error(
+                    StatusCodes.Status401Unauthorized,
+                    err.Code,
+                    err.Message),
+                _ => ApiResponses.Error(StatusCodes.Status400BadRequest, err.Code, err.Message),
+            };
+        }
+
+        return Ok(result.Value);
+    }
+
     [HttpPost("CreateOrder")]
     [HasPermission(AppPermissions.OrdersCreate)]
     [ProducesResponseType(typeof(RentalOrder), StatusCodes.Status201Created)]

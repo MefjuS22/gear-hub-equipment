@@ -46,6 +46,12 @@ import type {
   GetApiOrderQueryResponse,
   GetApiOrder400,
   GetApiOrder401,
+  GetApiOrderIdQueryResponse,
+  GetApiOrderIdPathParams,
+  GetApiOrderId400,
+  GetApiOrderId401,
+  GetApiOrderId403,
+  GetApiOrderId404,
   GetApiWarehouseQueryResponse,
   GetApiWarehouse401,
   GetApiWarehouseIdQueryResponse,
@@ -164,6 +170,7 @@ import {
   getApiEquipment,
   getApiEquipmentId,
   getApiOrder,
+  getApiOrderId,
   getApiWarehouse,
   getApiWarehouseId,
   postApiAuthLogin,
@@ -1058,6 +1065,82 @@ export function useGetApiOrder<
   ) as UseQueryResult<
     TData,
     ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderIdQueryKey = (id: GetApiOrderIdPathParams["id"]) =>
+  [{ url: "/api/Order/:id", params: { id: id } }] as const;
+
+export type GetApiOrderIdQueryKey = ReturnType<typeof getApiOrderIdQueryKey>;
+
+export function getApiOrderIdQueryOptions(
+  id: GetApiOrderIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderIdQueryKey(id);
+  return queryOptions<
+    GetApiOrderIdQueryResponse,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >,
+    GetApiOrderIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderId(id, { ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/:id}
+ */
+export function useGetApiOrderId<
+  TData = GetApiOrderIdQueryResponse,
+  TQueryData = GetApiOrderIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderIdQueryKey,
+>(
+  id: GetApiOrderIdPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiOrderIdQueryResponse,
+        ResponseErrorConfig<
+          | GetApiOrderId400
+          | GetApiOrderId401
+          | GetApiOrderId403
+          | GetApiOrderId404
+        >,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiOrderIdQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiOrderIdQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -2074,6 +2157,84 @@ export function useGetApiOrderSuspense<
   ) as UseSuspenseQueryResult<
     TData,
     ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderIdSuspenseQueryKey = (
+  id: GetApiOrderIdPathParams["id"],
+) => [{ url: "/api/Order/:id", params: { id: id } }] as const;
+
+export type GetApiOrderIdSuspenseQueryKey = ReturnType<
+  typeof getApiOrderIdSuspenseQueryKey
+>;
+
+export function getApiOrderIdSuspenseQueryOptions(
+  id: GetApiOrderIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderIdSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiOrderIdQueryResponse,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >,
+    GetApiOrderIdQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderId(id, { ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/:id}
+ */
+export function useGetApiOrderIdSuspense<
+  TData = GetApiOrderIdQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderIdSuspenseQueryKey,
+>(
+  id: GetApiOrderIdPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiOrderIdQueryResponse,
+        ResponseErrorConfig<
+          | GetApiOrderId400
+          | GetApiOrderId401
+          | GetApiOrderId403
+          | GetApiOrderId404
+        >,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderIdSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiOrderIdSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;

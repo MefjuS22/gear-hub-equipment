@@ -10,6 +10,7 @@
     "orderUserNotFound",
     "orderEquipmentNotFound",
     "orderEquipmentUnavailable",
+    "orderNotFound",
     "brandNotFound",
     "brandInUse",
     "categoryNotFound",

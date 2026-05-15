@@ -1,19 +1,53 @@
-﻿using GearHub.Api.Data;
+﻿using GearHub.Api.Authorization;
+using GearHub.Api.Data;
 using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Repositories;
 using GearHub.Api.Responses;
+using Microsoft.AspNetCore.Identity;
 
 namespace GearHub.Api.Services;
 
 public class OrderService(
     ApplicationDbContext dbContext,
-    IOrderRepository orderRepository) : IOrderService
+    IOrderRepository orderRepository,
+    UserManager<ApplicationUser> userManager) : IOrderService
 {
     public async Task<IReadOnlyList<RentalOrderListDto>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         var orders = await orderRepository.GetAllOrdersWithDetailsAsync(cancellationToken);
         return orders.Select(ToListDto).ToList();
+    }
+
+    public async Task<ServiceResult<RentalOrderListDto>> GetByIdForViewerAsync(
+        int orderId,
+        int viewerUserId,
+        CancellationToken cancellationToken = default)
+    {
+        var viewer = await userManager.FindByIdAsync(viewerUserId.ToString());
+        if (viewer is null)
+        {
+            return ServiceResult<RentalOrderListDto>.Fail(
+                ApiErrorCode.OrderUserNotFound,
+                "User not found.");
+        }
+
+        var isAdmin = await userManager.IsInRoleAsync(viewer, AppRoles.Admin);
+
+        var order = await orderRepository.GetOrderByIdWithDetailsAsync(orderId, cancellationToken);
+        if (order is null)
+        {
+            return ServiceResult<RentalOrderListDto>.Fail(ApiErrorCode.OrderNotFound, "Order not found.");
+        }
+
+        if (!isAdmin && order.UserId != viewerUserId)
+        {
+            return ServiceResult<RentalOrderListDto>.Fail(
+                ApiErrorCode.AuthForbidden,
+                "You do not have access to this order.");
+        }
+
+        return ServiceResult<RentalOrderListDto>.Ok(ToListDto(order));
     }
 
     public async Task<OrderCreationResult> CreateOrderAsync(

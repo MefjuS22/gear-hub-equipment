@@ -14,6 +14,7 @@ export const apiErrorCodeEnum = {
   orderUserNotFound: "orderUserNotFound",
   orderEquipmentNotFound: "orderEquipmentNotFound",
   orderEquipmentUnavailable: "orderEquipmentUnavailable",
+  orderNotFound: "orderNotFound",
   brandNotFound: "brandNotFound",
   brandInUse: "brandInUse",
   categoryNotFound: "categoryNotFound",
@@ -1588,6 +1589,50 @@ export type GetApiOrderQueryResponse = GetApiOrder200;
 export type GetApiOrderQuery = {
   Response: GetApiOrder200;
   Errors: GetApiOrder400 | GetApiOrder401;
+};
+
+export type GetApiOrderIdPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiOrderId200 = RentalOrderListDto;
+
+/**
+ * @description Bad Request
+ */
+export type GetApiOrderId400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiOrderId401 = ProblemDetails;
+
+/**
+ * @description Forbidden
+ */
+export type GetApiOrderId403 = ApiErrorResponse;
+
+/**
+ * @description Not Found
+ */
+export type GetApiOrderId404 = ApiErrorResponse;
+
+export type GetApiOrderIdQueryResponse = GetApiOrderId200;
+
+export type GetApiOrderIdQuery = {
+  Response: GetApiOrderId200;
+  PathParams: GetApiOrderIdPathParams;
+  Errors:
+    | GetApiOrderId400
+    | GetApiOrderId401
+    | GetApiOrderId403
+    | GetApiOrderId404;
 };
 
 /**

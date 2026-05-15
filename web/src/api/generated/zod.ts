@@ -16,6 +16,7 @@ export const apiErrorCodeSchema = z.enum([
   "orderUserNotFound",
   "orderEquipmentNotFound",
   "orderEquipmentUnavailable",
+  "orderNotFound",
   "brandNotFound",
   "brandInUse",
   "categoryNotFound",
@@ -975,6 +976,39 @@ export const getApiOrder401Schema = z.lazy(() => problemDetailsSchema);
 
 export const getApiOrderQueryResponseSchema = z.lazy(
   () => getApiOrder200Schema,
+);
+
+export const getApiOrderIdPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiOrderId200Schema = z.lazy(() => rentalOrderListDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const getApiOrderId400Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiOrderId401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Forbidden
+ */
+export const getApiOrderId403Schema = z.lazy(() => apiErrorResponseSchema);
+
+/**
+ * @description Not Found
+ */
+export const getApiOrderId404Schema = z.lazy(() => apiErrorResponseSchema);
+
+export const getApiOrderIdQueryResponseSchema = z.lazy(
+  () => getApiOrderId200Schema,
 );
 
 /**

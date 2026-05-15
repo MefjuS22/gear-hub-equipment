@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
+import type { RentalOrder } from "../../api/generated/types";
 import {
   getApiEquipmentQueryKey,
   usePostApiOrderCreateorder,
@@ -13,13 +14,34 @@ import {
   type OrderCheckoutFormValues,
 } from "../../lib/formSchemas";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { countRentalPeriodDays } from "../../lib/rentalPeriodDays";
 import { getAccessToken } from "../../store/authSessionStore";
+import type { CartLine } from "../../store/portalCartStore";
 import { useCart } from "../../store/portalCartStore";
+
+export type PortalLastOrderSummary = {
+  order: RentalOrder;
+  lines: CartLine[];
+  companyName: string;
+  contactPerson: string;
+  rentalStart: string;
+  rentalEnd: string;
+};
 
 export function useCartCheckout() {
   const { enqueueSnackbar } = useSnackbar();
   const { lines, clear, setQuantity, remove } = useCart();
   const queryClient = useQueryClient();
+  const [lastPlacedOrderSummary, setLastPlacedOrderSummary] =
+    useState<PortalLastOrderSummary | null>(null);
+  const pendingCheckoutRef = useRef<{
+    lines: CartLine[];
+    values: OrderCheckoutFormValues;
+  } | null>(null);
+
+  const dismissLastPlacedOrderSummary = useCallback(() => {
+    setLastPlacedOrderSummary(null);
+  }, []);
 
   const tomorrow = useMemo(() => {
     const d = new Date();
@@ -45,22 +67,40 @@ export function useCartCheckout() {
   const submit = usePostApiOrderCreateorder({
     client: gearhubApiClientOptions,
     mutation: {
-      onSuccess: () => {
+      onSuccess: (order) => {
+        const pending = pendingCheckoutRef.current;
+        pendingCheckoutRef.current = null;
         clear();
         queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
         enqueueSnackbar("Order placed.", { variant: "success" });
+        const d = new Date();
+        const tmr = new Date(d);
+        tmr.setDate(tmr.getDate() + 1);
+        form.reset({
+          companyName: "",
+          contactPerson: "",
+          rentalStart: d.toISOString().slice(0, 10),
+          rentalEnd: tmr.toISOString().slice(0, 10),
+        });
+        if (pending && order) {
+          setLastPlacedOrderSummary({
+            order,
+            lines: pending.lines,
+            companyName: pending.values.companyName.trim(),
+            contactPerson: pending.values.contactPerson.trim(),
+            rentalStart: pending.values.rentalStart,
+            rentalEnd: pending.values.rentalEnd,
+          });
+        }
+      },
+      onError: () => {
+        pendingCheckoutRef.current = null;
       },
     },
   });
 
   const subtotal = useMemo(() => {
-    const days = Math.max(
-      1,
-      Math.ceil(
-        (new Date(rentalEnd).getTime() - new Date(rentalStart).getTime()) /
-          (1000 * 60 * 60 * 24),
-      ) || 1,
-    );
+    const days = countRentalPeriodDays(rentalStart, rentalEnd);
     return lines.reduce((sum, l) => sum + l.dailyRate * l.quantity, 0) * days;
   }, [lines, rentalStart, rentalEnd]);
 
@@ -75,6 +115,10 @@ export function useCartCheckout() {
       enqueueSnackbar("Sign in to place an order.", { variant: "warning" });
       return;
     }
+    pendingCheckoutRef.current = {
+      lines: lines.map((l) => ({ ...l })),
+      values,
+    };
     submit.mutate({
       data: {
         companyName: values.companyName.trim(),
@@ -98,5 +142,7 @@ export function useCartCheckout() {
     submit,
     subtotal,
     orderSubmitError,
+    lastPlacedOrderSummary,
+    dismissLastPlacedOrderSummary,
   };
 }

@@ -21,15 +21,169 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Link } from "@tanstack/react-router";
 import dayjs from "dayjs";
-import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { CheckCircle2, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { Controller } from "react-hook-form";
+import { useEffect, useMemo } from "react";
+import {
+  useCartCheckout,
+  type PortalLastOrderSummary,
+} from "../../hooks/portal/useCartCheckout";
 import { formatUsd } from "../../lib/formatCurrency";
-import { useCartCheckout } from "../../hooks/portal/useCartCheckout";
+import { countRentalPeriodDays } from "../../lib/rentalPeriodDays";
 import { useAuth } from "../../providers/AuthProvider";
 import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
 
-/** After login or register from checkout, return here (cart is persisted). */
 const CHECKOUT_AUTH_REDIRECT = "/portal/cart";
+
+function summaryEstimatedTotal(summary: PortalLastOrderSummary): number {
+  const days = countRentalPeriodDays(summary.rentalStart, summary.rentalEnd);
+  return (
+    summary.lines.reduce(
+      (sum, l) => sum + l.dailyRate * l.quantity,
+      0,
+    ) * days
+  );
+}
+
+function OrderConfirmationSummary({
+  summary,
+  onDismiss,
+}: {
+  summary: PortalLastOrderSummary;
+  onDismiss: () => void;
+}) {
+  const total = useMemo(() => summaryEstimatedTotal(summary), [summary]);
+  const orderId = summary.order.id;
+  const rentalDays = useMemo(
+    () => countRentalPeriodDays(summary.rentalStart, summary.rentalEnd),
+    [summary.rentalEnd, summary.rentalStart],
+  );
+
+  return (
+    <Box>
+      <PageHeader
+        title="Order confirmed"
+        subtitle={
+          orderId != null
+            ? `Order #${orderId} was placed successfully.`
+            : "Your rental order was placed successfully."
+        }
+      />
+
+      <Alert
+        severity="success"
+        icon={<CheckCircle2 size={22} aria-hidden />}
+        sx={{ mb: 2 }}
+      >
+        Thank you. A summary of your order is below. You can start a new order anytime from the
+        catalog.
+      </Alert>
+
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, md: 5 }}>
+          <SectionCard title="Order details">
+            {summary.order.orderDate ? (
+              <Typography variant="body2" sx={{ mb: 1.5 }}>
+                <strong>Placed:</strong>{" "}
+                {dayjs(summary.order.orderDate).format("MMM D, YYYY h:mm A")}
+              </Typography>
+            ) : null}
+            <Typography variant="body2" sx={{ mb: 1.5 }}>
+              <strong>Rental period:</strong>{" "}
+              {dayjs(summary.rentalStart).format("MMM D, YYYY")} –{" "}
+              {dayjs(summary.rentalEnd).format("MMM D, YYYY")}
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              <strong>Client</strong>
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {summary.companyName}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {summary.contactPerson}
+            </Typography>
+          </SectionCard>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Card variant="outlined" sx={{ height: "100%" }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+                Equipment
+              </Typography>
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Item</TableCell>
+                      <TableCell align="center">Qty</TableCell>
+                      <TableCell align="right">Rate / day</TableCell>
+                      <TableCell align="right">Line total</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {summary.lines.map((l) => {
+                      const line = l.dailyRate * l.quantity * rentalDays;
+                      return (
+                        <TableRow key={l.equipmentId}>
+                          <TableCell>
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                              {l.name}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              ID #{l.equipmentId}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="center">{l.quantity}</TableCell>
+                          <TableCell align="right">{formatUsd(l.dailyRate)}</TableCell>
+                          <TableCell align="right">{formatUsd(line)}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Divider sx={{ my: 2 }} />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "baseline",
+                }}
+              >
+                <Typography variant="body2" color="text.secondary">
+                  Estimated total (same basis as checkout)
+                </Typography>
+                <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                  {formatUsd(total)}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={1.5}
+        sx={{ mt: 3 }}
+      >
+        <Button
+          component={Link}
+          to="/portal"
+          variant="contained"
+          color="primary"
+          size="large"
+        >
+          Browse catalog
+        </Button>
+        <Button variant="outlined" color="inherit" size="large" onClick={onDismiss}>
+          Dismiss summary
+        </Button>
+      </Stack>
+    </Box>
+  );
+}
 
 export function CartCheckoutView() {
   const { isAuthenticated } = useAuth();
@@ -42,9 +196,26 @@ export function CartCheckoutView() {
     submit,
     subtotal,
     orderSubmitError,
+    lastPlacedOrderSummary,
+    dismissLastPlacedOrderSummary,
   } = useCartCheckout();
 
+  const hasPlacedOrderSummary = lastPlacedOrderSummary != null;
+  useEffect(() => {
+    if (lines.length > 0 && hasPlacedOrderSummary) {
+      dismissLastPlacedOrderSummary();
+    }
+  }, [lines.length, hasPlacedOrderSummary, dismissLastPlacedOrderSummary]);
+
   if (lines.length === 0) {
+    if (lastPlacedOrderSummary) {
+      return (
+        <OrderConfirmationSummary
+          summary={lastPlacedOrderSummary}
+          onDismiss={dismissLastPlacedOrderSummary}
+        />
+      );
+    }
     return (
       <Box>
         <PageHeader

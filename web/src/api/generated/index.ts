@@ -28,6 +28,8 @@ export type {
   GetApiEquipmentIdSuspenseQueryKey,
   GetApiEquipmentQueryKey,
   GetApiEquipmentSuspenseQueryKey,
+  GetApiOrderIdQueryKey,
+  GetApiOrderIdSuspenseQueryKey,
   GetApiOrderQueryKey,
   GetApiOrderSuspenseQueryKey,
   GetApiWarehouseIdQueryKey,
@@ -164,6 +166,14 @@ export type {
   GetApiOrder200,
   GetApiOrder400,
   GetApiOrder401,
+  GetApiOrderId200,
+  GetApiOrderId400,
+  GetApiOrderId401,
+  GetApiOrderId403,
+  GetApiOrderId404,
+  GetApiOrderIdPathParams,
+  GetApiOrderIdQuery,
+  GetApiOrderIdQueryResponse,
   GetApiOrderQuery,
   GetApiOrderQueryResponse,
   GetApiWarehouse200,
@@ -301,6 +311,7 @@ export {
   getApiEquipment,
   getApiEquipmentId,
   getApiOrder,
+  getApiOrderId,
   getApiWarehouse,
   getApiWarehouseId,
   postApiAuthLogin,
@@ -376,6 +387,10 @@ export { getApiEquipmentQueryKey } from "./react-query.ts";
 export { getApiEquipmentQueryOptions } from "./react-query.ts";
 export { getApiEquipmentSuspenseQueryKey } from "./react-query.ts";
 export { getApiEquipmentSuspenseQueryOptions } from "./react-query.ts";
+export { getApiOrderIdQueryKey } from "./react-query.ts";
+export { getApiOrderIdQueryOptions } from "./react-query.ts";
+export { getApiOrderIdSuspenseQueryKey } from "./react-query.ts";
+export { getApiOrderIdSuspenseQueryOptions } from "./react-query.ts";
 export { getApiOrderQueryKey } from "./react-query.ts";
 export { getApiOrderQueryOptions } from "./react-query.ts";
 export { getApiOrderSuspenseQueryKey } from "./react-query.ts";
@@ -446,6 +461,8 @@ export { useGetApiEquipmentId } from "./react-query.ts";
 export { useGetApiEquipmentIdSuspense } from "./react-query.ts";
 export { useGetApiEquipmentSuspense } from "./react-query.ts";
 export { useGetApiOrder } from "./react-query.ts";
+export { useGetApiOrderId } from "./react-query.ts";
+export { useGetApiOrderIdSuspense } from "./react-query.ts";
 export { useGetApiOrderSuspense } from "./react-query.ts";
 export { useGetApiWarehouse } from "./react-query.ts";
 export { useGetApiWarehouseId } from "./react-query.ts";
@@ -563,6 +580,13 @@ export {
   getApiOrder200Schema,
   getApiOrder400Schema,
   getApiOrder401Schema,
+  getApiOrderId200Schema,
+  getApiOrderId400Schema,
+  getApiOrderId401Schema,
+  getApiOrderId403Schema,
+  getApiOrderId404Schema,
+  getApiOrderIdPathParamsSchema,
+  getApiOrderIdQueryResponseSchema,
   getApiOrderQueryResponseSchema,
   getApiWarehouse200Schema,
   getApiWarehouse401Schema,

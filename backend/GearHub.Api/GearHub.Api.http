@@ -32,3 +32,9 @@ GET {{GearHub.Api_HostAddress}}/api/Equipment
 Authorization: Bearer {{adminToken}}
 
 ###
+
+# Replace id after creating an order
+GET {{GearHub.Api_HostAddress}}/api/Order/1
+Authorization: Bearer {{adminToken}}
+
+###

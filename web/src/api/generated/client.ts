@@ -110,6 +110,12 @@ import type {
   GetApiOrderQueryResponse,
   GetApiOrder400,
   GetApiOrder401,
+  GetApiOrderIdQueryResponse,
+  GetApiOrderIdPathParams,
+  GetApiOrderId400,
+  GetApiOrderId401,
+  GetApiOrderId403,
+  GetApiOrderId404,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
@@ -940,6 +946,34 @@ export async function getApiOrder(
   >({
     method: "GET",
     url: getGetApiOrderUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiOrderIdUrl(id: GetApiOrderIdPathParams["id"]) {
+  const res = { method: "GET", url: `/api/Order/${id}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Order/:id}
+ */
+export async function getApiOrderId(
+  id: GetApiOrderIdPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiOrderIdQueryResponse,
+    ResponseErrorConfig<
+      GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiOrderIdUrl(id).url.toString(),
     ...requestConfig,
   });
   return res.data;
