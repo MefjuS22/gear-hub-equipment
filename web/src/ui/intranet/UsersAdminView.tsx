@@ -72,6 +72,7 @@ export function UsersAdminView() {
   const { list, create, setRoles, remove } = useUsersAdmin();
   const [createOpen, setCreateOpen] = useState(false);
   const [rolesUser, setRolesUser] = useState<UserAdminListDto | null>(null);
+  const [deleteUser, setDeleteUser] = useState<UserAdminListDto | null>(null);
 
   const createForm = useForm<CreateStaffUserFormValues>({
     resolver: zodResolver(createStaffUserFormSchema),
@@ -111,6 +112,18 @@ export function UsersAdminView() {
 
   const closeRoles = () => {
     setRolesUser(null);
+  };
+
+  const closeDelete = () => {
+    setDeleteUser(null);
+  };
+
+  const confirmDelete = () => {
+    const id = deleteUser?.id;
+    if (id == null) {
+      return;
+    }
+    remove.mutate({ id }, { onSuccess: () => closeDelete() });
   };
 
   const pending = create.isPending || setRoles.isPending || remove.isPending;
@@ -240,17 +253,7 @@ export function UsersAdminView() {
                               variant="outlined"
                               startIcon={<Trash2 size={16} aria-hidden />}
                               disabled={pending || isSelf || row.id == null}
-                              onClick={() => {
-                                if (row.id == null) return;
-                                if (
-                                  !window.confirm(
-                                    `Remove user ${row.email ?? ""}? This cannot be undone.`,
-                                  )
-                                ) {
-                                  return;
-                                }
-                                remove.mutate({ id: row.id });
-                              }}
+                              onClick={() => setDeleteUser(row)}
                             >
                               Delete
                             </Button>
@@ -459,6 +462,35 @@ export function UsersAdminView() {
             </Button>
           </DialogActions>
         </Box>
+      </Dialog>
+
+      <Dialog
+        open={deleteUser != null}
+        onClose={() => !pending && closeDelete()}
+        fullWidth
+        maxWidth="xs"
+      >
+        <DialogTitle>Delete user?</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Remove{" "}
+            <strong>{deleteUser?.email ?? deleteUser?.displayName ?? "this user"}</strong>
+            ? This cannot be undone. Users with rental orders cannot be deleted.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={() => closeDelete()} disabled={pending}>
+            Cancel
+          </Button>
+          <Button
+            color="error"
+            variant="contained"
+            disabled={pending || deleteUser?.id == null}
+            onClick={() => confirmDelete()}
+          >
+            Delete
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   );
