@@ -17,7 +17,9 @@ export const CartItemsCard = ({ items, onDecrease, onIncrease, onRemove }: Props
       <Card.Title title="Cart Items" />
       <Card.Content style={styles.cardContent}>
         {items.length === 0 ? (
-          <Text variant="bodyMedium">No equipment selected yet. Add items from Equipment Fleet.</Text>
+          <Text variant="bodyMedium">
+            No equipment selected yet. Add items from Equipment Fleet.
+          </Text>
         ) : (
           items.map((item, index) => (
             <View key={item.equipmentId}>

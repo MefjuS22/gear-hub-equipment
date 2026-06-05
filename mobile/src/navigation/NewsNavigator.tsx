@@ -9,10 +9,7 @@ const Stack = createNativeStackNavigator<NewsStackParamList>();
 
 export const NewsNavigator = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="NewsList"
-      screenOptions={sharedStackScreenOptions}
-    >
+    <Stack.Navigator initialRouteName="NewsList" screenOptions={sharedStackScreenOptions}>
       <Stack.Screen name="NewsList" component={NewsListScreen} options={{ title: "News" }} />
       <Stack.Screen name="NewsDetail" component={NewsDetailScreen} options={{ title: "Article" }} />
     </Stack.Navigator>

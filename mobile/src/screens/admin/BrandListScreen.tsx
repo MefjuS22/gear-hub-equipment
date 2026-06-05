@@ -51,7 +51,9 @@ export const BrandListScreen = ({ navigation }: Props) => {
                 await queryClient.invalidateQueries({ queryKey: getApiBrandQueryKey() });
                 showSuccess({ message: "Brand deleted.", duration: 1600 });
               } catch {
-                showError({ message: "Unable to delete. It may still be referenced by equipment." });
+                showError({
+                  message: "Unable to delete. It may still be referenced by equipment.",
+                });
               }
             })();
           },
@@ -87,26 +89,41 @@ export const BrandListScreen = ({ navigation }: Props) => {
                 <Card.Title title={brandsQuery.error ? "Load failed" : "No brands"} />
                 <Card.Content>
                   <Text variant="bodyMedium">
-                    {brandsQuery.error ? "Check your connection and API URL." : "Add a brand with the + button."}
+                    {brandsQuery.error
+                      ? "Check your connection."
+                      : "Add a brand with the + button."}
                   </Text>
                 </Card.Content>
               </Card>
             )
           }
           renderItem={({ item }) => (
-            <Card style={styles.card} mode="elevated" onPress={() => navigation.navigate("BrandForm", { brandId: item.id })}>
+            <Card
+              style={styles.card}
+              mode="elevated"
+              onPress={() => navigation.navigate("BrandForm", { brandId: item.id })}
+            >
               <Card.Title
                 title={item.name ?? "—"}
                 subtitle={`ID ${item.id ?? "?"}`}
                 right={() => (
-                  <IconButton icon="delete-outline" onPress={() => onDelete(item)} accessibilityLabel="Delete brand" />
+                  <IconButton
+                    icon="delete-outline"
+                    onPress={() => onDelete(item)}
+                    accessibilityLabel="Delete brand"
+                  />
                 )}
               />
             </Card>
           )}
         />
       </View>
-      <FAB icon="plus" label="Add brand" style={styles.fab} onPress={() => navigation.navigate("BrandForm", {})} />
+      <FAB
+        icon="plus"
+        label="Add brand"
+        style={styles.fab}
+        onPress={() => navigation.navigate("BrandForm", {})}
+      />
     </View>
   );
 };

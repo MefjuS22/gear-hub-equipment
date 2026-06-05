@@ -21,7 +21,8 @@ const formatDateForDisplay = (value: string) => {
 };
 
 export const OrderConfirmationScreen = ({ navigation, route }: Props) => {
-  const { customerName, rentalStartDate, rentalEndDate, itemsCount, subtotalPerDay } = route.params;
+  const { companyName, contactPerson, rentalStartDate, rentalEndDate, itemsCount, subtotalPerDay } =
+    route.params;
 
   return (
     <ScreenShell
@@ -47,8 +48,11 @@ export const OrderConfirmationScreen = ({ navigation, route }: Props) => {
           <Divider />
 
           <View style={styles.detailRow}>
-            <Text variant="labelLarge">Customer</Text>
-            <Text variant="bodyLarge">{customerName}</Text>
+            <Text variant="labelLarge">Client</Text>
+            <Text variant="bodyLarge">{companyName}</Text>
+            <Text variant="bodyMedium" style={styles.secondaryDetail}>
+              {contactPerson}
+            </Text>
           </View>
           <View style={styles.detailRow}>
             <Text variant="labelLarge">Rental period</Text>
@@ -100,5 +104,8 @@ const styles = StyleSheet.create({
   detailRow: {
     width: "100%",
     gap: 2,
+  },
+  secondaryDetail: {
+    color: "#64748b",
   },
 });

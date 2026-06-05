@@ -49,26 +49,30 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
 
   const onDelete = useCallback(
     (item: Equipment) => {
-      Alert.alert("Delete equipment", `Remove "${item.name}" (unit #${item.id})? This cannot be undone.`, [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: () => {
-            void (async () => {
-              try {
-                await deleteMutation.mutateAsync({ id: item.id });
-                await queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
-                showSuccess({ message: "Equipment deleted.", duration: 1600 });
-              } catch {
-                showError({
-                  message: "Unable to delete. It may be referenced by open orders.",
-                });
-              }
-            })();
+      Alert.alert(
+        "Delete equipment",
+        `Remove "${item.name}" (unit #${item.id})? This cannot be undone.`,
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Delete",
+            style: "destructive",
+            onPress: () => {
+              void (async () => {
+                try {
+                  await deleteMutation.mutateAsync({ id: item.id });
+                  await queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
+                  showSuccess({ message: "Equipment deleted.", duration: 1600 });
+                } catch {
+                  showError({
+                    message: "Unable to delete. It may be referenced by open orders.",
+                  });
+                }
+              })();
+            },
           },
-        },
-      ]);
+        ],
+      );
     },
     [deleteMutation, queryClient, showError, showSuccess],
   );
@@ -76,7 +80,11 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <CrudListSearchField value={query} onChangeText={setQuery} placeholder="Search equipment…" />
+        <CrudListSearchField
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Search equipment…"
+        />
         <FlatList
           data={filtered}
           keyExtractor={(item) => String(item.id)}
@@ -99,7 +107,9 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
                 <Card.Title title={equipmentQuery.error ? "Load failed" : "No equipment"} />
                 <Card.Content>
                   <Text variant="bodyMedium">
-                    {equipmentQuery.error ? "Check your connection and API URL." : "Create equipment with the + button."}
+                    {equipmentQuery.error
+                      ? "Check your connection."
+                      : "Create equipment with the + button."}
                   </Text>
                 </Card.Content>
               </Card>
@@ -109,7 +119,10 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
             const thumbUri = item.imageUrl ? resolvePublicFileUrl(item.imageUrl) : "";
             return (
               <Card style={styles.card} mode="elevated">
-                <Card.Title title={item.name} subtitle={`#${item.id} · $${item.dailyRate.toFixed(2)}/day`} />
+                <Card.Title
+                  title={item.name}
+                  subtitle={`#${item.id} · $${item.dailyRate.toFixed(2)}/day`}
+                />
                 <Card.Content style={styles.cardBody}>
                   {thumbUri ? (
                     <Image source={{ uri: thumbUri }} style={styles.thumb} resizeMode="cover" />
@@ -118,8 +131,8 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
                   )}
                   <View style={styles.cardText}>
                     <Text variant="bodySmall" style={styles.meta}>
-                      Category {item.categoryId} ({item.categoryName ?? "—"}) · Brand {item.brandId} (
-                      {item.brandName ?? "—"})
+                      Category {item.categoryId} ({item.categoryName ?? "—"}) · Brand {item.brandId}{" "}
+                      ({item.brandName ?? "—"})
                     </Text>
                     <Text variant="bodySmall" style={styles.meta}>
                       Warehouse {item.warehouseId} ({item.warehouseName ?? "—"})
@@ -133,17 +146,29 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
                   >
                     Details
                   </Button>
-                  <Button mode="contained-tonal" onPress={() => navigation.navigate("EquipmentForm", { equipmentId: item.id })}>
+                  <Button
+                    mode="contained-tonal"
+                    onPress={() => navigation.navigate("EquipmentForm", { equipmentId: item.id })}
+                  >
                     Edit
                   </Button>
-                  <IconButton icon="delete-outline" onPress={() => onDelete(item)} accessibilityLabel="Delete equipment" />
+                  <IconButton
+                    icon="delete-outline"
+                    onPress={() => onDelete(item)}
+                    accessibilityLabel="Delete equipment"
+                  />
                 </Card.Actions>
               </Card>
             );
           }}
         />
       </View>
-      <FAB icon="plus" label="Add equipment" style={styles.fab} onPress={() => navigation.navigate("EquipmentForm", {})} />
+      <FAB
+        icon="plus"
+        label="Add equipment"
+        style={styles.fab}
+        onPress={() => navigation.navigate("EquipmentForm", {})}
+      />
     </View>
   );
 };

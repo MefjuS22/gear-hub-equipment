@@ -17,17 +17,34 @@ const Stack = createNativeStackNavigator<CatalogStackParamList>();
 
 export const CatalogNavigator = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="CatalogHome"
-      screenOptions={sharedStackScreenOptions}
-    >
-      <Stack.Screen name="CatalogHome" component={CatalogHomeScreen} options={{ title: "Catalog" }} />
+    <Stack.Navigator initialRouteName="CatalogHome" screenOptions={sharedStackScreenOptions}>
+      <Stack.Screen
+        name="CatalogHome"
+        component={CatalogHomeScreen}
+        options={{ title: "Catalog" }}
+      />
       <Stack.Screen name="BrandList" component={BrandListScreen} options={{ title: "Brands" }} />
       <Stack.Screen name="BrandForm" component={BrandFormScreen} options={{ title: "Brand" }} />
-      <Stack.Screen name="CategoryList" component={CategoryListScreen} options={{ title: "Categories" }} />
-      <Stack.Screen name="CategoryForm" component={CategoryFormScreen} options={{ title: "Category" }} />
-      <Stack.Screen name="WarehouseList" component={WarehouseListScreen} options={{ title: "Warehouses" }} />
-      <Stack.Screen name="WarehouseForm" component={WarehouseFormScreen} options={{ title: "Warehouse" }} />
+      <Stack.Screen
+        name="CategoryList"
+        component={CategoryListScreen}
+        options={{ title: "Categories" }}
+      />
+      <Stack.Screen
+        name="CategoryForm"
+        component={CategoryFormScreen}
+        options={{ title: "Category" }}
+      />
+      <Stack.Screen
+        name="WarehouseList"
+        component={WarehouseListScreen}
+        options={{ title: "Warehouses" }}
+      />
+      <Stack.Screen
+        name="WarehouseForm"
+        component={WarehouseFormScreen}
+        options={{ title: "Warehouse" }}
+      />
       <Stack.Screen
         name="AdminEquipmentList"
         component={AdminEquipmentListScreen}
@@ -38,7 +55,11 @@ export const CatalogNavigator = () => {
         component={EquipmentDetailScreen}
         options={{ title: "Equipment" }}
       />
-      <Stack.Screen name="EquipmentForm" component={EquipmentFormScreen} options={{ title: "Equipment" }} />
+      <Stack.Screen
+        name="EquipmentForm"
+        component={EquipmentFormScreen}
+        options={{ title: "Equipment" }}
+      />
     </Stack.Navigator>
   );
 };

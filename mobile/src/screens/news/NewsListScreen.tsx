@@ -32,7 +32,11 @@ export const NewsListScreen = ({ navigation }: Props) => {
     const slug = item.slug ?? "";
     const cover = item.coverImageUrl ? resolvePublicFileUrl(item.coverImageUrl) : "";
     return (
-      <Card style={styles.card} mode="elevated" onPress={() => navigation.navigate("NewsDetail", { slug })}>
+      <Card
+        style={styles.card}
+        mode="elevated"
+        onPress={() => navigation.navigate("NewsDetail", { slug })}
+      >
         {cover ? <Card.Cover source={{ uri: cover }} style={styles.thumb} /> : null}
         <Card.Title title={item.title ?? "—"} subtitle={item.excerpt ?? undefined} />
         {item.publishedAtUtc ? (
@@ -74,7 +78,7 @@ export const NewsListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {listQuery.error
-                      ? "Check your connection and API URL."
+                      ? "Check your connection."
                       : "New articles will appear here when published."}
                   </Text>
                 </Card.Content>

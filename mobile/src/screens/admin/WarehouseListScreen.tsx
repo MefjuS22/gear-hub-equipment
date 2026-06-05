@@ -54,7 +54,9 @@ export const WarehouseListScreen = ({ navigation }: Props) => {
                 await queryClient.invalidateQueries({ queryKey: getApiWarehouseQueryKey() });
                 showSuccess({ message: "Warehouse deleted.", duration: 1600 });
               } catch {
-                showError({ message: "Unable to delete. It may still be referenced by equipment." });
+                showError({
+                  message: "Unable to delete. It may still be referenced by equipment.",
+                });
               }
             })();
           },
@@ -90,7 +92,9 @@ export const WarehouseListScreen = ({ navigation }: Props) => {
                 <Card.Title title={listQuery.error ? "Load failed" : "No warehouses"} />
                 <Card.Content>
                   <Text variant="bodyMedium">
-                    {listQuery.error ? "Check your connection and API URL." : "Add a warehouse with the + button."}
+                    {listQuery.error
+                      ? "Check your connection."
+                      : "Add a warehouse with the + button."}
                   </Text>
                 </Card.Content>
               </Card>
@@ -117,7 +121,12 @@ export const WarehouseListScreen = ({ navigation }: Props) => {
           )}
         />
       </View>
-      <FAB icon="plus" label="Add warehouse" style={styles.fab} onPress={() => navigation.navigate("WarehouseForm", {})} />
+      <FAB
+        icon="plus"
+        label="Add warehouse"
+        style={styles.fab}
+        onPress={() => navigation.navigate("WarehouseForm", {})}
+      />
     </View>
   );
 };

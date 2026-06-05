@@ -12,8 +12,5 @@ const normalizeApiUrl = (rawUrl: string) => {
 const parsedApiUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
 
 export const env = {
-  apiUrl:
-    parsedApiUrl && parsedApiUrl.length > 0
-      ? normalizeApiUrl(parsedApiUrl)
-      : DEFAULT_API_URL,
+  apiUrl: parsedApiUrl && parsedApiUrl.length > 0 ? normalizeApiUrl(parsedApiUrl) : DEFAULT_API_URL,
 };

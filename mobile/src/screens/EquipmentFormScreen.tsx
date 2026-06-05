@@ -59,7 +59,9 @@ export const EquipmentFormScreen = ({ navigation, route }: Props) => {
         </View>
       ) : null}
       {detailError ? (
-        <Text style={{ color: "#b91c1c", marginBottom: 8 }}>Could not load this equipment record.</Text>
+        <Text style={{ color: "#b91c1c", marginBottom: 8 }}>
+          Could not load this equipment record.
+        </Text>
       ) : null}
 
       {!detailLoading && !detailError ? (

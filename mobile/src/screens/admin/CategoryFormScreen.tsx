@@ -101,7 +101,13 @@ export const CategoryFormScreen = ({ navigation, route }: Props) => {
             control={control}
             name="name"
             render={({ field: { onChange, value } }) => (
-              <TextInput label="Name" mode="outlined" value={value ?? ""} onChangeText={onChange} error={Boolean(errors.name)} />
+              <TextInput
+                label="Name"
+                mode="outlined"
+                value={value ?? ""}
+                onChangeText={onChange}
+                error={Boolean(errors.name)}
+              />
             )}
           />
           {errors.name ? <Text style={{ color: "#b91c1c" }}>{errors.name.message}</Text> : null}
@@ -121,7 +127,11 @@ export const CategoryFormScreen = ({ navigation, route }: Props) => {
           />
         </Card.Content>
       </Card>
-      <Button mode="contained" loading={createMutation.isPending || updateMutation.isPending} onPress={handleSubmit(onSubmit)}>
+      <Button
+        mode="contained"
+        loading={createMutation.isPending || updateMutation.isPending}
+        onPress={handleSubmit(onSubmit)}
+      >
         Save
       </Button>
     </ScreenShell>

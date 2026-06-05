@@ -234,7 +234,13 @@ const styles = StyleSheet.create({
   colEquipment: { flex: 1, minWidth: 0 },
   colQty: { width: 36, textAlign: "right", paddingTop: 2, color: "#0f172a" },
   colUnit: { width: 88, textAlign: "right", paddingTop: 2, color: "#0f172a" },
-  colLine: { width: 80, textAlign: "right", paddingTop: 2, color: "#0f172a", fontVariant: ["tabular-nums"] },
+  colLine: {
+    width: 80,
+    textAlign: "right",
+    paddingTop: 2,
+    color: "#0f172a",
+    fontVariant: ["tabular-nums"],
+  },
   totalRow: {
     flexDirection: "row",
     justifyContent: "space-between",

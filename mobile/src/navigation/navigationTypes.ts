@@ -8,7 +8,8 @@ export type ShopStackParamList = {
       }
     | undefined;
   OrderConfirmation: {
-    customerName: string;
+    companyName: string;
+    contactPerson: string;
     rentalStartDate: string;
     rentalEndDate: string;
     itemsCount: number;
@@ -44,4 +45,10 @@ export type DrawerParamList = {
   Catalog: undefined;
   News: undefined;
   Orders: undefined;
+};
+
+export type RootStackParamList = {
+  Main: undefined;
+  Login: { redirectTo?: string } | undefined;
+  Register: { redirectTo?: string } | undefined;
 };

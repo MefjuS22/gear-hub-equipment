@@ -22,11 +22,15 @@ export async function uploadFileNative(
   formData.append("file", file as unknown as Blob);
   formData.append("folder", folder);
 
-  const { data } = await axios.post<FileUploadResponseDto>(`${env.apiUrl}/api/Files/upload`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
+  const { data } = await axios.post<FileUploadResponseDto>(
+    `${env.apiUrl}/api/Files/upload`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     },
-  });
+  );
 
   return data;
 }

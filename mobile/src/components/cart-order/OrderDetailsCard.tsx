@@ -1,75 +1,108 @@
 import { StyleSheet, View } from "react-native";
-import { Button, Card, Menu, Text } from "react-native-paper";
+import { Button, Card, HelperText, Text, TextInput } from "react-native-paper";
+import type { UseFormReturn } from "react-hook-form";
 
-import { Customer } from "../../types";
+import type { OrderFormValues } from "../../hooks/useCartOrderScreen";
 
 type Props = {
-  customers: Customer[];
-  selectedCustomerName?: string;
-  customerMenuVisible: boolean;
+  form: UseFormReturn<OrderFormValues>;
   dateRangeLabel: string;
   subtotal: number;
-  customerError?: string;
+  isAuthenticated: boolean;
+  companyNameError?: string;
+  contactPersonError?: string;
   rentalStartDateError?: string;
   rentalEndDateError?: string;
-  customersLoadError: boolean;
-  onOpenCustomerMenu: () => void;
-  onDismissCustomerMenu: () => void;
-  onSelectCustomer: (customerId: number) => void;
   onOpenDateRangePicker: () => void;
+  onNavigateLogin: () => void;
+  onNavigateRegister: () => void;
 };
 
 export const OrderDetailsCard = ({
-  customers,
-  selectedCustomerName,
-  customerMenuVisible,
+  form,
   dateRangeLabel,
   subtotal,
-  customerError,
+  isAuthenticated,
+  companyNameError,
+  contactPersonError,
   rentalStartDateError,
   rentalEndDateError,
-  customersLoadError,
-  onOpenCustomerMenu,
-  onDismissCustomerMenu,
-  onSelectCustomer,
   onOpenDateRangePicker,
+  onNavigateLogin,
+  onNavigateRegister,
 }: Props) => {
+  const companyName = form.watch("companyName");
+  const contactPerson = form.watch("contactPerson");
+
+  if (!isAuthenticated) {
+    return (
+      <Card style={styles.sectionCard}>
+        <Card.Title title="Sign in to continue" />
+        <Card.Content style={styles.cardContent}>
+          <Text variant="bodyMedium" style={styles.hint}>
+            Your cart is saved on this device. After you sign in, you can add client details and
+            submit the order.
+          </Text>
+          <Text variant="bodyMedium" style={styles.hint}>
+            Rental orders must be tied to a signed-in account.
+          </Text>
+          <View style={styles.authActions}>
+            <Button mode="contained" onPress={onNavigateLogin} contentStyle={styles.buttonContent}>
+              Sign in to place order
+            </Button>
+            <Button
+              mode="outlined"
+              onPress={onNavigateRegister}
+              contentStyle={styles.buttonContent}
+            >
+              Create account
+            </Button>
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  }
+
   return (
     <Card style={styles.sectionCard}>
       <Card.Title title="Order Details" />
       <Card.Content style={styles.cardContent}>
         <View>
           <Text variant="labelLarge" style={styles.fieldLabel}>
-            Customer
+            Client information
           </Text>
-          <Menu
-            visible={customerMenuVisible}
-            onDismiss={onDismissCustomerMenu}
-            anchor={
-              <Button
-                mode="outlined"
-                icon="chevron-down"
-                contentStyle={styles.menuButtonContent}
-                onPress={onOpenCustomerMenu}
-              >
-                {selectedCustomerName ?? "Select customer"}
-              </Button>
+          <TextInput
+            label="Company / organization"
+            mode="outlined"
+            autoComplete="organization"
+            value={companyName}
+            onChangeText={(value) =>
+              form.setValue("companyName", value, { shouldValidate: true, shouldDirty: true })
             }
-          >
-            {customers.map((customer) => (
-              <Menu.Item
-                key={customer.id}
-                title={customer.companyName}
-                onPress={() => onSelectCustomer(customer.id)}
-              />
-            ))}
-          </Menu>
-          {customerError ? <Text style={styles.errorText}>{customerError}</Text> : null}
-          {customersLoadError ? (
-            <Text variant="bodySmall" style={styles.errorText}>
-              Failed to load customers from backend.
-            </Text>
-          ) : null}
+            error={Boolean(companyNameError)}
+          />
+          <HelperText type="error" visible={Boolean(companyNameError)}>
+            {companyNameError}
+          </HelperText>
+
+          <TextInput
+            label="Contact person"
+            mode="outlined"
+            autoComplete="name"
+            value={contactPerson}
+            onChangeText={(value) =>
+              form.setValue("contactPerson", value, { shouldValidate: true, shouldDirty: true })
+            }
+            error={Boolean(contactPersonError)}
+          />
+          <HelperText type="error" visible={Boolean(contactPersonError)}>
+            {contactPersonError}
+          </HelperText>
+
+          <Text variant="bodySmall" style={styles.hint}>
+            We&apos;ll create a customer record for this rental. The order is placed under your
+            signed-in account.
+          </Text>
         </View>
 
         <View>
@@ -80,7 +113,10 @@ export const OrderDetailsCard = ({
             mode="outlined"
             icon="calendar-range"
             contentStyle={styles.menuButtonContent}
-            style={[styles.dateRangeButton, rentalStartDateError || rentalEndDateError ? styles.dateRangeButtonError : null]}
+            style={[
+              styles.dateRangeButton,
+              rentalStartDateError || rentalEndDateError ? styles.dateRangeButtonError : null,
+            ]}
             onPress={onOpenDateRangePicker}
           >
             {dateRangeLabel}
@@ -105,6 +141,9 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     color: "#334155",
   },
+  hint: {
+    color: "#64748b",
+  },
   errorText: {
     marginTop: 2,
     color: "#b91c1c",
@@ -118,5 +157,12 @@ const styles = StyleSheet.create({
   menuButtonContent: {
     justifyContent: "space-between",
     flexDirection: "row-reverse",
+  },
+  authActions: {
+    gap: 8,
+    marginTop: 4,
+  },
+  buttonContent: {
+    minHeight: 44,
   },
 });

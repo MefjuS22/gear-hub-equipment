@@ -1,6 +1,10 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useTheme } from "react-native-paper";
 
+import { AdminRoleGate } from "../components/AdminRoleGate";
+import { PermissionGate } from "../components/PermissionGate";
+import { AppPermissions } from "../lib/appPermissions";
+import { AppDrawerContent } from "./AppDrawerContent";
 import { CatalogNavigator } from "./CatalogNavigator";
 import { NewsNavigator } from "./NewsNavigator";
 import { OrdersNavigator } from "./OrdersNavigator";
@@ -9,11 +13,26 @@ import type { DrawerParamList } from "./navigationTypes";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
+const GatedCatalogNavigator = () => (
+  <AdminRoleGate>
+    <CatalogNavigator />
+  </AdminRoleGate>
+);
+
+const GatedOrdersNavigator = () => (
+  <AdminRoleGate>
+    <PermissionGate permission={AppPermissions.OrdersRead}>
+      <OrdersNavigator />
+    </PermissionGate>
+  </AdminRoleGate>
+);
+
 export const RootDrawerNavigator = () => {
   const theme = useTheme();
   return (
     <Drawer.Navigator
       initialRouteName="Shop"
+      drawerContent={(props) => <AppDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
         drawerActiveTintColor: theme.colors.primary,
@@ -28,11 +47,15 @@ export const RootDrawerNavigator = () => {
       />
       <Drawer.Screen
         name="Catalog"
-        component={CatalogNavigator}
+        component={GatedCatalogNavigator}
         options={{ drawerLabel: "Catalog admin", title: "Catalog" }}
       />
       <Drawer.Screen name="News" component={NewsNavigator} options={{ drawerLabel: "News" }} />
-      <Drawer.Screen name="Orders" component={OrdersNavigator} options={{ drawerLabel: "Orders" }} />
+      <Drawer.Screen
+        name="Orders"
+        component={GatedOrdersNavigator}
+        options={{ drawerLabel: "Orders", title: "Orders" }}
+      />
     </Drawer.Navigator>
   );
 };

@@ -97,7 +97,10 @@ const equipmentFormSchema = equipmentUpsertDtoSchema
 
 export type EquipmentFormValues = z.infer<typeof equipmentFormSchema>;
 
-export const useEquipmentFormScreen = ({ navigation, route }: Pick<Props, "navigation" | "route">) => {
+export const useEquipmentFormScreen = ({
+  navigation,
+  route,
+}: Pick<Props, "navigation" | "route">) => {
   const queryClient = useQueryClient();
   const { showSuccess, showError } = useAppToast();
   const [categoryMenuVisible, setCategoryMenuVisible] = useState(false);
@@ -260,10 +263,7 @@ export const useEquipmentFormScreen = ({ navigation, route }: Pick<Props, "navig
 
     setIsUploadingImage(true);
     try {
-      const uploaded = await uploadFileNative(
-        { uri: asset.uri, name, type },
-        "equipment",
-      );
+      const uploaded = await uploadFileNative({ uri: asset.uri, name, type }, "equipment");
       const path = uploaded.publicPath ?? uploaded.relativePath ?? "";
       if (!path) {
         showError({ message: "Upload succeeded but no file path was returned." });

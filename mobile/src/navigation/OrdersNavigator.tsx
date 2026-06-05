@@ -9,10 +9,12 @@ const Stack = createNativeStackNavigator<OrdersStackParamList>();
 
 export const OrdersNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={sharedStackScreenOptions}
-    >
-      <Stack.Screen name="OrderList" component={OrderListScreen} options={{ title: "Rental orders" }} />
+    <Stack.Navigator screenOptions={sharedStackScreenOptions}>
+      <Stack.Screen
+        name="OrderList"
+        component={OrderListScreen}
+        options={{ title: "Rental orders" }}
+      />
       <Stack.Screen name="OrderDetail" component={OrderDetailScreen} options={{ title: "Order" }} />
     </Stack.Navigator>
   );

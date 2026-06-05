@@ -57,7 +57,9 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
             </Card>
           ) : (
             <Card style={styles.emptyCard}>
-              <Card.Title title={equipmentQuery.error ? "Failed to load equipment" : "No equipment found"} />
+              <Card.Title
+                title={equipmentQuery.error ? "Failed to load equipment" : "No equipment found"}
+              />
               <Card.Content>
                 <Text variant="bodyMedium">
                   {equipmentQuery.error
@@ -76,7 +78,9 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
               item={item}
               quantityInCart={quantityInCart}
               onAddToCart={onAddToCart}
-              onOpenDetails={(equipmentId) => navigation.navigate("EquipmentDetail", { equipmentId })}
+              onOpenDetails={(equipmentId) =>
+                navigation.navigate("EquipmentDetail", { equipmentId })
+              }
               onUpdateQuantity={(equipmentId: number, delta: number) => {
                 updateQuantity(equipmentId, delta);
               }}

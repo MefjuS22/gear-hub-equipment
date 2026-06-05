@@ -98,14 +98,23 @@ export const WarehouseFormScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <ScreenShell title={isEdit ? "Edit warehouse" : "New warehouse"} subtitle="Warehouses anchor stock locations for equipment.">
+    <ScreenShell
+      title={isEdit ? "Edit warehouse" : "New warehouse"}
+      subtitle="Warehouses anchor stock locations for equipment."
+    >
       <Card style={{ backgroundColor: "#ffffff" }}>
         <Card.Content style={{ gap: 12 }}>
           <Controller
             control={control}
             name="name"
             render={({ field: { onChange, value } }) => (
-              <TextInput label="Name" mode="outlined" value={value ?? ""} onChangeText={onChange} error={Boolean(errors.name)} />
+              <TextInput
+                label="Name"
+                mode="outlined"
+                value={value ?? ""}
+                onChangeText={onChange}
+                error={Boolean(errors.name)}
+              />
             )}
           />
           {errors.name ? <Text style={{ color: "#b91c1c" }}>{errors.name.message}</Text> : null}
@@ -122,10 +131,16 @@ export const WarehouseFormScreen = ({ navigation, route }: Props) => {
               />
             )}
           />
-          {errors.location ? <Text style={{ color: "#b91c1c" }}>{errors.location.message}</Text> : null}
+          {errors.location ? (
+            <Text style={{ color: "#b91c1c" }}>{errors.location.message}</Text>
+          ) : null}
         </Card.Content>
       </Card>
-      <Button mode="contained" loading={createMutation.isPending || updateMutation.isPending} onPress={handleSubmit(onSubmit)}>
+      <Button
+        mode="contained"
+        loading={createMutation.isPending || updateMutation.isPending}
+        onPress={handleSubmit(onSubmit)}
+      >
         Save
       </Button>
     </ScreenShell>

@@ -46,7 +46,9 @@ export const NewsDetailScreen = ({ route }: Props) => {
 
   return (
     <ScreenShell title={post.title ?? "Article"} subtitle={post.excerpt ?? undefined}>
-      {coverUri ? <Image source={{ uri: coverUri }} style={styles.cover} resizeMode="cover" /> : null}
+      {coverUri ? (
+        <Image source={{ uri: coverUri }} style={styles.cover} resizeMode="cover" />
+      ) : null}
       {post.publishedAtUtc ? (
         <Text variant="labelMedium" style={styles.date}>
           {new Date(post.publishedAtUtc).toLocaleString()}

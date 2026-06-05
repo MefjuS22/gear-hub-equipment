@@ -50,15 +50,19 @@ export const OrderListScreen = ({ navigation }: Props) => {
       />
       <Card.Content style={styles.gap}>
         <Text variant="bodySmall">
-          Rental {item.rentalStartDate ? new Date(item.rentalStartDate).toLocaleDateString() : "?"} →{" "}
-          {item.rentalEndDate ? new Date(item.rentalEndDate).toLocaleDateString() : "?"}
+          Rental {item.rentalStartDate ? new Date(item.rentalStartDate).toLocaleDateString() : "?"}{" "}
+          → {item.rentalEndDate ? new Date(item.rentalEndDate).toLocaleDateString() : "?"}
         </Text>
         <Text variant="bodySmall" style={styles.muted}>
           Placed by {item.userName ?? "—"} ({item.userEmail ?? "—"})
         </Text>
         <View style={styles.chips}>
           {(item.items ?? []).map((line) => (
-            <Chip key={`${item.id}-${line.equipmentId}-${line.equipmentName}`} compact icon="package-variant">
+            <Chip
+              key={`${item.id}-${line.equipmentId}-${line.equipmentName}`}
+              compact
+              icon="package-variant"
+            >
               {line.equipmentName ?? `Equipment ${line.equipmentId}`} ×{line.quantity ?? 0}
             </Chip>
           ))}
@@ -98,7 +102,7 @@ export const OrderListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {ordersQuery.error
-                      ? "Check your connection and API URL."
+                      ? "Check your connection."
                       : "Create a rental from Browse to populate this list."}
                   </Text>
                 </Card.Content>

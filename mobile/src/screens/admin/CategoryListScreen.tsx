@@ -54,7 +54,9 @@ export const CategoryListScreen = ({ navigation }: Props) => {
                 await queryClient.invalidateQueries({ queryKey: getApiCategoryQueryKey() });
                 showSuccess({ message: "Category deleted.", duration: 1600 });
               } catch {
-                showError({ message: "Unable to delete. It may still be referenced by equipment." });
+                showError({
+                  message: "Unable to delete. It may still be referenced by equipment.",
+                });
               }
             })();
           },
@@ -90,7 +92,9 @@ export const CategoryListScreen = ({ navigation }: Props) => {
                 <Card.Title title={listQuery.error ? "Load failed" : "No categories"} />
                 <Card.Content>
                   <Text variant="bodyMedium">
-                    {listQuery.error ? "Check your connection and API URL." : "Add a category with the + button."}
+                    {listQuery.error
+                      ? "Check your connection."
+                      : "Add a category with the + button."}
                   </Text>
                 </Card.Content>
               </Card>
@@ -117,7 +121,12 @@ export const CategoryListScreen = ({ navigation }: Props) => {
           )}
         />
       </View>
-      <FAB icon="plus" label="Add category" style={styles.fab} onPress={() => navigation.navigate("CategoryForm", {})} />
+      <FAB
+        icon="plus"
+        label="Add category"
+        style={styles.fab}
+        onPress={() => navigation.navigate("CategoryForm", {})}
+      />
     </View>
   );
 };

@@ -165,11 +165,17 @@ export const EquipmentFormCard = ({
             }
           >
             {brandOptions.map((brand) => (
-              <Menu.Item key={brand.id} title={brand.name} onPress={() => onSelectBrand(brand.id)} />
+              <Menu.Item
+                key={brand.id}
+                title={brand.name}
+                onPress={() => onSelectBrand(brand.id)}
+              />
             ))}
           </Menu>
           {errors.brandId ? (
-            <Text style={styles.errorText}>{asRequiredMessage(errors.brandId.message, "Brand")}</Text>
+            <Text style={styles.errorText}>
+              {asRequiredMessage(errors.brandId.message, "Brand")}
+            </Text>
           ) : null}
           {brandsLoadError ? (
             <Text style={styles.errorText}>Failed to load brands from backend.</Text>

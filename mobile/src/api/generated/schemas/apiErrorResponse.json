@@ -13,6 +13,7 @@
         "orderUserNotFound",
         "orderEquipmentNotFound",
         "orderEquipmentUnavailable",
+        "orderNotFound",
         "brandNotFound",
         "brandInUse",
         "categoryNotFound",
@@ -21,7 +22,14 @@
         "warehouseInUse",
         "cmsPostNotFound",
         "cmsPostSlugTaken",
-        "fileUploadInvalid"
+        "fileUploadInvalid",
+        "authInvalidCredentials",
+        "authRoleNotFound",
+        "authForbidden",
+        "userNotFound",
+        "userEmailTaken",
+        "userCannotDeleteSelf",
+        "userLastAdmin"
       ],
       "type": "string",
       "x-readme-ref-name": "ApiErrorCode"

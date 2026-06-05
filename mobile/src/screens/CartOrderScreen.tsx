@@ -13,30 +13,34 @@ type Props = NativeStackScreenProps<ShopStackParamList, "CartOrder">;
 
 export const CartOrderScreen = ({ navigation, route }: Props) => {
   const {
+    form,
     items,
     updateQuantity,
     removeFromCart,
-    customers,
-    selectedCustomer,
-    customersQuery,
+    isAuthenticated,
     errors,
     subtotal,
     dateRange,
     dateRangeLabel,
-    customerMenuVisible,
     isDateRangePickerVisible,
     createOrderMutation,
-    onOpenCustomerMenu,
-    onDismissCustomerMenu,
-    onSelectCustomer,
     onOpenDateRangePicker,
     onDismissDateRangePicker,
     onConfirmDateRange,
     onConfirmOrderPress,
+    onNavigateLogin,
+    onNavigateRegister,
   } = useCartOrderScreen({ navigation, route });
 
   return (
-    <ScreenShell title="Rental Cart" subtitle="Review items, assign customer, and submit an order.">
+    <ScreenShell
+      title="Rental Cart"
+      subtitle={
+        isAuthenticated
+          ? "Configure client details and rental parameters."
+          : "Sign in to enter order details and confirm your rental."
+      }
+    >
       <CartItemsCard
         items={items}
         onDecrease={(equipmentId) => updateQuantity(equipmentId, -1)}
@@ -44,31 +48,31 @@ export const CartOrderScreen = ({ navigation, route }: Props) => {
         onRemove={removeFromCart}
       />
       <OrderDetailsCard
-        customers={customers}
-        selectedCustomerName={selectedCustomer?.companyName}
-        customerMenuVisible={customerMenuVisible}
+        form={form}
         dateRangeLabel={dateRangeLabel}
         subtotal={subtotal}
-        customerError={errors.customerId?.message}
+        isAuthenticated={isAuthenticated}
+        companyNameError={errors.companyName?.message}
+        contactPersonError={errors.contactPerson?.message}
         rentalStartDateError={errors.rentalStartDate?.message}
         rentalEndDateError={errors.rentalEndDate?.message}
-        customersLoadError={Boolean(customersQuery.error)}
-        onOpenCustomerMenu={onOpenCustomerMenu}
-        onDismissCustomerMenu={onDismissCustomerMenu}
-        onSelectCustomer={onSelectCustomer}
         onOpenDateRangePicker={onOpenDateRangePicker}
+        onNavigateLogin={onNavigateLogin}
+        onNavigateRegister={onNavigateRegister}
       />
 
-      <Button
-        mode="contained"
-        icon="check-circle-outline"
-        contentStyle={styles.confirmButtonContent}
-        loading={createOrderMutation.isPending}
-        disabled={createOrderMutation.isPending || items.length === 0 || customersQuery.isPending}
-        onPress={onConfirmOrderPress}
-      >
-        Confirm Order
-      </Button>
+      {isAuthenticated ? (
+        <Button
+          mode="contained"
+          icon="check-circle-outline"
+          contentStyle={styles.confirmButtonContent}
+          loading={createOrderMutation.isPending}
+          disabled={createOrderMutation.isPending || items.length === 0}
+          onPress={onConfirmOrderPress}
+        >
+          Confirm Order
+        </Button>
+      ) : null}
 
       <DatePickerModal
         locale="en-GB"

@@ -6,9 +6,7 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "backgroundColor": "#f8f9fa",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "jsEngine": "hermes",
     "plugins": [
       [

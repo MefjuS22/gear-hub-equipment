@@ -13,7 +13,10 @@ import {
   usePostApiBrand,
   usePutApiBrandId,
 } from "../../api/generated/react-query";
-import type { PostApiBrandMutationRequest, PutApiBrandIdMutationRequest } from "../../api/generated/types";
+import type {
+  PostApiBrandMutationRequest,
+  PutApiBrandIdMutationRequest,
+} from "../../api/generated/types";
 import { ScreenShell } from "../../components/ScreenShell";
 import type { CatalogStackParamList } from "../../navigation/navigationTypes";
 import { useAppToast } from "../../providers/AppToastProvider";
@@ -85,20 +88,33 @@ export const BrandFormScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <ScreenShell title={isEdit ? "Edit brand" : "New brand"} subtitle="Brand names must stay unique in the catalog.">
+    <ScreenShell
+      title={isEdit ? "Edit brand" : "New brand"}
+      subtitle="Brand names must stay unique in the catalog."
+    >
       <Card style={{ backgroundColor: "#ffffff" }}>
         <Card.Content style={{ gap: 12 }}>
           <Controller
             control={control}
             name="name"
             render={({ field: { onChange, value } }) => (
-              <TextInput label="Name" mode="outlined" value={value ?? ""} onChangeText={onChange} error={Boolean(errors.name)} />
+              <TextInput
+                label="Name"
+                mode="outlined"
+                value={value ?? ""}
+                onChangeText={onChange}
+                error={Boolean(errors.name)}
+              />
             )}
           />
           {errors.name ? <Text style={{ color: "#b91c1c" }}>{errors.name.message}</Text> : null}
         </Card.Content>
       </Card>
-      <Button mode="contained" loading={createMutation.isPending || updateMutation.isPending} onPress={handleSubmit(onSubmit)}>
+      <Button
+        mode="contained"
+        loading={createMutation.isPending || updateMutation.isPending}
+        onPress={handleSubmit(onSubmit)}
+      >
         Save
       </Button>
     </ScreenShell>

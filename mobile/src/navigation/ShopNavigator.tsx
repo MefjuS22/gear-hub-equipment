@@ -11,10 +11,7 @@ const Stack = createNativeStackNavigator<ShopStackParamList>();
 
 export const ShopNavigator = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="EquipmentList"
-      screenOptions={sharedStackScreenOptions}
-    >
+    <Stack.Navigator initialRouteName="EquipmentList" screenOptions={sharedStackScreenOptions}>
       <Stack.Screen
         name="EquipmentList"
         component={EquipmentListScreen}
