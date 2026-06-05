@@ -2,6 +2,7 @@ import {
   PORTAL_TEXT_DEFAULTS,
   type PortalTextKey,
   isPortalTextKey,
+  normalizePortalTextHtmlForEditor,
   resolvePortalTextBodyHtml,
 } from "./portalTextDefaults";
 import { portalTextPlain } from "./portalTextHtml";
@@ -40,7 +41,7 @@ export function buildPortalTextOverrides(
   );
 
   if (isPortalTextKey(editedKey)) {
-    savedMap.set(editedKey, editedBodyHtml);
+    savedMap.set(editedKey, normalizePortalTextHtmlForEditor(editedBodyHtml));
   }
 
   const overrides = {} as PortalTextOverrides;

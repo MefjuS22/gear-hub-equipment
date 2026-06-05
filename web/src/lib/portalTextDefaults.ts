@@ -1,3 +1,5 @@
+import { portalTextPlain } from "./portalTextHtml";
+
 /** Fallback copy when portal texts API is unavailable or a block is empty. */
 export const PORTAL_TEXT_DEFAULTS = {
   "catalog.hero.title": "Equipment catalog",
@@ -17,7 +19,6 @@ export function isPortalTextKey(key: string): key is PortalTextKey {
   return key in PORTAL_TEXT_DEFAULTS;
 }
 
-/** Wrap plain text so TipTap can display it; leave existing HTML unchanged. */
 export function normalizePortalTextHtmlForEditor(html: string): string {
   const trimmed = html.trim();
   if (!trimmed) {
@@ -29,7 +30,6 @@ export function normalizePortalTextHtmlForEditor(html: string): string {
   return trimmed;
 }
 
-/** Effective portal body: API value when set, otherwise code default. */
 export function resolvePortalTextBodyHtml(
   key: string,
   raw?: string | null,
@@ -42,4 +42,15 @@ export function resolvePortalTextBodyHtml(
     return normalizePortalTextHtmlForEditor(PORTAL_TEXT_DEFAULTS[key]);
   }
   return "";
+}
+
+export function resolvePortalTextPlainForEditor(
+  key: string,
+  raw?: string | null,
+): string {
+  return portalTextPlain(resolvePortalTextBodyHtml(key, raw));
+}
+
+export function portalTextPlainToBodyHtml(plain: string): string {
+  return normalizePortalTextHtmlForEditor(plain);
 }

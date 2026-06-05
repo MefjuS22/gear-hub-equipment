@@ -13,9 +13,11 @@ import {
   portalTextFormSchema,
   type PortalTextFormValues,
 } from "../../lib/formSchemas";
-import { resolvePortalTextBodyHtml } from "../../lib/portalTextDefaults";
-import { resolvePublicFileUrl, uploadFile } from "../../api/uploadFile";
-import { LoadingState, PageHeader, RichTextEditor } from "../common";
+import {
+  portalTextPlainToBodyHtml,
+  resolvePortalTextPlainForEditor,
+} from "../../lib/portalTextDefaults";
+import { LoadingState, PageHeader } from "../common";
 import { PortalTextPagePreview } from "./PortalTextPagePreview";
 import { PortalTextsSectionNav } from "./PortalTextsSectionNav";
 
@@ -41,7 +43,7 @@ export function PortalStaticTextEditorView({
     }
     form.reset({
       title: detail.data.title ?? "",
-      bodyHtml: resolvePortalTextBodyHtml(textKey, detail.data.bodyHtml),
+      bodyHtml: resolvePortalTextPlainForEditor(textKey, detail.data.bodyHtml),
     });
   }, [detail.data, form, textKey]);
 
@@ -76,7 +78,7 @@ export function PortalStaticTextEditorView({
         key: textKey,
         data: {
           title: values.title.trim(),
-          bodyHtml: values.bodyHtml,
+          bodyHtml: portalTextPlainToBodyHtml(values.bodyHtml),
         },
       },
       {
@@ -126,10 +128,7 @@ export function PortalStaticTextEditorView({
                 required
                 fullWidth
                 error={!!fieldState.error}
-                helperText={
-                  fieldState.error?.message ??
-                  "Shown in the intranet list only — not on the public portal."
-                }
+                helperText={fieldState.error?.message}
               />
             )}
           />
@@ -142,24 +141,25 @@ export function PortalStaticTextEditorView({
               name="bodyHtml"
               control={form.control}
               render={({ field, fieldState }) => (
-                <RichTextEditor
-                  value={field.value}
-                  onChange={field.onChange}
+                <TextField
+                  {...field}
+                  label="Portal text"
+                  required
+                  fullWidth
+                  multiline
+                  minRows={3}
                   disabled={update.isPending}
                   error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
                   placeholder="Write the text shown on the customer portal…"
-                  onUploadImage={async (file) => {
-                    const res = await uploadFile(file, "cms");
-                    return resolvePublicFileUrl(res.publicPath ?? "");
+                  slotProps={{
+                    htmlInput: {
+                      style: { resize: "vertical" },
+                    },
                   }}
                 />
               )}
             />
-            {form.formState.errors.bodyHtml ? (
-              <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
-                {form.formState.errors.bodyHtml.message}
-              </Typography>
-            ) : null}
           </Box>
 
           <Box sx={{ display: "flex", gap: 1.5, pt: 1 }}>
