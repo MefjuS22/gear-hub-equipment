@@ -1061,6 +1061,12 @@ export const postApiEquipmentMutationResponseSchema = z.lazy(
   () => postApiEquipment201Schema,
 );
 
+export const getApiEquipmentCategoriesQueryParamsSchema = z
+  .object({
+    search: z.optional(z.string()),
+  })
+  .optional();
+
 /**
  * @description OK
  */

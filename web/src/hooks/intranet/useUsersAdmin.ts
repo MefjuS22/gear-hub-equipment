@@ -74,5 +74,15 @@ export function useUsersAdmin() {
     },
   });
 
-  return { list, create, setRoles, remove, page, setPage, pageSize, setPageSize, ...paged };
+  return {
+    list,
+    create,
+    setRoles,
+    remove,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    ...paged,
+  };
 }

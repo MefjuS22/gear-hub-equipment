@@ -122,7 +122,12 @@ export function RichTextEditor({
     if (!url) {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
     } else {
-      editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
     }
     closeLinkDialog();
   };
@@ -304,7 +309,9 @@ export function RichTextEditor({
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle>{hasExistingLink ? "Edit link" : "Insert link"}</DialogTitle>
+        <DialogTitle>
+          {hasExistingLink ? "Edit link" : "Insert link"}
+        </DialogTitle>
         <DialogContent>
           <TextField
             inputRef={linkInputRef}

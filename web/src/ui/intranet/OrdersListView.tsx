@@ -14,7 +14,12 @@ import { ClipboardList } from "lucide-react";
 import { useOrdersList } from "../../hooks/intranet/useOrdersList";
 import { canViewIntranetOrderDetail } from "../../lib/intranetOrderAccess";
 import { useAuth } from "../../providers/AuthProvider";
-import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 import {
   formatOrderDateTime,
   formatOrderLinesSummary,

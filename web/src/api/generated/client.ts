@@ -101,6 +101,7 @@ import type {
   PostApiEquipment401,
   PostApiEquipment500,
   GetApiEquipmentCategoriesQueryResponse,
+  GetApiEquipmentCategoriesQueryParams,
   GetApiEquipmentCategories401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
@@ -877,6 +878,7 @@ function getGetApiEquipmentCategoriesUrl() {
  * {@link /api/Equipment/Categories}
  */
 export async function getApiEquipmentCategories(
+  params?: GetApiEquipmentCategoriesQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -888,6 +890,7 @@ export async function getApiEquipmentCategories(
   >({
     method: "GET",
     url: getGetApiEquipmentCategoriesUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;

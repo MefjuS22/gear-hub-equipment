@@ -20,12 +20,9 @@ import {
 } from "@mui/material";
 import { Bell, Search, Settings, ShoppingCart } from "lucide-react";
 import { useMemo, useState, type ReactNode } from "react";
+import { usePortalCatalogUrl } from "../../hooks/portal/usePortalCatalogUrl";
 import { useAuth } from "../../providers/AuthProvider";
 import { useCart } from "../../store/portalCartStore";
-import {
-  PortalCatalogSearchProvider,
-  usePortalCatalogSearch,
-} from "../../ui/portal/PortalCatalogSearchContext";
 
 export const Route = createFileRoute("/portal")({
   component: PortalLayout,
@@ -71,7 +68,8 @@ function PortalTopBar() {
     select: (s) => normalizePath(s.location.pathname),
   });
   const { lines } = useCart();
-  const { search, setSearch } = usePortalCatalogSearch();
+  const { search: catalogSearch, setSearch: setCatalogSearch } =
+    usePortalCatalogUrl();
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const [accountMenuAnchor, setAccountMenuAnchor] =
@@ -142,8 +140,8 @@ function PortalTopBar() {
           {isCatalog ? (
             <TextField
               placeholder="Search catalog…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={catalogSearch.q}
+              onChange={(e) => setCatalogSearch({ q: e.target.value })}
               size="small"
               fullWidth
               slotProps={{
@@ -318,8 +316,8 @@ function PortalTopBar() {
         {isCatalog ? (
           <TextField
             placeholder="Search catalog…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={catalogSearch.q}
+            onChange={(e) => setCatalogSearch({ q: e.target.value })}
             size="small"
             fullWidth
             slotProps={{
@@ -370,9 +368,5 @@ function PortalLayoutInner() {
 }
 
 function PortalLayout() {
-  return (
-    <PortalCatalogSearchProvider>
-      <PortalLayoutInner />
-    </PortalCatalogSearchProvider>
-  );
+  return <PortalLayoutInner />;
 }

@@ -23,7 +23,9 @@ export const createStaffUserFormSchema = z
     path: ["admin"],
   });
 
-export type CreateStaffUserFormValues = z.infer<typeof createStaffUserFormSchema>;
+export type CreateStaffUserFormValues = z.infer<
+  typeof createStaffUserFormSchema
+>;
 
 export const setStaffUserRolesFormSchema = z
   .object({

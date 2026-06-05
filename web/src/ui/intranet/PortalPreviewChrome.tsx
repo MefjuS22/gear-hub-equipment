@@ -15,13 +15,7 @@ type PortalPreviewChromeProps = {
   activePage: PortalTextPreviewPage;
 };
 
-function PreviewNavTab({
-  label,
-  active,
-}: {
-  label: string;
-  active: boolean;
-}) {
+function PreviewNavTab({ label, active }: { label: string; active: boolean }) {
   return (
     <Button
       color="inherit"
@@ -117,7 +111,9 @@ export function PortalPreviewChrome({ activePage }: PortalPreviewChromeProps) {
           )}
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexShrink: 0 }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", gap: 1, flexShrink: 0 }}
+        >
           <Button
             variant="outlined"
             size="small"

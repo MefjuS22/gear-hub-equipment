@@ -99,9 +99,7 @@ function LoginPage() {
             <Typography variant="body2" color="text.secondary">
               Use your GearHub staff account. Need an account?{" "}
               <Link to="/register" search={registerSearch}>
-                <MuiLink component="span">
-                  Create one
-                </MuiLink>
+                <MuiLink component="span">Create one</MuiLink>
               </Link>
               .
             </Typography>

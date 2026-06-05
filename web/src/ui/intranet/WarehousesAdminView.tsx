@@ -24,7 +24,12 @@ import {
   warehouseFormSchema,
   type WarehouseFormValues,
 } from "../../lib/formSchemas";
-import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 
 export function WarehousesAdminView() {
   const {

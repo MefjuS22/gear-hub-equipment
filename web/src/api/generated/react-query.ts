@@ -61,6 +61,7 @@ import type {
   GetApiEquipmentQueryParams,
   GetApiEquipment401,
   GetApiEquipmentCategoriesQueryResponse,
+  GetApiEquipmentCategoriesQueryParams,
   GetApiEquipmentCategories401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
@@ -1025,17 +1026,20 @@ export function useGetApiEquipment<
   return query;
 }
 
-export const getApiEquipmentCategoriesQueryKey = () =>
-  [{ url: "/api/Equipment/Categories" }] as const;
+export const getApiEquipmentCategoriesQueryKey = (
+  params?: GetApiEquipmentCategoriesQueryParams,
+) =>
+  [{ url: "/api/Equipment/Categories" }, ...(params ? [params] : [])] as const;
 
 export type GetApiEquipmentCategoriesQueryKey = ReturnType<
   typeof getApiEquipmentCategoriesQueryKey
 >;
 
 export function getApiEquipmentCategoriesQueryOptions(
+  params?: GetApiEquipmentCategoriesQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiEquipmentCategoriesQueryKey();
+  const queryKey = getApiEquipmentCategoriesQueryKey(params);
   return queryOptions<
     GetApiEquipmentCategoriesQueryResponse,
     ResponseErrorConfig<GetApiEquipmentCategories401>,
@@ -1044,7 +1048,7 @@ export function getApiEquipmentCategoriesQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiEquipmentCategories({
+      return getApiEquipmentCategories(params, {
         ...config,
         signal: config.signal ?? signal,
       });
@@ -1060,6 +1064,7 @@ export function useGetApiEquipmentCategories<
   TQueryData = GetApiEquipmentCategoriesQueryResponse,
   TQueryKey extends QueryKey = GetApiEquipmentCategoriesQueryKey,
 >(
+  params?: GetApiEquipmentCategoriesQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -1076,11 +1081,11 @@ export function useGetApiEquipmentCategories<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiEquipmentCategoriesQueryKey();
+    resolvedOptions?.queryKey ?? getApiEquipmentCategoriesQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiEquipmentCategoriesQueryOptions(config),
+      ...getApiEquipmentCategoriesQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -2519,17 +2524,20 @@ export function useGetApiEquipmentSuspense<
   return query;
 }
 
-export const getApiEquipmentCategoriesSuspenseQueryKey = () =>
-  [{ url: "/api/Equipment/Categories" }] as const;
+export const getApiEquipmentCategoriesSuspenseQueryKey = (
+  params?: GetApiEquipmentCategoriesQueryParams,
+) =>
+  [{ url: "/api/Equipment/Categories" }, ...(params ? [params] : [])] as const;
 
 export type GetApiEquipmentCategoriesSuspenseQueryKey = ReturnType<
   typeof getApiEquipmentCategoriesSuspenseQueryKey
 >;
 
 export function getApiEquipmentCategoriesSuspenseQueryOptions(
+  params?: GetApiEquipmentCategoriesQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiEquipmentCategoriesSuspenseQueryKey();
+  const queryKey = getApiEquipmentCategoriesSuspenseQueryKey(params);
   return queryOptions<
     GetApiEquipmentCategoriesQueryResponse,
     ResponseErrorConfig<GetApiEquipmentCategories401>,
@@ -2538,7 +2546,7 @@ export function getApiEquipmentCategoriesSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiEquipmentCategories({
+      return getApiEquipmentCategories(params, {
         ...config,
         signal: config.signal ?? signal,
       });
@@ -2553,6 +2561,7 @@ export function useGetApiEquipmentCategoriesSuspense<
   TData = GetApiEquipmentCategoriesQueryResponse,
   TQueryKey extends QueryKey = GetApiEquipmentCategoriesSuspenseQueryKey,
 >(
+  params?: GetApiEquipmentCategoriesQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -2568,11 +2577,12 @@ export function useGetApiEquipmentCategoriesSuspense<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiEquipmentCategoriesSuspenseQueryKey();
+    resolvedOptions?.queryKey ??
+    getApiEquipmentCategoriesSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiEquipmentCategoriesSuspenseQueryOptions(config),
+      ...getApiEquipmentCategoriesSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,

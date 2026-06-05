@@ -8,7 +8,12 @@ import { useListPagination } from "../../hooks/useListPagination";
 import { getPagedItems } from "../../lib/pagination";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
-import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 
 function formatPublished(iso: string | undefined) {
   if (!iso) return "";

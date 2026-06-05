@@ -13,7 +13,11 @@ import { Heart, LayoutGrid, List, Package, ShoppingCart } from "lucide-react";
 
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiPortaltext } from "../../api/generated/react-query";
-import { buildPageParams, LOOKUP_PAGE_SIZE, getPagedItems } from "../../lib/pagination";
+import {
+  buildPageParams,
+  LOOKUP_PAGE_SIZE,
+  getPagedItems,
+} from "../../lib/pagination";
 import {
   getOverrideHtml,
   getOverridePlain,
@@ -48,10 +52,7 @@ const PREVIEW_SAMPLE_ARTICLES = [
   },
 ] as const;
 
-function PreviewShell({
-  textKey,
-  bodyHtml,
-}: PortalTextPagePreviewProps) {
+function PreviewShell({ textKey, bodyHtml }: PortalTextPagePreviewProps) {
   const list = useGetApiPortaltext(buildPageParams(0, LOOKUP_PAGE_SIZE), {
     client: gearhubApiClientOptions,
   });
@@ -102,11 +103,7 @@ function PreviewShell({
   );
 }
 
-function CatalogPagePreview({
-  overrides,
-}: {
-  overrides: PortalTextOverrides;
-}) {
+function CatalogPagePreview({ overrides }: { overrides: PortalTextOverrides }) {
   return (
     <Box>
       <PageHeader
@@ -163,7 +160,10 @@ function CatalogPagePreview({
           name="Scissor lift 26 ft"
           category="Lifting · LiftMaster"
           featured
-          descriptionHtml={getOverrideHtml(overrides, "catalog.featured.fallback")}
+          descriptionHtml={getOverrideHtml(
+            overrides,
+            "catalog.featured.fallback",
+          )}
         />
         <CatalogSampleCard
           name="Industrial generator 20 kW"
@@ -196,7 +196,12 @@ function CatalogSampleCard({
           justifyContent: "center",
         }}
       >
-        <Package size={featured ? 72 : 48} strokeWidth={1} color="#94a3b8" aria-hidden />
+        <Package
+          size={featured ? 72 : 48}
+          strokeWidth={1}
+          color="#94a3b8"
+          aria-hidden
+        />
       </Box>
       <CardContent sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <Box
@@ -213,7 +218,11 @@ function CatalogSampleCard({
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
           {name}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: featured ? 2 : 1 }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mb: featured ? 2 : 1 }}
+        >
           {category}
         </Typography>
         {featured && descriptionHtml ? (
@@ -243,7 +252,12 @@ function CatalogSampleCard({
             $125.00 / day
           </Typography>
         )}
-        <Button variant="outlined" size="small" disabled sx={{ alignSelf: "flex-start" }}>
+        <Button
+          variant="outlined"
+          size="small"
+          disabled
+          sx={{ alignSelf: "flex-start" }}
+        >
           View details
         </Button>
       </CardContent>
@@ -331,7 +345,11 @@ function EquipmentPagePreview({
             <strong>Warehouse:</strong> Central depot
           </Typography>
 
-          <Button variant="containedBlack" disabled sx={{ alignSelf: "flex-start", mt: 1 }}>
+          <Button
+            variant="containedBlack"
+            disabled
+            sx={{ alignSelf: "flex-start", mt: 1 }}
+          >
             Add to cart
           </Button>
         </CardContent>
@@ -393,7 +411,11 @@ function NewsPagePreview({ overrides }: { overrides: PortalTextOverrides }) {
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>
                   {post.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 1 }}
+                >
                   {post.excerpt}
                 </Typography>
               </CardContent>

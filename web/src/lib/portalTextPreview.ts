@@ -35,9 +35,7 @@ export function buildPortalTextOverrides(
   saved?: SavedPortalText[],
 ): PortalTextOverrides {
   const savedMap = new Map(
-    (saved ?? [])
-      .filter((t) => t.key)
-      .map((t) => [t.key!, t.bodyHtml ?? null]),
+    (saved ?? []).filter((t) => t.key).map((t) => [t.key!, t.bodyHtml ?? null]),
   );
 
   if (isPortalTextKey(editedKey)) {

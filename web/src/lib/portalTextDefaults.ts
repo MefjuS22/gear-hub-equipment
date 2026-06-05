@@ -8,7 +8,8 @@ export const PORTAL_TEXT_DEFAULTS = {
   "catalog.featured.fallback":
     "<p>Reliable rental unit with transparent daily pricing. Add to your order to reserve dates at checkout.</p>",
   "cart.empty.title": "Your cart is empty",
-  "cart.empty.body": "Browse the catalog and add equipment to start a rental order.",
+  "cart.empty.body":
+    "Browse the catalog and add equipment to start a rental order.",
   "news.list.title": "News",
   "news.list.subtitle": "Updates, tips, and announcements from our team.",
 } as const;

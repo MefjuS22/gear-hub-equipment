@@ -21,8 +21,9 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
     }
 
     public Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        string? search,
         CancellationToken cancellationToken = default) =>
-        equipmentRepository.GetCatalogCategoryNamesAsync(cancellationToken);
+        equipmentRepository.GetCatalogCategoryNamesAsync(search, cancellationToken);
 
     public async Task<ServiceResult<EquipmentDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {

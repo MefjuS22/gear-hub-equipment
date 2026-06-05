@@ -12,6 +12,7 @@ public interface IEquipmentRepository
         CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        string? search,
         CancellationToken cancellationToken = default);
     Task<Equipment?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<Equipment> CreateAsync(Equipment equipment, CancellationToken cancellationToken = default);

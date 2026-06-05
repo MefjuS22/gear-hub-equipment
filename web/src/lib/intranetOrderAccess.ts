@@ -1,4 +1,7 @@
-import type { RentalOrderListDto, UserProfileDto } from "../api/generated/types";
+import type {
+  RentalOrderListDto,
+  UserProfileDto,
+} from "../api/generated/types";
 import { userHasAdminRole } from "./userRoles";
 
 /** Matches backend <c>OrderService.GetByIdForViewerAsync</c>: Admin in DB or placing user. */

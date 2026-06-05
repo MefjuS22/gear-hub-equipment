@@ -13,29 +13,13 @@ public class EquipmentRepository(ApplicationDbContext dbContext) : IEquipmentRep
         int take,
         CancellationToken cancellationToken = default)
     {
-        var equipmentQuery = dbContext.Equipment
-            .AsNoTracking()
-            .Include(item => item.Category)
-            .Include(item => item.Brand)
-            .Include(item => item.Warehouse)
-            .AsQueryable();
-
-        var search = query.Search?.Trim();
-        if (!string.IsNullOrEmpty(search))
-        {
-            var pattern = $"%{search}%";
-            equipmentQuery = equipmentQuery.Where(item =>
-                EF.Functions.ILike(item.Name, pattern) ||
-                (item.Brand != null && EF.Functions.ILike(item.Brand.Name, pattern)) ||
-                (item.Category != null && EF.Functions.ILike(item.Category.Name, pattern)));
-        }
-
-        var category = query.Category?.Trim();
-        if (!string.IsNullOrEmpty(category))
-        {
-            equipmentQuery = equipmentQuery.Where(item =>
-                item.Category != null && item.Category.Name == category);
-        }
+        var equipmentQuery = ApplyCatalogFilters(
+            dbContext.Equipment
+                .AsNoTracking()
+                .Include(item => item.Category)
+                .Include(item => item.Brand)
+                .Include(item => item.Warehouse),
+            query);
 
         equipmentQuery = equipmentQuery.OrderBy(item => item.Name);
 
@@ -45,15 +29,45 @@ public class EquipmentRepository(ApplicationDbContext dbContext) : IEquipmentRep
     }
 
     public async Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        string? search,
         CancellationToken cancellationToken = default)
     {
-        return await dbContext.Equipment
-            .AsNoTracking()
+        var filter = new EquipmentListQuery { Search = search };
+        var equipmentQuery = ApplyCatalogFilters(
+            dbContext.Equipment.AsNoTracking().Include(item => item.Category),
+            filter);
+
+        return await equipmentQuery
             .Where(item => item.Category != null && item.Category!.Name != "")
             .Select(item => item.Category!.Name)
             .Distinct()
             .OrderBy(name => name)
             .ToListAsync(cancellationToken);
+    }
+
+    private static IQueryable<Equipment> ApplyCatalogFilters(
+        IQueryable<Equipment> equipmentQuery,
+        EquipmentListQuery query)
+    {
+        var search = query.Search?.Trim();
+        if (!string.IsNullOrEmpty(search))
+        {
+            var pattern = $"%{search}%";
+            equipmentQuery = equipmentQuery.Where(item =>
+                EF.Functions.ILike(item.Name, pattern) ||
+                (item.Brand != null && EF.Functions.ILike(item.Brand.Name, pattern)) ||
+                (item.Category != null && EF.Functions.ILike(item.Category.Name, pattern)) ||
+                (item.DescriptionHtml != null && EF.Functions.ILike(item.DescriptionHtml, pattern)));
+        }
+
+        var category = query.Category?.Trim();
+        if (!string.IsNullOrEmpty(category))
+        {
+            equipmentQuery = equipmentQuery.Where(item =>
+                item.Category != null && item.Category.Name == category);
+        }
+
+        return equipmentQuery;
     }
 
     public async Task<Equipment?> GetByIdAsync(int id, CancellationToken cancellationToken = default)

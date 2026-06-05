@@ -20,7 +20,12 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useBrandsAdmin } from "../../hooks/intranet/useBrandsAdmin";
 import { brandFormSchema, type BrandFormValues } from "../../lib/formSchemas";
-import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 import type { BrandLookupDto } from "../../api/generated/types";
 
 export function BrandsAdminView() {

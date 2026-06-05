@@ -14,7 +14,12 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { FileText, Pencil, PlusCircle, Trash2 } from "lucide-react";
 import type { CmsPostListDto } from "../../api/generated/types";
 import { useCmsPostsAdmin } from "../../hooks/intranet/useCmsPostsAdmin";
-import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 import { PortalTextsSectionNav } from "./PortalTextsSectionNav";
 
 export function PortalTextsListView() {

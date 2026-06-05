@@ -104,9 +104,13 @@ export function EquipmentForm({
             />
           )}
         />
-        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
-          Shown on featured catalog cards and the equipment detail page. Leave empty to use the
-          portal fallback blurb.
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ mt: 0.5, display: "block" }}
+        >
+          Shown on featured catalog cards and the equipment detail page. Leave
+          empty to use the portal fallback blurb.
         </Typography>
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>

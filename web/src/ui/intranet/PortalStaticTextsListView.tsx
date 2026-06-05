@@ -17,7 +17,12 @@ import type { PortalTextDto } from "../../api/generated/types";
 import { usePortalTextsAdmin } from "../../hooks/intranet/usePortalTextsAdmin";
 import { resolvePortalTextBodyHtml } from "../../lib/portalTextDefaults";
 import { portalTextPlain } from "../../lib/portalTextHtml";
-import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 import { PortalTextsSectionNav } from "./PortalTextsSectionNav";
 
 export function PortalStaticTextsListView() {

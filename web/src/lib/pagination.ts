@@ -10,9 +10,7 @@ export type PagedSlice<T> = {
   totalPages?: number;
 };
 
-export function getPagedItems<T>(
-  data: PagedSlice<T> | undefined | null,
-): T[] {
+export function getPagedItems<T>(data: PagedSlice<T> | undefined | null): T[] {
   return data?.items ?? [];
 }
 

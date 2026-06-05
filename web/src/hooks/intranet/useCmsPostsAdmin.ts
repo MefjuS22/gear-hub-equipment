@@ -74,5 +74,15 @@ export function useCmsPostsAdmin() {
     },
   });
 
-  return { list, create, update, remove, page, setPage, pageSize, setPageSize, ...paged };
+  return {
+    list,
+    create,
+    update,
+    remove,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    ...paged,
+  };
 }

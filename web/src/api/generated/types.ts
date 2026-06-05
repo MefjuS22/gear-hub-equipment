@@ -1885,6 +1885,13 @@ export type PostApiEquipmentMutation = {
   Errors: PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500;
 };
 
+export type GetApiEquipmentCategoriesQueryParams = {
+  /**
+   * @type string | undefined
+   */
+  search?: string;
+};
+
 /**
  * @description OK
  */
@@ -1900,6 +1907,7 @@ export type GetApiEquipmentCategoriesQueryResponse =
 
 export type GetApiEquipmentCategoriesQuery = {
   Response: GetApiEquipmentCategories200;
+  QueryParams: GetApiEquipmentCategoriesQueryParams;
   Errors: GetApiEquipmentCategories401;
 };
 

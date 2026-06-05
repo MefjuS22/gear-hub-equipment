@@ -43,14 +43,14 @@ export function PortalEquipmentDetailView({ equipmentId }: Props) {
           message="Could not load this equipment item."
           sx={{ mb: 2 }}
         />
-        <Button
-          component={Link}
-          to="/portal"
-          startIcon={<ArrowLeft size={18} aria-hidden />}
-          variant="outlined"
-        >
-          Back to catalog
-        </Button>
+        <Link to="/portal" style={{ textDecoration: "none" }}>
+          <Button
+            startIcon={<ArrowLeft size={18} aria-hidden />}
+            variant="outlined"
+          >
+            Back to catalog
+          </Button>
+        </Link>
       </Box>
     );
   }
@@ -146,7 +146,9 @@ export function PortalEquipmentDetailView({ equipmentId }: Props) {
             Description
           </Typography>
           <PortalHtmlBlock
-            html={e.descriptionHtml?.trim() || getHtml("catalog.featured.fallback")}
+            html={
+              e.descriptionHtml?.trim() || getHtml("catalog.featured.fallback")
+            }
             sx={{ mb: 1 }}
           />
 

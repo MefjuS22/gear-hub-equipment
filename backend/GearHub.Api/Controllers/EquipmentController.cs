@@ -25,8 +25,9 @@ public class EquipmentController(IEquipmentService equipmentService) : Controlle
     [AllowAnonymous]
     [ProducesResponseType(typeof(IReadOnlyList<string>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyList<string>>> GetCatalogCategories(
+        [FromQuery] string? search,
         CancellationToken cancellationToken) =>
-        Ok(await equipmentService.GetCatalogCategoryNamesAsync(cancellationToken));
+        Ok(await equipmentService.GetCatalogCategoryNamesAsync(search, cancellationToken));
 
     [HttpGet("{id:int}")]
     [AllowAnonymous]

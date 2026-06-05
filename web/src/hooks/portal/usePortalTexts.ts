@@ -7,7 +7,11 @@ import {
   type PortalTextKey,
 } from "../../lib/portalTextDefaults";
 import { portalTextPlain } from "../../lib/portalTextHtml";
-import { buildPageParams, LOOKUP_PAGE_SIZE, getPagedItems } from "../../lib/pagination";
+import {
+  buildPageParams,
+  LOOKUP_PAGE_SIZE,
+  getPagedItems,
+} from "../../lib/pagination";
 
 const portalTextParams = buildPageParams(0, LOOKUP_PAGE_SIZE);
 

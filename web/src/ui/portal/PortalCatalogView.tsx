@@ -26,12 +26,13 @@ import {
   Plus,
   ShoppingCart,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { formatUsd } from "../../lib/formatCurrency";
 import { portalTextPlain } from "../../lib/portalTextHtml";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { usePortalCatalog } from "../../hooks/portal/usePortalCatalog";
+import { usePortalCatalogUrl } from "../../hooks/portal/usePortalCatalogUrl";
 import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import {
   EmptyState,
@@ -41,7 +42,6 @@ import {
   StatusChip,
   TablePaginationBar,
 } from "../common";
-import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
 import { useCart } from "../../store/portalCartStore";
 
 type CatalogOrderControlProps = {
@@ -203,31 +203,26 @@ function catalogItemDescriptionHtml(
 
 export function PortalCatalogView() {
   const { getPlain, getHtml } = usePortalTexts();
-  const { search } = usePortalCatalogSearch();
-  const [categoryKey, setCategoryKey] = useState<string>("all");
+  const { search, setSearch } = usePortalCatalogUrl();
   const [view, setView] = useState<"grid" | "list">("grid");
 
-  const {
-    equipment,
-    categories,
-    items,
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
-    totalCount,
-  } = usePortalCatalog({ search, categoryKey });
+  const { equipment, categories, items, totalCount, isFiltering } =
+    usePortalCatalog(search);
 
-  useEffect(() => {
-    setPage(0);
-  }, [search, categoryKey, setPage]);
+  const page = search.page - 1;
+  const pageSize = search.pageSize;
+  const categoryKey = search.category;
+
+  const setPage = (nextPage: number) => setSearch({ page: nextPage + 1 });
+  const setPageSize = (nextPageSize: number) =>
+    setSearch({ pageSize: nextPageSize, page: 1 });
 
   const categoryOptions = useMemo(
     () => categories.data ?? [],
     [categories.data],
   );
 
-  if (equipment.isLoading) {
+  if (equipment.isLoading && !equipment.data) {
     return <LoadingState message="Loading catalog…" />;
   }
   if (equipment.error) {
@@ -240,7 +235,7 @@ export function PortalCatalogView() {
   }
 
   return (
-    <Box>
+    <Box sx={{ opacity: isFiltering || equipment.isFetching ? 0.72 : 1 }}>
       <PageHeader
         title={getPlain("catalog.hero.title")}
         subtitle={getPlain("catalog.hero.subtitle")}
@@ -288,7 +283,7 @@ export function PortalCatalogView() {
           >
             <Chip
               label="All equipment"
-              onClick={() => setCategoryKey("all")}
+              onClick={() => setSearch({ category: "all" })}
               color={categoryKey === "all" ? "primary" : "default"}
               variant={categoryKey === "all" ? "filled" : "outlined"}
             />
@@ -296,7 +291,7 @@ export function PortalCatalogView() {
               <Chip
                 key={c}
                 label={c}
-                onClick={() => setCategoryKey(c)}
+                onClick={() => setSearch({ category: c })}
                 color={categoryKey === c ? "primary" : "default"}
                 variant={categoryKey === c ? "filled" : "outlined"}
               />
@@ -599,7 +594,10 @@ export function PortalCatalogView() {
                         </Box>
                       </Box>
                     ) : (
-                      <Typography variant="body1" sx={{ mb: 2, flex: 1, mt: 1 }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ mb: 2, flex: 1, mt: 1 }}
+                      >
                         <strong>{formatUsd(item.dailyRate ?? 0)}</strong> / day
                       </Typography>
                     )}

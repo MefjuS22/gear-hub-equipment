@@ -5,48 +5,57 @@ import {
   useGetApiEquipment,
   useGetApiEquipmentCategories,
 } from "../../api/generated/react-query";
+import {
+  catalogCategoriesQueryParams,
+  catalogSearchToApiParams,
+  type CatalogSearch,
+} from "../../lib/catalogSearch";
 import { getPagedItems } from "../../lib/pagination";
-import { useListPagination } from "../useListPagination";
+import { useDebouncedValue } from "../useDebouncedValue";
 
-type UsePortalCatalogOptions = {
-  search: string;
-  categoryKey: string;
-};
-
-export function usePortalCatalog({
-  search,
-  categoryKey,
-}: UsePortalCatalogOptions) {
-  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
-
-  const queryParams = useMemo(
-    () => ({
-      ...params,
-      Search: search.trim() || undefined,
-      Category: categoryKey !== "all" ? categoryKey : undefined,
+export function usePortalCatalog(search: CatalogSearch) {
+  const debouncedQ = useDebouncedValue(search.q);
+  const apiSearch = useMemo(
+    (): CatalogSearch => ({
+      ...search,
+      q: debouncedQ,
     }),
-    [params, search, categoryKey],
+    [search, debouncedQ],
   );
 
-  const equipment = useGetApiEquipment(queryParams, {
+  const equipmentParams = useMemo(
+    () => catalogSearchToApiParams(apiSearch),
+    [apiSearch],
+  );
+
+  const categoryParams = useMemo(
+    () => catalogCategoriesQueryParams(apiSearch),
+    [apiSearch],
+  );
+
+  const equipment = useGetApiEquipment(equipmentParams, {
     client: gearhubApiClientOptions,
+    query: {
+      placeholderData: (previous) => previous,
+    },
   });
 
-  const categories = useGetApiEquipmentCategories({
+  const categories = useGetApiEquipmentCategories(categoryParams, {
     client: gearhubApiClientOptions,
+    query: {
+      placeholderData: (previous) => previous,
+    },
   });
 
   const items = getPagedItems(equipment.data);
   const totalCount = equipment.data?.totalCount ?? 0;
+  const isFiltering = search.q.trim() !== debouncedQ.trim();
 
   return {
     equipment,
     categories,
     items,
-    page,
-    setPage,
-    pageSize,
-    setPageSize,
     totalCount,
+    isFiltering,
   };
 }
