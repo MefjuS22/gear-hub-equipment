@@ -17,9 +17,11 @@ namespace GearHub.Api.Controllers;
 public class UsersController(IUserAdminService userAdminService) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<UserAdminListDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<UserAdminListDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await userAdminService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<UserAdminListDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<UserAdminListDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await userAdminService.GetAllAsync(pagination, cancellationToken));
 
     [HttpPost]
     [ProducesResponseType(typeof(UserAdminListDto), StatusCodes.Status201Created)]

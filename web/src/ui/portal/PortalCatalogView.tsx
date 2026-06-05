@@ -26,7 +26,7 @@ import {
   Plus,
   ShoppingCart,
 } from "lucide-react";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { formatUsd } from "../../lib/formatCurrency";
 import { portalTextPlain } from "../../lib/portalTextHtml";
@@ -39,6 +39,7 @@ import {
   LoadingState,
   PageHeader,
   StatusChip,
+  TablePaginationBar,
 } from "../common";
 import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
 import { useCart } from "../../store/portalCartStore";
@@ -201,35 +202,30 @@ function catalogItemDescriptionHtml(
 }
 
 export function PortalCatalogView() {
-  const { equipment } = usePortalCatalog();
   const { getPlain, getHtml } = usePortalTexts();
   const { search } = usePortalCatalogSearch();
   const [categoryKey, setCategoryKey] = useState<string>("all");
   const [view, setView] = useState<"grid" | "list">("grid");
 
-  const categories = useMemo(() => {
-    const set = new Set<string>();
-    for (const item of equipment.data ?? []) {
-      const c = item.categoryName?.trim();
-      if (c) set.add(c);
-    }
-    return [...set].sort((a, b) => a.localeCompare(b));
-  }, [equipment.data]);
+  const {
+    equipment,
+    categories,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = usePortalCatalog({ search, categoryKey });
 
-  const filtered = useMemo(() => {
-    const rows = equipment.data ?? [];
-    const q = search.trim().toLowerCase();
-    return rows.filter((item) => {
-      if (categoryKey !== "all") {
-        const c = item.categoryName?.trim() ?? "";
-        if (c !== categoryKey) return false;
-      }
-      if (!q) return true;
-      const hay =
-        `${item.name ?? ""} ${item.brandName ?? ""} ${item.categoryName ?? ""}`.toLowerCase();
-      return hay.includes(q);
-    });
-  }, [equipment.data, search, categoryKey]);
+  useEffect(() => {
+    setPage(0);
+  }, [search, categoryKey, setPage]);
+
+  const categoryOptions = useMemo(
+    () => categories.data ?? [],
+    [categories.data],
+  );
 
   if (equipment.isLoading) {
     return <LoadingState message="Loading catalog…" />;
@@ -296,7 +292,7 @@ export function PortalCatalogView() {
               color={categoryKey === "all" ? "primary" : "default"}
               variant={categoryKey === "all" ? "filled" : "outlined"}
             />
-            {categories.map((c) => (
+            {categoryOptions.map((c) => (
               <Chip
                 key={c}
                 label={c}
@@ -309,7 +305,7 @@ export function PortalCatalogView() {
         </CardContent>
       </Card>
 
-      {filtered.length === 0 ? (
+      {items.length === 0 ? (
         <EmptyState
           title="No equipment matches"
           description="Try another category or clear your search."
@@ -330,7 +326,7 @@ export function PortalCatalogView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filtered.map((item) => (
+              {items.map((item) => (
                 <TableRow key={item.id} hover>
                   <TableCell sx={{ py: 0.5 }}>
                     {resolveMediaSrc(item.imageUrl) ? (
@@ -431,12 +427,12 @@ export function PortalCatalogView() {
         </TableContainer>
       ) : (
         <Grid container spacing={2}>
-          {filtered.map((item, index) => {
-            const featured = index === 0;
+          {items.map((item, index) => {
+            const featured = page === 0 && index === 0;
             const gridSize =
-              featured && filtered.length > 1
+              featured && items.length > 1
                 ? { xs: 12, md: 8 }
-                : featured && filtered.length === 1
+                : featured && items.length === 1
                   ? { xs: 12, md: 12 }
                   : { xs: 12, sm: 6, md: 4 };
             const catalogImg = resolveMediaSrc(item.imageUrl);
@@ -648,6 +644,14 @@ export function PortalCatalogView() {
           })}
         </Grid>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </Box>
   );
 }

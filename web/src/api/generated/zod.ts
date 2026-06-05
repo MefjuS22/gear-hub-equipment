@@ -181,6 +181,16 @@ export const brandLookupDtoSchema = z.object({
   name: z.string().nullish(),
 });
 
+export const brandLookupDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(brandLookupDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const brandUpsertDtoSchema = z.object({
   name: z.string().nullish(),
 });
@@ -189,6 +199,16 @@ export const categoryLookupDtoSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
   description: z.string().nullish(),
+});
+
+export const categoryLookupDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(categoryLookupDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
 });
 
 export const categoryUpsertDtoSchema = z.object({
@@ -220,6 +240,16 @@ export const cmsPostListDtoSchema = z.object({
   updatedAtUtc: z.optional(z.iso.datetime()),
 });
 
+export const cmsPostListDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(cmsPostListDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const cmsPostPublicDetailDtoSchema = z.object({
   id: z.optional(z.uuid()),
   slug: z.string().nullish(),
@@ -240,6 +270,16 @@ export const cmsPostPublicSummaryDtoSchema = z.object({
   publishedAtUtc: z.optional(z.iso.datetime()),
 });
 
+export const cmsPostPublicSummaryDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(cmsPostPublicSummaryDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const cmsPostUpsertDtoSchema = z.object({
   slug: z.string().nullish(),
   title: z.string().nullish(),
@@ -256,6 +296,16 @@ export const createUserAdminDtoSchema = z.object({
   roles: z.array(z.string()).nullish(),
 });
 
+export const customerPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(customerSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const equipmentDtoSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
@@ -269,6 +319,16 @@ export const equipmentDtoSchema = z.object({
   isAvailable: z.optional(z.boolean()),
   imageUrl: z.string().nullish(),
   descriptionHtml: z.string().nullish(),
+});
+
+export const equipmentDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(equipmentDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
 });
 
 export const equipmentUpsertDtoSchema = z.object({
@@ -318,9 +378,29 @@ export const portalTextDtoSchema = z.object({
   updatedAtUtc: z.optional(z.iso.datetime()),
 });
 
+export const portalTextDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(portalTextDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const portalTextPublicDtoSchema = z.object({
   key: z.string().nullish(),
   bodyHtml: z.string().nullish(),
+});
+
+export const portalTextPublicDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(portalTextPublicDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
 });
 
 export const portalTextUpsertDtoSchema = z.object({
@@ -366,6 +446,16 @@ export const rentalOrderListDtoSchema = z.object({
   },
 });
 
+export const rentalOrderListDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(rentalOrderListDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const setUserRolesDtoSchema = z.object({
   roles: z.array(z.string()).nullish(),
 });
@@ -377,10 +467,30 @@ export const userAdminListDtoSchema = z.object({
   roles: z.array(z.string()).nullish(),
 });
 
+export const userAdminListDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(userAdminListDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
+});
+
 export const warehouseLookupDtoSchema = z.object({
   id: z.optional(z.int()),
   name: z.string().nullish(),
   location: z.string().nullish(),
+});
+
+export const warehouseLookupDtoPagedResultDtoSchema = z.object({
+  get items() {
+    return z.array(warehouseLookupDtoSchema).nullish();
+  },
+  page: z.optional(z.int()),
+  pageSize: z.optional(z.int()),
+  totalCount: z.optional(z.int()),
+  totalPages: z.optional(z.int()),
 });
 
 export const warehouseUpsertDtoSchema = z.object({
@@ -445,10 +555,19 @@ export const getApiAuthMeQueryResponseSchema = z.lazy(
   () => getApiAuthMe200Schema,
 );
 
+export const getApiBrandQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiBrand200Schema = z.array(z.lazy(() => brandLookupDtoSchema));
+export const getApiBrand200Schema = z.lazy(
+  () => brandLookupDtoPagedResultDtoSchema,
+);
 
 /**
  * @description Unauthorized
@@ -560,11 +679,18 @@ export const deleteApiBrandIdMutationResponseSchema = z.lazy(
   () => deleteApiBrandId204Schema,
 );
 
+export const getApiCategoryQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiCategory200Schema = z.array(
-  z.lazy(() => categoryLookupDtoSchema),
+export const getApiCategory200Schema = z.lazy(
+  () => categoryLookupDtoPagedResultDtoSchema,
 );
 
 /**
@@ -681,11 +807,18 @@ export const deleteApiCategoryIdMutationResponseSchema = z.lazy(
   () => deleteApiCategoryId204Schema,
 );
 
+export const getApiCmspostQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiCmspost200Schema = z.array(
-  z.lazy(() => cmsPostListDtoSchema),
+export const getApiCmspost200Schema = z.lazy(
+  () => cmsPostListDtoPagedResultDtoSchema,
 );
 
 /**
@@ -798,11 +931,18 @@ export const deleteApiCmspostIdMutationResponseSchema = z.lazy(
   () => deleteApiCmspostId204Schema,
 );
 
+export const getApiCmspostPublishedQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiCmspostPublished200Schema = z.array(
-  z.lazy(() => cmsPostPublicSummaryDtoSchema),
+export const getApiCmspostPublished200Schema = z.lazy(
+  () => cmsPostPublicSummaryDtoPagedResultDtoSchema,
 );
 
 /**
@@ -845,18 +985,43 @@ export const getApiCmspostPublishedSlugQueryResponseSchema = z.lazy(
   () => getApiCmspostPublishedSlug200Schema,
 );
 
+export const getApiCustomerQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
+/**
+ * @description OK
+ */
+export const getApiCustomer200Schema = z.lazy(
+  () => customerPagedResultDtoSchema,
+);
+
 /**
  * @description Unauthorized
  */
 export const getApiCustomer401Schema = z.lazy(() => problemDetailsSchema);
 
-export const getApiCustomerQueryResponseSchema = z.any();
+export const getApiCustomerQueryResponseSchema = z.lazy(
+  () => getApiCustomer200Schema,
+);
+
+export const getApiEquipmentQueryParamsSchema = z
+  .object({
+    Search: z.optional(z.string()),
+    Category: z.optional(z.string()),
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
 
 /**
  * @description OK
  */
-export const getApiEquipment200Schema = z.array(
-  z.lazy(() => equipmentDtoSchema),
+export const getApiEquipment200Schema = z.lazy(
+  () => equipmentDtoPagedResultDtoSchema,
 );
 
 /**
@@ -894,6 +1059,22 @@ export const postApiEquipmentMutationRequestSchema = z.lazy(
 
 export const postApiEquipmentMutationResponseSchema = z.lazy(
   () => postApiEquipment201Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiEquipmentCategories200Schema = z.array(z.string());
+
+/**
+ * @description Unauthorized
+ */
+export const getApiEquipmentCategories401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+export const getApiEquipmentCategoriesQueryResponseSchema = z.lazy(
+  () => getApiEquipmentCategories200Schema,
 );
 
 export const getApiEquipmentIdPathParamsSchema = z.object({
@@ -1002,11 +1183,18 @@ export const postApiFilesUploadMutationResponseSchema = z.lazy(
   () => postApiFilesUpload200Schema,
 );
 
+export const getApiOrderQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiOrder200Schema = z.array(
-  z.lazy(() => rentalOrderListDtoSchema),
+export const getApiOrder200Schema = z.lazy(
+  () => rentalOrderListDtoPagedResultDtoSchema,
 );
 
 /**
@@ -1083,11 +1271,18 @@ export const postApiOrderCreateorderMutationResponseSchema = z.lazy(
   () => postApiOrderCreateorder201Schema,
 );
 
+export const getApiPortaltextQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiPortaltext200Schema = z.array(
-  z.lazy(() => portalTextDtoSchema),
+export const getApiPortaltext200Schema = z.lazy(
+  () => portalTextDtoPagedResultDtoSchema,
 );
 
 /**
@@ -1099,11 +1294,18 @@ export const getApiPortaltextQueryResponseSchema = z.lazy(
   () => getApiPortaltext200Schema,
 );
 
+export const getApiPortaltextPublicQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiPortaltextPublic200Schema = z.array(
-  z.lazy(() => portalTextPublicDtoSchema),
+export const getApiPortaltextPublic200Schema = z.lazy(
+  () => portalTextPublicDtoPagedResultDtoSchema,
 );
 
 /**
@@ -1178,11 +1380,18 @@ export const putApiPortaltextKeyMutationResponseSchema = z.lazy(
   () => putApiPortaltextKey200Schema,
 );
 
+export const getApiUsersQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiUsers200Schema = z.array(
-  z.lazy(() => userAdminListDtoSchema),
+export const getApiUsers200Schema = z.lazy(
+  () => userAdminListDtoPagedResultDtoSchema,
 );
 
 /**
@@ -1297,11 +1506,18 @@ export const deleteApiUsersIdMutationResponseSchema = z.lazy(
   () => deleteApiUsersId204Schema,
 );
 
+export const getApiWarehouseQueryParamsSchema = z
+  .object({
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
 /**
  * @description OK
  */
-export const getApiWarehouse200Schema = z.array(
-  z.lazy(() => warehouseLookupDtoSchema),
+export const getApiWarehouse200Schema = z.lazy(
+  () => warehouseLookupDtoPagedResultDtoSchema,
 );
 
 /**

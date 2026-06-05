@@ -20,11 +20,22 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useBrandsAdmin } from "../../hooks/intranet/useBrandsAdmin";
 import { brandFormSchema, type BrandFormValues } from "../../lib/formSchemas";
-import { EmptyState, LoadingState, PageHeader } from "../common";
+import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
 import type { BrandLookupDto } from "../../api/generated/types";
 
 export function BrandsAdminView() {
-  const { list, create, update, remove } = useBrandsAdmin();
+  const {
+    list,
+    create,
+    update,
+    remove,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = useBrandsAdmin();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<BrandLookupDto | null>(null);
 
@@ -71,7 +82,7 @@ export function BrandsAdminView() {
     return <LoadingState message="Loading brands…" />;
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -156,6 +167,14 @@ export function BrandsAdminView() {
           </Table>
         </TableContainer>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
 
       <Dialog
         open={dialogOpen}

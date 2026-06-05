@@ -384,6 +384,29 @@ export type BrandLookupDto = {
   name?: string | null;
 };
 
+export type BrandLookupDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: BrandLookupDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
+};
+
 export type BrandUpsertDto = {
   /**
    * @type string
@@ -404,6 +427,29 @@ export type CategoryLookupDto = {
    * @type string
    */
   description?: string | null;
+};
+
+export type CategoryLookupDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: CategoryLookupDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
 };
 
 export type CategoryUpsertDto = {
@@ -495,6 +541,29 @@ export type CmsPostListDto = {
   updatedAtUtc?: string;
 };
 
+export type CmsPostListDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: CmsPostListDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
+};
+
 export type CmsPostPublicDetailDto = {
   /**
    * @type string | undefined, uuid
@@ -557,6 +626,29 @@ export type CmsPostPublicSummaryDto = {
   publishedAtUtc?: string;
 };
 
+export type CmsPostPublicSummaryDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: CmsPostPublicSummaryDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
+};
+
 export type CmsPostUpsertDto = {
   /**
    * @type string
@@ -601,6 +693,29 @@ export type CreateUserAdminDto = {
    * @type array
    */
   roles?: string[] | null;
+};
+
+export type CustomerPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: Customer[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
 };
 
 export type EquipmentDto = {
@@ -652,6 +767,29 @@ export type EquipmentDto = {
    * @type string
    */
   descriptionHtml?: string | null;
+};
+
+export type EquipmentDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: EquipmentDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
 };
 
 export type EquipmentUpsertDto = {
@@ -780,6 +918,29 @@ export type PortalTextDto = {
   updatedAtUtc?: string;
 };
 
+export type PortalTextDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: PortalTextDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
+};
+
 export type PortalTextPublicDto = {
   /**
    * @type string
@@ -789,6 +950,29 @@ export type PortalTextPublicDto = {
    * @type string
    */
   bodyHtml?: string | null;
+};
+
+export type PortalTextPublicDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: PortalTextPublicDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
 };
 
 export type PortalTextUpsertDto = {
@@ -903,6 +1087,29 @@ export type RentalOrderListDto = {
   items?: RentalOrderLineDto[] | null;
 };
 
+export type RentalOrderListDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: RentalOrderListDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
+};
+
 export type SetUserRolesDto = {
   /**
    * @type array
@@ -929,6 +1136,29 @@ export type UserAdminListDto = {
   roles?: string[] | null;
 };
 
+export type UserAdminListDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: UserAdminListDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
+};
+
 export type WarehouseLookupDto = {
   /**
    * @type integer | undefined, int32
@@ -942,6 +1172,29 @@ export type WarehouseLookupDto = {
    * @type string
    */
   location?: string | null;
+};
+
+export type WarehouseLookupDtoPagedResultDto = {
+  /**
+   * @type array
+   */
+  items?: WarehouseLookupDto[] | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  pageSize?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCount?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalPages?: number;
 };
 
 export type WarehouseUpsertDto = {
@@ -1017,10 +1270,21 @@ export type GetApiAuthMeQuery = {
   Errors: GetApiAuthMe401;
 };
 
+export type GetApiBrandQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiBrand200 = BrandLookupDto[];
+export type GetApiBrand200 = BrandLookupDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1031,6 +1295,7 @@ export type GetApiBrandQueryResponse = GetApiBrand200;
 
 export type GetApiBrandQuery = {
   Response: GetApiBrand200;
+  QueryParams: GetApiBrandQueryParams;
   Errors: GetApiBrand401;
 };
 
@@ -1157,10 +1422,21 @@ export type DeleteApiBrandIdMutation = {
   Errors: DeleteApiBrandId400 | DeleteApiBrandId401 | DeleteApiBrandId404;
 };
 
+export type GetApiCategoryQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiCategory200 = CategoryLookupDto[];
+export type GetApiCategory200 = CategoryLookupDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1171,6 +1447,7 @@ export type GetApiCategoryQueryResponse = GetApiCategory200;
 
 export type GetApiCategoryQuery = {
   Response: GetApiCategory200;
+  QueryParams: GetApiCategoryQueryParams;
   Errors: GetApiCategory401;
 };
 
@@ -1300,10 +1577,21 @@ export type DeleteApiCategoryIdMutation = {
     | DeleteApiCategoryId404;
 };
 
+export type GetApiCmspostQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiCmspost200 = CmsPostListDto[];
+export type GetApiCmspost200 = CmsPostListDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1314,6 +1602,7 @@ export type GetApiCmspostQueryResponse = GetApiCmspost200;
 
 export type GetApiCmspostQuery = {
   Response: GetApiCmspost200;
+  QueryParams: GetApiCmspostQueryParams;
   Errors: GetApiCmspost401;
 };
 
@@ -1440,10 +1729,21 @@ export type DeleteApiCmspostIdMutation = {
   Errors: DeleteApiCmspostId401 | DeleteApiCmspostId404;
 };
 
+export type GetApiCmspostPublishedQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiCmspostPublished200 = CmsPostPublicSummaryDto[];
+export type GetApiCmspostPublished200 = CmsPostPublicSummaryDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1454,6 +1754,7 @@ export type GetApiCmspostPublishedQueryResponse = GetApiCmspostPublished200;
 
 export type GetApiCmspostPublishedQuery = {
   Response: GetApiCmspostPublished200;
+  QueryParams: GetApiCmspostPublishedQueryParams;
   Errors: GetApiCmspostPublished401;
 };
 
@@ -1488,22 +1789,58 @@ export type GetApiCmspostPublishedSlugQuery = {
   Errors: GetApiCmspostPublishedSlug401 | GetApiCmspostPublishedSlug404;
 };
 
-/**
- * @description Unauthorized
- */
-export type GetApiCustomer401 = ProblemDetails;
-
-export type GetApiCustomerQueryResponse = any;
-
-export type GetApiCustomerQuery = {
-  Response: any;
-  Errors: GetApiCustomer401;
+export type GetApiCustomerQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
 };
 
 /**
  * @description OK
  */
-export type GetApiEquipment200 = EquipmentDto[];
+export type GetApiCustomer200 = CustomerPagedResultDto;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiCustomer401 = ProblemDetails;
+
+export type GetApiCustomerQueryResponse = GetApiCustomer200;
+
+export type GetApiCustomerQuery = {
+  Response: GetApiCustomer200;
+  QueryParams: GetApiCustomerQueryParams;
+  Errors: GetApiCustomer401;
+};
+
+export type GetApiEquipmentQueryParams = {
+  /**
+   * @type string | undefined
+   */
+  Search?: string;
+  /**
+   * @type string | undefined
+   */
+  Category?: string;
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiEquipment200 = EquipmentDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1514,6 +1851,7 @@ export type GetApiEquipmentQueryResponse = GetApiEquipment200;
 
 export type GetApiEquipmentQuery = {
   Response: GetApiEquipment200;
+  QueryParams: GetApiEquipmentQueryParams;
   Errors: GetApiEquipment401;
 };
 
@@ -1545,6 +1883,24 @@ export type PostApiEquipmentMutation = {
   Response: PostApiEquipment201;
   Request: PostApiEquipmentMutationRequest;
   Errors: PostApiEquipment400 | PostApiEquipment401 | PostApiEquipment500;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiEquipmentCategories200 = string[];
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiEquipmentCategories401 = ProblemDetails;
+
+export type GetApiEquipmentCategoriesQueryResponse =
+  GetApiEquipmentCategories200;
+
+export type GetApiEquipmentCategoriesQuery = {
+  Response: GetApiEquipmentCategories200;
+  Errors: GetApiEquipmentCategories401;
 };
 
 export type GetApiEquipmentIdPathParams = {
@@ -1680,10 +2036,21 @@ export type PostApiFilesUploadMutation = {
   Errors: PostApiFilesUpload400 | PostApiFilesUpload401;
 };
 
+export type GetApiOrderQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiOrder200 = RentalOrderListDto[];
+export type GetApiOrder200 = RentalOrderListDtoPagedResultDto;
 
 /**
  * @description Bad Request
@@ -1699,6 +2066,7 @@ export type GetApiOrderQueryResponse = GetApiOrder200;
 
 export type GetApiOrderQuery = {
   Response: GetApiOrder200;
+  QueryParams: GetApiOrderQueryParams;
   Errors: GetApiOrder400 | GetApiOrder401;
 };
 
@@ -1772,10 +2140,21 @@ export type PostApiOrderCreateorderMutation = {
   Errors: PostApiOrderCreateorder400 | PostApiOrderCreateorder401;
 };
 
+export type GetApiPortaltextQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiPortaltext200 = PortalTextDto[];
+export type GetApiPortaltext200 = PortalTextDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1786,13 +2165,25 @@ export type GetApiPortaltextQueryResponse = GetApiPortaltext200;
 
 export type GetApiPortaltextQuery = {
   Response: GetApiPortaltext200;
+  QueryParams: GetApiPortaltextQueryParams;
   Errors: GetApiPortaltext401;
+};
+
+export type GetApiPortaltextPublicQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
 };
 
 /**
  * @description OK
  */
-export type GetApiPortaltextPublic200 = PortalTextPublicDto[];
+export type GetApiPortaltextPublic200 = PortalTextPublicDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1803,6 +2194,7 @@ export type GetApiPortaltextPublicQueryResponse = GetApiPortaltextPublic200;
 
 export type GetApiPortaltextPublicQuery = {
   Response: GetApiPortaltextPublic200;
+  QueryParams: GetApiPortaltextPublicQueryParams;
   Errors: GetApiPortaltextPublic401;
 };
 
@@ -1877,10 +2269,21 @@ export type PutApiPortaltextKeyMutation = {
     | PutApiPortaltextKey404;
 };
 
+export type GetApiUsersQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiUsers200 = UserAdminListDto[];
+export type GetApiUsers200 = UserAdminListDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -1896,6 +2299,7 @@ export type GetApiUsersQueryResponse = GetApiUsers200;
 
 export type GetApiUsersQuery = {
   Response: GetApiUsers200;
+  QueryParams: GetApiUsersQueryParams;
   Errors: GetApiUsers401 | GetApiUsers403;
 };
 
@@ -2020,10 +2424,21 @@ export type DeleteApiUsersIdMutation = {
     | DeleteApiUsersId404;
 };
 
+export type GetApiWarehouseQueryParams = {
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
 /**
  * @description OK
  */
-export type GetApiWarehouse200 = WarehouseLookupDto[];
+export type GetApiWarehouse200 = WarehouseLookupDtoPagedResultDto;
 
 /**
  * @description Unauthorized
@@ -2034,6 +2449,7 @@ export type GetApiWarehouseQueryResponse = GetApiWarehouse200;
 
 export type GetApiWarehouseQuery = {
   Response: GetApiWarehouse200;
+  QueryParams: GetApiWarehouseQueryParams;
   Errors: GetApiWarehouse401;
 };
 

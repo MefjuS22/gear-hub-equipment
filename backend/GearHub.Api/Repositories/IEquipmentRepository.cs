@@ -1,10 +1,18 @@
-﻿using GearHub.Api.Models;
+﻿using GearHub.Api.DTOs;
+using GearHub.Api.Models;
 
 namespace GearHub.Api.Repositories;
 
 public interface IEquipmentRepository
 {
-    Task<List<Equipment>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<(List<Equipment> Items, int TotalCount)> GetPageAsync(
+        EquipmentListQuery query,
+        int skip,
+        int take,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        CancellationToken cancellationToken = default);
     Task<Equipment?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<Equipment> CreateAsync(Equipment equipment, CancellationToken cancellationToken = default);
     Task<bool> UpdateAsync(Equipment equipment, CancellationToken cancellationToken = default);

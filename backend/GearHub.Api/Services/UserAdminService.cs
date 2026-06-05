@@ -13,12 +13,14 @@ public class UserAdminService(
     RoleManager<IdentityRole<int>> roleManager,
     ApplicationDbContext dbContext) : IUserAdminService
 {
-    public async Task<IReadOnlyList<UserAdminListDto>> GetAllAsync(
+    public async Task<PagedResultDto<UserAdminListDto>> GetAllAsync(
+        PaginationQuery pagination,
         CancellationToken cancellationToken = default)
     {
-        var users = await userManager.Users
-            .OrderBy(u => u.Email)
-            .ToListAsync(cancellationToken);
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = userManager.Users.OrderBy(u => u.Email);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var users = await query.Skip(skip).Take(pageSize).ToListAsync(cancellationToken);
 
         var list = new List<UserAdminListDto>(users.Count);
         foreach (var u in users)
@@ -27,7 +29,7 @@ public class UserAdminService(
             list.Add(ToDto(u, roles));
         }
 
-        return list;
+        return Pagination.Create(list, page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<UserAdminListDto>> CreateAsync(

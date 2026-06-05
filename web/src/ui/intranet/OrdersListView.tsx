@@ -14,14 +14,15 @@ import { ClipboardList } from "lucide-react";
 import { useOrdersList } from "../../hooks/intranet/useOrdersList";
 import { canViewIntranetOrderDetail } from "../../lib/intranetOrderAccess";
 import { useAuth } from "../../providers/AuthProvider";
-import { EmptyState, LoadingState, PageHeader } from "../common";
+import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
 import {
   formatOrderDateTime,
   formatOrderLinesSummary,
 } from "./orderDisplayFormat";
 
 export function OrdersListView() {
-  const { list } = useOrdersList();
+  const { list, items, page, setPage, pageSize, setPageSize, totalCount } =
+    useOrdersList();
   const { user } = useAuth();
 
   if (list.isLoading) {
@@ -42,7 +43,7 @@ export function OrdersListView() {
     );
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -133,6 +134,13 @@ export function OrdersListView() {
           </Table>
         </TableContainer>
       )}
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </Box>
   );
 }

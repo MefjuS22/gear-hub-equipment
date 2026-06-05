@@ -36,7 +36,13 @@ import {
   type SetStaffUserRolesFormValues,
 } from "../../lib/formSchemas";
 import { useAuth } from "../../providers/AuthProvider";
-import { EmptyState, ErrorAlert, LoadingState, PageHeader } from "../common";
+import {
+  EmptyState,
+  ErrorAlert,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 
 function rolesToFlags(roles: string[]): SetStaffUserRolesFormValues {
   return {
@@ -69,7 +75,18 @@ function roleSorter(a: string, b: string) {
 
 export function UsersAdminView() {
   const { user: currentUser } = useAuth();
-  const { list, create, setRoles, remove } = useUsersAdmin();
+  const {
+    list,
+    create,
+    setRoles,
+    remove,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = useUsersAdmin();
   const [createOpen, setCreateOpen] = useState(false);
   const [rolesUser, setRolesUser] = useState<UserAdminListDto | null>(null);
   const [deleteUser, setDeleteUser] = useState<UserAdminListDto | null>(null);
@@ -171,7 +188,7 @@ export function UsersAdminView() {
     );
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -268,6 +285,14 @@ export function UsersAdminView() {
           </Table>
         </TableContainer>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
 
       <Dialog
         open={createOpen}

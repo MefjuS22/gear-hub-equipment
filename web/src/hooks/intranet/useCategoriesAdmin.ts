@@ -10,12 +10,15 @@ import {
   usePutApiCategoryId,
 } from "../../api/generated/react-query";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { useListPagination, usePagedResult } from "../useListPagination";
 
 export function useCategoriesAdmin() {
   const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
 
-  const list = useGetApiCategory({ client: gearhubApiClientOptions });
+  const list = useGetApiCategory(params, { client: gearhubApiClientOptions });
+  const paged = usePagedResult(list.data);
 
   const invalidate = () => {
     void qc.invalidateQueries({ queryKey: getApiCategoryQueryKey() });
@@ -67,5 +70,5 @@ export function useCategoriesAdmin() {
     },
   });
 
-  return { list, create, update, remove };
+  return { list, create, update, remove, page, setPage, pageSize, setPageSize, ...paged };
 }

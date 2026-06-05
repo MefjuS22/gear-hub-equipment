@@ -13,6 +13,7 @@ import { Heart, LayoutGrid, List, Package, ShoppingCart } from "lucide-react";
 
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiPortaltext } from "../../api/generated/react-query";
+import { buildPageParams, LOOKUP_PAGE_SIZE, getPagedItems } from "../../lib/pagination";
 import {
   getOverrideHtml,
   getOverridePlain,
@@ -51,11 +52,13 @@ function PreviewShell({
   textKey,
   bodyHtml,
 }: PortalTextPagePreviewProps) {
-  const list = useGetApiPortaltext({ client: gearhubApiClientOptions });
+  const list = useGetApiPortaltext(buildPageParams(0, LOOKUP_PAGE_SIZE), {
+    client: gearhubApiClientOptions,
+  });
   const overrides = buildPortalTextOverrides(
     textKey,
     bodyHtml,
-    list.data ?? [],
+    getPagedItems(list.data),
   );
   const page = getPortalTextPreviewPage(textKey);
 

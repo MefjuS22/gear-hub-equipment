@@ -10,6 +10,7 @@ import {
   usePutApiPortaltextKey,
 } from "../../api/generated/react-query";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { useListPagination, usePagedResult } from "../useListPagination";
 
 function invalidatePortalTextQueries(qc: ReturnType<typeof useQueryClient>) {
   void qc.invalidateQueries({
@@ -26,7 +27,9 @@ export function usePortalTextsAdmin() {
   const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
 
-  const list = useGetApiPortaltext({ client: gearhubApiClientOptions });
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
+  const list = useGetApiPortaltext(params, { client: gearhubApiClientOptions });
+  const paged = usePagedResult(list.data);
 
   const update = usePutApiPortaltextKey({
     client: gearhubApiClientOptions,
@@ -43,7 +46,7 @@ export function usePortalTextsAdmin() {
     },
   });
 
-  return { list, update };
+  return { list, update, page, setPage, pageSize, setPageSize, ...paged };
 }
 
 export function usePortalTextDetail(key: string) {

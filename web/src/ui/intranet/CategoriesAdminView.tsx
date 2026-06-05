@@ -24,10 +24,21 @@ import {
   categoryFormSchema,
   type CategoryFormValues,
 } from "../../lib/formSchemas";
-import { EmptyState, LoadingState, PageHeader } from "../common";
+import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
 
 export function CategoriesAdminView() {
-  const { list, create, update, remove } = useCategoriesAdmin();
+  const {
+    list,
+    create,
+    update,
+    remove,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = useCategoriesAdmin();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<CategoryLookupDto | null>(null);
 
@@ -75,7 +86,7 @@ export function CategoriesAdminView() {
     return <LoadingState message="Loading categories…" />;
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -162,6 +173,14 @@ export function CategoriesAdminView() {
           </Table>
         </TableContainer>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
 
       <Dialog
         open={dialogOpen}

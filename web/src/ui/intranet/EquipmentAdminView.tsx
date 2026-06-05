@@ -17,10 +17,19 @@ import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { AppPermissions } from "../../lib/appPermissions";
 import { useHasPermission } from "../../hooks/usePermissionSet";
 import { useEquipmentAdmin } from "../../hooks/intranet/useEquipmentAdmin";
-import { LoadingState, PageHeader } from "../common";
+import { LoadingState, PageHeader, TablePaginationBar } from "../common";
 
 export function EquipmentAdminView() {
-  const { equipment, remove } = useEquipmentAdmin();
+  const {
+    equipment,
+    remove,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = useEquipmentAdmin();
   const canManage = useHasPermission(AppPermissions.EquipmentManage);
 
   if (equipment.isLoading) {
@@ -58,7 +67,7 @@ export function EquipmentAdminView() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {equipment.data?.map((e) => (
+            {items.map((e) => (
               <TableRow key={e.id}>
                 <TableCell>
                   {resolveMediaSrc(e.imageUrl) ? (
@@ -131,6 +140,13 @@ export function EquipmentAdminView() {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </Box>
   );
 }

@@ -6,17 +6,22 @@ namespace GearHub.Api.Repositories;
 
 public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
 {
-    public async Task<IReadOnlyList<RentalOrder>> GetAllOrdersWithDetailsAsync(
+    public async Task<(List<RentalOrder> Items, int TotalCount)> GetOrdersPageWithDetailsAsync(
+        int skip,
+        int take,
         CancellationToken cancellationToken = default)
     {
-        return await dbContext.RentalOrders
+        var query = dbContext.RentalOrders
             .AsNoTracking()
             .Include(order => order.Customer)
             .Include(order => order.User)
             .Include(order => order.Items)
             .ThenInclude(item => item.Equipment)
-            .OrderByDescending(order => order.OrderDate)
-            .ToListAsync(cancellationToken);
+            .OrderByDescending(order => order.OrderDate);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var items = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        return (items, totalCount);
     }
 
     public async Task<RentalOrder?> GetOrderByIdWithDetailsAsync(

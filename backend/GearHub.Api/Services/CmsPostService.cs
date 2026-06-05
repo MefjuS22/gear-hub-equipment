@@ -14,13 +14,19 @@ public class CmsPostService(
 {
     private const string PostgresUniqueViolation = "23505";
 
-    public async Task<IReadOnlyList<CmsPostListDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<CmsPostListDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        return await dbContext.CmsPosts
-            .AsNoTracking()
-            .OrderByDescending(p => p.UpdatedAtUtc)
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.CmsPosts.AsNoTracking().OrderByDescending(p => p.UpdatedAtUtc);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var posts = await query
+            .Skip(skip)
+            .Take(pageSize)
             .Select(p => ToListDto(p))
             .ToListAsync(cancellationToken);
+        return Pagination.Create(posts, page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<CmsPostDetailDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -36,12 +42,19 @@ public class CmsPostService(
         return ServiceResult<CmsPostDetailDto>.Ok(ToDetailDto(post));
     }
 
-    public async Task<IReadOnlyList<CmsPostPublicSummaryDto>> GetPublishedAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<CmsPostPublicSummaryDto>> GetPublishedAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        return await dbContext.CmsPosts
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.CmsPosts
             .AsNoTracking()
             .Where(p => p.IsPublished && p.PublishedAtUtc != null)
-            .OrderByDescending(p => p.PublishedAtUtc)
+            .OrderByDescending(p => p.PublishedAtUtc);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var posts = await query
+            .Skip(skip)
+            .Take(pageSize)
             .Select(p => new CmsPostPublicSummaryDto
             {
                 Id = p.Id,
@@ -52,6 +65,7 @@ public class CmsPostService(
                 PublishedAtUtc = p.PublishedAtUtc!.Value,
             })
             .ToListAsync(cancellationToken);
+        return Pagination.Create(posts, page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<CmsPostPublicDetailDto>> GetPublishedBySlugAsync(string slug, CancellationToken cancellationToken = default)

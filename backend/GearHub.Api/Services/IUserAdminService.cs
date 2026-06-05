@@ -5,7 +5,9 @@ namespace GearHub.Api.Services;
 
 public interface IUserAdminService
 {
-    Task<IReadOnlyList<UserAdminListDto>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<PagedResultDto<UserAdminListDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default);
 
     Task<ServiceResult<UserAdminListDto>> CreateAsync(
         CreateUserAdminDto dto,

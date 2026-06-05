@@ -8,14 +8,22 @@ namespace GearHub.Api.Services;
 
 public class PortalTextService(ApplicationDbContext dbContext) : IPortalTextService
 {
-    public async Task<IReadOnlyList<PortalTextDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<PortalTextDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        return await dbContext.PortalTexts
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.PortalTexts
             .AsNoTracking()
             .OrderBy(text => text.SortOrder)
-            .ThenBy(text => text.Key)
+            .ThenBy(text => text.Key);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var texts = await query
+            .Skip(skip)
+            .Take(pageSize)
             .Select(text => ToDto(text))
             .ToListAsync(cancellationToken);
+        return Pagination.Create(texts, page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<PortalTextDto>> GetByKeyAsync(string key, CancellationToken cancellationToken = default)
@@ -31,17 +39,23 @@ public class PortalTextService(ApplicationDbContext dbContext) : IPortalTextServ
         return ServiceResult<PortalTextDto>.Ok(ToDto(text));
     }
 
-    public async Task<IReadOnlyList<PortalTextPublicDto>> GetPublicAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<PortalTextPublicDto>> GetPublicAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        return await dbContext.PortalTexts
-            .AsNoTracking()
-            .OrderBy(text => text.SortOrder)
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.PortalTexts.AsNoTracking().OrderBy(text => text.SortOrder);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var texts = await query
+            .Skip(skip)
+            .Take(pageSize)
             .Select(text => new PortalTextPublicDto
             {
                 Key = text.Key,
                 BodyHtml = text.BodyHtml,
             })
             .ToListAsync(cancellationToken);
+        return Pagination.Create(texts, page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<PortalTextDto>> UpdateAsync(

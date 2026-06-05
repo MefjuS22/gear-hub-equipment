@@ -11,13 +11,16 @@ import {
 } from "../../api/generated/react-query";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
 import { useAuth } from "../../providers/AuthProvider";
+import { useListPagination, usePagedResult } from "../useListPagination";
 
 export function useUsersAdmin() {
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
 
-  const list = useGetApiUsers({ client: gearhubApiClientOptions });
+  const list = useGetApiUsers(params, { client: gearhubApiClientOptions });
+  const paged = usePagedResult(list.data);
 
   const invalidateListAndMaybeMe = (affectedUserId?: number) => {
     void queryClient.invalidateQueries({ queryKey: getApiUsersQueryKey() });
@@ -71,5 +74,5 @@ export function useUsersAdmin() {
     },
   });
 
-  return { list, create, setRoles, remove };
+  return { list, create, setRoles, remove, page, setPage, pageSize, setPageSize, ...paged };
 }

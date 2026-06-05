@@ -19,7 +19,10 @@ import {
   equipmentFormSchema,
   type EquipmentFormValues,
 } from "../../lib/formSchemas";
+import { buildPageParams, LOOKUP_PAGE_SIZE } from "../../lib/pagination";
 import type { WarehouseOption } from "../../lib/warehouseOptionsFromEquipment";
+
+const lookupParams = buildPageParams(0, LOOKUP_PAGE_SIZE);
 
 export type UseEquipmentUpsertOptions = {
   equipmentId?: number;
@@ -56,14 +59,18 @@ export function useEquipmentUpsert({
     client: gearhubApiClientOptions,
     query: { enabled: isEdit },
   });
-  const categories = useGetApiCategory({ client: gearhubApiClientOptions });
-  const brands = useGetApiBrand({ client: gearhubApiClientOptions });
-  const warehouseQuery = useGetApiWarehouse({
+  const categories = useGetApiCategory(lookupParams, {
+    client: gearhubApiClientOptions,
+  });
+  const brands = useGetApiBrand(lookupParams, {
+    client: gearhubApiClientOptions,
+  });
+  const warehouseQuery = useGetApiWarehouse(lookupParams, {
     client: gearhubApiClientOptions,
   });
 
   const warehouses = useMemo((): WarehouseOption[] => {
-    const fromList: WarehouseOption[] = (warehouseQuery.data ?? [])
+    const fromList: WarehouseOption[] = (warehouseQuery.data?.items ?? [])
       .filter((w) => w.id != null)
       .map((w) => ({
         id: w.id!,
@@ -88,8 +95,8 @@ export function useEquipmentUpsert({
       return;
     }
     if (primedCreateDefaults.current) return;
-    const c0 = categories.data?.[0]?.id;
-    const b0 = brands.data?.[0]?.id;
+    const c0 = categories.data?.items?.[0]?.id;
+    const b0 = brands.data?.items?.[0]?.id;
     const w0 = warehouses[0]?.id;
     if (c0 == null || b0 == null || w0 == null) return;
     primedCreateDefaults.current = true;

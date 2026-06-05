@@ -15,15 +15,19 @@ public class PortalTextController(IPortalTextService portalTextService) : Contro
 {
     [HttpGet]
     [HasPermission(AppPermissions.CmsManage)]
-    [ProducesResponseType(typeof(IReadOnlyList<PortalTextDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<PortalTextDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await portalTextService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<PortalTextDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<PortalTextDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await portalTextService.GetAllAsync(pagination, cancellationToken));
 
     [HttpGet("Public")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(IReadOnlyList<PortalTextPublicDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<PortalTextPublicDto>>> GetPublic(CancellationToken cancellationToken) =>
-        Ok(await portalTextService.GetPublicAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<PortalTextPublicDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<PortalTextPublicDto>>> GetPublic(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await portalTextService.GetPublicAsync(pagination, cancellationToken));
 
     [HttpGet("{key}")]
     [HasPermission(AppPermissions.CmsManage)]

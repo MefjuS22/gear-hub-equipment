@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "slug": { "type": "string", "nullable": true },
+          "title": { "type": "string", "nullable": true },
+          "excerpt": { "type": "string", "nullable": true },
+          "coverImageUrl": { "type": "string", "nullable": true },
+          "isPublished": { "type": "boolean" },
+          "publishedAtUtc": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updatedAtUtc": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false,
+        "x-readme-ref-name": "CmsPostListDto"
+      },
+      "nullable": true
+    },
+    "page": { "type": "integer", "format": "int32" },
+    "pageSize": { "type": "integer", "format": "int32" },
+    "totalCount": { "type": "integer", "format": "int32" },
+    "totalPages": { "type": "integer", "format": "int32" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "CmsPostListDtoPagedResultDto"
+}

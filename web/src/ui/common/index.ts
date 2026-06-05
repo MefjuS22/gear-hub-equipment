@@ -7,3 +7,4 @@ export { PortalHtmlBlock } from "./PortalHtmlBlock";
 export { RichTextEditor } from "./RichTextEditor";
 export { SectionCard } from "./SectionCard";
 export { StatusChip, type AvailabilityStatus } from "./StatusChip";
+export { TablePaginationBar } from "./TablePaginationBar";

@@ -10,25 +10,26 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { FileText, Pencil } from "lucide-react";
 
 import type { PortalTextDto } from "../../api/generated/types";
 import { usePortalTextsAdmin } from "../../hooks/intranet/usePortalTextsAdmin";
 import { resolvePortalTextBodyHtml } from "../../lib/portalTextDefaults";
 import { portalTextPlain } from "../../lib/portalTextHtml";
-import { EmptyState, LoadingState, PageHeader } from "../common";
+import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
 import { PortalTextsSectionNav } from "./PortalTextsSectionNav";
 
 export function PortalStaticTextsListView() {
-  const { list } = usePortalTextsAdmin();
+  const { list, items, page, setPage, pageSize, setPageSize, totalCount } =
+    usePortalTextsAdmin();
   const navigate = useNavigate();
 
   if (list.isLoading) {
     return <LoadingState message="Loading portal texts…" />;
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -72,6 +73,13 @@ export function PortalStaticTextsListView() {
           </Table>
         </TableContainer>
       )}
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </Box>
   );
 }

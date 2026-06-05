@@ -24,10 +24,21 @@ import {
   warehouseFormSchema,
   type WarehouseFormValues,
 } from "../../lib/formSchemas";
-import { EmptyState, LoadingState, PageHeader } from "../common";
+import { EmptyState, LoadingState, PageHeader, TablePaginationBar } from "../common";
 
 export function WarehousesAdminView() {
-  const { list, create, update, remove } = useWarehousesAdmin();
+  const {
+    list,
+    create,
+    update,
+    remove,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = useWarehousesAdmin();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<WarehouseLookupDto | null>(null);
 
@@ -75,7 +86,7 @@ export function WarehousesAdminView() {
     return <LoadingState message="Loading warehouses…" />;
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -162,6 +173,14 @@ export function WarehousesAdminView() {
           </Table>
         </TableContainer>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
 
       <Dialog
         open={dialogOpen}

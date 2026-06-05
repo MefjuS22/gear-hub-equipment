@@ -7,11 +7,22 @@ namespace GearHub.Api.Services;
 
 public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquipmentService
 {
-    public async Task<IReadOnlyList<EquipmentDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<EquipmentDto>> GetAllAsync(
+        EquipmentListQuery query,
+        CancellationToken cancellationToken = default)
     {
-        var equipment = await equipmentRepository.GetAllAsync(cancellationToken);
-        return equipment.Select(ToDto).ToList();
+        var (page, pageSize, skip) = Pagination.Normalize(query);
+        var (equipment, totalCount) = await equipmentRepository.GetPageAsync(
+            query,
+            skip,
+            pageSize,
+            cancellationToken);
+        return Pagination.Create(equipment.Select(ToDto).ToList(), page, pageSize, totalCount);
     }
+
+    public Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        CancellationToken cancellationToken = default) =>
+        equipmentRepository.GetCatalogCategoryNamesAsync(cancellationToken);
 
     public async Task<ServiceResult<EquipmentDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {

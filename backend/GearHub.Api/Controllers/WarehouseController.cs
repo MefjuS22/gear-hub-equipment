@@ -15,9 +15,11 @@ namespace GearHub.Api.Controllers;
 public class WarehouseController(IWarehouseService warehouseService) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<WarehouseLookupDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<WarehouseLookupDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await warehouseService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<WarehouseLookupDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<WarehouseLookupDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await warehouseService.GetAllAsync(pagination, cancellationToken));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(WarehouseLookupDto), StatusCodes.Status200OK)]
