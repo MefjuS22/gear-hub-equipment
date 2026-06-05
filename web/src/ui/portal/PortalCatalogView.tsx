@@ -29,6 +29,7 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { formatUsd } from "../../lib/formatCurrency";
+import { portalTextPlain } from "../../lib/portalTextHtml";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { usePortalCatalog } from "../../hooks/portal/usePortalCatalog";
 import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
@@ -37,7 +38,6 @@ import {
   ErrorAlert,
   LoadingState,
   PageHeader,
-  PortalHtmlBlock,
   StatusChip,
 } from "../common";
 import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
@@ -167,6 +167,37 @@ function CatalogOrderControl({
   );
 
   return wrapCatalogSlot(stepper);
+}
+
+function CatalogDescriptionPreview({ html }: { html: string }) {
+  const plain = portalTextPlain(html);
+  if (!plain) {
+    return null;
+  }
+
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      sx={{
+        mb: 1,
+        display: "-webkit-box",
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: "vertical",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
+      {plain}
+    </Typography>
+  );
+}
+
+function catalogItemDescriptionHtml(
+  descriptionHtml: string | null | undefined,
+  fallbackHtml: string,
+): string {
+  return descriptionHtml?.trim() || fallbackHtml;
 }
 
 export function PortalCatalogView() {
@@ -331,7 +362,7 @@ export function PortalCatalogView() {
                       </Box>
                     )}
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
+                  <TableCell>
                     <Link
                       to="/portal/equipment/$equipmentId"
                       params={{ equipmentId: String(item.id ?? 0) }}
@@ -344,6 +375,12 @@ export function PortalCatalogView() {
                     >
                       {item.name}
                     </Link>
+                    <CatalogDescriptionPreview
+                      html={catalogItemDescriptionHtml(
+                        item.descriptionHtml,
+                        getHtml("catalog.featured.fallback"),
+                      )}
+                    />
                   </TableCell>
                   <TableCell>{item.categoryName}</TableCell>
                   <TableCell>{item.brandName}</TableCell>
@@ -403,6 +440,10 @@ export function PortalCatalogView() {
                   ? { xs: 12, md: 12 }
                   : { xs: 12, sm: 6, md: 4 };
             const catalogImg = resolveMediaSrc(item.imageUrl);
+            const descriptionHtml = catalogItemDescriptionHtml(
+              item.descriptionHtml,
+              getHtml("catalog.featured.fallback"),
+            );
             return (
               <Grid key={item.id} size={gridSize}>
                 <Card
@@ -530,19 +571,11 @@ export function PortalCatalogView() {
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      sx={{ mb: featured ? 2 : 1 }}
+                      sx={{ mb: 0.5 }}
                     >
                       {item.categoryName} · {item.brandName}
                     </Typography>
-                    {featured ? (
-                      <PortalHtmlBlock
-                        html={
-                          item.descriptionHtml?.trim() ||
-                          getHtml("catalog.featured.fallback")
-                        }
-                        sx={{ mb: 2, flex: 1 }}
-                      />
-                    ) : null}
+                    <CatalogDescriptionPreview html={descriptionHtml} />
                     {featured ? (
                       <Box
                         sx={{
@@ -570,7 +603,7 @@ export function PortalCatalogView() {
                         </Box>
                       </Box>
                     ) : (
-                      <Typography variant="body1" sx={{ mb: 2, flex: 1 }}>
+                      <Typography variant="body1" sx={{ mb: 2, flex: 1, mt: 1 }}>
                         <strong>{formatUsd(item.dailyRate ?? 0)}</strong> / day
                       </Typography>
                     )}
