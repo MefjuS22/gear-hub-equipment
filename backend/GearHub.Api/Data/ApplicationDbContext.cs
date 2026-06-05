@@ -19,6 +19,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<RentalOrder> RentalOrders => Set<RentalOrder>();
     public DbSet<RentalOrderItem> RentalOrderItems => Set<RentalOrderItem>();
     public DbSet<CmsPost> CmsPosts => Set<CmsPost>();
+    public DbSet<PortalText> PortalTexts => Set<PortalText>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -58,6 +59,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(post => post.CoverImageUrl).HasMaxLength(2000);
         });
 
+        modelBuilder.Entity<PortalText>(entity =>
+        {
+            entity.HasIndex(text => text.Key).IsUnique();
+            entity.Property(text => text.Key).HasMaxLength(120);
+            entity.Property(text => text.Title).HasMaxLength(300);
+            entity.Property(text => text.PlacementHint).HasMaxLength(500);
+        });
+
         modelBuilder.Entity<Warehouse>().HasData(
             new Warehouse { Id = 1, Name = "Main Warehouse", Location = "Warsaw, Poland" }
         );
@@ -79,6 +88,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<Equipment>(entity =>
         {
             entity.Property(e => e.ImageUrl).HasMaxLength(2000);
+            entity.Property(e => e.DescriptionHtml).HasMaxLength(64_000);
             entity.HasData(
             new Equipment
             {

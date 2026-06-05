@@ -5,6 +5,7 @@ import { Newspaper } from "lucide-react";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiCmspostPublished } from "../../api/generated/react-query";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import { EmptyState, LoadingState, PageHeader } from "../common";
 
 function formatPublished(iso: string | undefined) {
@@ -14,6 +15,7 @@ function formatPublished(iso: string | undefined) {
 }
 
 export function PortalNewsListView() {
+  const { getPlain } = usePortalTexts();
   const { data, isLoading, isError } = useGetApiCmspostPublished({
     client: gearhubApiClientOptions,
   });
@@ -26,9 +28,9 @@ export function PortalNewsListView() {
     return (
       <Box>
         <PageHeader
-          title="News"
+          title={getPlain("news.list.title")}
           titleVariant="h5"
-          subtitle="Updates and articles from GearHub."
+          subtitle={getPlain("news.list.subtitle")}
         />
         <Typography color="error" sx={{ mt: 2 }}>
           Could not load articles. Please try again later.
@@ -42,9 +44,9 @@ export function PortalNewsListView() {
   return (
     <Box>
       <PageHeader
-        title="News"
+        title={getPlain("news.list.title")}
         titleVariant="h5"
-        subtitle="Updates, tips, and announcements from our team."
+        subtitle={getPlain("news.list.subtitle")}
       />
 
       {posts.length === 0 ? (

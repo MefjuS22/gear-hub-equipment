@@ -48,6 +48,7 @@ export function useEquipmentUpsert({
       dailyRate: 100,
       isAvailable: true,
       imageUrl: "",
+      descriptionHtml: "",
     },
   });
 
@@ -114,6 +115,7 @@ export function useEquipmentUpsert({
       dailyRate: d.dailyRate ?? 0,
       isAvailable: d.isAvailable ?? true,
       imageUrl: d.imageUrl ?? "",
+      descriptionHtml: d.descriptionHtml ?? "",
     });
   }, [isEdit, equipmentDetail.data, form]);
 

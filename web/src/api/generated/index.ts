@@ -33,6 +33,12 @@ export type {
   GetApiOrderIdSuspenseQueryKey,
   GetApiOrderQueryKey,
   GetApiOrderSuspenseQueryKey,
+  GetApiPortaltextKeyQueryKey,
+  GetApiPortaltextKeySuspenseQueryKey,
+  GetApiPortaltextPublicQueryKey,
+  GetApiPortaltextPublicSuspenseQueryKey,
+  GetApiPortaltextQueryKey,
+  GetApiPortaltextSuspenseQueryKey,
   GetApiUsersQueryKey,
   GetApiUsersSuspenseQueryKey,
   GetApiWarehouseIdQueryKey,
@@ -53,6 +59,7 @@ export type {
   PutApiCategoryIdMutationKey,
   PutApiCmspostIdMutationKey,
   PutApiEquipmentIdMutationKey,
+  PutApiPortaltextKeyMutationKey,
   PutApiUsersIdRolesMutationKey,
   PutApiWarehouseIdMutationKey,
 } from "./react-query.ts";
@@ -190,6 +197,20 @@ export type {
   GetApiOrderIdQueryResponse,
   GetApiOrderQuery,
   GetApiOrderQueryResponse,
+  GetApiPortaltext200,
+  GetApiPortaltext401,
+  GetApiPortaltextKey200,
+  GetApiPortaltextKey401,
+  GetApiPortaltextKey404,
+  GetApiPortaltextKeyPathParams,
+  GetApiPortaltextKeyQuery,
+  GetApiPortaltextKeyQueryResponse,
+  GetApiPortaltextPublic200,
+  GetApiPortaltextPublic401,
+  GetApiPortaltextPublicQuery,
+  GetApiPortaltextPublicQueryResponse,
+  GetApiPortaltextQuery,
+  GetApiPortaltextQueryResponse,
   GetApiUsers200,
   GetApiUsers401,
   GetApiUsers403,
@@ -209,6 +230,9 @@ export type {
   Maintenance,
   OrderCreateDto,
   OrderItemDto,
+  PortalTextDto,
+  PortalTextPublicDto,
+  PortalTextUpsertDto,
   PostApiAuthLogin200,
   PostApiAuthLogin400,
   PostApiAuthLogin401,
@@ -301,6 +325,14 @@ export type {
   PutApiEquipmentIdMutationRequest,
   PutApiEquipmentIdMutationResponse,
   PutApiEquipmentIdPathParams,
+  PutApiPortaltextKey200,
+  PutApiPortaltextKey400,
+  PutApiPortaltextKey401,
+  PutApiPortaltextKey404,
+  PutApiPortaltextKeyMutation,
+  PutApiPortaltextKeyMutationRequest,
+  PutApiPortaltextKeyMutationResponse,
+  PutApiPortaltextKeyPathParams,
   PutApiUsersIdRoles204,
   PutApiUsersIdRoles400,
   PutApiUsersIdRoles401,
@@ -350,6 +382,9 @@ export {
   getApiEquipmentId,
   getApiOrder,
   getApiOrderId,
+  getApiPortaltext,
+  getApiPortaltextKey,
+  getApiPortaltextPublic,
   getApiUsers,
   getApiWarehouse,
   getApiWarehouseId,
@@ -367,6 +402,7 @@ export {
   putApiCategoryId,
   putApiCmspostId,
   putApiEquipmentId,
+  putApiPortaltextKey,
   putApiUsersIdRoles,
   putApiWarehouseId,
 } from "./client.ts";
@@ -438,6 +474,18 @@ export { getApiOrderQueryKey } from "./react-query.ts";
 export { getApiOrderQueryOptions } from "./react-query.ts";
 export { getApiOrderSuspenseQueryKey } from "./react-query.ts";
 export { getApiOrderSuspenseQueryOptions } from "./react-query.ts";
+export { getApiPortaltextKeyQueryKey } from "./react-query.ts";
+export { getApiPortaltextKeyQueryOptions } from "./react-query.ts";
+export { getApiPortaltextKeySuspenseQueryKey } from "./react-query.ts";
+export { getApiPortaltextKeySuspenseQueryOptions } from "./react-query.ts";
+export { getApiPortaltextPublicQueryKey } from "./react-query.ts";
+export { getApiPortaltextPublicQueryOptions } from "./react-query.ts";
+export { getApiPortaltextPublicSuspenseQueryKey } from "./react-query.ts";
+export { getApiPortaltextPublicSuspenseQueryOptions } from "./react-query.ts";
+export { getApiPortaltextQueryKey } from "./react-query.ts";
+export { getApiPortaltextQueryOptions } from "./react-query.ts";
+export { getApiPortaltextSuspenseQueryKey } from "./react-query.ts";
+export { getApiPortaltextSuspenseQueryOptions } from "./react-query.ts";
 export { getApiUsersQueryKey } from "./react-query.ts";
 export { getApiUsersQueryOptions } from "./react-query.ts";
 export { getApiUsersSuspenseQueryKey } from "./react-query.ts";
@@ -478,6 +526,8 @@ export { putApiCmspostIdMutationKey } from "./react-query.ts";
 export { putApiCmspostIdMutationOptions } from "./react-query.ts";
 export { putApiEquipmentIdMutationKey } from "./react-query.ts";
 export { putApiEquipmentIdMutationOptions } from "./react-query.ts";
+export { putApiPortaltextKeyMutationKey } from "./react-query.ts";
+export { putApiPortaltextKeyMutationOptions } from "./react-query.ts";
 export { putApiUsersIdRolesMutationKey } from "./react-query.ts";
 export { putApiUsersIdRolesMutationOptions } from "./react-query.ts";
 export { putApiWarehouseIdMutationKey } from "./react-query.ts";
@@ -516,6 +566,12 @@ export { useGetApiOrder } from "./react-query.ts";
 export { useGetApiOrderId } from "./react-query.ts";
 export { useGetApiOrderIdSuspense } from "./react-query.ts";
 export { useGetApiOrderSuspense } from "./react-query.ts";
+export { useGetApiPortaltext } from "./react-query.ts";
+export { useGetApiPortaltextKey } from "./react-query.ts";
+export { useGetApiPortaltextKeySuspense } from "./react-query.ts";
+export { useGetApiPortaltextPublic } from "./react-query.ts";
+export { useGetApiPortaltextPublicSuspense } from "./react-query.ts";
+export { useGetApiPortaltextSuspense } from "./react-query.ts";
 export { useGetApiUsers } from "./react-query.ts";
 export { useGetApiUsersSuspense } from "./react-query.ts";
 export { useGetApiWarehouse } from "./react-query.ts";
@@ -536,6 +592,7 @@ export { usePutApiBrandId } from "./react-query.ts";
 export { usePutApiCategoryId } from "./react-query.ts";
 export { usePutApiCmspostId } from "./react-query.ts";
 export { usePutApiEquipmentId } from "./react-query.ts";
+export { usePutApiPortaltextKey } from "./react-query.ts";
 export { usePutApiUsersIdRoles } from "./react-query.ts";
 export { usePutApiWarehouseId } from "./react-query.ts";
 export { apiErrorCodeEnum } from "./types.ts";
@@ -652,6 +709,17 @@ export {
   getApiOrderIdPathParamsSchema,
   getApiOrderIdQueryResponseSchema,
   getApiOrderQueryResponseSchema,
+  getApiPortaltext200Schema,
+  getApiPortaltext401Schema,
+  getApiPortaltextKey200Schema,
+  getApiPortaltextKey401Schema,
+  getApiPortaltextKey404Schema,
+  getApiPortaltextKeyPathParamsSchema,
+  getApiPortaltextKeyQueryResponseSchema,
+  getApiPortaltextPublic200Schema,
+  getApiPortaltextPublic401Schema,
+  getApiPortaltextPublicQueryResponseSchema,
+  getApiPortaltextQueryResponseSchema,
   getApiUsers200Schema,
   getApiUsers401Schema,
   getApiUsers403Schema,
@@ -668,6 +736,9 @@ export {
   maintenanceSchema,
   orderCreateDtoSchema,
   orderItemDtoSchema,
+  portalTextDtoSchema,
+  portalTextPublicDtoSchema,
+  portalTextUpsertDtoSchema,
   postApiAuthLogin200Schema,
   postApiAuthLogin400Schema,
   postApiAuthLogin401Schema,
@@ -746,6 +817,13 @@ export {
   putApiEquipmentIdMutationRequestSchema,
   putApiEquipmentIdMutationResponseSchema,
   putApiEquipmentIdPathParamsSchema,
+  putApiPortaltextKey200Schema,
+  putApiPortaltextKey400Schema,
+  putApiPortaltextKey401Schema,
+  putApiPortaltextKey404Schema,
+  putApiPortaltextKeyMutationRequestSchema,
+  putApiPortaltextKeyMutationResponseSchema,
+  putApiPortaltextKeyPathParamsSchema,
   putApiUsersIdRoles204Schema,
   putApiUsersIdRoles400Schema,
   putApiUsersIdRoles401Schema,

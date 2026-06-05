@@ -4,6 +4,21 @@
  */
 
 import type {
+  Client,
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@kubb/plugin-client/clients/axios";
+import type {
+  QueryKey,
+  QueryClient,
+  QueryObserverOptions,
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
+  UseMutationOptions,
+  UseMutationResult,
+} from "@tanstack/react-query";
+import type {
   DeleteApiBrandIdMutationResponse,
   DeleteApiBrandIdPathParams,
   DeleteApiBrandId400,
@@ -52,6 +67,14 @@ import type {
   GetApiOrderId401,
   GetApiOrderId403,
   GetApiOrderId404,
+  GetApiPortaltextQueryResponse,
+  GetApiPortaltext401,
+  GetApiPortaltextPublicQueryResponse,
+  GetApiPortaltextPublic401,
+  GetApiPortaltextKeyQueryResponse,
+  GetApiPortaltextKeyPathParams,
+  GetApiPortaltextKey401,
+  GetApiPortaltextKey404,
   GetApiUsersQueryResponse,
   GetApiUsers401,
   GetApiUsers403,
@@ -128,6 +151,12 @@ import type {
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorder401,
+  PutApiPortaltextKeyMutationRequest,
+  PutApiPortaltextKeyMutationResponse,
+  PutApiPortaltextKeyPathParams,
+  PutApiPortaltextKey400,
+  PutApiPortaltextKey401,
+  PutApiPortaltextKey404,
   PostApiUsersMutationRequest,
   PostApiUsersMutationResponse,
   PostApiUsers400,
@@ -161,20 +190,12 @@ import type {
   DeleteApiWarehouseId401,
   DeleteApiWarehouseId404,
 } from "./types.ts";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@kubb/plugin-client/clients/axios";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
+import {
+  mutationOptions,
+  useMutation,
+  queryOptions,
+  useQuery,
+  useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
   deleteApiBrandId,
@@ -192,6 +213,9 @@ import {
   getApiEquipmentId,
   getApiOrder,
   getApiOrderId,
+  getApiPortaltext,
+  getApiPortaltextPublic,
+  getApiPortaltextKey,
   getApiUsers,
   getApiWarehouse,
   getApiWarehouseId,
@@ -210,6 +234,7 @@ import {
   deleteApiEquipmentId,
   postApiFilesUpload,
   postApiOrderCreateorder,
+  putApiPortaltextKey,
   postApiUsers,
   putApiUsersIdRoles,
   deleteApiUsersId,
@@ -217,13 +242,6 @@ import {
   putApiWarehouseId,
   deleteApiWarehouseId,
 } from "./client.ts";
-import {
-  mutationOptions,
-  useMutation,
-  queryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
 
 export const getApiAuthMeQueryKey = () => [{ url: "/api/Auth/me" }] as const;
 
@@ -1166,6 +1184,214 @@ export function useGetApiOrderId<
     ResponseErrorConfig<
       GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
     >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextQueryKey = () =>
+  [{ url: "/api/PortalText" }] as const;
+
+export type GetApiPortaltextQueryKey = ReturnType<
+  typeof getApiPortaltextQueryKey
+>;
+
+export function getApiPortaltextQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextQueryKey();
+  return queryOptions<
+    GetApiPortaltextQueryResponse,
+    ResponseErrorConfig<GetApiPortaltext401>,
+    GetApiPortaltextQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltext({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText}
+ */
+export function useGetApiPortaltext<
+  TData = GetApiPortaltextQueryResponse,
+  TQueryData = GetApiPortaltextQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiPortaltextQueryResponse,
+        ResponseErrorConfig<GetApiPortaltext401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiPortaltextQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiPortaltextQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiPortaltext401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextPublicQueryKey = () =>
+  [{ url: "/api/PortalText/Public" }] as const;
+
+export type GetApiPortaltextPublicQueryKey = ReturnType<
+  typeof getApiPortaltextPublicQueryKey
+>;
+
+export function getApiPortaltextPublicQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextPublicQueryKey();
+  return queryOptions<
+    GetApiPortaltextPublicQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextPublic401>,
+    GetApiPortaltextPublicQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextPublic({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/Public}
+ */
+export function useGetApiPortaltextPublic<
+  TData = GetApiPortaltextPublicQueryResponse,
+  TQueryData = GetApiPortaltextPublicQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextPublicQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiPortaltextPublicQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextPublic401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextPublicQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiPortaltextPublicQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiPortaltextPublic401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextKeyQueryKey = (
+  key: GetApiPortaltextKeyPathParams["key"],
+) => [{ url: "/api/PortalText/:key", params: { key: key } }] as const;
+
+export type GetApiPortaltextKeyQueryKey = ReturnType<
+  typeof getApiPortaltextKeyQueryKey
+>;
+
+export function getApiPortaltextKeyQueryOptions(
+  key: GetApiPortaltextKeyPathParams["key"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextKeyQueryKey(key);
+  return queryOptions<
+    GetApiPortaltextKeyQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+    GetApiPortaltextKeyQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!key,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextKey(key, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export function useGetApiPortaltextKey<
+  TData = GetApiPortaltextKeyQueryResponse,
+  TQueryData = GetApiPortaltextKeyQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextKeyQueryKey,
+>(
+  key: GetApiPortaltextKeyPathParams["key"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiPortaltextKeyQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextKeyQueryKey(key);
+
+  const query = useQuery(
+    {
+      ...getApiPortaltextKeyQueryOptions(key, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -2323,6 +2549,211 @@ export function useGetApiOrderIdSuspense<
     ResponseErrorConfig<
       GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
     >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextSuspenseQueryKey = () =>
+  [{ url: "/api/PortalText" }] as const;
+
+export type GetApiPortaltextSuspenseQueryKey = ReturnType<
+  typeof getApiPortaltextSuspenseQueryKey
+>;
+
+export function getApiPortaltextSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextSuspenseQueryKey();
+  return queryOptions<
+    GetApiPortaltextQueryResponse,
+    ResponseErrorConfig<GetApiPortaltext401>,
+    GetApiPortaltextQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltext({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText}
+ */
+export function useGetApiPortaltextSuspense<
+  TData = GetApiPortaltextQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiPortaltextQueryResponse,
+        ResponseErrorConfig<GetApiPortaltext401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiPortaltextSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltext401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextPublicSuspenseQueryKey = () =>
+  [{ url: "/api/PortalText/Public" }] as const;
+
+export type GetApiPortaltextPublicSuspenseQueryKey = ReturnType<
+  typeof getApiPortaltextPublicSuspenseQueryKey
+>;
+
+export function getApiPortaltextPublicSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextPublicSuspenseQueryKey();
+  return queryOptions<
+    GetApiPortaltextPublicQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextPublic401>,
+    GetApiPortaltextPublicQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextPublic({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/Public}
+ */
+export function useGetApiPortaltextPublicSuspense<
+  TData = GetApiPortaltextPublicQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextPublicSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiPortaltextPublicQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextPublic401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextPublicSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiPortaltextPublicSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltextPublic401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextKeySuspenseQueryKey = (
+  key: GetApiPortaltextKeyPathParams["key"],
+) => [{ url: "/api/PortalText/:key", params: { key: key } }] as const;
+
+export type GetApiPortaltextKeySuspenseQueryKey = ReturnType<
+  typeof getApiPortaltextKeySuspenseQueryKey
+>;
+
+export function getApiPortaltextKeySuspenseQueryOptions(
+  key: GetApiPortaltextKeyPathParams["key"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextKeySuspenseQueryKey(key);
+  return queryOptions<
+    GetApiPortaltextKeyQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+    GetApiPortaltextKeyQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!key,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextKey(key, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export function useGetApiPortaltextKeySuspense<
+  TData = GetApiPortaltextKeyQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextKeySuspenseQueryKey,
+>(
+  key: GetApiPortaltextKeyPathParams["key"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiPortaltextKeyQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextKeySuspenseQueryKey(key);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiPortaltextKeySuspenseQueryOptions(key, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -3830,6 +4261,107 @@ export function usePostApiOrderCreateorder<TContext>(
       PostApiOrderCreateorder400 | PostApiOrderCreateorder401
     >,
     { data?: PostApiOrderCreateorderMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiPortaltextKeyMutationKey = () =>
+  [{ url: "/api/PortalText/:key" }] as const;
+
+export type PutApiPortaltextKeyMutationKey = ReturnType<
+  typeof putApiPortaltextKeyMutationKey
+>;
+
+export function putApiPortaltextKeyMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiPortaltextKeyMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiPortaltextKeyMutationKey();
+  return mutationOptions<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ key, data }) => {
+      return putApiPortaltextKey(key, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export function usePutApiPortaltextKey<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiPortaltextKeyMutationResponse,
+      ResponseErrorConfig<
+        PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+      >,
+      {
+        key: PutApiPortaltextKeyPathParams["key"];
+        data?: PutApiPortaltextKeyMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiPortaltextKeyMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiPortaltextKeyMutationKey();
+
+  const baseOptions = putApiPortaltextKeyMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
     TContext
   >;
 }

@@ -24,6 +24,7 @@ export const apiErrorCodeEnum = {
   cmsPostNotFound: "cmsPostNotFound",
   cmsPostSlugTaken: "cmsPostSlugTaken",
   fileUploadInvalid: "fileUploadInvalid",
+  portalTextNotFound: "portalTextNotFound",
   authInvalidCredentials: "authInvalidCredentials",
   authRoleNotFound: "authRoleNotFound",
   authForbidden: "authForbidden",
@@ -183,6 +184,10 @@ export type Equipment = {
    * @type string
    */
   imageUrl?: string | null;
+  /**
+   * @type string
+   */
+  descriptionHtml?: string | null;
   /**
    * @type array
    */
@@ -643,6 +648,10 @@ export type EquipmentDto = {
    * @type string
    */
   imageUrl?: string | null;
+  /**
+   * @type string
+   */
+  descriptionHtml?: string | null;
 };
 
 export type EquipmentUpsertDto = {
@@ -674,6 +683,10 @@ export type EquipmentUpsertDto = {
    * @type string
    */
   imageUrl?: string | null;
+  /**
+   * @type string
+   */
+  descriptionHtml?: string | null;
 };
 
 export type FileUploadResponseDto = {
@@ -738,6 +751,55 @@ export type OrderCreateDto = {
    * @type array
    */
   items?: OrderItemDto[] | null;
+};
+
+export type PortalTextDto = {
+  /**
+   * @type string
+   */
+  key?: string | null;
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  placementHint?: string | null;
+  /**
+   * @type string
+   */
+  bodyHtml?: string | null;
+  /**
+   * @type integer | undefined, int32
+   */
+  sortOrder?: number;
+  /**
+   * @type string | undefined, date-time
+   */
+  updatedAtUtc?: string;
+};
+
+export type PortalTextPublicDto = {
+  /**
+   * @type string
+   */
+  key?: string | null;
+  /**
+   * @type string
+   */
+  bodyHtml?: string | null;
+};
+
+export type PortalTextUpsertDto = {
+  /**
+   * @type string
+   */
+  title?: string | null;
+  /**
+   * @type string
+   */
+  bodyHtml?: string | null;
 };
 
 export type ProblemDetails = {
@@ -1708,6 +1770,111 @@ export type PostApiOrderCreateorderMutation = {
   Response: PostApiOrderCreateorder201;
   Request: PostApiOrderCreateorderMutationRequest;
   Errors: PostApiOrderCreateorder400 | PostApiOrderCreateorder401;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiPortaltext200 = PortalTextDto[];
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiPortaltext401 = ProblemDetails;
+
+export type GetApiPortaltextQueryResponse = GetApiPortaltext200;
+
+export type GetApiPortaltextQuery = {
+  Response: GetApiPortaltext200;
+  Errors: GetApiPortaltext401;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiPortaltextPublic200 = PortalTextPublicDto[];
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiPortaltextPublic401 = ProblemDetails;
+
+export type GetApiPortaltextPublicQueryResponse = GetApiPortaltextPublic200;
+
+export type GetApiPortaltextPublicQuery = {
+  Response: GetApiPortaltextPublic200;
+  Errors: GetApiPortaltextPublic401;
+};
+
+export type GetApiPortaltextKeyPathParams = {
+  /**
+   * @type string
+   */
+  key: string;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiPortaltextKey200 = PortalTextDto;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiPortaltextKey401 = ProblemDetails;
+
+/**
+ * @description Not Found
+ */
+export type GetApiPortaltextKey404 = ApiErrorResponse;
+
+export type GetApiPortaltextKeyQueryResponse = GetApiPortaltextKey200;
+
+export type GetApiPortaltextKeyQuery = {
+  Response: GetApiPortaltextKey200;
+  PathParams: GetApiPortaltextKeyPathParams;
+  Errors: GetApiPortaltextKey401 | GetApiPortaltextKey404;
+};
+
+export type PutApiPortaltextKeyPathParams = {
+  /**
+   * @type string
+   */
+  key: string;
+};
+
+/**
+ * @description OK
+ */
+export type PutApiPortaltextKey200 = PortalTextDto;
+
+/**
+ * @description Bad Request
+ */
+export type PutApiPortaltextKey400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type PutApiPortaltextKey401 = ProblemDetails;
+
+/**
+ * @description Not Found
+ */
+export type PutApiPortaltextKey404 = ApiErrorResponse;
+
+export type PutApiPortaltextKeyMutationRequest = PortalTextUpsertDto;
+
+export type PutApiPortaltextKeyMutationResponse = PutApiPortaltextKey200;
+
+export type PutApiPortaltextKeyMutation = {
+  Response: PutApiPortaltextKey200;
+  Request: PutApiPortaltextKeyMutationRequest;
+  PathParams: PutApiPortaltextKeyPathParams;
+  Errors:
+    | PutApiPortaltextKey400
+    | PutApiPortaltextKey401
+    | PutApiPortaltextKey404;
 };
 
 /**

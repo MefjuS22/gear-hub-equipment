@@ -6,6 +6,7 @@ import {
   MenuItem,
   Paper,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
@@ -17,7 +18,8 @@ import type {
 } from "../../api/generated/types";
 import type { WarehouseOption } from "../../lib/warehouseOptionsFromEquipment";
 import type { EquipmentFormValues } from "../../lib/formSchemas";
-import { ImageUrlField } from "../common/ImageUrlField";
+import { resolvePublicFileUrl, uploadFile } from "../../api/uploadFile";
+import { ImageUrlField, RichTextEditor } from "../common";
 
 type EquipmentFormProps = {
   control: Control<EquipmentFormValues>;
@@ -81,6 +83,32 @@ export function EquipmentForm({
         disabled={isPending}
         helperText="Optional. Upload or paste a URL (e.g. /files/equipment/…)."
       />
+      <Box>
+        <Typography variant="subtitle2" sx={{ mb: 1 }}>
+          Catalog description
+        </Typography>
+        <Controller
+          name="descriptionHtml"
+          control={control}
+          render={({ field, fieldState }) => (
+            <RichTextEditor
+              value={field.value}
+              onChange={field.onChange}
+              disabled={isPending}
+              error={!!fieldState.error}
+              placeholder="Describe this unit for the customer portal catalog and detail page."
+              onUploadImage={async (file) => {
+                const res = await uploadFile(file, "equipment");
+                return resolvePublicFileUrl(res.publicPath ?? "");
+              }}
+            />
+          )}
+        />
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
+          Shown on featured catalog cards and the equipment detail page. Leave empty to use the
+          portal fallback blurb.
+        </Typography>
+      </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         <Controller
           name="categoryId"

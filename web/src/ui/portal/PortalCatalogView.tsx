@@ -30,15 +30,14 @@ import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { formatUsd } from "../../lib/formatCurrency";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
-import {
-  PORTAL_HERO,
-  usePortalCatalog,
-} from "../../hooks/portal/usePortalCatalog";
+import { usePortalCatalog } from "../../hooks/portal/usePortalCatalog";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import {
   EmptyState,
   ErrorAlert,
   LoadingState,
   PageHeader,
+  PortalHtmlBlock,
   StatusChip,
 } from "../common";
 import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
@@ -172,6 +171,7 @@ function CatalogOrderControl({
 
 export function PortalCatalogView() {
   const { equipment } = usePortalCatalog();
+  const { getPlain, getHtml } = usePortalTexts();
   const { search } = usePortalCatalogSearch();
   const [categoryKey, setCategoryKey] = useState<string>("all");
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -214,7 +214,10 @@ export function PortalCatalogView() {
 
   return (
     <Box>
-      <PageHeader title={PORTAL_HERO.title} subtitle={PORTAL_HERO.body} />
+      <PageHeader
+        title={getPlain("catalog.hero.title")}
+        subtitle={getPlain("catalog.hero.subtitle")}
+      />
 
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
@@ -532,14 +535,13 @@ export function PortalCatalogView() {
                       {item.categoryName} · {item.brandName}
                     </Typography>
                     {featured ? (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
+                      <PortalHtmlBlock
+                        html={
+                          item.descriptionHtml?.trim() ||
+                          getHtml("catalog.featured.fallback")
+                        }
                         sx={{ mb: 2, flex: 1 }}
-                      >
-                        Reliable rental unit with transparent daily pricing. Add
-                        to your order to reserve dates at checkout.
-                      </Typography>
+                      />
                     ) : null}
                     {featured ? (
                       <Box

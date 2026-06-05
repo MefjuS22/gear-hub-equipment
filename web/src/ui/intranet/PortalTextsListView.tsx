@@ -15,6 +15,7 @@ import { FileText, Pencil, PlusCircle, Trash2 } from "lucide-react";
 import type { CmsPostListDto } from "../../api/generated/types";
 import { useCmsPostsAdmin } from "../../hooks/intranet/useCmsPostsAdmin";
 import { EmptyState, LoadingState, PageHeader } from "../common";
+import { PortalTextsSectionNav } from "./PortalTextsSectionNav";
 
 export function PortalTextsListView() {
   const { list, remove } = useCmsPostsAdmin();
@@ -28,7 +29,7 @@ export function PortalTextsListView() {
   return (
     <Box>
       <PageHeader
-        title="Portal content (CMS)"
+        title="Portal content"
         subtitle="Create news and articles with rich text. Published posts appear under News on the customer portal."
         actions={
           <Button
@@ -41,6 +42,7 @@ export function PortalTextsListView() {
           </Button>
         }
       />
+      <PortalTextsSectionNav />
 
       {rows.length === 0 ? (
         <EmptyState

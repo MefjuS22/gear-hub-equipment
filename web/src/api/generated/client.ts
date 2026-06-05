@@ -5,6 +5,11 @@
 
 import fetch from "@kubb/plugin-client/clients/axios";
 import type {
+  Client,
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@kubb/plugin-client/clients/axios";
+import type {
   DeleteApiBrandIdMutationResponse,
   DeleteApiBrandIdPathParams,
   DeleteApiBrandId400,
@@ -120,6 +125,20 @@ import type {
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorder401,
+  GetApiPortaltextQueryResponse,
+  GetApiPortaltext401,
+  GetApiPortaltextPublicQueryResponse,
+  GetApiPortaltextPublic401,
+  GetApiPortaltextKeyQueryResponse,
+  GetApiPortaltextKeyPathParams,
+  GetApiPortaltextKey401,
+  GetApiPortaltextKey404,
+  PutApiPortaltextKeyMutationRequest,
+  PutApiPortaltextKeyMutationResponse,
+  PutApiPortaltextKeyPathParams,
+  PutApiPortaltextKey400,
+  PutApiPortaltextKey401,
+  PutApiPortaltextKey404,
   GetApiUsersQueryResponse,
   GetApiUsers401,
   GetApiUsers403,
@@ -162,11 +181,6 @@ import type {
   DeleteApiWarehouseId401,
   DeleteApiWarehouseId404,
 } from "./types.ts";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@kubb/plugin-client/clients/axios";
 import { buildFormData } from "./.kubb/config.ts";
 
 function getPostApiAuthLoginUrl() {
@@ -1027,6 +1041,117 @@ export async function postApiOrderCreateorder(
   >({
     method: "POST",
     url: getPostApiOrderCreateorderUrl().url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiPortaltextUrl() {
+  const res = { method: "GET", url: `/api/PortalText` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText}
+ */
+export async function getApiPortaltext(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiPortaltextQueryResponse,
+    ResponseErrorConfig<GetApiPortaltext401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiPortaltextUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiPortaltextPublicUrl() {
+  const res = { method: "GET", url: `/api/PortalText/Public` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText/Public}
+ */
+export async function getApiPortaltextPublic(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiPortaltextPublicQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextPublic401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiPortaltextPublicUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiPortaltextKeyUrl(key: GetApiPortaltextKeyPathParams["key"]) {
+  const res = { method: "GET", url: `/api/PortalText/${key}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export async function getApiPortaltextKey(
+  key: GetApiPortaltextKeyPathParams["key"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiPortaltextKeyQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiPortaltextKeyUrl(key).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiPortaltextKeyUrl(key: PutApiPortaltextKeyPathParams["key"]) {
+  const res = { method: "PUT", url: `/api/PortalText/${key}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export async function putApiPortaltextKey(
+  key: PutApiPortaltextKeyPathParams["key"],
+  data?: PutApiPortaltextKeyMutationRequest,
+  config: Partial<RequestConfig<PutApiPortaltextKeyMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    PutApiPortaltextKeyMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiPortaltextKeyUrl(key).url.toString(),
     data: requestData,
     ...requestConfig,
     headers: { "Content-Type": "application/*+json", ...requestConfig.headers },

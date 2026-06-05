@@ -20,6 +20,9 @@ public class Equipment
     /// <summary>Optional catalog image (URL or path such as /files/equipment/…).</summary>
     public string? ImageUrl { get; set; }
 
+    /// <summary>Rich HTML description shown on the customer portal catalog and detail pages.</summary>
+    public string? DescriptionHtml { get; set; }
+
     public ICollection<Maintenance> Maintenances { get; set; } = new List<Maintenance>();
     public ICollection<RentalOrderItem> RentalOrderItems { get; set; } = new List<RentalOrderItem>();
 }

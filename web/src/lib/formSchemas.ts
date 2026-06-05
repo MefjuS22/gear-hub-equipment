@@ -77,6 +77,7 @@ export const equipmentFormSchema = z.object({
   dailyRate: z.number().nonnegative(),
   isAvailable: z.boolean(),
   imageUrl: z.string().max(2000),
+  descriptionHtml: z.string().max(64_000),
 });
 export type EquipmentFormValues = z.infer<typeof equipmentFormSchema>;
 
@@ -88,10 +89,8 @@ export const maintenanceFormSchema = z.object({
 export type MaintenanceFormValues = z.infer<typeof maintenanceFormSchema>;
 
 export const portalTextFormSchema = z.object({
-  key: z.string().min(1, "Key is required"),
-  title: z.string(),
-  body: z.string(),
-  sortOrder: z.number().int(),
+  title: z.string().min(1, "Label is required").max(300),
+  bodyHtml: z.string().min(1, "Content is required").max(64_000),
 });
 export type PortalTextFormValues = z.infer<typeof portalTextFormSchema>;
 

@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "title": { "type": "string", "nullable": true },
+    "bodyHtml": { "type": "string", "nullable": true }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "PortalTextUpsertDto"
+}

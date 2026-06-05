@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AppPermissions } from "../../../lib/appPermissions";
 import { requireStaffPermission } from "../../../lib/intranetRouteGuards";
@@ -10,5 +11,9 @@ export const Route = createFileRoute("/intranet/portal-texts")({
 });
 
 function PortalTextsSectionLayout() {
-  return <Outlet />;
+  return (
+    <Box>
+      <Outlet />
+    </Box>
+  );
 }

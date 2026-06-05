@@ -90,7 +90,7 @@ export const INTRANET_NAV: IntranetNavItem[] = [
   {
     to: "/intranet/portal-texts",
     label: "Portal content",
-    description: "News and CMS posts.",
+    description: "News, portal copy, and CMS posts.",
     Icon: FileText,
     permission: AppPermissions.CmsManage,
   },

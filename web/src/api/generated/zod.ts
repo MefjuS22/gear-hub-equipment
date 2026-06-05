@@ -26,6 +26,7 @@ export const apiErrorCodeSchema = z.enum([
   "cmsPostNotFound",
   "cmsPostSlugTaken",
   "fileUploadInvalid",
+  "portalTextNotFound",
   "authInvalidCredentials",
   "authRoleNotFound",
   "authForbidden",
@@ -97,6 +98,7 @@ export const equipmentSchema = z.object({
   dailyRate: z.optional(z.number()),
   isAvailable: z.optional(z.boolean()),
   imageUrl: z.string().nullish(),
+  descriptionHtml: z.string().nullish(),
   get maintenances() {
     return z.array(maintenanceSchema).nullish();
   },
@@ -266,6 +268,7 @@ export const equipmentDtoSchema = z.object({
   dailyRate: z.optional(z.number()),
   isAvailable: z.optional(z.boolean()),
   imageUrl: z.string().nullish(),
+  descriptionHtml: z.string().nullish(),
 });
 
 export const equipmentUpsertDtoSchema = z.object({
@@ -276,6 +279,7 @@ export const equipmentUpsertDtoSchema = z.object({
   dailyRate: z.optional(z.number()),
   isAvailable: z.optional(z.boolean()),
   imageUrl: z.string().nullish(),
+  descriptionHtml: z.string().nullish(),
 });
 
 export const fileUploadResponseDtoSchema = z.object({
@@ -303,6 +307,25 @@ export const orderCreateDtoSchema = z.object({
   get items() {
     return z.array(orderItemDtoSchema).nullish();
   },
+});
+
+export const portalTextDtoSchema = z.object({
+  key: z.string().nullish(),
+  title: z.string().nullish(),
+  placementHint: z.string().nullish(),
+  bodyHtml: z.string().nullish(),
+  sortOrder: z.optional(z.int()),
+  updatedAtUtc: z.optional(z.iso.datetime()),
+});
+
+export const portalTextPublicDtoSchema = z.object({
+  key: z.string().nullish(),
+  bodyHtml: z.string().nullish(),
+});
+
+export const portalTextUpsertDtoSchema = z.object({
+  title: z.string().nullish(),
+  bodyHtml: z.string().nullish(),
 });
 
 export const problemDetailsSchema = z
@@ -1058,6 +1081,101 @@ export const postApiOrderCreateorderMutationRequestSchema = z.lazy(
 
 export const postApiOrderCreateorderMutationResponseSchema = z.lazy(
   () => postApiOrderCreateorder201Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiPortaltext200Schema = z.array(
+  z.lazy(() => portalTextDtoSchema),
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiPortaltext401Schema = z.lazy(() => problemDetailsSchema);
+
+export const getApiPortaltextQueryResponseSchema = z.lazy(
+  () => getApiPortaltext200Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiPortaltextPublic200Schema = z.array(
+  z.lazy(() => portalTextPublicDtoSchema),
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiPortaltextPublic401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+export const getApiPortaltextPublicQueryResponseSchema = z.lazy(
+  () => getApiPortaltextPublic200Schema,
+);
+
+export const getApiPortaltextKeyPathParamsSchema = z.object({
+  key: z.string(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiPortaltextKey200Schema = z.lazy(() => portalTextDtoSchema);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiPortaltextKey401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Not Found
+ */
+export const getApiPortaltextKey404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+export const getApiPortaltextKeyQueryResponseSchema = z.lazy(
+  () => getApiPortaltextKey200Schema,
+);
+
+export const putApiPortaltextKeyPathParamsSchema = z.object({
+  key: z.string(),
+});
+
+/**
+ * @description OK
+ */
+export const putApiPortaltextKey200Schema = z.lazy(() => portalTextDtoSchema);
+
+/**
+ * @description Bad Request
+ */
+export const putApiPortaltextKey400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+/**
+ * @description Unauthorized
+ */
+export const putApiPortaltextKey401Schema = z.lazy(() => problemDetailsSchema);
+
+/**
+ * @description Not Found
+ */
+export const putApiPortaltextKey404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+export const putApiPortaltextKeyMutationRequestSchema = z.lazy(
+  () => portalTextUpsertDtoSchema,
+);
+
+export const putApiPortaltextKeyMutationResponseSchema = z.lazy(
+  () => putApiPortaltextKey200Schema,
 );
 
 /**

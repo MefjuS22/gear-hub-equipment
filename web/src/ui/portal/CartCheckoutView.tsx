@@ -30,6 +30,7 @@ import {
 } from "../../hooks/portal/useCartCheckout";
 import { formatUsd } from "../../lib/formatCurrency";
 import { countRentalPeriodDays } from "../../lib/rentalPeriodDays";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import { useAuth } from "../../providers/AuthProvider";
 import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
 
@@ -187,6 +188,7 @@ function OrderConfirmationSummary({
 
 export function CartCheckoutView() {
   const { isAuthenticated } = useAuth();
+  const { getPlain } = usePortalTexts();
   const {
     form,
     handleSubmitForm,
@@ -223,8 +225,8 @@ export function CartCheckoutView() {
           subtitle="Configure client details and rental parameters, then confirm your equipment cart."
         />
         <EmptyState
-          title="Your cart is empty"
-          description="Add items from the catalog to build a rental order."
+          title={getPlain("cart.empty.title")}
+          description={getPlain("cart.empty.body")}
           icon={ShoppingCart}
         />
       </Box>
