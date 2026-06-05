@@ -5,6 +5,7 @@ import { Button, Text } from "react-native-paper";
 import { EquipmentFormCard } from "../components/equipment-form/EquipmentFormCard";
 import { useEquipmentFormScreen } from "../hooks/useEquipmentFormScreen";
 import { ScreenShell } from "../components/ScreenShell";
+import { getApiErrorDisplayMessage } from "../lib/apiError";
 import type { CatalogStackParamList } from "../navigation/navigationTypes";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "EquipmentForm">;
@@ -60,7 +61,7 @@ export const EquipmentFormScreen = ({ navigation, route }: Props) => {
       ) : null}
       {detailError ? (
         <Text style={{ color: "#b91c1c", marginBottom: 8 }}>
-          Could not load this equipment record.
+          {getApiErrorDisplayMessage(equipmentDetailQuery.error)}
         </Text>
       ) : null}
 

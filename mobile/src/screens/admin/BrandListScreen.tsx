@@ -12,6 +12,7 @@ import {
 } from "../../api/generated/react-query";
 import type { BrandLookupDto } from "../../api/generated/types";
 import type { CatalogStackParamList } from "../../navigation/navigationTypes";
+import { getApiErrorDisplayMessage, handleApiError } from "../../lib/apiError";
 import { useAppToast } from "../../providers/AppToastProvider";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -50,10 +51,8 @@ export const BrandListScreen = ({ navigation }: Props) => {
                 await deleteMutation.mutateAsync({ id });
                 await queryClient.invalidateQueries({ queryKey: getApiBrandQueryKey() });
                 showSuccess({ message: "Brand deleted.", duration: 1600 });
-              } catch {
-                showError({
-                  message: "Unable to delete. It may still be referenced by equipment.",
-                });
+              } catch (err) {
+                handleApiError(err, { showError });
               }
             })();
           },
@@ -90,7 +89,7 @@ export const BrandListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {brandsQuery.error
-                      ? "Check your connection."
+                      ? getApiErrorDisplayMessage(brandsQuery.error)
                       : "Add a brand with the + button."}
                   </Text>
                 </Card.Content>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useApiErrorMessage } from "./useApiErrorMessage";
 import { CommonActions } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useForm } from "react-hook-form";
@@ -8,6 +9,7 @@ import { z } from "zod/v4";
 import { generatedClientConfig } from "../api/generatedConfig";
 import { usePostApiOrderCreateorder } from "../api/generated/react-query";
 import type { PostApiOrderCreateorderMutationRequest } from "../api/generated/types";
+import { handleApiError } from "../lib/apiError";
 import { ShopStackParamList } from "../navigation/navigationTypes";
 import { useAppToast } from "../providers/AppToastProvider";
 import { useAuth } from "../providers/AuthProvider";
@@ -70,6 +72,7 @@ export const useCartOrderScreen = ({ navigation, route }: Pick<Props, "navigatio
   const {
     handleSubmit,
     setValue,
+    setError,
     watch,
     formState: { errors },
   } = form;
@@ -77,6 +80,7 @@ export const useCartOrderScreen = ({ navigation, route }: Pick<Props, "navigatio
   const createOrderMutation = usePostApiOrderCreateorder({
     client: generatedClientConfig,
   });
+  const orderSubmitError = useApiErrorMessage(createOrderMutation.error);
 
   const rentalStartDate = watch("rentalStartDate");
   const rentalEndDate = watch("rentalEndDate");
@@ -133,10 +137,8 @@ export const useCartOrderScreen = ({ navigation, route }: Pick<Props, "navigatio
         itemsCount,
         subtotalPerDay: subtotal,
       });
-    } catch {
-      showError({
-        message: "Unable to post order. Please check API connectivity.",
-      });
+    } catch (err) {
+      handleApiError(err, { setError });
     }
   };
 
@@ -201,6 +203,7 @@ export const useCartOrderScreen = ({ navigation, route }: Pick<Props, "navigatio
     dateRangeLabel,
     isDateRangePickerVisible,
     createOrderMutation,
+    orderSubmitError,
     onOpenDateRangePicker,
     onDismissDateRangePicker,
     onConfirmDateRange,

@@ -1,4 +1,6 @@
 import { isAxiosError } from "axios";
+import type { FieldValues, Path, UseFormSetError } from "react-hook-form";
+
 import type { ApiErrorCode, ApiErrorResponse } from "../api/generated/types";
 import { apiErrorCodeEnum } from "../api/generated/types";
 
@@ -63,4 +65,50 @@ export function formatApiErrorForDisplay(parsed: ParsedApiError): string {
     }
   }
   return lines.join("\n");
+}
+
+export function getApiErrorDisplayMessage(err: unknown): string {
+  return formatApiErrorForDisplay(parseApiError(err));
+}
+
+export function applyApiFieldErrorsToForm<T extends FieldValues>(
+  setError: UseFormSetError<T>,
+  parsed: ParsedApiError,
+  fieldMap?: Partial<Record<string, Path<T>>>,
+): void {
+  if (!parsed.fieldErrors) {
+    return;
+  }
+
+  for (const [field, messages] of Object.entries(parsed.fieldErrors)) {
+    const message = messages[0];
+    if (!message) {
+      continue;
+    }
+    const target = fieldMap?.[field] ?? (field as Path<T>);
+    setError(target, { type: "server", message });
+  }
+}
+
+type HandleApiErrorOptions<T extends FieldValues> = {
+  showError?: (options: { message: string }) => void;
+  setError?: UseFormSetError<T>;
+  fieldMap?: Partial<Record<string, Path<T>>>;
+};
+
+export function handleApiError<T extends FieldValues = FieldValues>(
+  err: unknown,
+  options: HandleApiErrorOptions<T> = {},
+): ParsedApiError {
+  const parsed = parseApiError(err);
+
+  if (options.setError) {
+    applyApiFieldErrorsToForm(options.setError, parsed, options.fieldMap);
+  }
+
+  if (options.showError) {
+    options.showError({ message: formatApiErrorForDisplay(parsed) });
+  }
+
+  return parsed;
 }

@@ -23,6 +23,7 @@ import type {
   PutApiEquipmentIdMutationRequest,
 } from "../api/generated/types";
 import type { CatalogStackParamList } from "../navigation/navigationTypes";
+import { handleApiError } from "../lib/apiError";
 import { useAppToast } from "../providers/AppToastProvider";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "EquipmentForm">;
@@ -158,6 +159,7 @@ export const useEquipmentFormScreen = ({
     control,
     handleSubmit,
     setValue,
+    setError,
     watch,
     reset,
     formState: { errors },
@@ -271,8 +273,8 @@ export const useEquipmentFormScreen = ({
       }
       setValue("imageUrl", path, { shouldDirty: true, shouldValidate: true });
       showSuccess({ message: "Image uploaded.", duration: 1400 });
-    } catch {
-      showError({ message: "Image upload failed. Check the API and try again." });
+    } catch (err) {
+      handleApiError(err, { showError });
     } finally {
       setIsUploadingImage(false);
     }
@@ -315,10 +317,8 @@ export const useEquipmentFormScreen = ({
           navigation.goBack();
         },
       });
-    } catch {
-      showError({
-        message: "Unable to save equipment. Check backend availability.",
-      });
+    } catch (err) {
+      handleApiError(err, { showError, setError });
     }
   };
 

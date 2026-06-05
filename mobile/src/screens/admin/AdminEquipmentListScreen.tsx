@@ -16,6 +16,7 @@ import {
 import type { Equipment } from "../../types";
 import { mapApiEquipment } from "../../api/mappers";
 import type { CatalogStackParamList } from "../../navigation/navigationTypes";
+import { getApiErrorDisplayMessage, handleApiError } from "../../lib/apiError";
 import { useAppToast } from "../../providers/AppToastProvider";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "AdminEquipmentList">;
@@ -63,10 +64,8 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
                   await deleteMutation.mutateAsync({ id: item.id });
                   await queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
                   showSuccess({ message: "Equipment deleted.", duration: 1600 });
-                } catch {
-                  showError({
-                    message: "Unable to delete. It may be referenced by open orders.",
-                  });
+                } catch (err) {
+                  handleApiError(err, { showError });
                 }
               })();
             },
@@ -108,7 +107,7 @@ export const AdminEquipmentListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {equipmentQuery.error
-                      ? "Check your connection."
+                      ? getApiErrorDisplayMessage(equipmentQuery.error)
                       : "Create equipment with the + button."}
                   </Text>
                 </Card.Content>

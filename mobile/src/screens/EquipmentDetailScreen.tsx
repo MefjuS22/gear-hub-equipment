@@ -11,6 +11,7 @@ import { EquipmentImagePlaceholder } from "../components/equipment-list/Equipmen
 import type { CatalogStackParamList, ShopStackParamList } from "../navigation/navigationTypes";
 import { useAppToast } from "../providers/AppToastProvider";
 import { useCartStore } from "../store/useCartStore";
+import { getApiErrorDisplayMessage } from "../lib/apiError";
 import { formatCurrency } from "../utils/formatCurrency";
 
 type Props =
@@ -67,7 +68,7 @@ export const EquipmentDetailScreen = ({ navigation, route }: Props) => {
           Could not load equipment
         </Text>
         <Text variant="bodyMedium" style={styles.muted}>
-          Check your connection or try another item from the list.
+          {getApiErrorDisplayMessage(detailQuery.error)}
         </Text>
         <Button mode="contained" style={styles.backBtn} onPress={() => navigation.goBack()}>
           Go back

@@ -13,6 +13,7 @@ import {
 } from "../../api/generated/react-query";
 import type { WarehouseLookupDto } from "../../api/generated/types";
 import type { CatalogStackParamList } from "../../navigation/navigationTypes";
+import { getApiErrorDisplayMessage, handleApiError } from "../../lib/apiError";
 import { useAppToast } from "../../providers/AppToastProvider";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "WarehouseList">;
@@ -53,10 +54,8 @@ export const WarehouseListScreen = ({ navigation }: Props) => {
                 await deleteMutation.mutateAsync({ id });
                 await queryClient.invalidateQueries({ queryKey: getApiWarehouseQueryKey() });
                 showSuccess({ message: "Warehouse deleted.", duration: 1600 });
-              } catch {
-                showError({
-                  message: "Unable to delete. It may still be referenced by equipment.",
-                });
+              } catch (err) {
+                handleApiError(err, { showError });
               }
             })();
           },
@@ -93,7 +92,7 @@ export const WarehouseListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {listQuery.error
-                      ? "Check your connection."
+                      ? getApiErrorDisplayMessage(listQuery.error)
                       : "Add a warehouse with the + button."}
                   </Text>
                 </Card.Content>

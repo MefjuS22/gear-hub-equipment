@@ -8,6 +8,7 @@ import { resolvePublicFileUrl, rewriteCmsBodyHtmlForNative } from "../../api/res
 import { generatedClientConfig } from "../../api/generatedConfig";
 import { useGetApiCmspostPublishedSlug } from "../../api/generated/react-query";
 import { ScreenShell } from "../../components/ScreenShell";
+import { getApiErrorDisplayMessage } from "../../lib/apiError";
 import type { NewsStackParamList } from "../../navigation/navigationTypes";
 
 type Props = NativeStackScreenProps<NewsStackParamList, "NewsDetail">;
@@ -39,7 +40,9 @@ export const NewsDetailScreen = ({ route }: Props) => {
   if (detailQuery.error || !post) {
     return (
       <ScreenShell title="Article" scrollable={false}>
-        <Text variant="bodyLarge">This article could not be loaded.</Text>
+        <Text variant="bodyLarge">
+          {getApiErrorDisplayMessage(detailQuery.error)}
+        </Text>
       </ScreenShell>
     );
   }

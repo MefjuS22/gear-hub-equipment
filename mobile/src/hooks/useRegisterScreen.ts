@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { generatedClientConfig } from "../api/generatedConfig";
 import { usePostApiAuthRegister } from "../api/generated/react-query";
-import { formatApiErrorForDisplay, parseApiError } from "../lib/apiError";
+import { getApiErrorDisplayMessage } from "../lib/apiError";
 import type { RootStackParamList } from "../navigation/navigationTypes";
 import { useAppToast } from "../providers/AppToastProvider";
 import { useAuth } from "../providers/AuthProvider";
@@ -70,7 +70,7 @@ export const useRegisterScreen = ({ navigation, route }: Pick<Props, "navigation
   }, [isAuthenticated, navigation, redirectTo]);
 
   const submitError = registerMutation.isError
-    ? formatApiErrorForDisplay(parseApiError(registerMutation.error))
+    ? getApiErrorDisplayMessage(registerMutation.error)
     : null;
 
   return {

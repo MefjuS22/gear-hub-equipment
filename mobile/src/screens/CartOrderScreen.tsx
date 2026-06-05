@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 
+import { ApiErrorBanner } from "../components/ApiErrorBanner";
 import { CartItemsCard } from "../components/cart-order/CartItemsCard";
 import { OrderDetailsCard } from "../components/cart-order/OrderDetailsCard";
 import { ScreenShell } from "../components/ScreenShell";
@@ -24,6 +25,7 @@ export const CartOrderScreen = ({ navigation, route }: Props) => {
     dateRangeLabel,
     isDateRangePickerVisible,
     createOrderMutation,
+    orderSubmitError,
     onOpenDateRangePicker,
     onDismissDateRangePicker,
     onConfirmDateRange,
@@ -47,6 +49,8 @@ export const CartOrderScreen = ({ navigation, route }: Props) => {
         onIncrease={(equipmentId) => updateQuantity(equipmentId, 1)}
         onRemove={removeFromCart}
       />
+      {isAuthenticated && orderSubmitError ? <ApiErrorBanner message={orderSubmitError} /> : null}
+
       <OrderDetailsCard
         form={form}
         dateRangeLabel={dateRangeLabel}

@@ -19,6 +19,7 @@ import type {
 } from "../../api/generated/types";
 import { ScreenShell } from "../../components/ScreenShell";
 import type { CatalogStackParamList } from "../../navigation/navigationTypes";
+import { handleApiError } from "../../lib/apiError";
 import { useAppToast } from "../../providers/AppToastProvider";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "WarehouseForm">;
@@ -60,6 +61,7 @@ export const WarehouseFormScreen = ({ navigation, route }: Props) => {
     control,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(warehouseFormSchema),
@@ -92,8 +94,8 @@ export const WarehouseFormScreen = ({ navigation, route }: Props) => {
         duration: 1500,
         onDismiss: () => navigation.goBack(),
       });
-    } catch {
-      showError({ message: "Save failed. Check the API." });
+    } catch (err) {
+      handleApiError(err, { showError, setError });
     }
   };
 

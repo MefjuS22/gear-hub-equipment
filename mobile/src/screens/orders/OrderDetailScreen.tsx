@@ -7,6 +7,7 @@ import { generatedClientConfig } from "../../api/generatedConfig";
 import { useGetApiOrder } from "../../api/generated/react-query";
 import type { RentalOrderListDto } from "../../api/generated/types";
 import type { OrdersStackParamList } from "../../navigation/navigationTypes";
+import { getApiErrorDisplayMessage } from "../../lib/apiError";
 import { formatCurrency } from "../../utils/formatCurrency";
 
 type Props = NativeStackScreenProps<OrdersStackParamList, "OrderDetail">;
@@ -76,7 +77,7 @@ export const OrderDetailScreen = ({ navigation, route }: Props) => {
           Could not load orders
         </Text>
         <Text variant="bodyMedium" style={styles.muted}>
-          Check your connection and try again.
+          {getApiErrorDisplayMessage(ordersQuery.error)}
         </Text>
         <Button mode="contained" style={styles.backBtn} onPress={() => void ordersQuery.refetch()}>
           Retry

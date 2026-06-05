@@ -7,6 +7,7 @@ import { CrudListSearchField } from "../../components/admin/CrudListSearchField"
 import { generatedClientConfig } from "../../api/generatedConfig";
 import { useGetApiOrder } from "../../api/generated/react-query";
 import type { RentalOrderListDto } from "../../api/generated/types";
+import { getApiErrorDisplayMessage } from "../../lib/apiError";
 import type { OrdersStackParamList } from "../../navigation/navigationTypes";
 
 type Props = NativeStackScreenProps<OrdersStackParamList, "OrderList">;
@@ -102,7 +103,7 @@ export const OrderListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {ordersQuery.error
-                      ? "Check your connection."
+                      ? getApiErrorDisplayMessage(ordersQuery.error)
                       : "Create a rental from Browse to populate this list."}
                   </Text>
                 </Card.Content>

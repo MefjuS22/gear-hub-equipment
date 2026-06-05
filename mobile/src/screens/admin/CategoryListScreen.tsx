@@ -13,6 +13,7 @@ import {
 } from "../../api/generated/react-query";
 import type { CategoryLookupDto } from "../../api/generated/types";
 import type { CatalogStackParamList } from "../../navigation/navigationTypes";
+import { getApiErrorDisplayMessage, handleApiError } from "../../lib/apiError";
 import { useAppToast } from "../../providers/AppToastProvider";
 
 type Props = NativeStackScreenProps<CatalogStackParamList, "CategoryList">;
@@ -53,10 +54,8 @@ export const CategoryListScreen = ({ navigation }: Props) => {
                 await deleteMutation.mutateAsync({ id });
                 await queryClient.invalidateQueries({ queryKey: getApiCategoryQueryKey() });
                 showSuccess({ message: "Category deleted.", duration: 1600 });
-              } catch {
-                showError({
-                  message: "Unable to delete. It may still be referenced by equipment.",
-                });
+              } catch (err) {
+                handleApiError(err, { showError });
               }
             })();
           },
@@ -93,7 +92,7 @@ export const CategoryListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {listQuery.error
-                      ? "Check your connection."
+                      ? getApiErrorDisplayMessage(listQuery.error)
                       : "Add a category with the + button."}
                   </Text>
                 </Card.Content>

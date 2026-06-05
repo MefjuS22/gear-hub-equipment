@@ -4,6 +4,7 @@ import { Card, Text } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 
 import { EquipmentListHeader } from "../components/equipment-list/EquipmentListHeader";
+import { getApiErrorDisplayMessage } from "../lib/apiError";
 import { EquipmentListItemCard } from "../components/equipment-list/EquipmentListItemCard";
 import { useEquipmentListScreen } from "../hooks/useEquipmentListScreen";
 import type { ShopStackParamList } from "../navigation/navigationTypes";
@@ -63,7 +64,7 @@ export const EquipmentListScreen = ({ navigation }: Props) => {
               <Card.Content>
                 <Text variant="bodyMedium">
                   {equipmentQuery.error
-                    ? "Unable to fetch data from backend. Check if Docker services are running."
+                    ? getApiErrorDisplayMessage(equipmentQuery.error)
                     : "No equipment available in the database."}
                 </Text>
               </Card.Content>

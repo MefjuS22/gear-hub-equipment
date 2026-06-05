@@ -8,6 +8,7 @@ import { CrudListSearchField } from "../../components/admin/CrudListSearchField"
 import { generatedClientConfig } from "../../api/generatedConfig";
 import { useGetApiCmspostPublished } from "../../api/generated/react-query";
 import type { CmsPostPublicSummaryDto } from "../../api/generated/types";
+import { getApiErrorDisplayMessage } from "../../lib/apiError";
 import type { NewsStackParamList } from "../../navigation/navigationTypes";
 
 type Props = NativeStackScreenProps<NewsStackParamList, "NewsList">;
@@ -78,7 +79,7 @@ export const NewsListScreen = ({ navigation }: Props) => {
                 <Card.Content>
                   <Text variant="bodyMedium">
                     {listQuery.error
-                      ? "Check your connection."
+                      ? getApiErrorDisplayMessage(listQuery.error)
                       : "New articles will appear here when published."}
                   </Text>
                 </Card.Content>
