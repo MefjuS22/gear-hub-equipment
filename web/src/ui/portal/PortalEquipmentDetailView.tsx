@@ -15,8 +15,9 @@ import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiEquipmentId } from "../../api/generated/react-query";
 import { formatUsd } from "../../lib/formatCurrency";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import { useCart } from "../../store/portalCartStore";
-import { ErrorAlert, LoadingState } from "../common";
+import { ErrorAlert, LoadingState, PortalHtmlBlock } from "../common";
 
 type Props = {
   equipmentId: number;
@@ -25,6 +26,7 @@ type Props = {
 export function PortalEquipmentDetailView({ equipmentId }: Props) {
   const navigate = useNavigate();
   const { add } = useCart();
+  const { getHtml } = usePortalTexts();
   const detail = useGetApiEquipmentId(equipmentId, {
     client: gearhubApiClientOptions,
     query: { enabled: Number.isFinite(equipmentId) && equipmentId > 0 },
@@ -41,14 +43,14 @@ export function PortalEquipmentDetailView({ equipmentId }: Props) {
           message="Could not load this equipment item."
           sx={{ mb: 2 }}
         />
-        <Button
-          component={Link}
-          to="/portal"
-          startIcon={<ArrowLeft size={18} aria-hidden />}
-          variant="outlined"
-        >
-          Back to catalog
-        </Button>
+        <Link to="/portal" style={{ textDecoration: "none" }}>
+          <Button
+            startIcon={<ArrowLeft size={18} aria-hidden />}
+            variant="outlined"
+          >
+            Back to catalog
+          </Button>
+        </Link>
       </Box>
     );
   }
@@ -137,6 +139,18 @@ export function PortalEquipmentDetailView({ equipmentId }: Props) {
               / day
             </Typography>
           </Box>
+
+          <Divider />
+
+          <Typography variant="subtitle2" color="text.secondary">
+            Description
+          </Typography>
+          <PortalHtmlBlock
+            html={
+              e.descriptionHtml?.trim() || getHtml("catalog.featured.fallback")
+            }
+            sx={{ mb: 1 }}
+          />
 
           <Divider />
 

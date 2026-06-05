@@ -7,7 +7,8 @@
     "warehouseId": { "type": "integer", "format": "int32" },
     "dailyRate": { "type": "number", "format": "double" },
     "isAvailable": { "type": "boolean" },
-    "imageUrl": { "type": "string", "nullable": true }
+    "imageUrl": { "type": "string", "nullable": true },
+    "descriptionHtml": { "type": "string", "nullable": true }
   },
   "additionalProperties": false,
   "x-readme-ref-name": "EquipmentUpsertDto"

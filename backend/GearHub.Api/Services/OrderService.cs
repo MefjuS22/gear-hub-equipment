@@ -13,10 +13,16 @@ public class OrderService(
     IOrderRepository orderRepository,
     UserManager<ApplicationUser> userManager) : IOrderService
 {
-    public async Task<IReadOnlyList<RentalOrderListDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<RentalOrderListDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        var orders = await orderRepository.GetAllOrdersWithDetailsAsync(cancellationToken);
-        return orders.Select(ToListDto).ToList();
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var (orders, totalCount) = await orderRepository.GetOrdersPageWithDetailsAsync(
+            skip,
+            pageSize,
+            cancellationToken);
+        return Pagination.Create(orders.Select(ToListDto).ToList(), page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<RentalOrderListDto>> GetByIdForViewerAsync(

@@ -5,6 +5,11 @@
 
 import fetch from "@kubb/plugin-client/clients/axios";
 import type {
+  Client,
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@kubb/plugin-client/clients/axios";
+import type {
   DeleteApiBrandIdMutationResponse,
   DeleteApiBrandIdPathParams,
   DeleteApiBrandId400,
@@ -20,6 +25,7 @@ import type {
   PostApiAuthRegisterMutationResponse,
   PostApiAuthRegister400,
   GetApiBrandQueryResponse,
+  GetApiBrandQueryParams,
   GetApiBrand401,
   PostApiBrandMutationRequest,
   PostApiBrandMutationResponse,
@@ -35,6 +41,7 @@ import type {
   PutApiBrandId401,
   PutApiBrandId404,
   GetApiCategoryQueryResponse,
+  GetApiCategoryQueryParams,
   GetApiCategory401,
   PostApiCategoryMutationRequest,
   PostApiCategoryMutationResponse,
@@ -55,6 +62,7 @@ import type {
   DeleteApiCategoryId401,
   DeleteApiCategoryId404,
   GetApiCmspostQueryResponse,
+  GetApiCmspostQueryParams,
   GetApiCmspost401,
   PostApiCmspostMutationRequest,
   PostApiCmspostMutationResponse,
@@ -75,20 +83,26 @@ import type {
   DeleteApiCmspostId401,
   DeleteApiCmspostId404,
   GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublishedQueryParams,
   GetApiCmspostPublished401,
   GetApiCmspostPublishedSlugQueryResponse,
   GetApiCmspostPublishedSlugPathParams,
   GetApiCmspostPublishedSlug401,
   GetApiCmspostPublishedSlug404,
   GetApiCustomerQueryResponse,
+  GetApiCustomerQueryParams,
   GetApiCustomer401,
   GetApiEquipmentQueryResponse,
+  GetApiEquipmentQueryParams,
   GetApiEquipment401,
   PostApiEquipmentMutationRequest,
   PostApiEquipmentMutationResponse,
   PostApiEquipment400,
   PostApiEquipment401,
   PostApiEquipment500,
+  GetApiEquipmentCategoriesQueryResponse,
+  GetApiEquipmentCategoriesQueryParams,
+  GetApiEquipmentCategories401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
   GetApiEquipmentId401,
@@ -108,6 +122,7 @@ import type {
   PostApiFilesUpload400,
   PostApiFilesUpload401,
   GetApiOrderQueryResponse,
+  GetApiOrderQueryParams,
   GetApiOrder400,
   GetApiOrder401,
   GetApiOrderIdQueryResponse,
@@ -120,7 +135,24 @@ import type {
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorder401,
+  GetApiPortaltextQueryResponse,
+  GetApiPortaltextQueryParams,
+  GetApiPortaltext401,
+  GetApiPortaltextPublicQueryResponse,
+  GetApiPortaltextPublicQueryParams,
+  GetApiPortaltextPublic401,
+  GetApiPortaltextKeyQueryResponse,
+  GetApiPortaltextKeyPathParams,
+  GetApiPortaltextKey401,
+  GetApiPortaltextKey404,
+  PutApiPortaltextKeyMutationRequest,
+  PutApiPortaltextKeyMutationResponse,
+  PutApiPortaltextKeyPathParams,
+  PutApiPortaltextKey400,
+  PutApiPortaltextKey401,
+  PutApiPortaltextKey404,
   GetApiUsersQueryResponse,
+  GetApiUsersQueryParams,
   GetApiUsers401,
   GetApiUsers403,
   PostApiUsersMutationRequest,
@@ -142,6 +174,7 @@ import type {
   DeleteApiUsersId403,
   DeleteApiUsersId404,
   GetApiWarehouseQueryResponse,
+  GetApiWarehouseQueryParams,
   GetApiWarehouse401,
   PostApiWarehouseMutationRequest,
   PostApiWarehouseMutationResponse,
@@ -162,11 +195,6 @@ import type {
   DeleteApiWarehouseId401,
   DeleteApiWarehouseId404,
 } from "./types.ts";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@kubb/plugin-client/clients/axios";
 import { buildFormData } from "./.kubb/config.ts";
 
 function getPostApiAuthLoginUrl() {
@@ -267,6 +295,7 @@ function getGetApiBrandUrl() {
  * {@link /api/Brand}
  */
 export async function getApiBrand(
+  params?: GetApiBrandQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -278,6 +307,7 @@ export async function getApiBrand(
   >({
     method: "GET",
     url: getGetApiBrandUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -411,6 +441,7 @@ function getGetApiCategoryUrl() {
  * {@link /api/Category}
  */
 export async function getApiCategory(
+  params?: GetApiCategoryQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -422,6 +453,7 @@ export async function getApiCategory(
   >({
     method: "GET",
     url: getGetApiCategoryUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -555,6 +587,7 @@ function getGetApiCmspostUrl() {
  * {@link /api/CmsPost}
  */
 export async function getApiCmspost(
+  params?: GetApiCmspostQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -566,6 +599,7 @@ export async function getApiCmspost(
   >({
     method: "GET",
     url: getGetApiCmspostUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -699,6 +733,7 @@ function getGetApiCmspostPublishedUrl() {
  * {@link /api/CmsPost/Published}
  */
 export async function getApiCmspostPublished(
+  params?: GetApiCmspostPublishedQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -710,6 +745,7 @@ export async function getApiCmspostPublished(
   >({
     method: "GET",
     url: getGetApiCmspostPublishedUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -754,6 +790,7 @@ function getGetApiCustomerUrl() {
  * {@link /api/Customer}
  */
 export async function getApiCustomer(
+  params?: GetApiCustomerQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -765,6 +802,7 @@ export async function getApiCustomer(
   >({
     method: "GET",
     url: getGetApiCustomerUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -779,6 +817,7 @@ function getGetApiEquipmentUrl() {
  * {@link /api/Equipment}
  */
 export async function getApiEquipment(
+  params?: GetApiEquipmentQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -790,6 +829,7 @@ export async function getApiEquipment(
   >({
     method: "GET",
     url: getGetApiEquipmentUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -825,6 +865,33 @@ export async function postApiEquipment(
     data: requestData,
     ...requestConfig,
     headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
+function getGetApiEquipmentCategoriesUrl() {
+  const res = { method: "GET", url: `/api/Equipment/Categories` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Equipment/Categories}
+ */
+export async function getApiEquipmentCategories(
+  params?: GetApiEquipmentCategoriesQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiEquipmentCategoriesQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentCategories401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiEquipmentCategoriesUrl().url.toString(),
+    params,
+    ...requestConfig,
   });
   return res.data;
 }
@@ -956,6 +1023,7 @@ function getGetApiOrderUrl() {
  * {@link /api/Order}
  */
 export async function getApiOrder(
+  params?: GetApiOrderQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -967,6 +1035,7 @@ export async function getApiOrder(
   >({
     method: "GET",
     url: getGetApiOrderUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -1034,6 +1103,121 @@ export async function postApiOrderCreateorder(
   return res.data;
 }
 
+function getGetApiPortaltextUrl() {
+  const res = { method: "GET", url: `/api/PortalText` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText}
+ */
+export async function getApiPortaltext(
+  params?: GetApiPortaltextQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiPortaltextQueryResponse,
+    ResponseErrorConfig<GetApiPortaltext401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiPortaltextUrl().url.toString(),
+    params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiPortaltextPublicUrl() {
+  const res = { method: "GET", url: `/api/PortalText/Public` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText/Public}
+ */
+export async function getApiPortaltextPublic(
+  params?: GetApiPortaltextPublicQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiPortaltextPublicQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextPublic401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiPortaltextPublicUrl().url.toString(),
+    params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiPortaltextKeyUrl(key: GetApiPortaltextKeyPathParams["key"]) {
+  const res = { method: "GET", url: `/api/PortalText/${key}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export async function getApiPortaltextKey(
+  key: GetApiPortaltextKeyPathParams["key"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiPortaltextKeyQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiPortaltextKeyUrl(key).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getPutApiPortaltextKeyUrl(key: PutApiPortaltextKeyPathParams["key"]) {
+  const res = { method: "PUT", url: `/api/PortalText/${key}` as const };
+  return res;
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export async function putApiPortaltextKey(
+  key: PutApiPortaltextKeyPathParams["key"],
+  data?: PutApiPortaltextKeyMutationRequest,
+  config: Partial<RequestConfig<PutApiPortaltextKeyMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const requestData = data;
+
+  const res = await request<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    PutApiPortaltextKeyMutationRequest
+  >({
+    method: "PUT",
+    url: getPutApiPortaltextKeyUrl(key).url.toString(),
+    data: requestData,
+    ...requestConfig,
+    headers: { "Content-Type": "application/*+json", ...requestConfig.headers },
+  });
+  return res.data;
+}
+
 function getGetApiUsersUrl() {
   const res = { method: "GET", url: `/api/Users` as const };
   return res;
@@ -1043,6 +1227,7 @@ function getGetApiUsersUrl() {
  * {@link /api/Users}
  */
 export async function getApiUsers(
+  params?: GetApiUsersQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -1054,6 +1239,7 @@ export async function getApiUsers(
   >({
     method: "GET",
     url: getGetApiUsersUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;
@@ -1169,6 +1355,7 @@ function getGetApiWarehouseUrl() {
  * {@link /api/Warehouse}
  */
 export async function getApiWarehouse(
+  params?: GetApiWarehouseQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
   const { client: request = fetch, ...requestConfig } = config;
@@ -1180,6 +1367,7 @@ export async function getApiWarehouse(
   >({
     method: "GET",
     url: getGetApiWarehouseUrl().url.toString(),
+    params,
     ...requestConfig,
   });
   return res.data;

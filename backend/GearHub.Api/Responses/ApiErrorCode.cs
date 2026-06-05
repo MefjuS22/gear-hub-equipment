@@ -27,6 +27,7 @@ public enum ApiErrorCode
     CmsPostSlugTaken = 307,
 
     FileUploadInvalid = 308,
+    PortalTextNotFound = 309,
 
     AuthInvalidCredentials = 400,
     AuthRoleNotFound = 401,

@@ -8,6 +8,7 @@ import {
   usePutApiCmspostId,
 } from "../../api/generated/react-query";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { useListPagination, usePagedResult } from "../useListPagination";
 
 function invalidateAllCmsQueries(qc: ReturnType<typeof useQueryClient>) {
   void qc.invalidateQueries({
@@ -24,7 +25,9 @@ export function useCmsPostsAdmin() {
   const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
 
-  const list = useGetApiCmspost({ client: gearhubApiClientOptions });
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
+  const list = useGetApiCmspost(params, { client: gearhubApiClientOptions });
+  const paged = usePagedResult(list.data);
 
   const create = usePostApiCmspost({
     client: gearhubApiClientOptions,
@@ -71,5 +74,15 @@ export function useCmsPostsAdmin() {
     },
   });
 
-  return { list, create, update, remove };
+  return {
+    list,
+    create,
+    update,
+    remove,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    ...paged,
+  };
 }

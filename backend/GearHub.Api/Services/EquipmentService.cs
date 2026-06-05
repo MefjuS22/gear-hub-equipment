@@ -7,11 +7,23 @@ namespace GearHub.Api.Services;
 
 public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquipmentService
 {
-    public async Task<IReadOnlyList<EquipmentDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<EquipmentDto>> GetAllAsync(
+        EquipmentListQuery query,
+        CancellationToken cancellationToken = default)
     {
-        var equipment = await equipmentRepository.GetAllAsync(cancellationToken);
-        return equipment.Select(ToDto).ToList();
+        var (page, pageSize, skip) = Pagination.Normalize(query);
+        var (equipment, totalCount) = await equipmentRepository.GetPageAsync(
+            query,
+            skip,
+            pageSize,
+            cancellationToken);
+        return Pagination.Create(equipment.Select(ToDto).ToList(), page, pageSize, totalCount);
     }
+
+    public Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        string? search,
+        CancellationToken cancellationToken = default) =>
+        equipmentRepository.GetCatalogCategoryNamesAsync(search, cancellationToken);
 
     public async Task<ServiceResult<EquipmentDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)
     {
@@ -105,6 +117,9 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
             ImageUrl = string.IsNullOrWhiteSpace(request.ImageUrl)
                 ? null
                 : request.ImageUrl.Trim(),
+            DescriptionHtml = string.IsNullOrWhiteSpace(request.DescriptionHtml)
+                ? null
+                : request.DescriptionHtml,
         };
 
     private static EquipmentDto ToDto(Equipment equipment) =>
@@ -121,5 +136,6 @@ public class EquipmentService(IEquipmentRepository equipmentRepository) : IEquip
             DailyRate = equipment.DailyRate,
             IsAvailable = equipment.IsAvailable,
             ImageUrl = equipment.ImageUrl,
+            DescriptionHtml = equipment.DescriptionHtml,
         };
 }

@@ -15,9 +15,11 @@ namespace GearHub.Api.Controllers;
 public class BrandController(IBrandService brandService) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<BrandLookupDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<BrandLookupDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await brandService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<BrandLookupDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<BrandLookupDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await brandService.GetAllAsync(pagination, cancellationToken));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(BrandLookupDto), StatusCodes.Status200OK)]

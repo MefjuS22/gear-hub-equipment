@@ -4,7 +4,18 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Box, IconButton, Paper, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Paper,
+  TextField,
+  Tooltip,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import {
   Bold,
@@ -17,7 +28,7 @@ import {
   Strikethrough,
   Underline as UnderlineIcon,
 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type RichTextEditorProps = {
   value: string;
@@ -25,7 +36,6 @@ type RichTextEditorProps = {
   placeholder?: string;
   disabled?: boolean;
   error?: boolean;
-  /** When set, toolbar includes image upload (stores returned URL in HTML). */
   onUploadImage?: (file: File) => Promise<string>;
 };
 
@@ -39,7 +49,11 @@ export function RichTextEditor({
 }: RichTextEditorProps) {
   const { enqueueSnackbar } = useSnackbar();
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const linkInputRef = useRef<HTMLInputElement>(null);
   const uploadRef = useRef(onUploadImage);
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [hasExistingLink, setHasExistingLink] = useState(false);
 
   useEffect(() => {
     uploadRef.current = onUploadImage;
@@ -82,19 +96,45 @@ export function RichTextEditor({
     editor.commands.setContent(next, { emitUpdate: false });
   }, [value, editor]);
 
+  useEffect(() => {
+    if (!linkDialogOpen) return;
+    const id = window.setTimeout(() => linkInputRef.current?.focus(), 0);
+    return () => window.clearTimeout(id);
+  }, [linkDialogOpen]);
+
   if (!editor) {
     return null;
   }
 
-  const setLink = () => {
+  const openLinkDialog = () => {
     const prev = editor.getAttributes("link").href as string | undefined;
-    const url = window.prompt("Link URL", prev ?? "https://");
-    if (url === null) return;
-    if (url === "") {
+    setLinkUrl(prev ?? "");
+    setHasExistingLink(Boolean(prev) || editor.isActive("link"));
+    setLinkDialogOpen(true);
+  };
+
+  const closeLinkDialog = () => {
+    setLinkDialogOpen(false);
+  };
+
+  const applyLink = () => {
+    const url = linkUrl.trim();
+    if (!url) {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
-      return;
+    } else {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
     }
-    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+    closeLinkDialog();
+  };
+
+  const removeLink = () => {
+    editor.chain().focus().extendMarkRange("link").unsetLink().run();
+    closeLinkDialog();
   };
 
   return (
@@ -203,7 +243,7 @@ export function RichTextEditor({
             size="small"
             disabled={disabled}
             color={editor.isActive("link") ? "primary" : "default"}
-            onClick={setLink}
+            onClick={openLinkDialog}
             aria-label="Link"
           >
             <LinkIcon size={18} aria-hidden />
@@ -262,6 +302,46 @@ export function RichTextEditor({
       >
         <EditorContent editor={editor} />
       </Box>
+
+      <Dialog
+        open={linkDialogOpen}
+        onClose={closeLinkDialog}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>
+          {hasExistingLink ? "Edit link" : "Insert link"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            inputRef={linkInputRef}
+            label="URL"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            placeholder="https://example.com"
+            fullWidth
+            margin="dense"
+            autoComplete="off"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applyLink();
+              }
+            }}
+          />
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          {hasExistingLink ? (
+            <Button color="error" onClick={removeLink} sx={{ mr: "auto" }}>
+              Remove link
+            </Button>
+          ) : null}
+          <Button onClick={closeLinkDialog}>Cancel</Button>
+          <Button variant="contained" onClick={applyLink}>
+            Apply
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }

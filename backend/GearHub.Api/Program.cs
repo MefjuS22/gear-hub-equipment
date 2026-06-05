@@ -71,6 +71,7 @@ builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICmsPostService, CmsPostService>();
+builder.Services.AddScoped<IPortalTextService, PortalTextService>();
 builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
@@ -132,6 +133,7 @@ using (var scope = app.Services.CreateScope())
     }
 
     CmsTableBootstrap.EnsureCmsPostsTable(dbContext);
+    PortalTextBootstrap.EnsurePortalTexts(dbContext);
     MediaColumnsBootstrap.EnsureMediaColumns(dbContext);
     await IdentityDataSeeder.SeedAsync(scope.ServiceProvider);
 }

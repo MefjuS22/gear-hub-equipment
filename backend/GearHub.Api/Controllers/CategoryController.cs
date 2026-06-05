@@ -15,9 +15,11 @@ namespace GearHub.Api.Controllers;
 public class CategoryController(ICategoryService categoryService) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<CategoryLookupDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<CategoryLookupDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await categoryService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<CategoryLookupDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<CategoryLookupDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await categoryService.GetAllAsync(pagination, cancellationToken));
 
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(CategoryLookupDto), StatusCodes.Status200OK)]

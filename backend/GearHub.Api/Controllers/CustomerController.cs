@@ -1,4 +1,5 @@
 using GearHub.Api.Authorization;
+using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,9 @@ namespace GearHub.Api.Controllers;
 public class CustomerController(ICustomerService customerService) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Customer>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await customerService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<Customer>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<Customer>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await customerService.GetAllAsync(pagination, cancellationToken));
 }

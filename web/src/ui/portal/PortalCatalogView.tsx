@@ -29,19 +29,19 @@ import {
 import { useMemo, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { formatUsd } from "../../lib/formatCurrency";
+import { portalTextPlain } from "../../lib/portalTextHtml";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
-import {
-  PORTAL_HERO,
-  usePortalCatalog,
-} from "../../hooks/portal/usePortalCatalog";
+import { usePortalCatalog } from "../../hooks/portal/usePortalCatalog";
+import { usePortalCatalogUrl } from "../../hooks/portal/usePortalCatalogUrl";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import {
   EmptyState,
   ErrorAlert,
   LoadingState,
   PageHeader,
   StatusChip,
+  TablePaginationBar,
 } from "../common";
-import { usePortalCatalogSearch } from "./PortalCatalogSearchContext";
 import { useCart } from "../../store/portalCartStore";
 
 type CatalogOrderControlProps = {
@@ -170,37 +170,59 @@ function CatalogOrderControl({
   return wrapCatalogSlot(stepper);
 }
 
+function CatalogDescriptionPreview({ html }: { html: string }) {
+  const plain = portalTextPlain(html);
+  if (!plain) {
+    return null;
+  }
+
+  return (
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      sx={{
+        mb: 1,
+        display: "-webkit-box",
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: "vertical",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+      }}
+    >
+      {plain}
+    </Typography>
+  );
+}
+
+function catalogItemDescriptionHtml(
+  descriptionHtml: string | null | undefined,
+  fallbackHtml: string,
+): string {
+  return descriptionHtml?.trim() || fallbackHtml;
+}
+
 export function PortalCatalogView() {
-  const { equipment } = usePortalCatalog();
-  const { search } = usePortalCatalogSearch();
-  const [categoryKey, setCategoryKey] = useState<string>("all");
+  const { getPlain, getHtml } = usePortalTexts();
+  const { search, setSearch } = usePortalCatalogUrl();
   const [view, setView] = useState<"grid" | "list">("grid");
 
-  const categories = useMemo(() => {
-    const set = new Set<string>();
-    for (const item of equipment.data ?? []) {
-      const c = item.categoryName?.trim();
-      if (c) set.add(c);
-    }
-    return [...set].sort((a, b) => a.localeCompare(b));
-  }, [equipment.data]);
+  const { equipment, categories, items, totalCount, isFiltering } =
+    usePortalCatalog(search);
 
-  const filtered = useMemo(() => {
-    const rows = equipment.data ?? [];
-    const q = search.trim().toLowerCase();
-    return rows.filter((item) => {
-      if (categoryKey !== "all") {
-        const c = item.categoryName?.trim() ?? "";
-        if (c !== categoryKey) return false;
-      }
-      if (!q) return true;
-      const hay =
-        `${item.name ?? ""} ${item.brandName ?? ""} ${item.categoryName ?? ""}`.toLowerCase();
-      return hay.includes(q);
-    });
-  }, [equipment.data, search, categoryKey]);
+  const page = search.page - 1;
+  const pageSize = search.pageSize;
+  const categoryKey = search.category;
 
-  if (equipment.isLoading) {
+  const setPage = (nextPage: number) => setSearch({ page: nextPage + 1 });
+  const setPageSize = (nextPageSize: number) =>
+    setSearch({ pageSize: nextPageSize, page: 1 });
+
+  const categoryOptions = useMemo(
+    () => categories.data ?? [],
+    [categories.data],
+  );
+
+  if (equipment.isLoading && !equipment.data) {
     return <LoadingState message="Loading catalog…" />;
   }
   if (equipment.error) {
@@ -213,8 +235,11 @@ export function PortalCatalogView() {
   }
 
   return (
-    <Box>
-      <PageHeader title={PORTAL_HERO.title} subtitle={PORTAL_HERO.body} />
+    <Box sx={{ opacity: isFiltering || equipment.isFetching ? 0.72 : 1 }}>
+      <PageHeader
+        title={getPlain("catalog.hero.title")}
+        subtitle={getPlain("catalog.hero.subtitle")}
+      />
 
       <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
@@ -258,15 +283,15 @@ export function PortalCatalogView() {
           >
             <Chip
               label="All equipment"
-              onClick={() => setCategoryKey("all")}
+              onClick={() => setSearch({ category: "all" })}
               color={categoryKey === "all" ? "primary" : "default"}
               variant={categoryKey === "all" ? "filled" : "outlined"}
             />
-            {categories.map((c) => (
+            {categoryOptions.map((c) => (
               <Chip
                 key={c}
                 label={c}
-                onClick={() => setCategoryKey(c)}
+                onClick={() => setSearch({ category: c })}
                 color={categoryKey === c ? "primary" : "default"}
                 variant={categoryKey === c ? "filled" : "outlined"}
               />
@@ -275,7 +300,7 @@ export function PortalCatalogView() {
         </CardContent>
       </Card>
 
-      {filtered.length === 0 ? (
+      {items.length === 0 ? (
         <EmptyState
           title="No equipment matches"
           description="Try another category or clear your search."
@@ -296,7 +321,7 @@ export function PortalCatalogView() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filtered.map((item) => (
+              {items.map((item) => (
                 <TableRow key={item.id} hover>
                   <TableCell sx={{ py: 0.5 }}>
                     {resolveMediaSrc(item.imageUrl) ? (
@@ -328,7 +353,7 @@ export function PortalCatalogView() {
                       </Box>
                     )}
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
+                  <TableCell>
                     <Link
                       to="/portal/equipment/$equipmentId"
                       params={{ equipmentId: String(item.id ?? 0) }}
@@ -341,6 +366,12 @@ export function PortalCatalogView() {
                     >
                       {item.name}
                     </Link>
+                    <CatalogDescriptionPreview
+                      html={catalogItemDescriptionHtml(
+                        item.descriptionHtml,
+                        getHtml("catalog.featured.fallback"),
+                      )}
+                    />
                   </TableCell>
                   <TableCell>{item.categoryName}</TableCell>
                   <TableCell>{item.brandName}</TableCell>
@@ -391,15 +422,19 @@ export function PortalCatalogView() {
         </TableContainer>
       ) : (
         <Grid container spacing={2}>
-          {filtered.map((item, index) => {
-            const featured = index === 0;
+          {items.map((item, index) => {
+            const featured = page === 0 && index === 0;
             const gridSize =
-              featured && filtered.length > 1
+              featured && items.length > 1
                 ? { xs: 12, md: 8 }
-                : featured && filtered.length === 1
+                : featured && items.length === 1
                   ? { xs: 12, md: 12 }
                   : { xs: 12, sm: 6, md: 4 };
             const catalogImg = resolveMediaSrc(item.imageUrl);
+            const descriptionHtml = catalogItemDescriptionHtml(
+              item.descriptionHtml,
+              getHtml("catalog.featured.fallback"),
+            );
             return (
               <Grid key={item.id} size={gridSize}>
                 <Card
@@ -527,20 +562,11 @@ export function PortalCatalogView() {
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      sx={{ mb: featured ? 2 : 1 }}
+                      sx={{ mb: 0.5 }}
                     >
                       {item.categoryName} · {item.brandName}
                     </Typography>
-                    {featured ? (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ mb: 2, flex: 1 }}
-                      >
-                        Reliable rental unit with transparent daily pricing. Add
-                        to your order to reserve dates at checkout.
-                      </Typography>
-                    ) : null}
+                    <CatalogDescriptionPreview html={descriptionHtml} />
                     {featured ? (
                       <Box
                         sx={{
@@ -568,7 +594,10 @@ export function PortalCatalogView() {
                         </Box>
                       </Box>
                     ) : (
-                      <Typography variant="body1" sx={{ mb: 2, flex: 1 }}>
+                      <Typography
+                        variant="body1"
+                        sx={{ mb: 2, flex: 1, mt: 1 }}
+                      >
                         <strong>{formatUsd(item.dailyRate ?? 0)}</strong> / day
                       </Typography>
                     )}
@@ -613,6 +642,14 @@ export function PortalCatalogView() {
           })}
         </Grid>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </Box>
   );
 }

@@ -15,9 +15,19 @@ public class EquipmentController(IEquipmentService equipmentService) : Controlle
 {
     [HttpGet]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(IReadOnlyList<EquipmentDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<EquipmentDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await equipmentService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<EquipmentDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<EquipmentDto>>> GetAll(
+        [FromQuery] EquipmentListQuery query,
+        CancellationToken cancellationToken) =>
+        Ok(await equipmentService.GetAllAsync(query, cancellationToken));
+
+    [HttpGet("Categories")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(IReadOnlyList<string>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<string>>> GetCatalogCategories(
+        [FromQuery] string? search,
+        CancellationToken cancellationToken) =>
+        Ok(await equipmentService.GetCatalogCategoryNamesAsync(search, cancellationToken));
 
     [HttpGet("{id:int}")]
     [AllowAnonymous]

@@ -75,8 +75,8 @@ export function EquipmentEditView({
       />
       <EquipmentForm
         control={form.control}
-        categories={categories.data}
-        brands={brands.data}
+        categories={categories.data?.items ?? undefined}
+        brands={brands.data?.items ?? undefined}
         warehouses={warehouses}
         onSubmit={handleSubmitForm}
         isPending={update.isPending}

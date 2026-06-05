@@ -1,4 +1,5 @@
 ﻿using GearHub.Api.Data;
+using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,13 +7,67 @@ namespace GearHub.Api.Repositories;
 
 public class EquipmentRepository(ApplicationDbContext dbContext) : IEquipmentRepository
 {
-    public async Task<List<Equipment>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<(List<Equipment> Items, int TotalCount)> GetPageAsync(
+        EquipmentListQuery query,
+        int skip,
+        int take,
+        CancellationToken cancellationToken = default)
     {
-        return await dbContext.Equipment
-            .Include(item => item.Category)
-            .Include(item => item.Brand)
-            .Include(item => item.Warehouse)
+        var equipmentQuery = ApplyCatalogFilters(
+            dbContext.Equipment
+                .AsNoTracking()
+                .Include(item => item.Category)
+                .Include(item => item.Brand)
+                .Include(item => item.Warehouse),
+            query);
+
+        equipmentQuery = equipmentQuery.OrderBy(item => item.Name);
+
+        var totalCount = await equipmentQuery.CountAsync(cancellationToken);
+        var items = await equipmentQuery.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        return (items, totalCount);
+    }
+
+    public async Task<IReadOnlyList<string>> GetCatalogCategoryNamesAsync(
+        string? search,
+        CancellationToken cancellationToken = default)
+    {
+        var filter = new EquipmentListQuery { Search = search };
+        var equipmentQuery = ApplyCatalogFilters(
+            dbContext.Equipment.AsNoTracking().Include(item => item.Category),
+            filter);
+
+        return await equipmentQuery
+            .Where(item => item.Category != null && item.Category!.Name != "")
+            .Select(item => item.Category!.Name)
+            .Distinct()
+            .OrderBy(name => name)
             .ToListAsync(cancellationToken);
+    }
+
+    private static IQueryable<Equipment> ApplyCatalogFilters(
+        IQueryable<Equipment> equipmentQuery,
+        EquipmentListQuery query)
+    {
+        var search = query.Search?.Trim();
+        if (!string.IsNullOrEmpty(search))
+        {
+            var pattern = $"%{search}%";
+            equipmentQuery = equipmentQuery.Where(item =>
+                EF.Functions.ILike(item.Name, pattern) ||
+                (item.Brand != null && EF.Functions.ILike(item.Brand.Name, pattern)) ||
+                (item.Category != null && EF.Functions.ILike(item.Category.Name, pattern)) ||
+                (item.DescriptionHtml != null && EF.Functions.ILike(item.DescriptionHtml, pattern)));
+        }
+
+        var category = query.Category?.Trim();
+        if (!string.IsNullOrEmpty(category))
+        {
+            equipmentQuery = equipmentQuery.Where(item =>
+                item.Category != null && item.Category.Name == category);
+        }
+
+        return equipmentQuery;
     }
 
     public async Task<Equipment?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
@@ -46,6 +101,7 @@ public class EquipmentRepository(ApplicationDbContext dbContext) : IEquipmentRep
         existing.DailyRate = equipment.DailyRate;
         existing.IsAvailable = equipment.IsAvailable;
         existing.ImageUrl = equipment.ImageUrl;
+        existing.DescriptionHtml = equipment.DescriptionHtml;
 
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;

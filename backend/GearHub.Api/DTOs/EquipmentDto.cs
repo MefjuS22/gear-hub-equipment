@@ -13,4 +13,5 @@ public class EquipmentDto
     public decimal DailyRate { get; set; }
     public bool IsAvailable { get; set; }
     public string? ImageUrl { get; set; }
+    public string? DescriptionHtml { get; set; }
 }

@@ -10,12 +10,15 @@ import {
   usePutApiWarehouseId,
 } from "../../api/generated/react-query";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { useListPagination, usePagedResult } from "../useListPagination";
 
 export function useWarehousesAdmin() {
   const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
 
-  const list = useGetApiWarehouse({ client: gearhubApiClientOptions });
+  const list = useGetApiWarehouse(params, { client: gearhubApiClientOptions });
+  const paged = usePagedResult(list.data);
 
   const invalidate = () => {
     void qc.invalidateQueries({ queryKey: getApiWarehouseQueryKey() });
@@ -67,5 +70,15 @@ export function useWarehousesAdmin() {
     },
   });
 
-  return { list, create, update, remove };
+  return {
+    list,
+    create,
+    update,
+    remove,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    ...paged,
+  };
 }

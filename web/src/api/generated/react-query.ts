@@ -4,6 +4,21 @@
  */
 
 import type {
+  Client,
+  RequestConfig,
+  ResponseErrorConfig,
+} from "@kubb/plugin-client/clients/axios";
+import type {
+  QueryKey,
+  QueryClient,
+  QueryObserverOptions,
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
+  UseMutationOptions,
+  UseMutationResult,
+} from "@tanstack/react-query";
+import type {
   DeleteApiBrandIdMutationResponse,
   DeleteApiBrandIdPathParams,
   DeleteApiBrandId400,
@@ -12,38 +27,48 @@ import type {
   GetApiAuthMeQueryResponse,
   GetApiAuthMe401,
   GetApiBrandQueryResponse,
+  GetApiBrandQueryParams,
   GetApiBrand401,
   GetApiBrandIdQueryResponse,
   GetApiBrandIdPathParams,
   GetApiBrandId401,
   GetApiBrandId404,
   GetApiCategoryQueryResponse,
+  GetApiCategoryQueryParams,
   GetApiCategory401,
   GetApiCategoryIdQueryResponse,
   GetApiCategoryIdPathParams,
   GetApiCategoryId401,
   GetApiCategoryId404,
   GetApiCmspostQueryResponse,
+  GetApiCmspostQueryParams,
   GetApiCmspost401,
   GetApiCmspostIdQueryResponse,
   GetApiCmspostIdPathParams,
   GetApiCmspostId401,
   GetApiCmspostId404,
   GetApiCmspostPublishedQueryResponse,
+  GetApiCmspostPublishedQueryParams,
   GetApiCmspostPublished401,
   GetApiCmspostPublishedSlugQueryResponse,
   GetApiCmspostPublishedSlugPathParams,
   GetApiCmspostPublishedSlug401,
   GetApiCmspostPublishedSlug404,
   GetApiCustomerQueryResponse,
+  GetApiCustomerQueryParams,
   GetApiCustomer401,
   GetApiEquipmentQueryResponse,
+  GetApiEquipmentQueryParams,
   GetApiEquipment401,
+  GetApiEquipmentCategoriesQueryResponse,
+  GetApiEquipmentCategoriesQueryParams,
+  GetApiEquipmentCategories401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
   GetApiEquipmentId401,
   GetApiEquipmentId404,
   GetApiOrderQueryResponse,
+  GetApiOrderQueryParams,
   GetApiOrder400,
   GetApiOrder401,
   GetApiOrderIdQueryResponse,
@@ -52,10 +77,22 @@ import type {
   GetApiOrderId401,
   GetApiOrderId403,
   GetApiOrderId404,
+  GetApiPortaltextQueryResponse,
+  GetApiPortaltextQueryParams,
+  GetApiPortaltext401,
+  GetApiPortaltextPublicQueryResponse,
+  GetApiPortaltextPublicQueryParams,
+  GetApiPortaltextPublic401,
+  GetApiPortaltextKeyQueryResponse,
+  GetApiPortaltextKeyPathParams,
+  GetApiPortaltextKey401,
+  GetApiPortaltextKey404,
   GetApiUsersQueryResponse,
+  GetApiUsersQueryParams,
   GetApiUsers401,
   GetApiUsers403,
   GetApiWarehouseQueryResponse,
+  GetApiWarehouseQueryParams,
   GetApiWarehouse401,
   GetApiWarehouseIdQueryResponse,
   GetApiWarehouseIdPathParams,
@@ -128,6 +165,12 @@ import type {
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
   PostApiOrderCreateorder401,
+  PutApiPortaltextKeyMutationRequest,
+  PutApiPortaltextKeyMutationResponse,
+  PutApiPortaltextKeyPathParams,
+  PutApiPortaltextKey400,
+  PutApiPortaltextKey401,
+  PutApiPortaltextKey404,
   PostApiUsersMutationRequest,
   PostApiUsersMutationResponse,
   PostApiUsers400,
@@ -161,20 +204,12 @@ import type {
   DeleteApiWarehouseId401,
   DeleteApiWarehouseId404,
 } from "./types.ts";
-import type {
-  Client,
-  RequestConfig,
-  ResponseErrorConfig,
-} from "@kubb/plugin-client/clients/axios";
-import type {
-  QueryKey,
-  QueryClient,
-  QueryObserverOptions,
-  UseQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult,
-  UseMutationOptions,
-  UseMutationResult,
+import {
+  mutationOptions,
+  useMutation,
+  queryOptions,
+  useQuery,
+  useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
   deleteApiBrandId,
@@ -189,9 +224,13 @@ import {
   getApiCmspostPublishedSlug,
   getApiCustomer,
   getApiEquipment,
+  getApiEquipmentCategories,
   getApiEquipmentId,
   getApiOrder,
   getApiOrderId,
+  getApiPortaltext,
+  getApiPortaltextPublic,
+  getApiPortaltextKey,
   getApiUsers,
   getApiWarehouse,
   getApiWarehouseId,
@@ -210,6 +249,7 @@ import {
   deleteApiEquipmentId,
   postApiFilesUpload,
   postApiOrderCreateorder,
+  putApiPortaltextKey,
   postApiUsers,
   putApiUsersIdRoles,
   deleteApiUsersId,
@@ -217,13 +257,6 @@ import {
   putApiWarehouseId,
   deleteApiWarehouseId,
 } from "./client.ts";
-import {
-  mutationOptions,
-  useMutation,
-  queryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
 
 export const getApiAuthMeQueryKey = () => [{ url: "/api/Auth/me" }] as const;
 
@@ -287,14 +320,16 @@ export function useGetApiAuthMe<
   return query;
 }
 
-export const getApiBrandQueryKey = () => [{ url: "/api/Brand" }] as const;
+export const getApiBrandQueryKey = (params?: GetApiBrandQueryParams) =>
+  [{ url: "/api/Brand" }, ...(params ? [params] : [])] as const;
 
 export type GetApiBrandQueryKey = ReturnType<typeof getApiBrandQueryKey>;
 
 export function getApiBrandQueryOptions(
+  params?: GetApiBrandQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiBrandQueryKey();
+  const queryKey = getApiBrandQueryKey(params);
   return queryOptions<
     GetApiBrandQueryResponse,
     ResponseErrorConfig<GetApiBrand401>,
@@ -303,7 +338,10 @@ export function getApiBrandQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiBrand({ ...config, signal: config.signal ?? signal });
+      return getApiBrand(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -316,6 +354,7 @@ export function useGetApiBrand<
   TQueryData = GetApiBrandQueryResponse,
   TQueryKey extends QueryKey = GetApiBrandQueryKey,
 >(
+  params?: GetApiBrandQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -331,11 +370,11 @@ export function useGetApiBrand<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiBrandQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiBrandQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiBrandQueryOptions(config),
+      ...getApiBrandQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -416,14 +455,16 @@ export function useGetApiBrandId<
   return query;
 }
 
-export const getApiCategoryQueryKey = () => [{ url: "/api/Category" }] as const;
+export const getApiCategoryQueryKey = (params?: GetApiCategoryQueryParams) =>
+  [{ url: "/api/Category" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCategoryQueryKey = ReturnType<typeof getApiCategoryQueryKey>;
 
 export function getApiCategoryQueryOptions(
+  params?: GetApiCategoryQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCategoryQueryKey();
+  const queryKey = getApiCategoryQueryKey(params);
   return queryOptions<
     GetApiCategoryQueryResponse,
     ResponseErrorConfig<GetApiCategory401>,
@@ -432,7 +473,10 @@ export function getApiCategoryQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCategory({ ...config, signal: config.signal ?? signal });
+      return getApiCategory(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -445,6 +489,7 @@ export function useGetApiCategory<
   TQueryData = GetApiCategoryQueryResponse,
   TQueryKey extends QueryKey = GetApiCategoryQueryKey,
 >(
+  params?: GetApiCategoryQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -460,11 +505,11 @@ export function useGetApiCategory<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiCategoryQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiCategoryQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiCategoryQueryOptions(config),
+      ...getApiCategoryQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -551,14 +596,16 @@ export function useGetApiCategoryId<
   return query;
 }
 
-export const getApiCmspostQueryKey = () => [{ url: "/api/CmsPost" }] as const;
+export const getApiCmspostQueryKey = (params?: GetApiCmspostQueryParams) =>
+  [{ url: "/api/CmsPost" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCmspostQueryKey = ReturnType<typeof getApiCmspostQueryKey>;
 
 export function getApiCmspostQueryOptions(
+  params?: GetApiCmspostQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCmspostQueryKey();
+  const queryKey = getApiCmspostQueryKey(params);
   return queryOptions<
     GetApiCmspostQueryResponse,
     ResponseErrorConfig<GetApiCmspost401>,
@@ -567,7 +614,10 @@ export function getApiCmspostQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCmspost({ ...config, signal: config.signal ?? signal });
+      return getApiCmspost(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -580,6 +630,7 @@ export function useGetApiCmspost<
   TQueryData = GetApiCmspostQueryResponse,
   TQueryKey extends QueryKey = GetApiCmspostQueryKey,
 >(
+  params?: GetApiCmspostQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -595,11 +646,11 @@ export function useGetApiCmspost<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiCmspostQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiCmspostQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiCmspostQueryOptions(config),
+      ...getApiCmspostQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -685,17 +736,19 @@ export function useGetApiCmspostId<
   return query;
 }
 
-export const getApiCmspostPublishedQueryKey = () =>
-  [{ url: "/api/CmsPost/Published" }] as const;
+export const getApiCmspostPublishedQueryKey = (
+  params?: GetApiCmspostPublishedQueryParams,
+) => [{ url: "/api/CmsPost/Published" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCmspostPublishedQueryKey = ReturnType<
   typeof getApiCmspostPublishedQueryKey
 >;
 
 export function getApiCmspostPublishedQueryOptions(
+  params?: GetApiCmspostPublishedQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCmspostPublishedQueryKey();
+  const queryKey = getApiCmspostPublishedQueryKey(params);
   return queryOptions<
     GetApiCmspostPublishedQueryResponse,
     ResponseErrorConfig<GetApiCmspostPublished401>,
@@ -704,7 +757,7 @@ export function getApiCmspostPublishedQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCmspostPublished({
+      return getApiCmspostPublished(params, {
         ...config,
         signal: config.signal ?? signal,
       });
@@ -720,6 +773,7 @@ export function useGetApiCmspostPublished<
   TQueryData = GetApiCmspostPublishedQueryResponse,
   TQueryKey extends QueryKey = GetApiCmspostPublishedQueryKey,
 >(
+  params?: GetApiCmspostPublishedQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -736,11 +790,11 @@ export function useGetApiCmspostPublished<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiCmspostPublishedQueryKey();
+    resolvedOptions?.queryKey ?? getApiCmspostPublishedQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiCmspostPublishedQueryOptions(config),
+      ...getApiCmspostPublishedQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -834,14 +888,16 @@ export function useGetApiCmspostPublishedSlug<
   return query;
 }
 
-export const getApiCustomerQueryKey = () => [{ url: "/api/Customer" }] as const;
+export const getApiCustomerQueryKey = (params?: GetApiCustomerQueryParams) =>
+  [{ url: "/api/Customer" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCustomerQueryKey = ReturnType<typeof getApiCustomerQueryKey>;
 
 export function getApiCustomerQueryOptions(
+  params?: GetApiCustomerQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCustomerQueryKey();
+  const queryKey = getApiCustomerQueryKey(params);
   return queryOptions<
     GetApiCustomerQueryResponse,
     ResponseErrorConfig<GetApiCustomer401>,
@@ -850,7 +906,10 @@ export function getApiCustomerQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCustomer({ ...config, signal: config.signal ?? signal });
+      return getApiCustomer(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -863,6 +922,7 @@ export function useGetApiCustomer<
   TQueryData = GetApiCustomerQueryResponse,
   TQueryKey extends QueryKey = GetApiCustomerQueryKey,
 >(
+  params?: GetApiCustomerQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -878,11 +938,11 @@ export function useGetApiCustomer<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiCustomerQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiCustomerQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiCustomerQueryOptions(config),
+      ...getApiCustomerQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -896,17 +956,18 @@ export function useGetApiCustomer<
   return query;
 }
 
-export const getApiEquipmentQueryKey = () =>
-  [{ url: "/api/Equipment" }] as const;
+export const getApiEquipmentQueryKey = (params?: GetApiEquipmentQueryParams) =>
+  [{ url: "/api/Equipment" }, ...(params ? [params] : [])] as const;
 
 export type GetApiEquipmentQueryKey = ReturnType<
   typeof getApiEquipmentQueryKey
 >;
 
 export function getApiEquipmentQueryOptions(
+  params?: GetApiEquipmentQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiEquipmentQueryKey();
+  const queryKey = getApiEquipmentQueryKey(params);
   return queryOptions<
     GetApiEquipmentQueryResponse,
     ResponseErrorConfig<GetApiEquipment401>,
@@ -915,7 +976,10 @@ export function getApiEquipmentQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiEquipment({ ...config, signal: config.signal ?? signal });
+      return getApiEquipment(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -928,6 +992,7 @@ export function useGetApiEquipment<
   TQueryData = GetApiEquipmentQueryResponse,
   TQueryKey extends QueryKey = GetApiEquipmentQueryKey,
 >(
+  params?: GetApiEquipmentQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -943,11 +1008,11 @@ export function useGetApiEquipment<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiEquipmentQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiEquipmentQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiEquipmentQueryOptions(config),
+      ...getApiEquipmentQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -955,6 +1020,80 @@ export function useGetApiEquipment<
   ) as UseQueryResult<TData, ResponseErrorConfig<GetApiEquipment401>> & {
     queryKey: TQueryKey;
   };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiEquipmentCategoriesQueryKey = (
+  params?: GetApiEquipmentCategoriesQueryParams,
+) =>
+  [{ url: "/api/Equipment/Categories" }, ...(params ? [params] : [])] as const;
+
+export type GetApiEquipmentCategoriesQueryKey = ReturnType<
+  typeof getApiEquipmentCategoriesQueryKey
+>;
+
+export function getApiEquipmentCategoriesQueryOptions(
+  params?: GetApiEquipmentCategoriesQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiEquipmentCategoriesQueryKey(params);
+  return queryOptions<
+    GetApiEquipmentCategoriesQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentCategories401>,
+    GetApiEquipmentCategoriesQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiEquipmentCategories(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Equipment/Categories}
+ */
+export function useGetApiEquipmentCategories<
+  TData = GetApiEquipmentCategoriesQueryResponse,
+  TQueryData = GetApiEquipmentCategoriesQueryResponse,
+  TQueryKey extends QueryKey = GetApiEquipmentCategoriesQueryKey,
+>(
+  params?: GetApiEquipmentCategoriesQueryParams,
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiEquipmentCategoriesQueryResponse,
+        ResponseErrorConfig<GetApiEquipmentCategories401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiEquipmentCategoriesQueryKey(params);
+
+  const query = useQuery(
+    {
+      ...getApiEquipmentCategoriesQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiEquipmentCategories401>
+  > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
 
@@ -1034,14 +1173,16 @@ export function useGetApiEquipmentId<
   return query;
 }
 
-export const getApiOrderQueryKey = () => [{ url: "/api/Order" }] as const;
+export const getApiOrderQueryKey = (params?: GetApiOrderQueryParams) =>
+  [{ url: "/api/Order" }, ...(params ? [params] : [])] as const;
 
 export type GetApiOrderQueryKey = ReturnType<typeof getApiOrderQueryKey>;
 
 export function getApiOrderQueryOptions(
+  params?: GetApiOrderQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiOrderQueryKey();
+  const queryKey = getApiOrderQueryKey(params);
   return queryOptions<
     GetApiOrderQueryResponse,
     ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>,
@@ -1050,7 +1191,10 @@ export function getApiOrderQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiOrder({ ...config, signal: config.signal ?? signal });
+      return getApiOrder(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -1063,6 +1207,7 @@ export function useGetApiOrder<
   TQueryData = GetApiOrderQueryResponse,
   TQueryKey extends QueryKey = GetApiOrderQueryKey,
 >(
+  params?: GetApiOrderQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -1078,11 +1223,11 @@ export function useGetApiOrder<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiOrderQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiOrderQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiOrderQueryOptions(config),
+      ...getApiOrderQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -1173,14 +1318,234 @@ export function useGetApiOrderId<
   return query;
 }
 
-export const getApiUsersQueryKey = () => [{ url: "/api/Users" }] as const;
+export const getApiPortaltextQueryKey = (
+  params?: GetApiPortaltextQueryParams,
+) => [{ url: "/api/PortalText" }, ...(params ? [params] : [])] as const;
+
+export type GetApiPortaltextQueryKey = ReturnType<
+  typeof getApiPortaltextQueryKey
+>;
+
+export function getApiPortaltextQueryOptions(
+  params?: GetApiPortaltextQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextQueryKey(params);
+  return queryOptions<
+    GetApiPortaltextQueryResponse,
+    ResponseErrorConfig<GetApiPortaltext401>,
+    GetApiPortaltextQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltext(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText}
+ */
+export function useGetApiPortaltext<
+  TData = GetApiPortaltextQueryResponse,
+  TQueryData = GetApiPortaltextQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextQueryKey,
+>(
+  params?: GetApiPortaltextQueryParams,
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiPortaltextQueryResponse,
+        ResponseErrorConfig<GetApiPortaltext401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextQueryKey(params);
+
+  const query = useQuery(
+    {
+      ...getApiPortaltextQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiPortaltext401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextPublicQueryKey = (
+  params?: GetApiPortaltextPublicQueryParams,
+) => [{ url: "/api/PortalText/Public" }, ...(params ? [params] : [])] as const;
+
+export type GetApiPortaltextPublicQueryKey = ReturnType<
+  typeof getApiPortaltextPublicQueryKey
+>;
+
+export function getApiPortaltextPublicQueryOptions(
+  params?: GetApiPortaltextPublicQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextPublicQueryKey(params);
+  return queryOptions<
+    GetApiPortaltextPublicQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextPublic401>,
+    GetApiPortaltextPublicQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextPublic(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/Public}
+ */
+export function useGetApiPortaltextPublic<
+  TData = GetApiPortaltextPublicQueryResponse,
+  TQueryData = GetApiPortaltextPublicQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextPublicQueryKey,
+>(
+  params?: GetApiPortaltextPublicQueryParams,
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiPortaltextPublicQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextPublic401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextPublicQueryKey(params);
+
+  const query = useQuery(
+    {
+      ...getApiPortaltextPublicQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiPortaltextPublic401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextKeyQueryKey = (
+  key: GetApiPortaltextKeyPathParams["key"],
+) => [{ url: "/api/PortalText/:key", params: { key: key } }] as const;
+
+export type GetApiPortaltextKeyQueryKey = ReturnType<
+  typeof getApiPortaltextKeyQueryKey
+>;
+
+export function getApiPortaltextKeyQueryOptions(
+  key: GetApiPortaltextKeyPathParams["key"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextKeyQueryKey(key);
+  return queryOptions<
+    GetApiPortaltextKeyQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+    GetApiPortaltextKeyQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!key,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextKey(key, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export function useGetApiPortaltextKey<
+  TData = GetApiPortaltextKeyQueryResponse,
+  TQueryData = GetApiPortaltextKeyQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextKeyQueryKey,
+>(
+  key: GetApiPortaltextKeyPathParams["key"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiPortaltextKeyQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextKeyQueryKey(key);
+
+  const query = useQuery(
+    {
+      ...getApiPortaltextKeyQueryOptions(key, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiUsersQueryKey = (params?: GetApiUsersQueryParams) =>
+  [{ url: "/api/Users" }, ...(params ? [params] : [])] as const;
 
 export type GetApiUsersQueryKey = ReturnType<typeof getApiUsersQueryKey>;
 
 export function getApiUsersQueryOptions(
+  params?: GetApiUsersQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiUsersQueryKey();
+  const queryKey = getApiUsersQueryKey(params);
   return queryOptions<
     GetApiUsersQueryResponse,
     ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
@@ -1189,7 +1554,10 @@ export function getApiUsersQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiUsers({ ...config, signal: config.signal ?? signal });
+      return getApiUsers(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -1202,6 +1570,7 @@ export function useGetApiUsers<
   TQueryData = GetApiUsersQueryResponse,
   TQueryKey extends QueryKey = GetApiUsersQueryKey,
 >(
+  params?: GetApiUsersQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -1217,11 +1586,11 @@ export function useGetApiUsers<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiUsersQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiUsersQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiUsersQueryOptions(config),
+      ...getApiUsersQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -1236,17 +1605,18 @@ export function useGetApiUsers<
   return query;
 }
 
-export const getApiWarehouseQueryKey = () =>
-  [{ url: "/api/Warehouse" }] as const;
+export const getApiWarehouseQueryKey = (params?: GetApiWarehouseQueryParams) =>
+  [{ url: "/api/Warehouse" }, ...(params ? [params] : [])] as const;
 
 export type GetApiWarehouseQueryKey = ReturnType<
   typeof getApiWarehouseQueryKey
 >;
 
 export function getApiWarehouseQueryOptions(
+  params?: GetApiWarehouseQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiWarehouseQueryKey();
+  const queryKey = getApiWarehouseQueryKey(params);
   return queryOptions<
     GetApiWarehouseQueryResponse,
     ResponseErrorConfig<GetApiWarehouse401>,
@@ -1255,7 +1625,10 @@ export function getApiWarehouseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiWarehouse({ ...config, signal: config.signal ?? signal });
+      return getApiWarehouse(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -1268,6 +1641,7 @@ export function useGetApiWarehouse<
   TQueryData = GetApiWarehouseQueryResponse,
   TQueryKey extends QueryKey = GetApiWarehouseQueryKey,
 >(
+  params?: GetApiWarehouseQueryParams,
   options: {
     query?: Partial<
       QueryObserverOptions<
@@ -1283,11 +1657,11 @@ export function useGetApiWarehouse<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiWarehouseQueryKey();
+  const queryKey = resolvedOptions?.queryKey ?? getApiWarehouseQueryKey(params);
 
   const query = useQuery(
     {
-      ...getApiWarehouseQueryOptions(config),
+      ...getApiWarehouseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as QueryObserverOptions,
@@ -1437,17 +1811,18 @@ export function useGetApiAuthMeSuspense<
   return query;
 }
 
-export const getApiBrandSuspenseQueryKey = () =>
-  [{ url: "/api/Brand" }] as const;
+export const getApiBrandSuspenseQueryKey = (params?: GetApiBrandQueryParams) =>
+  [{ url: "/api/Brand" }, ...(params ? [params] : [])] as const;
 
 export type GetApiBrandSuspenseQueryKey = ReturnType<
   typeof getApiBrandSuspenseQueryKey
 >;
 
 export function getApiBrandSuspenseQueryOptions(
+  params?: GetApiBrandQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiBrandSuspenseQueryKey();
+  const queryKey = getApiBrandSuspenseQueryKey(params);
   return queryOptions<
     GetApiBrandQueryResponse,
     ResponseErrorConfig<GetApiBrand401>,
@@ -1456,7 +1831,10 @@ export function getApiBrandSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiBrand({ ...config, signal: config.signal ?? signal });
+      return getApiBrand(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -1468,6 +1846,7 @@ export function useGetApiBrandSuspense<
   TData = GetApiBrandQueryResponse,
   TQueryKey extends QueryKey = GetApiBrandSuspenseQueryKey,
 >(
+  params?: GetApiBrandQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -1482,11 +1861,12 @@ export function useGetApiBrandSuspense<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiBrandSuspenseQueryKey();
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiBrandSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiBrandSuspenseQueryOptions(config),
+      ...getApiBrandSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -1569,17 +1949,19 @@ export function useGetApiBrandIdSuspense<
   return query;
 }
 
-export const getApiCategorySuspenseQueryKey = () =>
-  [{ url: "/api/Category" }] as const;
+export const getApiCategorySuspenseQueryKey = (
+  params?: GetApiCategoryQueryParams,
+) => [{ url: "/api/Category" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCategorySuspenseQueryKey = ReturnType<
   typeof getApiCategorySuspenseQueryKey
 >;
 
 export function getApiCategorySuspenseQueryOptions(
+  params?: GetApiCategoryQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCategorySuspenseQueryKey();
+  const queryKey = getApiCategorySuspenseQueryKey(params);
   return queryOptions<
     GetApiCategoryQueryResponse,
     ResponseErrorConfig<GetApiCategory401>,
@@ -1588,7 +1970,10 @@ export function getApiCategorySuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCategory({ ...config, signal: config.signal ?? signal });
+      return getApiCategory(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -1600,6 +1985,7 @@ export function useGetApiCategorySuspense<
   TData = GetApiCategoryQueryResponse,
   TQueryKey extends QueryKey = GetApiCategorySuspenseQueryKey,
 >(
+  params?: GetApiCategoryQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -1615,11 +2001,11 @@ export function useGetApiCategorySuspense<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiCategorySuspenseQueryKey();
+    resolvedOptions?.queryKey ?? getApiCategorySuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiCategorySuspenseQueryOptions(config),
+      ...getApiCategorySuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -1705,17 +2091,19 @@ export function useGetApiCategoryIdSuspense<
   return query;
 }
 
-export const getApiCmspostSuspenseQueryKey = () =>
-  [{ url: "/api/CmsPost" }] as const;
+export const getApiCmspostSuspenseQueryKey = (
+  params?: GetApiCmspostQueryParams,
+) => [{ url: "/api/CmsPost" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCmspostSuspenseQueryKey = ReturnType<
   typeof getApiCmspostSuspenseQueryKey
 >;
 
 export function getApiCmspostSuspenseQueryOptions(
+  params?: GetApiCmspostQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCmspostSuspenseQueryKey();
+  const queryKey = getApiCmspostSuspenseQueryKey(params);
   return queryOptions<
     GetApiCmspostQueryResponse,
     ResponseErrorConfig<GetApiCmspost401>,
@@ -1724,7 +2112,10 @@ export function getApiCmspostSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCmspost({ ...config, signal: config.signal ?? signal });
+      return getApiCmspost(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -1736,6 +2127,7 @@ export function useGetApiCmspostSuspense<
   TData = GetApiCmspostQueryResponse,
   TQueryKey extends QueryKey = GetApiCmspostSuspenseQueryKey,
 >(
+  params?: GetApiCmspostQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -1750,11 +2142,12 @@ export function useGetApiCmspostSuspense<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiCmspostSuspenseQueryKey();
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCmspostSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiCmspostSuspenseQueryOptions(config),
+      ...getApiCmspostSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -1840,17 +2233,19 @@ export function useGetApiCmspostIdSuspense<
   return query;
 }
 
-export const getApiCmspostPublishedSuspenseQueryKey = () =>
-  [{ url: "/api/CmsPost/Published" }] as const;
+export const getApiCmspostPublishedSuspenseQueryKey = (
+  params?: GetApiCmspostPublishedQueryParams,
+) => [{ url: "/api/CmsPost/Published" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCmspostPublishedSuspenseQueryKey = ReturnType<
   typeof getApiCmspostPublishedSuspenseQueryKey
 >;
 
 export function getApiCmspostPublishedSuspenseQueryOptions(
+  params?: GetApiCmspostPublishedQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCmspostPublishedSuspenseQueryKey();
+  const queryKey = getApiCmspostPublishedSuspenseQueryKey(params);
   return queryOptions<
     GetApiCmspostPublishedQueryResponse,
     ResponseErrorConfig<GetApiCmspostPublished401>,
@@ -1859,7 +2254,7 @@ export function getApiCmspostPublishedSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCmspostPublished({
+      return getApiCmspostPublished(params, {
         ...config,
         signal: config.signal ?? signal,
       });
@@ -1874,6 +2269,7 @@ export function useGetApiCmspostPublishedSuspense<
   TData = GetApiCmspostPublishedQueryResponse,
   TQueryKey extends QueryKey = GetApiCmspostPublishedSuspenseQueryKey,
 >(
+  params?: GetApiCmspostPublishedQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -1889,11 +2285,11 @@ export function useGetApiCmspostPublishedSuspense<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiCmspostPublishedSuspenseQueryKey();
+    resolvedOptions?.queryKey ?? getApiCmspostPublishedSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiCmspostPublishedSuspenseQueryOptions(config),
+      ...getApiCmspostPublishedSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -1987,17 +2383,19 @@ export function useGetApiCmspostPublishedSlugSuspense<
   return query;
 }
 
-export const getApiCustomerSuspenseQueryKey = () =>
-  [{ url: "/api/Customer" }] as const;
+export const getApiCustomerSuspenseQueryKey = (
+  params?: GetApiCustomerQueryParams,
+) => [{ url: "/api/Customer" }, ...(params ? [params] : [])] as const;
 
 export type GetApiCustomerSuspenseQueryKey = ReturnType<
   typeof getApiCustomerSuspenseQueryKey
 >;
 
 export function getApiCustomerSuspenseQueryOptions(
+  params?: GetApiCustomerQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiCustomerSuspenseQueryKey();
+  const queryKey = getApiCustomerSuspenseQueryKey(params);
   return queryOptions<
     GetApiCustomerQueryResponse,
     ResponseErrorConfig<GetApiCustomer401>,
@@ -2006,7 +2404,10 @@ export function getApiCustomerSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiCustomer({ ...config, signal: config.signal ?? signal });
+      return getApiCustomer(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -2018,6 +2419,7 @@ export function useGetApiCustomerSuspense<
   TData = GetApiCustomerQueryResponse,
   TQueryKey extends QueryKey = GetApiCustomerSuspenseQueryKey,
 >(
+  params?: GetApiCustomerQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -2033,11 +2435,11 @@ export function useGetApiCustomerSuspense<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiCustomerSuspenseQueryKey();
+    resolvedOptions?.queryKey ?? getApiCustomerSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiCustomerSuspenseQueryOptions(config),
+      ...getApiCustomerSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -2051,17 +2453,19 @@ export function useGetApiCustomerSuspense<
   return query;
 }
 
-export const getApiEquipmentSuspenseQueryKey = () =>
-  [{ url: "/api/Equipment" }] as const;
+export const getApiEquipmentSuspenseQueryKey = (
+  params?: GetApiEquipmentQueryParams,
+) => [{ url: "/api/Equipment" }, ...(params ? [params] : [])] as const;
 
 export type GetApiEquipmentSuspenseQueryKey = ReturnType<
   typeof getApiEquipmentSuspenseQueryKey
 >;
 
 export function getApiEquipmentSuspenseQueryOptions(
+  params?: GetApiEquipmentQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiEquipmentSuspenseQueryKey();
+  const queryKey = getApiEquipmentSuspenseQueryKey(params);
   return queryOptions<
     GetApiEquipmentQueryResponse,
     ResponseErrorConfig<GetApiEquipment401>,
@@ -2070,7 +2474,10 @@ export function getApiEquipmentSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiEquipment({ ...config, signal: config.signal ?? signal });
+      return getApiEquipment(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -2082,6 +2489,7 @@ export function useGetApiEquipmentSuspense<
   TData = GetApiEquipmentQueryResponse,
   TQueryKey extends QueryKey = GetApiEquipmentSuspenseQueryKey,
 >(
+  params?: GetApiEquipmentQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -2097,11 +2505,11 @@ export function useGetApiEquipmentSuspense<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiEquipmentSuspenseQueryKey();
+    resolvedOptions?.queryKey ?? getApiEquipmentSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiEquipmentSuspenseQueryOptions(config),
+      ...getApiEquipmentSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -2109,6 +2517,79 @@ export function useGetApiEquipmentSuspense<
   ) as UseSuspenseQueryResult<
     TData,
     ResponseErrorConfig<GetApiEquipment401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiEquipmentCategoriesSuspenseQueryKey = (
+  params?: GetApiEquipmentCategoriesQueryParams,
+) =>
+  [{ url: "/api/Equipment/Categories" }, ...(params ? [params] : [])] as const;
+
+export type GetApiEquipmentCategoriesSuspenseQueryKey = ReturnType<
+  typeof getApiEquipmentCategoriesSuspenseQueryKey
+>;
+
+export function getApiEquipmentCategoriesSuspenseQueryOptions(
+  params?: GetApiEquipmentCategoriesQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiEquipmentCategoriesSuspenseQueryKey(params);
+  return queryOptions<
+    GetApiEquipmentCategoriesQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentCategories401>,
+    GetApiEquipmentCategoriesQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiEquipmentCategories(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Equipment/Categories}
+ */
+export function useGetApiEquipmentCategoriesSuspense<
+  TData = GetApiEquipmentCategoriesQueryResponse,
+  TQueryKey extends QueryKey = GetApiEquipmentCategoriesSuspenseQueryKey,
+>(
+  params?: GetApiEquipmentCategoriesQueryParams,
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiEquipmentCategoriesQueryResponse,
+        ResponseErrorConfig<GetApiEquipmentCategories401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ??
+    getApiEquipmentCategoriesSuspenseQueryKey(params);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiEquipmentCategoriesSuspenseQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiEquipmentCategories401>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -2188,17 +2669,18 @@ export function useGetApiEquipmentIdSuspense<
   return query;
 }
 
-export const getApiOrderSuspenseQueryKey = () =>
-  [{ url: "/api/Order" }] as const;
+export const getApiOrderSuspenseQueryKey = (params?: GetApiOrderQueryParams) =>
+  [{ url: "/api/Order" }, ...(params ? [params] : [])] as const;
 
 export type GetApiOrderSuspenseQueryKey = ReturnType<
   typeof getApiOrderSuspenseQueryKey
 >;
 
 export function getApiOrderSuspenseQueryOptions(
+  params?: GetApiOrderQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiOrderSuspenseQueryKey();
+  const queryKey = getApiOrderSuspenseQueryKey(params);
   return queryOptions<
     GetApiOrderQueryResponse,
     ResponseErrorConfig<GetApiOrder400 | GetApiOrder401>,
@@ -2207,7 +2689,10 @@ export function getApiOrderSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiOrder({ ...config, signal: config.signal ?? signal });
+      return getApiOrder(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -2219,6 +2704,7 @@ export function useGetApiOrderSuspense<
   TData = GetApiOrderQueryResponse,
   TQueryKey extends QueryKey = GetApiOrderSuspenseQueryKey,
 >(
+  params?: GetApiOrderQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -2233,11 +2719,12 @@ export function useGetApiOrderSuspense<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiOrderSuspenseQueryKey();
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiOrderSuspenseQueryOptions(config),
+      ...getApiOrderSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -2330,17 +2817,232 @@ export function useGetApiOrderIdSuspense<
   return query;
 }
 
-export const getApiUsersSuspenseQueryKey = () =>
-  [{ url: "/api/Users" }] as const;
+export const getApiPortaltextSuspenseQueryKey = (
+  params?: GetApiPortaltextQueryParams,
+) => [{ url: "/api/PortalText" }, ...(params ? [params] : [])] as const;
+
+export type GetApiPortaltextSuspenseQueryKey = ReturnType<
+  typeof getApiPortaltextSuspenseQueryKey
+>;
+
+export function getApiPortaltextSuspenseQueryOptions(
+  params?: GetApiPortaltextQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextSuspenseQueryKey(params);
+  return queryOptions<
+    GetApiPortaltextQueryResponse,
+    ResponseErrorConfig<GetApiPortaltext401>,
+    GetApiPortaltextQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltext(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText}
+ */
+export function useGetApiPortaltextSuspense<
+  TData = GetApiPortaltextQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextSuspenseQueryKey,
+>(
+  params?: GetApiPortaltextQueryParams,
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiPortaltextQueryResponse,
+        ResponseErrorConfig<GetApiPortaltext401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextSuspenseQueryKey(params);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiPortaltextSuspenseQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltext401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextPublicSuspenseQueryKey = (
+  params?: GetApiPortaltextPublicQueryParams,
+) => [{ url: "/api/PortalText/Public" }, ...(params ? [params] : [])] as const;
+
+export type GetApiPortaltextPublicSuspenseQueryKey = ReturnType<
+  typeof getApiPortaltextPublicSuspenseQueryKey
+>;
+
+export function getApiPortaltextPublicSuspenseQueryOptions(
+  params?: GetApiPortaltextPublicQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextPublicSuspenseQueryKey(params);
+  return queryOptions<
+    GetApiPortaltextPublicQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextPublic401>,
+    GetApiPortaltextPublicQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextPublic(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/Public}
+ */
+export function useGetApiPortaltextPublicSuspense<
+  TData = GetApiPortaltextPublicQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextPublicSuspenseQueryKey,
+>(
+  params?: GetApiPortaltextPublicQueryParams,
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiPortaltextPublicQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextPublic401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextPublicSuspenseQueryKey(params);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiPortaltextPublicSuspenseQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltextPublic401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiPortaltextKeySuspenseQueryKey = (
+  key: GetApiPortaltextKeyPathParams["key"],
+) => [{ url: "/api/PortalText/:key", params: { key: key } }] as const;
+
+export type GetApiPortaltextKeySuspenseQueryKey = ReturnType<
+  typeof getApiPortaltextKeySuspenseQueryKey
+>;
+
+export function getApiPortaltextKeySuspenseQueryOptions(
+  key: GetApiPortaltextKeyPathParams["key"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiPortaltextKeySuspenseQueryKey(key);
+  return queryOptions<
+    GetApiPortaltextKeyQueryResponse,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+    GetApiPortaltextKeyQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!key,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiPortaltextKey(key, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export function useGetApiPortaltextKeySuspense<
+  TData = GetApiPortaltextKeyQueryResponse,
+  TQueryKey extends QueryKey = GetApiPortaltextKeySuspenseQueryKey,
+>(
+  key: GetApiPortaltextKeyPathParams["key"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiPortaltextKeyQueryResponse,
+        ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiPortaltextKeySuspenseQueryKey(key);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiPortaltextKeySuspenseQueryOptions(key, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiPortaltextKey401 | GetApiPortaltextKey404>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiUsersSuspenseQueryKey = (params?: GetApiUsersQueryParams) =>
+  [{ url: "/api/Users" }, ...(params ? [params] : [])] as const;
 
 export type GetApiUsersSuspenseQueryKey = ReturnType<
   typeof getApiUsersSuspenseQueryKey
 >;
 
 export function getApiUsersSuspenseQueryOptions(
+  params?: GetApiUsersQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiUsersSuspenseQueryKey();
+  const queryKey = getApiUsersSuspenseQueryKey(params);
   return queryOptions<
     GetApiUsersQueryResponse,
     ResponseErrorConfig<GetApiUsers401 | GetApiUsers403>,
@@ -2349,7 +3051,10 @@ export function getApiUsersSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiUsers({ ...config, signal: config.signal ?? signal });
+      return getApiUsers(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -2361,6 +3066,7 @@ export function useGetApiUsersSuspense<
   TData = GetApiUsersQueryResponse,
   TQueryKey extends QueryKey = GetApiUsersSuspenseQueryKey,
 >(
+  params?: GetApiUsersQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -2375,11 +3081,12 @@ export function useGetApiUsersSuspense<
 ) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
-  const queryKey = resolvedOptions?.queryKey ?? getApiUsersSuspenseQueryKey();
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiUsersSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiUsersSuspenseQueryOptions(config),
+      ...getApiUsersSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -2394,17 +3101,19 @@ export function useGetApiUsersSuspense<
   return query;
 }
 
-export const getApiWarehouseSuspenseQueryKey = () =>
-  [{ url: "/api/Warehouse" }] as const;
+export const getApiWarehouseSuspenseQueryKey = (
+  params?: GetApiWarehouseQueryParams,
+) => [{ url: "/api/Warehouse" }, ...(params ? [params] : [])] as const;
 
 export type GetApiWarehouseSuspenseQueryKey = ReturnType<
   typeof getApiWarehouseSuspenseQueryKey
 >;
 
 export function getApiWarehouseSuspenseQueryOptions(
+  params?: GetApiWarehouseQueryParams,
   config: Partial<RequestConfig> & { client?: Client } = {},
 ) {
-  const queryKey = getApiWarehouseSuspenseQueryKey();
+  const queryKey = getApiWarehouseSuspenseQueryKey(params);
   return queryOptions<
     GetApiWarehouseQueryResponse,
     ResponseErrorConfig<GetApiWarehouse401>,
@@ -2413,7 +3122,10 @@ export function getApiWarehouseSuspenseQueryOptions(
   >({
     queryKey,
     queryFn: async ({ signal }) => {
-      return getApiWarehouse({ ...config, signal: config.signal ?? signal });
+      return getApiWarehouse(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
     },
   });
 }
@@ -2425,6 +3137,7 @@ export function useGetApiWarehouseSuspense<
   TData = GetApiWarehouseQueryResponse,
   TQueryKey extends QueryKey = GetApiWarehouseSuspenseQueryKey,
 >(
+  params?: GetApiWarehouseQueryParams,
   options: {
     query?: Partial<
       UseSuspenseQueryOptions<
@@ -2440,11 +3153,11 @@ export function useGetApiWarehouseSuspense<
   const { query: queryConfig = {}, client: config = {} } = options ?? {};
   const { client: queryClient, ...resolvedOptions } = queryConfig;
   const queryKey =
-    resolvedOptions?.queryKey ?? getApiWarehouseSuspenseQueryKey();
+    resolvedOptions?.queryKey ?? getApiWarehouseSuspenseQueryKey(params);
 
   const query = useSuspenseQuery(
     {
-      ...getApiWarehouseSuspenseQueryOptions(config),
+      ...getApiWarehouseSuspenseQueryOptions(params, config),
       ...resolvedOptions,
       queryKey,
     } as unknown as UseSuspenseQueryOptions,
@@ -3830,6 +4543,107 @@ export function usePostApiOrderCreateorder<TContext>(
       PostApiOrderCreateorder400 | PostApiOrderCreateorder401
     >,
     { data?: PostApiOrderCreateorderMutationRequest },
+    TContext
+  >;
+}
+
+export const putApiPortaltextKeyMutationKey = () =>
+  [{ url: "/api/PortalText/:key" }] as const;
+
+export type PutApiPortaltextKeyMutationKey = ReturnType<
+  typeof putApiPortaltextKeyMutationKey
+>;
+
+export function putApiPortaltextKeyMutationOptions<TContext = unknown>(
+  config: Partial<RequestConfig<PutApiPortaltextKeyMutationRequest>> & {
+    client?: Client;
+  } = {},
+) {
+  const mutationKey = putApiPortaltextKeyMutationKey();
+  return mutationOptions<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
+    TContext
+  >({
+    mutationKey,
+    mutationFn: async ({ key, data }) => {
+      return putApiPortaltextKey(key, data, config);
+    },
+  });
+}
+
+/**
+ * {@link /api/PortalText/:key}
+ */
+export function usePutApiPortaltextKey<TContext>(
+  options: {
+    mutation?: UseMutationOptions<
+      PutApiPortaltextKeyMutationResponse,
+      ResponseErrorConfig<
+        PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+      >,
+      {
+        key: PutApiPortaltextKeyPathParams["key"];
+        data?: PutApiPortaltextKeyMutationRequest;
+      },
+      TContext
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig<PutApiPortaltextKeyMutationRequest>> & {
+      client?: Client;
+    };
+  } = {},
+) {
+  const { mutation = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...mutationOptions } = mutation;
+  const mutationKey =
+    mutationOptions.mutationKey ?? putApiPortaltextKeyMutationKey();
+
+  const baseOptions = putApiPortaltextKeyMutationOptions(
+    config,
+  ) as UseMutationOptions<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
+    TContext
+  >;
+
+  return useMutation<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
+    TContext
+  >(
+    {
+      ...baseOptions,
+      mutationKey,
+      ...mutationOptions,
+    },
+    queryClient,
+  ) as UseMutationResult<
+    PutApiPortaltextKeyMutationResponse,
+    ResponseErrorConfig<
+      PutApiPortaltextKey400 | PutApiPortaltextKey401 | PutApiPortaltextKey404
+    >,
+    {
+      key: PutApiPortaltextKeyPathParams["key"];
+      data?: PutApiPortaltextKeyMutationRequest;
+    },
     TContext
   >;
 }

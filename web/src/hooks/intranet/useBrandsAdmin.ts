@@ -10,12 +10,15 @@ import {
   usePutApiBrandId,
 } from "../../api/generated/react-query";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { useListPagination, usePagedResult } from "../useListPagination";
 
 export function useBrandsAdmin() {
   const { enqueueSnackbar } = useSnackbar();
   const qc = useQueryClient();
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
 
-  const list = useGetApiBrand({ client: gearhubApiClientOptions });
+  const list = useGetApiBrand(params, { client: gearhubApiClientOptions });
+  const paged = usePagedResult(list.data);
 
   const invalidate = () => {
     void qc.invalidateQueries({ queryKey: getApiBrandQueryKey() });
@@ -67,5 +70,15 @@ export function useBrandsAdmin() {
     },
   });
 
-  return { list, create, update, remove };
+  return {
+    list,
+    create,
+    update,
+    remove,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    ...paged,
+  };
 }

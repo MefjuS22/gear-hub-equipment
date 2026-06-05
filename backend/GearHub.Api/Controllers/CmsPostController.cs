@@ -15,9 +15,11 @@ public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
 {
     [HttpGet]
     [HasPermission(AppPermissions.CmsManage)]
-    [ProducesResponseType(typeof(IReadOnlyList<CmsPostListDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<CmsPostListDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await cmsPostService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<CmsPostListDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<CmsPostListDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await cmsPostService.GetAllAsync(pagination, cancellationToken));
 
     [HttpGet("{id:guid}")]
     [HasPermission(AppPermissions.CmsManage)]
@@ -39,10 +41,11 @@ public class CmsPostController(ICmsPostService cmsPostService) : ControllerBase
 
     [HttpGet("Published")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(IReadOnlyList<CmsPostPublicSummaryDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<CmsPostPublicSummaryDto>>> GetPublished(
+    [ProducesResponseType(typeof(PagedResultDto<CmsPostPublicSummaryDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<CmsPostPublicSummaryDto>>> GetPublished(
+        [FromQuery] PaginationQuery pagination,
         CancellationToken cancellationToken) =>
-        Ok(await cmsPostService.GetPublishedAsync(cancellationToken));
+        Ok(await cmsPostService.GetPublishedAsync(pagination, cancellationToken));
 
     [HttpGet("Published/{slug}")]
     [AllowAnonymous]

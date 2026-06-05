@@ -4,8 +4,16 @@ import { Link } from "@tanstack/react-router";
 import { Newspaper } from "lucide-react";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import { useGetApiCmspostPublished } from "../../api/generated/react-query";
+import { useListPagination } from "../../hooks/useListPagination";
+import { getPagedItems } from "../../lib/pagination";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
-import { EmptyState, LoadingState, PageHeader } from "../common";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
+import {
+  EmptyState,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 
 function formatPublished(iso: string | undefined) {
   if (!iso) return "";
@@ -14,9 +22,13 @@ function formatPublished(iso: string | undefined) {
 }
 
 export function PortalNewsListView() {
-  const { data, isLoading, isError } = useGetApiCmspostPublished({
+  const { getPlain } = usePortalTexts();
+  const { page, setPage, pageSize, setPageSize, params } = useListPagination();
+  const { data, isLoading, isError } = useGetApiCmspostPublished(params, {
     client: gearhubApiClientOptions,
   });
+  const posts = getPagedItems(data);
+  const totalCount = data?.totalCount ?? 0;
 
   if (isLoading) {
     return <LoadingState message="Loading news…" />;
@@ -26,9 +38,9 @@ export function PortalNewsListView() {
     return (
       <Box>
         <PageHeader
-          title="News"
+          title={getPlain("news.list.title")}
           titleVariant="h5"
-          subtitle="Updates and articles from GearHub."
+          subtitle={getPlain("news.list.subtitle")}
         />
         <Typography color="error" sx={{ mt: 2 }}>
           Could not load articles. Please try again later.
@@ -37,14 +49,12 @@ export function PortalNewsListView() {
     );
   }
 
-  const posts = data ?? [];
-
   return (
     <Box>
       <PageHeader
-        title="News"
+        title={getPlain("news.list.title")}
         titleVariant="h5"
-        subtitle="Updates, tips, and announcements from our team."
+        subtitle={getPlain("news.list.subtitle")}
       />
 
       {posts.length === 0 ? (
@@ -117,6 +127,14 @@ export function PortalNewsListView() {
           })}
         </Box>
       )}
+
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </Box>
   );
 }

@@ -1,15 +1,61 @@
+import { useMemo } from "react";
+
 import { gearhubApiClientOptions } from "../../api/clientOptions";
-import { useGetApiEquipment } from "../../api/generated/react-query";
+import {
+  useGetApiEquipment,
+  useGetApiEquipmentCategories,
+} from "../../api/generated/react-query";
+import {
+  catalogCategoriesQueryParams,
+  catalogSearchToApiParams,
+  type CatalogSearch,
+} from "../../lib/catalogSearch";
+import { getPagedItems } from "../../lib/pagination";
+import { useDebouncedValue } from "../useDebouncedValue";
 
-export const PORTAL_HERO = {
-  title: "Equipment catalog",
-  body: "Browse and reserve specialized rental equipment. Filter by category or search by name, brand, or model.",
-} as const;
+export function usePortalCatalog(search: CatalogSearch) {
+  const debouncedQ = useDebouncedValue(search.q);
+  const apiSearch = useMemo(
+    (): CatalogSearch => ({
+      ...search,
+      q: debouncedQ,
+    }),
+    [search, debouncedQ],
+  );
 
-export function usePortalCatalog() {
-  const equipment = useGetApiEquipment({
+  const equipmentParams = useMemo(
+    () => catalogSearchToApiParams(apiSearch),
+    [apiSearch],
+  );
+
+  const categoryParams = useMemo(
+    () => catalogCategoriesQueryParams(apiSearch),
+    [apiSearch],
+  );
+
+  const equipment = useGetApiEquipment(equipmentParams, {
     client: gearhubApiClientOptions,
+    query: {
+      placeholderData: (previous) => previous,
+    },
   });
 
-  return { equipment };
+  const categories = useGetApiEquipmentCategories(categoryParams, {
+    client: gearhubApiClientOptions,
+    query: {
+      placeholderData: (previous) => previous,
+    },
+  });
+
+  const items = getPagedItems(equipment.data);
+  const totalCount = equipment.data?.totalCount ?? 0;
+  const isFiltering = search.q.trim() !== debouncedQ.trim();
+
+  return {
+    equipment,
+    categories,
+    items,
+    totalCount,
+    isFiltering,
+  };
 }

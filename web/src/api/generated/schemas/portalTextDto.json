@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "key": { "type": "string", "nullable": true },
+    "title": { "type": "string", "nullable": true },
+    "placementHint": { "type": "string", "nullable": true },
+    "bodyHtml": { "type": "string", "nullable": true },
+    "sortOrder": { "type": "integer", "format": "int32" },
+    "updatedAtUtc": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "PortalTextDto"
+}

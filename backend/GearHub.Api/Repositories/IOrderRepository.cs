@@ -4,7 +4,10 @@ namespace GearHub.Api.Repositories;
 
 public interface IOrderRepository
 {
-    Task<IReadOnlyList<RentalOrder>> GetAllOrdersWithDetailsAsync(CancellationToken cancellationToken = default);
+    Task<(List<RentalOrder> Items, int TotalCount)> GetOrdersPageWithDetailsAsync(
+        int skip,
+        int take,
+        CancellationToken cancellationToken = default);
 
     Task<RentalOrder?> GetOrderByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default);
 

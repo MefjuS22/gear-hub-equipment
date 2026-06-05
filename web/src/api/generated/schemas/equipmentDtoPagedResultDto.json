@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32" },
+          "name": { "type": "string", "nullable": true },
+          "categoryId": { "type": "integer", "format": "int32" },
+          "categoryName": { "type": "string", "nullable": true },
+          "brandId": { "type": "integer", "format": "int32" },
+          "brandName": { "type": "string", "nullable": true },
+          "warehouseId": { "type": "integer", "format": "int32" },
+          "warehouseName": { "type": "string", "nullable": true },
+          "dailyRate": { "type": "number", "format": "double" },
+          "isAvailable": { "type": "boolean" },
+          "imageUrl": { "type": "string", "nullable": true },
+          "descriptionHtml": { "type": "string", "nullable": true }
+        },
+        "additionalProperties": false,
+        "x-readme-ref-name": "EquipmentDto"
+      },
+      "nullable": true
+    },
+    "page": { "type": "integer", "format": "int32" },
+    "pageSize": { "type": "integer", "format": "int32" },
+    "totalCount": { "type": "integer", "format": "int32" },
+    "totalPages": { "type": "integer", "format": "int32" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "EquipmentDtoPagedResultDto"
+}

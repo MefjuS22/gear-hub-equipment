@@ -36,6 +36,8 @@ import { Route as PortalEquipmentEquipmentIdRouteImport } from './routes/portal/
 import { Route as IntranetPortalTextsNewRouteImport } from './routes/intranet/portal-texts/new'
 import { Route as IntranetOrdersOrderIdRouteImport } from './routes/intranet/orders/$orderId'
 import { Route as IntranetEquipmentNewRouteImport } from './routes/intranet/equipment/new'
+import { Route as IntranetPortalTextsStaticIndexRouteImport } from './routes/intranet/portal-texts/static/index'
+import { Route as IntranetPortalTextsStaticEditRouteImport } from './routes/intranet/portal-texts/static/edit'
 import { Route as IntranetPortalTextsPostIdEditRouteImport } from './routes/intranet/portal-texts/$postId/edit'
 import { Route as IntranetEquipmentEquipmentIdEditRouteImport } from './routes/intranet/equipment/$equipmentId/edit'
 
@@ -177,6 +179,18 @@ const IntranetEquipmentNewRoute = IntranetEquipmentNewRouteImport.update({
   path: '/new',
   getParentRoute: () => IntranetEquipmentRouteRoute,
 } as any)
+const IntranetPortalTextsStaticIndexRoute =
+  IntranetPortalTextsStaticIndexRouteImport.update({
+    id: '/static/',
+    path: '/static/',
+    getParentRoute: () => IntranetPortalTextsRouteRoute,
+  } as any)
+const IntranetPortalTextsStaticEditRoute =
+  IntranetPortalTextsStaticEditRouteImport.update({
+    id: '/static/edit',
+    path: '/static/edit',
+    getParentRoute: () => IntranetPortalTextsRouteRoute,
+  } as any)
 const IntranetPortalTextsPostIdEditRoute =
   IntranetPortalTextsPostIdEditRouteImport.update({
     id: '/$postId/edit',
@@ -220,6 +234,8 @@ export interface FileRoutesByFullPath {
   '/portal/news/': typeof PortalNewsIndexRoute
   '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
   '/intranet/portal-texts/$postId/edit': typeof IntranetPortalTextsPostIdEditRoute
+  '/intranet/portal-texts/static/edit': typeof IntranetPortalTextsStaticEditRoute
+  '/intranet/portal-texts/static/': typeof IntranetPortalTextsStaticIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -245,6 +261,8 @@ export interface FileRoutesByTo {
   '/portal/news': typeof PortalNewsIndexRoute
   '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
   '/intranet/portal-texts/$postId/edit': typeof IntranetPortalTextsPostIdEditRoute
+  '/intranet/portal-texts/static/edit': typeof IntranetPortalTextsStaticEditRoute
+  '/intranet/portal-texts/static': typeof IntranetPortalTextsStaticIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -277,6 +295,8 @@ export interface FileRoutesById {
   '/portal/news/': typeof PortalNewsIndexRoute
   '/intranet/equipment/$equipmentId/edit': typeof IntranetEquipmentEquipmentIdEditRoute
   '/intranet/portal-texts/$postId/edit': typeof IntranetPortalTextsPostIdEditRoute
+  '/intranet/portal-texts/static/edit': typeof IntranetPortalTextsStaticEditRoute
+  '/intranet/portal-texts/static/': typeof IntranetPortalTextsStaticIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -310,6 +330,8 @@ export interface FileRouteTypes {
     | '/portal/news/'
     | '/intranet/equipment/$equipmentId/edit'
     | '/intranet/portal-texts/$postId/edit'
+    | '/intranet/portal-texts/static/edit'
+    | '/intranet/portal-texts/static/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -335,6 +357,8 @@ export interface FileRouteTypes {
     | '/portal/news'
     | '/intranet/equipment/$equipmentId/edit'
     | '/intranet/portal-texts/$postId/edit'
+    | '/intranet/portal-texts/static/edit'
+    | '/intranet/portal-texts/static'
   id:
     | '__root__'
     | '/'
@@ -366,6 +390,8 @@ export interface FileRouteTypes {
     | '/portal/news/'
     | '/intranet/equipment/$equipmentId/edit'
     | '/intranet/portal-texts/$postId/edit'
+    | '/intranet/portal-texts/static/edit'
+    | '/intranet/portal-texts/static/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -567,6 +593,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IntranetEquipmentNewRouteImport
       parentRoute: typeof IntranetEquipmentRouteRoute
     }
+    '/intranet/portal-texts/static/': {
+      id: '/intranet/portal-texts/static/'
+      path: '/static'
+      fullPath: '/intranet/portal-texts/static/'
+      preLoaderRoute: typeof IntranetPortalTextsStaticIndexRouteImport
+      parentRoute: typeof IntranetPortalTextsRouteRoute
+    }
+    '/intranet/portal-texts/static/edit': {
+      id: '/intranet/portal-texts/static/edit'
+      path: '/static/edit'
+      fullPath: '/intranet/portal-texts/static/edit'
+      preLoaderRoute: typeof IntranetPortalTextsStaticEditRouteImport
+      parentRoute: typeof IntranetPortalTextsRouteRoute
+    }
     '/intranet/portal-texts/$postId/edit': {
       id: '/intranet/portal-texts/$postId/edit'
       path: '/$postId/edit'
@@ -620,6 +660,8 @@ interface IntranetPortalTextsRouteRouteChildren {
   IntranetPortalTextsNewRoute: typeof IntranetPortalTextsNewRoute
   IntranetPortalTextsIndexRoute: typeof IntranetPortalTextsIndexRoute
   IntranetPortalTextsPostIdEditRoute: typeof IntranetPortalTextsPostIdEditRoute
+  IntranetPortalTextsStaticEditRoute: typeof IntranetPortalTextsStaticEditRoute
+  IntranetPortalTextsStaticIndexRoute: typeof IntranetPortalTextsStaticIndexRoute
 }
 
 const IntranetPortalTextsRouteRouteChildren: IntranetPortalTextsRouteRouteChildren =
@@ -627,6 +669,8 @@ const IntranetPortalTextsRouteRouteChildren: IntranetPortalTextsRouteRouteChildr
     IntranetPortalTextsNewRoute: IntranetPortalTextsNewRoute,
     IntranetPortalTextsIndexRoute: IntranetPortalTextsIndexRoute,
     IntranetPortalTextsPostIdEditRoute: IntranetPortalTextsPostIdEditRoute,
+    IntranetPortalTextsStaticEditRoute: IntranetPortalTextsStaticEditRoute,
+    IntranetPortalTextsStaticIndexRoute: IntranetPortalTextsStaticIndexRoute,
   }
 
 const IntranetPortalTextsRouteRouteWithChildren =

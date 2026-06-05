@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": { "type": "string", "nullable": true },
+          "title": { "type": "string", "nullable": true },
+          "placementHint": { "type": "string", "nullable": true },
+          "bodyHtml": { "type": "string", "nullable": true },
+          "sortOrder": { "type": "integer", "format": "int32" },
+          "updatedAtUtc": { "type": "string", "format": "date-time" }
+        },
+        "additionalProperties": false,
+        "x-readme-ref-name": "PortalTextDto"
+      },
+      "nullable": true
+    },
+    "page": { "type": "integer", "format": "int32" },
+    "pageSize": { "type": "integer", "format": "int32" },
+    "totalCount": { "type": "integer", "format": "int32" },
+    "totalPages": { "type": "integer", "format": "int32" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "PortalTextDtoPagedResultDto"
+}

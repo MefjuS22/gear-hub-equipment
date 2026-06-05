@@ -18,9 +18,11 @@ public class OrderController(IOrderService orderService) : ControllerBase
 {
     [HttpGet]
     [HasPermission(AppPermissions.OrdersRead)]
-    [ProducesResponseType(typeof(IReadOnlyList<RentalOrderListDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<RentalOrderListDto>>> GetAll(CancellationToken cancellationToken) =>
-        Ok(await orderService.GetAllAsync(cancellationToken));
+    [ProducesResponseType(typeof(PagedResultDto<RentalOrderListDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResultDto<RentalOrderListDto>>> GetAll(
+        [FromQuery] PaginationQuery pagination,
+        CancellationToken cancellationToken) =>
+        Ok(await orderService.GetAllAsync(pagination, cancellationToken));
 
     /// <summary>
     /// Order detail for the placing user or a user with the Admin role (resolved from the database).

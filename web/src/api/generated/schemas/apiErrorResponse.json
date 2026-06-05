@@ -23,6 +23,7 @@
         "cmsPostNotFound",
         "cmsPostSlugTaken",
         "fileUploadInvalid",
+        "portalTextNotFound",
         "authInvalidCredentials",
         "authRoleNotFound",
         "authForbidden",

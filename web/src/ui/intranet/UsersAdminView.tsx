@@ -36,21 +36,22 @@ import {
   type SetStaffUserRolesFormValues,
 } from "../../lib/formSchemas";
 import { useAuth } from "../../providers/AuthProvider";
-import { EmptyState, ErrorAlert, LoadingState, PageHeader } from "../common";
+import {
+  EmptyState,
+  ErrorAlert,
+  LoadingState,
+  PageHeader,
+  TablePaginationBar,
+} from "../common";
 
 function rolesToFlags(roles: string[]): SetStaffUserRolesFormValues {
   return {
-    admin: roles.some(
-      (r) => r.toLowerCase() === AppRoles.Admin.toLowerCase(),
-    ),
+    admin: roles.some((r) => r.toLowerCase() === AppRoles.Admin.toLowerCase()),
     user: roles.some((r) => r.toLowerCase() === AppRoles.User.toLowerCase()),
   };
 }
 
-function flagsToRoles(flags: {
-  admin: boolean;
-  user: boolean;
-}): string[] {
+function flagsToRoles(flags: { admin: boolean; user: boolean }): string[] {
   const r: string[] = [];
   if (flags.admin) {
     r.push(AppRoles.Admin);
@@ -69,7 +70,18 @@ function roleSorter(a: string, b: string) {
 
 export function UsersAdminView() {
   const { user: currentUser } = useAuth();
-  const { list, create, setRoles, remove } = useUsersAdmin();
+  const {
+    list,
+    create,
+    setRoles,
+    remove,
+    items,
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+  } = useUsersAdmin();
   const [createOpen, setCreateOpen] = useState(false);
   const [rolesUser, setRolesUser] = useState<UserAdminListDto | null>(null);
   const [deleteUser, setDeleteUser] = useState<UserAdminListDto | null>(null);
@@ -171,7 +183,7 @@ export function UsersAdminView() {
     );
   }
 
-  const rows = list.data ?? [];
+  const rows = items;
 
   return (
     <Box>
@@ -217,7 +229,12 @@ export function UsersAdminView() {
                     <TableCell>
                       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                         {sortedRoles.map((r) => (
-                          <Chip key={r} label={r} size="small" variant="outlined" />
+                          <Chip
+                            key={r}
+                            label={r}
+                            size="small"
+                            variant="outlined"
+                          />
                         ))}
                       </Box>
                     </TableCell>
@@ -241,9 +258,7 @@ export function UsersAdminView() {
                         </Button>
                         <Tooltip
                           title={
-                            isSelf
-                              ? "You cannot delete your own account."
-                              : ""
+                            isSelf ? "You cannot delete your own account." : ""
                           }
                         >
                           <span>
@@ -269,6 +284,14 @@ export function UsersAdminView() {
         </TableContainer>
       )}
 
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
+
       <Dialog
         open={createOpen}
         onClose={() => !pending && closeCreate()}
@@ -283,7 +306,9 @@ export function UsersAdminView() {
             void onCreateSubmit();
           }}
         >
-          <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+          <DialogContent
+            sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+          >
             <Controller
               name="email"
               control={createForm.control}
@@ -397,9 +422,7 @@ export function UsersAdminView() {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>
-          Roles for {rolesUser?.email ?? "…"}
-        </DialogTitle>
+        <DialogTitle>Roles for {rolesUser?.email ?? "…"}</DialogTitle>
         <Box
           component="form"
           onSubmit={(e) => {
@@ -448,7 +471,12 @@ export function UsersAdminView() {
               />
             </FormGroup>
             {rolesForm.formState.errors.admin?.message && (
-              <Typography variant="caption" color="error" component="p" sx={{ mt: 1 }}>
+              <Typography
+                variant="caption"
+                color="error"
+                component="p"
+                sx={{ mt: 1 }}
+              >
                 {rolesForm.formState.errors.admin.message}
               </Typography>
             )}
@@ -474,7 +502,9 @@ export function UsersAdminView() {
         <DialogContent>
           <Typography>
             Remove{" "}
-            <strong>{deleteUser?.email ?? deleteUser?.displayName ?? "this user"}</strong>
+            <strong>
+              {deleteUser?.email ?? deleteUser?.displayName ?? "this user"}
+            </strong>
             ? This cannot be undone. Users with rental orders cannot be deleted.
           </Typography>
         </DialogContent>

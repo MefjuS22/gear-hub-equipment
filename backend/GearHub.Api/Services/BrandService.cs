@@ -8,14 +8,15 @@ namespace GearHub.Api.Services;
 
 public class BrandService(ApplicationDbContext dbContext) : IBrandService
 {
-    public async Task<IReadOnlyList<BrandLookupDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<BrandLookupDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        var brands = await dbContext.Brands
-            .AsNoTracking()
-            .OrderBy(brand => brand.Name)
-            .ToListAsync(cancellationToken);
-
-        return brands.Select(ToLookupDto).ToList();
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.Brands.AsNoTracking().OrderBy(brand => brand.Name);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var brands = await query.Skip(skip).Take(pageSize).ToListAsync(cancellationToken);
+        return Pagination.Create(brands.Select(ToLookupDto).ToList(), page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<BrandLookupDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)

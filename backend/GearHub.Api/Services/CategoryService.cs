@@ -8,14 +8,15 @@ namespace GearHub.Api.Services;
 
 public class CategoryService(ApplicationDbContext dbContext) : ICategoryService
 {
-    public async Task<IReadOnlyList<CategoryLookupDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<CategoryLookupDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        var categories = await dbContext.Categories
-            .AsNoTracking()
-            .OrderBy(category => category.Name)
-            .ToListAsync(cancellationToken);
-
-        return categories.Select(ToLookupDto).ToList();
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.Categories.AsNoTracking().OrderBy(category => category.Name);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var categories = await query.Skip(skip).Take(pageSize).ToListAsync(cancellationToken);
+        return Pagination.Create(categories.Select(ToLookupDto).ToList(), page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<CategoryLookupDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)

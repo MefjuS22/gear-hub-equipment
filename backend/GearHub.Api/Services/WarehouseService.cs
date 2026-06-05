@@ -8,14 +8,15 @@ namespace GearHub.Api.Services;
 
 public class WarehouseService(ApplicationDbContext dbContext) : IWarehouseService
 {
-    public async Task<IReadOnlyList<WarehouseLookupDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<PagedResultDto<WarehouseLookupDto>> GetAllAsync(
+        PaginationQuery pagination,
+        CancellationToken cancellationToken = default)
     {
-        var warehouses = await dbContext.Warehouses
-            .AsNoTracking()
-            .OrderBy(w => w.Name)
-            .ToListAsync(cancellationToken);
-
-        return warehouses.Select(ToLookupDto).ToList();
+        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var query = dbContext.Warehouses.AsNoTracking().OrderBy(w => w.Name);
+        var totalCount = await query.CountAsync(cancellationToken);
+        var warehouses = await query.Skip(skip).Take(pageSize).ToListAsync(cancellationToken);
+        return Pagination.Create(warehouses.Select(ToLookupDto).ToList(), page, pageSize, totalCount);
     }
 
     public async Task<ServiceResult<WarehouseLookupDto>> GetByIdAsync(int id, CancellationToken cancellationToken = default)

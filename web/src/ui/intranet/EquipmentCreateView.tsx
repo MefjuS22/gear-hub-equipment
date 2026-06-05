@@ -38,8 +38,8 @@ export function EquipmentCreateView() {
       />
       <EquipmentForm
         control={form.control}
-        categories={categories.data}
-        brands={brands.data}
+        categories={categories.data?.items ?? undefined}
+        brands={brands.data?.items ?? undefined}
         warehouses={warehouses}
         onSubmit={() => void handleSubmitForm()}
         isPending={create.isPending}

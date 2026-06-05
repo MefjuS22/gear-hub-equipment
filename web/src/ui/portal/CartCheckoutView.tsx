@@ -30,6 +30,7 @@ import {
 } from "../../hooks/portal/useCartCheckout";
 import { formatUsd } from "../../lib/formatCurrency";
 import { countRentalPeriodDays } from "../../lib/rentalPeriodDays";
+import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
 import { useAuth } from "../../providers/AuthProvider";
 import { EmptyState, ErrorAlert, PageHeader, SectionCard } from "../common";
 
@@ -38,10 +39,7 @@ const CHECKOUT_AUTH_REDIRECT = "/portal/cart";
 function summaryEstimatedTotal(summary: PortalLastOrderSummary): number {
   const days = countRentalPeriodDays(summary.rentalStart, summary.rentalEnd);
   return (
-    summary.lines.reduce(
-      (sum, l) => sum + l.dailyRate * l.quantity,
-      0,
-    ) * days
+    summary.lines.reduce((sum, l) => sum + l.dailyRate * l.quantity, 0) * days
   );
 }
 
@@ -75,8 +73,8 @@ function OrderConfirmationSummary({
         icon={<CheckCircle2 size={22} aria-hidden />}
         sx={{ mb: 2 }}
       >
-        Thank you. A summary of your order is below. You can start a new order anytime from the
-        catalog.
+        Thank you. A summary of your order is below. You can start a new order
+        anytime from the catalog.
       </Alert>
 
       <Grid container spacing={3}>
@@ -127,15 +125,23 @@ function OrderConfirmationSummary({
                       return (
                         <TableRow key={l.equipmentId}>
                           <TableCell>
-                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ fontWeight: 600 }}
+                            >
                               {l.name}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
                               ID #{l.equipmentId}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">{l.quantity}</TableCell>
-                          <TableCell align="right">{formatUsd(l.dailyRate)}</TableCell>
+                          <TableCell align="right">
+                            {formatUsd(l.dailyRate)}
+                          </TableCell>
                           <TableCell align="right">{formatUsd(line)}</TableCell>
                         </TableRow>
                       );
@@ -177,7 +183,12 @@ function OrderConfirmationSummary({
         >
           Browse catalog
         </Button>
-        <Button variant="outlined" color="inherit" size="large" onClick={onDismiss}>
+        <Button
+          variant="outlined"
+          color="inherit"
+          size="large"
+          onClick={onDismiss}
+        >
           Dismiss summary
         </Button>
       </Stack>
@@ -187,6 +198,7 @@ function OrderConfirmationSummary({
 
 export function CartCheckoutView() {
   const { isAuthenticated } = useAuth();
+  const { getPlain } = usePortalTexts();
   const {
     form,
     handleSubmitForm,
@@ -223,8 +235,8 @@ export function CartCheckoutView() {
           subtitle="Configure client details and rental parameters, then confirm your equipment cart."
         />
         <EmptyState
-          title="Your cart is empty"
-          description="Add items from the catalog to build a rental order."
+          title={getPlain("cart.empty.title")}
+          description={getPlain("cart.empty.body")}
           icon={ShoppingCart}
         />
       </Box>
@@ -355,8 +367,8 @@ export function CartCheckoutView() {
                 add client details and submit the order.
               </Alert>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Rental orders must be tied to a signed-in account. Sign in or create
-                an account to continue.
+                Rental orders must be tied to a signed-in account. Sign in or
+                create an account to continue.
               </Typography>
               <Stack spacing={1.5}>
                 <Link
@@ -386,7 +398,12 @@ export function CartCheckoutView() {
                     display: "block",
                   }}
                 >
-                  <Button variant="outlined" color="primary" size="large" fullWidth>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    fullWidth
+                  >
                     Create account
                   </Button>
                 </Link>

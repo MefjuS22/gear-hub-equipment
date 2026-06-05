@@ -13,11 +13,12 @@ import {
 import { Users } from "lucide-react";
 import type { Customer } from "../../api/generated/types";
 import { useCustomersAdmin } from "../../hooks/intranet/useCustomersAdmin";
-import { EmptyState } from "../common";
+import { EmptyState, TablePaginationBar } from "../common";
 
 export function CustomersAdminView() {
-  const { list } = useCustomersAdmin();
-  const rows = list.data ?? [];
+  const { list, items, page, setPage, pageSize, setPageSize, totalCount } =
+    useCustomersAdmin();
+  const rows = items;
 
   if (list.isLoading) {
     return (
@@ -65,6 +66,13 @@ export function CustomersAdminView() {
           </Table>
         </TableContainer>
       )}
+      <TablePaginationBar
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
     </div>
   );
 }
