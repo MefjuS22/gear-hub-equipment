@@ -46,6 +46,7 @@ public class EquipmentRepository(ApplicationDbContext dbContext) : IEquipmentRep
         existing.DailyRate = equipment.DailyRate;
         existing.IsAvailable = equipment.IsAvailable;
         existing.ImageUrl = equipment.ImageUrl;
+        existing.DescriptionHtml = equipment.DescriptionHtml;
 
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
