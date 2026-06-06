@@ -7,6 +7,7 @@
              mc:Ignorable="d">
     <views:ViewControllerBase.Resources>
         <views:InverseBooleanConverter x:Key="InverseBool" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
     </views:ViewControllerBase.Resources>
 
@@ -83,6 +84,26 @@
                       CanUserDeleteRows="False"
                       SelectionMode="Single">
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="" Width="64">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Width="48" Height="48">
+                                    <Border Background="#F0F0F0" CornerRadius="4"
+                                            Visibility="{Binding HasThumbnail, Converter={StaticResource InverseBool}, FallbackValue=Visible}" />
+                                    <TextBlock Text="—"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Foreground="#888888"
+                                               Visibility="{Binding HasThumbnail, Converter={StaticResource InverseBool}}" />
+                                    <Image Source="{Binding Thumbnail}"
+                                           Width="48"
+                                           Height="48"
+                                           Stretch="UniformToFill"
+                                           Visibility="{Binding HasThumbnail, Converter={StaticResource BoolToVisibility}}" />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="160" />
                     <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="120" />
                     <DataGridTextColumn Header="Brand" Binding="{Binding BrandName}" Width="120" />

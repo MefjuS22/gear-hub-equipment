@@ -1,6 +1,9 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
@@ -14,6 +17,7 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
     private readonly GearHubApiClient _api;
     private readonly ICartService _cart;
     private readonly IAppNavigation _navigation;
+    private readonly IRemoteImageService _images;
 
     private string _searchText = string.Empty;
     private string? _selectedCategory;
@@ -21,11 +25,16 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
     private int _totalPages = 1;
     private int _totalCount;
 
-    public CatalogView(GearHubApiClient api, ICartService cart, IAppNavigation navigation)
+    public CatalogView(
+        GearHubApiClient api,
+        ICartService cart,
+        IAppNavigation navigation,
+        IRemoteImageService images)
     {
         _api = api;
         _cart = cart;
         _navigation = navigation;
+        _images = images;
         InitializeComponent();
         DataContext = this;
         Items = [];
@@ -33,7 +42,7 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
         SelectedCategory = Categories[0];
     }
 
-    public ObservableCollection<EquipmentDto> Items { get; }
+    public ObservableCollection<CatalogRow> Items { get; }
 
     public ObservableCollection<string> Categories { get; }
 
@@ -91,24 +100,24 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
 
     private void Open_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is not Button { DataContext: EquipmentDto item })
+        if (sender is not Button { DataContext: CatalogRow row })
         {
             return;
         }
 
-        _navigation.NavigateTo("portal-equipment", item.Id);
+        _navigation.NavigateTo("portal-equipment", row.Id);
     }
 
     private async void AddToCart_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is not Button { DataContext: EquipmentDto item })
+        if (sender is not Button { DataContext: CatalogRow row })
         {
             return;
         }
 
-        _cart.Add(item);
+        _cart.Add(row.Equipment);
         await _cart.SaveAsync();
-        StatusMessage = $"Added {item.Name} to cart.";
+        StatusMessage = $"Added {row.Name} to cart.";
     }
 
     private async Task LoadCategoriesAsync()
@@ -146,13 +155,25 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
         _page = result.Page;
 
         Items.Clear();
-        foreach (var item in result.Items)
+        var rows = result.Items.Select(item => new CatalogRow(item)).ToList();
+        foreach (var row in rows)
         {
-            Items.Add(item);
+            Items.Add(row);
         }
+
+        _ = LoadThumbnailsAsync(rows);
 
         RaisePaginationProperties();
         StatusMessage = Items.Count == 0 ? "No equipment found." : null;
+    }
+
+    private async Task LoadThumbnailsAsync(IReadOnlyList<CatalogRow> rows)
+    {
+        foreach (var row in rows)
+        {
+            var thumbnail = await _images.LoadAsync(row.Equipment.ImageUrl);
+            row.Thumbnail = thumbnail;
+        }
     }
 
     private void RaisePaginationProperties()
@@ -160,5 +181,49 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
         RaisePropertyChanged(nameof(PaginationLabel));
         RaisePropertyChanged(nameof(CanGoPrevious));
         RaisePropertyChanged(nameof(CanGoNext));
+    }
+
+    public sealed class CatalogRow : INotifyPropertyChanged
+    {
+        private BitmapImage? _thumbnail;
+
+        public CatalogRow(EquipmentDto equipment)
+        {
+            Equipment = equipment;
+        }
+
+        public EquipmentDto Equipment { get; }
+
+        public int Id => Equipment.Id;
+
+        public string Name => Equipment.Name;
+
+        public string CategoryName => Equipment.CategoryName;
+
+        public string BrandName => Equipment.BrandName;
+
+        public decimal DailyRate => Equipment.DailyRate;
+
+        public bool IsAvailable => Equipment.IsAvailable;
+
+        public BitmapImage? Thumbnail
+        {
+            get => _thumbnail;
+            set
+            {
+                if (Equals(_thumbnail, value))
+                {
+                    return;
+                }
+
+                _thumbnail = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Thumbnail)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasThumbnail)));
+            }
+        }
+
+        public bool HasThumbnail => Thumbnail is not null;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

@@ -43,7 +43,13 @@
                     Style="{StaticResource BusyAwareButton}"
                     DockPanel.Dock="Right"
                     Padding="12,6"
+                    Margin="0,0,8,0"
                     Click="Add_Click" />
+            <Button Content="Delete"
+                    Style="{StaticResource BusyAwareButton}"
+                    DockPanel.Dock="Right"
+                    Padding="12,6"
+                    Click="Delete_Click" />
         </DockPanel>
 
         <StackPanel Grid.Row="2" Margin="0,0,0,8">
@@ -53,6 +59,7 @@
 
         <ListBox Grid.Row="3"
                  ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}"
                  FontFamily="Consolas" />
 
         <Border Grid.Row="3"

@@ -138,6 +138,9 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
                 _services.GetRequiredService<OrderDetailView>(),
                 view => view.LoadAsync(orderId)),
             "staff-equipment" => CreateAndLoad<EquipmentAdminView>(),
+            "staff-equipment-form" when parameter is EquipmentFormNavigation nav => CreateAndLoad(
+                _services.GetRequiredService<EquipmentFormView>(),
+                view => view.LoadAsync(nav.EquipmentId)),
             "staff-customers" => CreateAndLoad<CustomersView>(),
             "staff-categories" => CreateAndLoad<CategoriesView>(),
             "staff-brands" => CreateAndLoad<BrandsView>(),

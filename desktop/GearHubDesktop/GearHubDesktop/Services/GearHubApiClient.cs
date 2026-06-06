@@ -88,15 +88,54 @@ public sealed class GearHubApiClient
         return await ApiJson.ReadAsync<EquipmentDto>(response);
     }
 
+    public async Task<EquipmentDto> CreateEquipmentAsync(EquipmentUpsertDto dto)
+    {
+        var response = await _http.PostAsJsonAsync("api/Equipment", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<EquipmentDto>(response);
+    }
+
+    public async Task UpdateEquipmentAsync(int id, EquipmentUpsertDto dto)
+    {
+        var response = await _http.PutAsJsonAsync($"api/Equipment/{id}", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
+    public async Task DeleteEquipmentAsync(int id)
+    {
+        var response = await _http.DeleteAsync($"api/Equipment/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
+    public async Task<FileUploadResponseDto> UploadFileAsync(string filePath, string folder = "general")
+    {
+        await using var stream = File.OpenRead(filePath);
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new StreamContent(stream);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+        content.Add(fileContent, "file", Path.GetFileName(filePath));
+        content.Add(new StringContent(folder), "folder");
+
+        var response = await _http.PostAsync("api/Files/upload", content);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<FileUploadResponseDto>(response);
+    }
+
     public async Task<PagedResultDto<RentalOrderListDto>> GetOrdersAsync(
         int page,
         int pageSize,
-        string? search = null)
+        string? search = null,
+        DateTime? orderDateFrom = null,
+        DateTime? orderDateTo = null,
+        int? customerId = null)
     {
         var query = BuildQuery(
             ("page", page.ToString()),
             ("pageSize", pageSize.ToString()),
-            ("search", search));
+            ("search", search),
+            ("orderDateFrom", orderDateFrom?.ToString("yyyy-MM-dd")),
+            ("orderDateTo", orderDateTo?.ToString("yyyy-MM-dd")),
+            ("customerId", customerId?.ToString()));
         var response = await _http.GetAsync($"api/Order{query}");
         await ApiJson.EnsureSuccessAsync(response);
         return await ApiJson.ReadAsync<PagedResultDto<RentalOrderListDto>>(response);
@@ -151,6 +190,12 @@ public sealed class GearHubApiClient
         await ApiJson.EnsureSuccessAsync(response);
     }
 
+    public async Task DeleteBrandAsync(int id)
+    {
+        var response = await _http.DeleteAsync($"api/Brand/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
     public async Task<PagedResultDto<CategoryLookupDto>> GetCategoriesAsync(int page, int pageSize)
     {
         var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));
@@ -165,6 +210,12 @@ public sealed class GearHubApiClient
             "api/Category",
             new CategoryUpsertDto { Name = name, Description = string.Empty },
             ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
+    public async Task DeleteCategoryAsync(int id)
+    {
+        var response = await _http.DeleteAsync($"api/Category/{id}");
         await ApiJson.EnsureSuccessAsync(response);
     }
 
@@ -185,12 +236,25 @@ public sealed class GearHubApiClient
         await ApiJson.EnsureSuccessAsync(response);
     }
 
+    public async Task DeleteWarehouseAsync(int id)
+    {
+        var response = await _http.DeleteAsync($"api/Warehouse/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
     public async Task<PagedResultDto<UserAdminListDto>> GetUsersAsync(int page, int pageSize)
     {
         var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));
         var response = await _http.GetAsync($"api/Users{query}");
         await ApiJson.EnsureSuccessAsync(response);
         return await ApiJson.ReadAsync<PagedResultDto<UserAdminListDto>>(response);
+    }
+
+    public async Task<UserAdminListDto> CreateUserAsync(CreateUserAdminDto dto)
+    {
+        var response = await _http.PostAsJsonAsync("api/Users", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<UserAdminListDto>(response);
     }
 
     public async Task<PagedResultDto<CmsPostPublicSummaryDto>> GetPublishedNewsAsync(int page, int pageSize)

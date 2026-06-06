@@ -13,16 +13,22 @@ public partial class EquipmentDetailView : ViewControllerBase
     private readonly GearHubApiClient _api;
     private readonly ICartService _cart;
     private readonly ApiSettings _settings;
+    private readonly IRemoteImageService _images;
 
     private EquipmentDto? _equipment;
     private BitmapImage? _imageSource;
     private bool _isLoading;
 
-    public EquipmentDetailView(GearHubApiClient api, ICartService cart, ApiSettings settings)
+    public EquipmentDetailView(
+        GearHubApiClient api,
+        ICartService cart,
+        ApiSettings settings,
+        IRemoteImageService images)
     {
         _api = api;
         _cart = cart;
         _settings = settings;
+        _images = images;
         InitializeComponent();
         DataContext = this;
     }
@@ -74,11 +80,12 @@ public partial class EquipmentDetailView : ViewControllerBase
         ErrorMessage = null;
         StatusMessage = null;
         IsLoading = true;
+        ImageSource = null;
         try
         {
             _equipment = await _api.GetEquipmentByIdAsync(id);
             RaiseEquipmentProperties();
-            LoadImage(_equipment.ImageUrl);
+            ImageSource = await _images.LoadAsync(_equipment.ImageUrl);
             LoadDescriptionHtml(_equipment.DescriptionHtml);
         }
         catch (Exception ex)
@@ -106,33 +113,6 @@ public partial class EquipmentDetailView : ViewControllerBase
         });
     }
 
-    private void LoadImage(string? imageUrl)
-    {
-        ImageSource = null;
-        if (string.IsNullOrWhiteSpace(imageUrl))
-        {
-            return;
-        }
-
-        try
-        {
-            var uri = imageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
-                ? new Uri(imageUrl, UriKind.Absolute)
-                : new Uri(new Uri(_settings.BaseUrl.TrimEnd('/') + "/"), imageUrl.TrimStart('/'));
-
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = uri;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            ImageSource = bitmap;
-        }
-        catch
-        {
-            ImageSource = null;
-        }
-    }
-
     private void LoadDescriptionHtml(string? html)
     {
         if (string.IsNullOrWhiteSpace(html))
@@ -141,10 +121,7 @@ public partial class EquipmentDetailView : ViewControllerBase
             return;
         }
 
-        var document =
-            "<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />" +
-            "<style>body { font-family: Segoe UI, sans-serif; font-size: 14px; color: #333; }</style>" +
-            "</head><body>" + html + "</body></html>";
+        var document = CmsHtmlHelper.BuildWebBrowserDocument(html, _settings.BaseUrl);
         DescriptionBrowser.NavigateToString(document);
     }
 

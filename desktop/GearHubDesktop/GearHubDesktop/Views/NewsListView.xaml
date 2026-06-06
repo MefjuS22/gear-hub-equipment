@@ -89,6 +89,16 @@
                         <TextBlock Text="{Binding SelectedDetailPublishedLabel}"
                                    Foreground="#666666"
                                    Margin="0,0,0,16" />
+                        <Border Background="#F4F6F8"
+                                CornerRadius="6"
+                                MaxHeight="240"
+                                Margin="0,0,0,16"
+                                Visibility="{Binding HasCoverImage, Converter={StaticResource BoolToVisibility}}">
+                            <Image Source="{Binding CoverImageSource}"
+                                   Stretch="Uniform"
+                                   MaxHeight="240"
+                                   Margin="8" />
+                        </Border>
                         <TextBlock Text="{Binding SelectedDetail.Excerpt}"
                                    TextWrapping="Wrap"
                                    Foreground="#444444"

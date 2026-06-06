@@ -47,7 +47,22 @@
                 <Button Content="Refresh"
                         Style="{StaticResource BusyAwareButton}"
                         Padding="12,6"
+                        Margin="0,0,8,0"
                         Click="Refresh_Click" />
+                <Button Content="Add"
+                        Style="{StaticResource BusyAwareButton}"
+                        Padding="12,6"
+                        Margin="0,0,8,0"
+                        Click="Add_Click" />
+                <Button Content="Edit"
+                        Style="{StaticResource BusyAwareButton}"
+                        Padding="12,6"
+                        Margin="0,0,8,0"
+                        Click="Edit_Click" />
+                <Button Content="Delete"
+                        Style="{StaticResource BusyAwareButton}"
+                        Padding="12,6"
+                        Click="Delete_Click" />
             </StackPanel>
             <Button Content="Export Excel"
                     Style="{StaticResource BusyAwareButton}"
@@ -63,9 +78,11 @@
 
         <DataGrid Grid.Row="3"
                   ItemsSource="{Binding Equipment}"
+                  SelectedItem="{Binding SelectedEquipment}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" MinWidth="140" />

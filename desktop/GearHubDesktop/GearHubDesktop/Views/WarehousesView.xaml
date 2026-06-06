@@ -37,6 +37,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"
                      Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}"
@@ -52,7 +53,13 @@
                     Content="Add"
                     Style="{StaticResource BusyAwareButton}"
                     Padding="12,6"
+                    Margin="0,0,8,0"
                     Click="Add_Click" />
+            <Button Grid.Column="3"
+                    Content="Delete"
+                    Style="{StaticResource BusyAwareButton}"
+                    Padding="12,6"
+                    Click="Delete_Click" />
         </Grid>
 
         <StackPanel Grid.Row="2" Margin="0,0,0,8">
@@ -62,6 +69,7 @@
 
         <ListBox Grid.Row="3"
                  ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}"
                  FontFamily="Consolas" />
 
         <Border Grid.Row="3"

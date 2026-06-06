@@ -2,7 +2,9 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using GearHubDesktop.DTOs;
+using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
 
@@ -13,14 +15,19 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
     private const int PageSize = 50;
 
     private readonly GearHubApiClient _api;
+    private readonly ApiSettings _settings;
+    private readonly IRemoteImageService _images;
 
     private NewsArticleRow? _selectedArticle;
     private CmsPostPublicDetailDto? _selectedDetail;
+    private BitmapImage? _coverImageSource;
     private bool _isDetailLoading;
 
-    public NewsListView(GearHubApiClient api)
+    public NewsListView(GearHubApiClient api, ApiSettings settings, IRemoteImageService images)
     {
         _api = api;
+        _settings = settings;
+        _images = images;
         InitializeComponent();
         DataContext = this;
         Articles = [];
@@ -56,6 +63,18 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
             RaisePropertyChanged(nameof(SelectedDetailExcerptVisibility));
         }
     }
+
+    public BitmapImage? CoverImageSource
+    {
+        get => _coverImageSource;
+        private set
+        {
+            SetProperty(ref _coverImageSource, value);
+            RaisePropertyChanged(nameof(HasCoverImage));
+        }
+    }
+
+    public bool HasCoverImage => CoverImageSource is not null;
 
     public bool HasSelectedDetail => SelectedDetail is not null;
 
@@ -100,6 +119,7 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
     private async Task LoadSelectedDetailAsync()
     {
         SelectedDetail = null;
+        CoverImageSource = null;
         ArticleBrowser.NavigateToString("<html><body></body></html>");
 
         if (SelectedArticle is null)
@@ -113,6 +133,7 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
         {
             var detail = await _api.GetNewsBySlugAsync(SelectedArticle.Slug);
             SelectedDetail = detail;
+            CoverImageSource = await _images.LoadAsync(detail.CoverImageUrl);
             LoadArticleHtml(detail.BodyHtml);
         }
         catch (Exception ex)
@@ -127,11 +148,13 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
 
     private void LoadArticleHtml(string html)
     {
-        var document =
-            "<html><head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />" +
-            "<style>body { font-family: Segoe UI, sans-serif; font-size: 14px; color: #333; line-height: 1.5; }</style>" +
-            "</head><body>" + html + "</body></html>";
-        ArticleBrowser.NavigateToString(document);
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            ArticleBrowser.NavigateToString("<html><body></body></html>");
+            return;
+        }
+
+        ArticleBrowser.NavigateToString(CmsHtmlHelper.BuildWebBrowserDocument(html, _settings.BaseUrl));
     }
 
     public sealed class NewsArticleRow

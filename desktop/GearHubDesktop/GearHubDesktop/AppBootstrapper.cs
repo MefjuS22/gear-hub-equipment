@@ -34,6 +34,16 @@ public sealed class AppBootstrapper
             };
             return new GearHubApiClient(http, sp.GetRequiredService<IAuthSession>());
         });
+        services.AddSingleton<IRemoteImageService>(sp =>
+        {
+            var settings = sp.GetRequiredService<ApiSettings>();
+            var http = new HttpClient
+            {
+                BaseAddress = new Uri(settings.BaseUrl.TrimEnd('/') + "/"),
+                Timeout = TimeSpan.FromSeconds(60),
+            };
+            return new RemoteImageService(http, settings);
+        });
 
         services.AddTransient<LoginView>();
         services.AddTransient<CatalogView>();
@@ -44,6 +54,7 @@ public sealed class AppBootstrapper
         services.AddTransient<OrdersView>();
         services.AddTransient<OrderDetailView>();
         services.AddTransient<EquipmentAdminView>();
+        services.AddTransient<EquipmentFormView>();
         services.AddTransient<CustomersView>();
         services.AddTransient<CategoriesView>();
         services.AddTransient<BrandsView>();

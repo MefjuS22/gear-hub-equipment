@@ -8,6 +8,7 @@ public partial class CategoriesView : ViewControllerBase, ILoadableView
 {
     private readonly GearHubApiClient _api;
     private string _newName = string.Empty;
+    private LookupListItem? _selectedItem;
 
     public CategoriesView(GearHubApiClient api)
     {
@@ -16,12 +17,18 @@ public partial class CategoriesView : ViewControllerBase, ILoadableView
         DataContext = this;
     }
 
-    public ObservableCollection<string> Items { get; } = [];
+    public ObservableCollection<LookupListItem> Items { get; } = [];
 
     public string NewName
     {
         get => _newName;
         set => SetProperty(ref _newName, value);
+    }
+
+    public LookupListItem? SelectedItem
+    {
+        get => _selectedItem;
+        set => SetProperty(ref _selectedItem, value);
     }
 
     public async Task LoadAsync() => await ReloadAsync();
@@ -43,6 +50,31 @@ public partial class CategoriesView : ViewControllerBase, ILoadableView
         });
     }
 
+    private async void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (SelectedItem is null)
+        {
+            ErrorMessage = "Select a category to delete.";
+            return;
+        }
+
+        if (System.Windows.MessageBox.Show(
+                $"Delete category \"{SelectedItem.Display}\"?",
+                "Confirm delete",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        await RunAsync(async () =>
+        {
+            await _api.DeleteCategoryAsync(SelectedItem.Id);
+            StatusMessage = "Category deleted.";
+            await ReloadCoreAsync();
+        });
+    }
+
     private async Task ReloadAsync()
     {
         await RunAsync(ReloadCoreAsync);
@@ -54,7 +86,7 @@ public partial class CategoriesView : ViewControllerBase, ILoadableView
         Items.Clear();
         foreach (var category in result.Items)
         {
-            Items.Add($"{category.Id} · {category.Name}");
+            Items.Add(new LookupListItem(category.Id, $"{category.Id} · {category.Name}"));
         }
 
         StatusMessage = $"{result.TotalCount} categor{(result.TotalCount == 1 ? "y" : "ies")} loaded.";
