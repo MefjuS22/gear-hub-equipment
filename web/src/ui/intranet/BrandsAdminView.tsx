@@ -93,7 +93,7 @@ export function BrandsAdminView() {
     <Box>
       <PageHeader
         title="Brands"
-        subtitle="Manage equipment manufacturer labels used across the catalog."
+        subtitle="Brand names used on equipment."
         actions={
           <Button
             variant="containedBlack"

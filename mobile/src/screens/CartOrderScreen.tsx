@@ -39,8 +39,8 @@ export const CartOrderScreen = ({ navigation, route }: Props) => {
       title="Rental Cart"
       subtitle={
         isAuthenticated
-          ? "Configure client details and rental parameters."
-          : "Sign in to enter order details and confirm your rental."
+          ? "Enter company details and rental dates."
+          : "Sign in to complete your order."
       }
     >
       <CartItemsCard

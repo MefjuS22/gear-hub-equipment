@@ -56,7 +56,7 @@ export function EquipmentAdminView() {
     <Box>
       <PageHeader
         title="Equipment inventory"
-        subtitle="Manage and track your active rental fleet across warehouses."
+        subtitle="Manage the rental fleet."
         actions={
           <>
             <Button

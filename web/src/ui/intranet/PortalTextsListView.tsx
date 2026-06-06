@@ -44,7 +44,7 @@ export function PortalTextsListView() {
     <Box>
       <PageHeader
         title="Portal content"
-        subtitle="Create news and articles with rich text. Published posts appear under News on the customer portal."
+        subtitle="News articles for the public site."
         actions={
           <Button
             component={Link}

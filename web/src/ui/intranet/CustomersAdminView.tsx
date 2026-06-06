@@ -49,7 +49,7 @@ export function CustomersAdminView() {
     <Box>
       <PageHeader
         title="Customers"
-        subtitle="Company accounts that place rental orders."
+        subtitle="Companies linked to rental orders."
         actions={
           <Button
             variant="outlined"
@@ -64,8 +64,8 @@ export function CustomersAdminView() {
       />
       {rows.length === 0 ? (
         <EmptyState
-          title="Coming soon"
-          description="Customer management will appear here once available."
+          title="No customers yet"
+          description="Customers are created when orders are placed."
           icon={Users}
         />
       ) : (

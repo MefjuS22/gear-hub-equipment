@@ -71,7 +71,7 @@ export function OrderDetailView({ orderId }: Props) {
     <Box>
       <PageHeader
         title={`Order #${o.id ?? orderId}`}
-        subtitle="Rental order details"
+        subtitle="Order summary"
         actions={
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             <Button

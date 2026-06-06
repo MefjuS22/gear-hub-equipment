@@ -362,8 +362,8 @@ function CartPagePreview({ overrides }: { overrides: PortalTextOverrides }) {
   return (
     <Box>
       <PageHeader
-        title="Order builder"
-        subtitle="Configure client details and rental parameters, then confirm your equipment cart."
+        title="Checkout"
+        subtitle="Add equipment from the catalog to get started."
       />
       <EmptyState
         icon={ShoppingCart}

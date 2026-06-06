@@ -45,7 +45,7 @@ export const EquipmentDetailScreen = ({ navigation, route }: Props) => {
     if (!mapped.isAvailable) {
       showInfo({
         message:
-          "This unit is currently unavailable. Pick your rental period on the catalog and we will re-check availability at checkout.",
+          "This unit is unavailable. Choose dates on the catalog — availability is checked when you order.",
       });
       return;
     }

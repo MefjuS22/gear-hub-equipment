@@ -48,14 +48,14 @@ export const INTRANET_NAV: IntranetNavItem[] = [
   {
     to: "/intranet/categories",
     label: "Categories",
-    description: "Reference list from the API.",
+    description: "Catalog categories.",
     Icon: FolderTree,
     permission: AppPermissions.CategoriesManage,
   },
   {
     to: "/intranet/brands",
     label: "Brands",
-    description: "Reference list from the API.",
+    description: "Equipment brands.",
     Icon: Tag,
     permission: AppPermissions.BrandsManage,
   },

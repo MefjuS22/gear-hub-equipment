@@ -75,12 +75,12 @@ export function DashboardStatsPanel() {
   );
 
   if (stats.isLoading) {
-    return <LoadingState message="Loading dashboard statistics…" />;
+    return <LoadingState message="Loading statistics…" />;
   }
 
   if (stats.isError || !stats.data) {
     return (
-      <ErrorAlert message="Could not load dashboard statistics. Try again later." />
+      <ErrorAlert message="Could not load statistics." />
     );
   }
 
@@ -140,7 +140,7 @@ export function DashboardStatsPanel() {
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <KpiCard
-            label="Revenue est. (30 days)"
+            label="Revenue (30 days)"
             value={formatUsd(summary.estimatedRevenueLast30Days)}
             icon={<Package size={18} aria-hidden />}
           />
@@ -209,7 +209,7 @@ export function DashboardStatsPanel() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                Estimated revenue per day (30 days)
+                Revenue per day
               </Typography>
               <LineChart
                 height={CHART_HEIGHT}
@@ -238,7 +238,7 @@ export function DashboardStatsPanel() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                Top rented equipment (30 days)
+                Top equipment
               </Typography>
               <BarChart
                 height={CHART_HEIGHT}

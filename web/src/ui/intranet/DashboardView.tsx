@@ -27,7 +27,7 @@ export function DashboardView() {
     <Box>
       <PageHeader
         title="Dashboard"
-        subtitle="Operational overview, statistics, and shortcuts to staff areas."
+        subtitle="Overview, stats, and quick links."
         actions={
           <Box
             sx={{

@@ -46,7 +46,7 @@ public class CustomerExportService(ApplicationDbContext dbContext) : ICustomerEx
             "Contact person",
             "Order count",
             "Last order date",
-            "Total est. revenue");
+            "Total revenue");
 
         var row = 2;
         foreach (var customer in customers)

@@ -132,7 +132,7 @@ public class DashboardService(ApplicationDbContext dbContext) : IDashboardServic
         {
             ("Total orders", stats.Summary.TotalOrders),
             ("Orders (last 30 days)", stats.Summary.OrdersLast30Days),
-            ("Estimated revenue (last 30 days)", stats.Summary.EstimatedRevenueLast30Days),
+            ("Revenue (last 30 days)", stats.Summary.EstimatedRevenueLast30Days),
             ("Customers", stats.Summary.TotalCustomers),
             ("Equipment items", stats.Summary.TotalEquipment),
             ("Available equipment", stats.Summary.AvailableEquipment),

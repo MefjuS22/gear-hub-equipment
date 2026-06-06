@@ -107,7 +107,7 @@ export function OrdersListView() {
       <Box>
         <PageHeader
           title="Orders"
-          subtitle="Rental orders placed through the checkout flow."
+          subtitle="Orders from the portal."
         />
         <Typography color="error" sx={{ mt: 2 }}>
           Could not load orders. Try again later.
@@ -120,7 +120,7 @@ export function OrdersListView() {
     <Box sx={{ opacity: isFiltering || list.isFetching ? 0.72 : 1 }}>
       <PageHeader
         title="Orders"
-        subtitle="Filter the list and export PDF or Excel for the current selection."
+        subtitle="Filter orders and export to PDF or Excel."
         actions={
           <>
             <Button
@@ -234,7 +234,7 @@ export function OrdersListView() {
           description={
             filtersActive
               ? "Try different filters or clear them to see all orders."
-              : "When customers complete checkout, their orders will appear here."
+              : "Orders appear here after customers place them."
           }
           icon={ClipboardList}
         />

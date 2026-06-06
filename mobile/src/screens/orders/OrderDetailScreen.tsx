@@ -188,12 +188,12 @@ export const OrderDetailScreen = ({ navigation, route }: Props) => {
               ))}
               <View style={styles.totalRow}>
                 <Text variant="titleSmall" style={styles.totalLabel}>
-                  Estimated line total (qty × unit)
+                  Line total
                 </Text>
                 <Text variant="titleMedium">${formatCurrency(lineTotal)}</Text>
               </View>
               <Text variant="bodySmall" style={styles.disclaimer}>
-                Final rental totals depend on the full rental period at booking time.
+                Totals include the full rental period.
               </Text>
             </>
           ) : (
