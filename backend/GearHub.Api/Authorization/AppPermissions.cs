@@ -17,6 +17,7 @@ public static class AppPermissions
 
     public const string OrdersRead = "orders.read";
     public const string OrdersCreate = "orders.create";
+    public const string DashboardRead = "dashboard.read";
 
     public const string CmsReadPublished = "cms.read.published";
     public const string CmsManage = "cms.manage";
@@ -35,6 +36,7 @@ public static class AppPermissions
         CustomersRead,
         OrdersRead,
         OrdersCreate,
+        DashboardRead,
         CmsReadPublished,
         CmsManage,
         FilesUpload,

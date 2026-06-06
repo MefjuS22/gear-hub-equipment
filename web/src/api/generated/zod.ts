@@ -296,6 +296,12 @@ export const createUserAdminDtoSchema = z.object({
   roles: z.array(z.string()).nullish(),
 });
 
+export const customerCheckoutOptionDtoSchema = z.object({
+  id: z.optional(z.int()),
+  companyName: z.string().nullish(),
+  contactPerson: z.string().nullish(),
+});
+
 export const customerPagedResultDtoSchema = z.object({
   get items() {
     return z.array(customerSchema).nullish();
@@ -304,6 +310,40 @@ export const customerPagedResultDtoSchema = z.object({
   pageSize: z.optional(z.int()),
   totalCount: z.optional(z.int()),
   totalPages: z.optional(z.int()),
+});
+
+export const dashboardChartPointDtoSchema = z.object({
+  label: z.string().nullish(),
+  value: z.optional(z.number()),
+});
+
+export const dashboardSummaryDtoSchema = z.object({
+  totalOrders: z.optional(z.int()),
+  ordersLast30Days: z.optional(z.int()),
+  totalCustomers: z.optional(z.int()),
+  totalEquipment: z.optional(z.int()),
+  availableEquipment: z.optional(z.int()),
+  loginsLast24Hours: z.optional(z.int()),
+  uniqueUsersLoggedInLast24Hours: z.optional(z.int()),
+  estimatedRevenueLast30Days: z.optional(z.number()),
+});
+
+export const dashboardStatsDtoSchema = z.object({
+  get summary() {
+    return dashboardSummaryDtoSchema.optional();
+  },
+  get ordersByDay() {
+    return z.array(dashboardChartPointDtoSchema).nullish();
+  },
+  get revenueByDay() {
+    return z.array(dashboardChartPointDtoSchema).nullish();
+  },
+  get topEquipment() {
+    return z.array(dashboardChartPointDtoSchema).nullish();
+  },
+  get loginsByDay() {
+    return z.array(dashboardChartPointDtoSchema).nullish();
+  },
 });
 
 export const equipmentDtoSchema = z.object({
@@ -1008,6 +1048,70 @@ export const getApiCustomerQueryResponseSchema = z.lazy(
   () => getApiCustomer200Schema,
 );
 
+/**
+ * @description OK
+ */
+export const getApiCustomerMine200Schema = z.array(
+  z.lazy(() => customerCheckoutOptionDtoSchema),
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiCustomerMine401Schema = z.lazy(() => problemDetailsSchema);
+
+export const getApiCustomerMineQueryResponseSchema = z.lazy(
+  () => getApiCustomerMine200Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiCustomerExportExcel200Schema = z.any();
+
+/**
+ * @description Unauthorized
+ */
+export const getApiCustomerExportExcel401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+export const getApiCustomerExportExcelQueryResponseSchema = z.lazy(
+  () => getApiCustomerExportExcel200Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiDashboardStats200Schema = z.lazy(
+  () => dashboardStatsDtoSchema,
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiDashboardStats401Schema = z.lazy(() => problemDetailsSchema);
+
+export const getApiDashboardStatsQueryResponseSchema = z.lazy(
+  () => getApiDashboardStats200Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiDashboardExportExcel200Schema = z.any();
+
+/**
+ * @description Unauthorized
+ */
+export const getApiDashboardExportExcel401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+export const getApiDashboardExportExcelQueryResponseSchema = z.lazy(
+  () => getApiDashboardExportExcel200Schema,
+);
+
 export const getApiEquipmentQueryParamsSchema = z
   .object({
     Search: z.optional(z.string()),
@@ -1081,6 +1185,22 @@ export const getApiEquipmentCategories401Schema = z.lazy(
 
 export const getApiEquipmentCategoriesQueryResponseSchema = z.lazy(
   () => getApiEquipmentCategories200Schema,
+);
+
+/**
+ * @description OK
+ */
+export const getApiEquipmentExportExcel200Schema = z.any();
+
+/**
+ * @description Unauthorized
+ */
+export const getApiEquipmentExportExcel401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+export const getApiEquipmentExportExcelQueryResponseSchema = z.lazy(
+  () => getApiEquipmentExportExcel200Schema,
 );
 
 export const getApiEquipmentIdPathParamsSchema = z.object({
@@ -1191,6 +1311,10 @@ export const postApiFilesUploadMutationResponseSchema = z.lazy(
 
 export const getApiOrderQueryParamsSchema = z
   .object({
+    Search: z.optional(z.string()),
+    OrderDateFrom: z.optional(z.iso.datetime()),
+    OrderDateTo: z.optional(z.iso.datetime()),
+    CustomerId: z.optional(z.coerce.number().int()),
     Page: z.optional(z.coerce.number().int()),
     PageSize: z.optional(z.coerce.number().int()),
   })
@@ -1215,6 +1339,72 @@ export const getApiOrder401Schema = z.lazy(() => problemDetailsSchema);
 
 export const getApiOrderQueryResponseSchema = z.lazy(
   () => getApiOrder200Schema,
+);
+
+export const getApiOrderExportPdfQueryParamsSchema = z
+  .object({
+    Search: z.optional(z.string()),
+    OrderDateFrom: z.optional(z.iso.datetime()),
+    OrderDateTo: z.optional(z.iso.datetime()),
+    CustomerId: z.optional(z.coerce.number().int()),
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
+/**
+ * @description OK
+ */
+export const getApiOrderExportPdf200Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const getApiOrderExportPdf400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiOrderExportPdf401Schema = z.lazy(() => problemDetailsSchema);
+
+export const getApiOrderExportPdfQueryResponseSchema = z.lazy(
+  () => getApiOrderExportPdf200Schema,
+);
+
+export const getApiOrderExportExcelQueryParamsSchema = z
+  .object({
+    Search: z.optional(z.string()),
+    OrderDateFrom: z.optional(z.iso.datetime()),
+    OrderDateTo: z.optional(z.iso.datetime()),
+    CustomerId: z.optional(z.coerce.number().int()),
+    Page: z.optional(z.coerce.number().int()),
+    PageSize: z.optional(z.coerce.number().int()),
+  })
+  .optional();
+
+/**
+ * @description OK
+ */
+export const getApiOrderExportExcel200Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const getApiOrderExportExcel400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiOrderExportExcel401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+export const getApiOrderExportExcelQueryResponseSchema = z.lazy(
+  () => getApiOrderExportExcel200Schema,
 );
 
 export const getApiOrderIdPathParamsSchema = z.object({
@@ -1248,6 +1438,40 @@ export const getApiOrderId404Schema = z.lazy(() => apiErrorResponseSchema);
 
 export const getApiOrderIdQueryResponseSchema = z.lazy(
   () => getApiOrderId200Schema,
+);
+
+export const getApiOrderIdExportPdfPathParamsSchema = z.object({
+  id: z.coerce.number().int(),
+});
+
+/**
+ * @description OK
+ */
+export const getApiOrderIdExportPdf200Schema = z.any();
+
+/**
+ * @description Bad Request
+ */
+export const getApiOrderIdExportPdf400Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+/**
+ * @description Unauthorized
+ */
+export const getApiOrderIdExportPdf401Schema = z.lazy(
+  () => problemDetailsSchema,
+);
+
+/**
+ * @description Not Found
+ */
+export const getApiOrderIdExportPdf404Schema = z.lazy(
+  () => apiErrorResponseSchema,
+);
+
+export const getApiOrderIdExportPdfQueryResponseSchema = z.lazy(
+  () => getApiOrderIdExportPdf200Schema,
 );
 
 /**

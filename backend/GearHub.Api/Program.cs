@@ -14,10 +14,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using QuestPDF.Infrastructure;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 const long maxUploadBytes = 20 * 1024 * 1024;
 builder.Services.Configure<FormOptions>(options =>
@@ -77,6 +80,10 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserAdminService, UserAdminService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IOrderExportService, OrderExportService>();
+builder.Services.AddScoped<IEquipmentExportService, EquipmentExportService>();
+builder.Services.AddScoped<ICustomerExportService, CustomerExportService>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 builder.Services.Configure<FileStorageOptions>(
@@ -134,6 +141,7 @@ using (var scope = app.Services.CreateScope())
 
     CmsTableBootstrap.EnsureCmsPostsTable(dbContext);
     PortalTextBootstrap.EnsurePortalTexts(dbContext);
+    LoginEventBootstrap.EnsureLoginEvents(dbContext);
     MediaColumnsBootstrap.EnsureMediaColumns(dbContext);
     await IdentityDataSeeder.SeedAsync(scope.ServiceProvider);
 }

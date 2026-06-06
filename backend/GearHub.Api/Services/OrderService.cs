@@ -14,11 +14,12 @@ public class OrderService(
     UserManager<ApplicationUser> userManager) : IOrderService
 {
     public async Task<PagedResultDto<RentalOrderListDto>> GetAllAsync(
-        PaginationQuery pagination,
+        OrderListQuery query,
         CancellationToken cancellationToken = default)
     {
-        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var (page, pageSize, skip) = Pagination.Normalize(query);
         var (orders, totalCount) = await orderRepository.GetOrdersPageWithDetailsAsync(
+            query,
             skip,
             pageSize,
             cancellationToken);
@@ -117,14 +118,24 @@ public class OrderService(
         {
             var company = request.CompanyName!.Trim();
             var contact = request.ContactPerson!.Trim();
-            var customer = new Customer
+            var existingCustomer =
+                await orderRepository.FindCustomerByCompanyNameAsync(company, cancellationToken);
+
+            if (existingCustomer is not null)
             {
-                CompanyName = company,
-                ContactPerson = contact,
-            };
-            dbContext.Customers.Add(customer);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            customerId = customer.Id;
+                customerId = existingCustomer.Id;
+            }
+            else
+            {
+                var customer = new Customer
+                {
+                    CompanyName = company,
+                    ContactPerson = contact,
+                };
+                dbContext.Customers.Add(customer);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                customerId = customer.Id;
+            }
         }
 
         var order = new RentalOrder

@@ -11,7 +11,9 @@ namespace GearHub.Api.Controllers;
 [Route("api/[controller]")]
 [Authorize]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-public class EquipmentController(IEquipmentService equipmentService) : ControllerBase
+public class EquipmentController(
+    IEquipmentService equipmentService,
+    IEquipmentExportService equipmentExportService) : ControllerBase
 {
     [HttpGet]
     [AllowAnonymous]
@@ -28,6 +30,20 @@ public class EquipmentController(IEquipmentService equipmentService) : Controlle
         [FromQuery] string? search,
         CancellationToken cancellationToken) =>
         Ok(await equipmentService.GetCatalogCategoryNamesAsync(search, cancellationToken));
+
+    [HttpGet("export/excel")]
+    [HasPermission(AppPermissions.EquipmentRead)]
+    [Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportExcel(CancellationToken cancellationToken)
+    {
+        var bytes = await equipmentExportService.ExportCatalogExcelAsync(cancellationToken);
+        var fileName = $"gearhub-equipment-{DateTime.UtcNow:yyyyMMdd-HHmm}.xlsx";
+        return File(
+            bytes,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            fileName);
+    }
 
     [HttpGet("{id:int}")]
     [AllowAnonymous]

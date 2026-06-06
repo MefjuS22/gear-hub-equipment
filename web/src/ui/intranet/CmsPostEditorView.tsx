@@ -95,7 +95,7 @@ export function CmsPostEditorView(props: CmsPostEditorViewProps) {
     <Box>
       <PageHeader
         title={props.mode === "create" ? "New post" : "Edit post"}
-        subtitle="Rich text articles appear on the customer portal when published."
+        subtitle="Publish articles to the news page."
         actions={
           <Button
             component={Link}

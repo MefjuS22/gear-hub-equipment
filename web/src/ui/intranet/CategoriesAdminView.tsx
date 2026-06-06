@@ -97,7 +97,7 @@ export function CategoriesAdminView() {
     <Box>
       <PageHeader
         title="Categories"
-        subtitle="Organize equipment into browseable groups for the portal and intranet."
+        subtitle="Groups for catalog filtering."
         actions={
           <Button
             variant="containedBlack"

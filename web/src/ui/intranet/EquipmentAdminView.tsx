@@ -11,10 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "@tanstack/react-router";
-import { Pencil, PlusCircle, Trash2 } from "lucide-react";
+import { Download, Pencil, PlusCircle, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { formatUsd } from "../../lib/formatCurrency";
 import { resolveMediaSrc } from "../../lib/resolveMediaSrc";
 import { AppPermissions } from "../../lib/appPermissions";
+import { downloadAuthenticatedFile } from "../../lib/downloadAuthenticatedFile";
 import { useHasPermission } from "../../hooks/usePermissionSet";
 import { useEquipmentAdmin } from "../../hooks/intranet/useEquipmentAdmin";
 import { LoadingState, PageHeader, TablePaginationBar } from "../common";
@@ -31,6 +33,20 @@ export function EquipmentAdminView() {
     totalCount,
   } = useEquipmentAdmin();
   const canManage = useHasPermission(AppPermissions.EquipmentManage);
+  const [exportingExcel, setExportingExcel] = useState(false);
+
+  const handleExportExcel = async () => {
+    setExportingExcel(true);
+    try {
+      const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
+      await downloadAuthenticatedFile({
+        path: "/api/Equipment/export/excel",
+        fileName: `gearhub-equipment-${stamp}.xlsx`,
+      });
+    } finally {
+      setExportingExcel(false);
+    }
+  };
 
   if (equipment.isLoading) {
     return <LoadingState message="Loading equipment…" />;
@@ -40,18 +56,29 @@ export function EquipmentAdminView() {
     <Box>
       <PageHeader
         title="Equipment inventory"
-        subtitle="Manage and track your active rental fleet across warehouses."
+        subtitle="Manage the rental fleet."
         actions={
-          canManage ? (
+          <>
             <Button
-              component={Link}
-              to="/intranet/equipment/new"
-              variant="containedBlack"
-              startIcon={<PlusCircle size={18} aria-hidden />}
+              variant="outlined"
+              size="small"
+              startIcon={<Download size={16} aria-hidden />}
+              disabled={exportingExcel}
+              onClick={() => void handleExportExcel()}
             >
-              Add equipment
+              Export Excel
             </Button>
-          ) : null
+            {canManage ? (
+              <Button
+                component={Link}
+                to="/intranet/equipment/new"
+                variant="containedBlack"
+                startIcon={<PlusCircle size={18} aria-hidden />}
+              >
+                Add equipment
+              </Button>
+            ) : null}
+          </>
         }
       />
       <TableContainer component={Paper} variant="outlined">

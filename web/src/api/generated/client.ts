@@ -92,6 +92,14 @@ import type {
   GetApiCustomerQueryResponse,
   GetApiCustomerQueryParams,
   GetApiCustomer401,
+  GetApiCustomerMineQueryResponse,
+  GetApiCustomerMine401,
+  GetApiCustomerExportExcelQueryResponse,
+  GetApiCustomerExportExcel401,
+  GetApiDashboardStatsQueryResponse,
+  GetApiDashboardStats401,
+  GetApiDashboardExportExcelQueryResponse,
+  GetApiDashboardExportExcel401,
   GetApiEquipmentQueryResponse,
   GetApiEquipmentQueryParams,
   GetApiEquipment401,
@@ -103,6 +111,8 @@ import type {
   GetApiEquipmentCategoriesQueryResponse,
   GetApiEquipmentCategoriesQueryParams,
   GetApiEquipmentCategories401,
+  GetApiEquipmentExportExcelQueryResponse,
+  GetApiEquipmentExportExcel401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
   GetApiEquipmentId401,
@@ -125,12 +135,25 @@ import type {
   GetApiOrderQueryParams,
   GetApiOrder400,
   GetApiOrder401,
+  GetApiOrderExportPdfQueryResponse,
+  GetApiOrderExportPdfQueryParams,
+  GetApiOrderExportPdf400,
+  GetApiOrderExportPdf401,
+  GetApiOrderExportExcelQueryResponse,
+  GetApiOrderExportExcelQueryParams,
+  GetApiOrderExportExcel400,
+  GetApiOrderExportExcel401,
   GetApiOrderIdQueryResponse,
   GetApiOrderIdPathParams,
   GetApiOrderId400,
   GetApiOrderId401,
   GetApiOrderId403,
   GetApiOrderId404,
+  GetApiOrderIdExportPdfQueryResponse,
+  GetApiOrderIdExportPdfPathParams,
+  GetApiOrderIdExportPdf400,
+  GetApiOrderIdExportPdf401,
+  GetApiOrderIdExportPdf404,
   PostApiOrderCreateorderMutationRequest,
   PostApiOrderCreateorderMutationResponse,
   PostApiOrderCreateorder400,
@@ -808,6 +831,106 @@ export async function getApiCustomer(
   return res.data;
 }
 
+function getGetApiCustomerMineUrl() {
+  const res = { method: "GET", url: `/api/Customer/mine` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Customer/mine}
+ */
+export async function getApiCustomerMine(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCustomerMineQueryResponse,
+    ResponseErrorConfig<GetApiCustomerMine401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCustomerMineUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCustomerExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Customer/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Customer/export/excel}
+ */
+export async function getApiCustomerExportExcel(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCustomerExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiCustomerExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCustomerExportExcelUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiDashboardStatsUrl() {
+  const res = { method: "GET", url: `/api/Dashboard/stats` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Dashboard/stats}
+ */
+export async function getApiDashboardStats(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiDashboardStatsQueryResponse,
+    ResponseErrorConfig<GetApiDashboardStats401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiDashboardStatsUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiDashboardExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Dashboard/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Dashboard/export/excel}
+ */
+export async function getApiDashboardExportExcel(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiDashboardExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiDashboardExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiDashboardExportExcelUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
 function getGetApiEquipmentUrl() {
   const res = { method: "GET", url: `/api/Equipment` as const };
   return res;
@@ -891,6 +1014,31 @@ export async function getApiEquipmentCategories(
     method: "GET",
     url: getGetApiEquipmentCategoriesUrl().url.toString(),
     params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiEquipmentExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Equipment/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Equipment/export/excel}
+ */
+export async function getApiEquipmentExportExcel(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiEquipmentExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiEquipmentExportExcelUrl().url.toString(),
     ...requestConfig,
   });
   return res.data;
@@ -1041,6 +1189,60 @@ export async function getApiOrder(
   return res.data;
 }
 
+function getGetApiOrderExportPdfUrl() {
+  const res = { method: "GET", url: `/api/Order/export/pdf` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Order/export/pdf}
+ */
+export async function getApiOrderExportPdf(
+  params?: GetApiOrderExportPdfQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiOrderExportPdfQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiOrderExportPdfUrl().url.toString(),
+    params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiOrderExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Order/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Order/export/excel}
+ */
+export async function getApiOrderExportExcel(
+  params?: GetApiOrderExportExcelQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiOrderExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportExcel400 | GetApiOrderExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiOrderExportExcelUrl().url.toString(),
+    params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
 function getGetApiOrderIdUrl(id: GetApiOrderIdPathParams["id"]) {
   const res = { method: "GET", url: `/api/Order/${id}` as const };
   return res;
@@ -1064,6 +1266,38 @@ export async function getApiOrderId(
   >({
     method: "GET",
     url: getGetApiOrderIdUrl(id).url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiOrderIdExportPdfUrl(
+  id: GetApiOrderIdExportPdfPathParams["id"],
+) {
+  const res = { method: "GET", url: `/api/Order/${id}/export/pdf` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Order/:id/export/pdf}
+ */
+export async function getApiOrderIdExportPdf(
+  id: GetApiOrderIdExportPdfPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiOrderIdExportPdfQueryResponse,
+    ResponseErrorConfig<
+      | GetApiOrderIdExportPdf400
+      | GetApiOrderIdExportPdf401
+      | GetApiOrderIdExportPdf404
+    >,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiOrderIdExportPdfUrl(id).url.toString(),
     ...requestConfig,
   });
   return res.data;

@@ -40,11 +40,11 @@ export const OrderDetailsCard = ({
         <Card.Title title="Sign in to continue" />
         <Card.Content style={styles.cardContent}>
           <Text variant="bodyMedium" style={styles.hint}>
-            Your cart is saved on this device. After you sign in, you can add client details and
-            submit the order.
+            Your cart is saved on this device. Sign in to enter company details
+            and place the order.
           </Text>
           <Text variant="bodyMedium" style={styles.hint}>
-            Rental orders must be tied to a signed-in account.
+            You need an account to place an order.
           </Text>
           <View style={styles.authActions}>
             <Button mode="contained" onPress={onNavigateLogin} contentStyle={styles.buttonContent}>
@@ -69,7 +69,7 @@ export const OrderDetailsCard = ({
       <Card.Content style={styles.cardContent}>
         <View>
           <Text variant="labelLarge" style={styles.fieldLabel}>
-            Client information
+            Company details
           </Text>
           <TextInput
             label="Company / organization"
@@ -100,8 +100,7 @@ export const OrderDetailsCard = ({
           </HelperText>
 
           <Text variant="bodySmall" style={styles.hint}>
-            We&apos;ll create a customer record for this rental. The order is placed under your
-            signed-in account.
+            Pick a saved company or enter a new one.
           </Text>
         </View>
 

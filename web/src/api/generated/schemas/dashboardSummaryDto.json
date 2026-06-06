@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "totalOrders": { "type": "integer", "format": "int32" },
+    "ordersLast30Days": { "type": "integer", "format": "int32" },
+    "totalCustomers": { "type": "integer", "format": "int32" },
+    "totalEquipment": { "type": "integer", "format": "int32" },
+    "availableEquipment": { "type": "integer", "format": "int32" },
+    "loginsLast24Hours": { "type": "integer", "format": "int32" },
+    "uniqueUsersLoggedInLast24Hours": { "type": "integer", "format": "int32" },
+    "estimatedRevenueLast30Days": { "type": "number", "format": "double" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "DashboardSummaryDto"
+}

@@ -57,12 +57,22 @@ import type {
   GetApiCustomerQueryResponse,
   GetApiCustomerQueryParams,
   GetApiCustomer401,
+  GetApiCustomerMineQueryResponse,
+  GetApiCustomerMine401,
+  GetApiCustomerExportExcelQueryResponse,
+  GetApiCustomerExportExcel401,
+  GetApiDashboardStatsQueryResponse,
+  GetApiDashboardStats401,
+  GetApiDashboardExportExcelQueryResponse,
+  GetApiDashboardExportExcel401,
   GetApiEquipmentQueryResponse,
   GetApiEquipmentQueryParams,
   GetApiEquipment401,
   GetApiEquipmentCategoriesQueryResponse,
   GetApiEquipmentCategoriesQueryParams,
   GetApiEquipmentCategories401,
+  GetApiEquipmentExportExcelQueryResponse,
+  GetApiEquipmentExportExcel401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
   GetApiEquipmentId401,
@@ -71,12 +81,25 @@ import type {
   GetApiOrderQueryParams,
   GetApiOrder400,
   GetApiOrder401,
+  GetApiOrderExportPdfQueryResponse,
+  GetApiOrderExportPdfQueryParams,
+  GetApiOrderExportPdf400,
+  GetApiOrderExportPdf401,
+  GetApiOrderExportExcelQueryResponse,
+  GetApiOrderExportExcelQueryParams,
+  GetApiOrderExportExcel400,
+  GetApiOrderExportExcel401,
   GetApiOrderIdQueryResponse,
   GetApiOrderIdPathParams,
   GetApiOrderId400,
   GetApiOrderId401,
   GetApiOrderId403,
   GetApiOrderId404,
+  GetApiOrderIdExportPdfQueryResponse,
+  GetApiOrderIdExportPdfPathParams,
+  GetApiOrderIdExportPdf400,
+  GetApiOrderIdExportPdf401,
+  GetApiOrderIdExportPdf404,
   GetApiPortaltextQueryResponse,
   GetApiPortaltextQueryParams,
   GetApiPortaltext401,
@@ -223,11 +246,19 @@ import {
   getApiCmspostPublished,
   getApiCmspostPublishedSlug,
   getApiCustomer,
+  getApiCustomerMine,
+  getApiCustomerExportExcel,
+  getApiDashboardStats,
+  getApiDashboardExportExcel,
   getApiEquipment,
   getApiEquipmentCategories,
+  getApiEquipmentExportExcel,
   getApiEquipmentId,
   getApiOrder,
+  getApiOrderExportPdf,
+  getApiOrderExportExcel,
   getApiOrderId,
+  getApiOrderIdExportPdf,
   getApiPortaltext,
   getApiPortaltextPublic,
   getApiPortaltextKey,
@@ -956,6 +987,279 @@ export function useGetApiCustomer<
   return query;
 }
 
+export const getApiCustomerMineQueryKey = () =>
+  [{ url: "/api/Customer/mine" }] as const;
+
+export type GetApiCustomerMineQueryKey = ReturnType<
+  typeof getApiCustomerMineQueryKey
+>;
+
+export function getApiCustomerMineQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCustomerMineQueryKey();
+  return queryOptions<
+    GetApiCustomerMineQueryResponse,
+    ResponseErrorConfig<GetApiCustomerMine401>,
+    GetApiCustomerMineQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCustomerMine({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Customer/mine}
+ */
+export function useGetApiCustomerMine<
+  TData = GetApiCustomerMineQueryResponse,
+  TQueryData = GetApiCustomerMineQueryResponse,
+  TQueryKey extends QueryKey = GetApiCustomerMineQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCustomerMineQueryResponse,
+        ResponseErrorConfig<GetApiCustomerMine401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiCustomerMineQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiCustomerMineQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiCustomerMine401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCustomerExportExcelQueryKey = () =>
+  [{ url: "/api/Customer/export/excel" }] as const;
+
+export type GetApiCustomerExportExcelQueryKey = ReturnType<
+  typeof getApiCustomerExportExcelQueryKey
+>;
+
+export function getApiCustomerExportExcelQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCustomerExportExcelQueryKey();
+  return queryOptions<
+    GetApiCustomerExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiCustomerExportExcel401>,
+    GetApiCustomerExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCustomerExportExcel({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Customer/export/excel}
+ */
+export function useGetApiCustomerExportExcel<
+  TData = GetApiCustomerExportExcelQueryResponse,
+  TQueryData = GetApiCustomerExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiCustomerExportExcelQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiCustomerExportExcelQueryResponse,
+        ResponseErrorConfig<GetApiCustomerExportExcel401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCustomerExportExcelQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiCustomerExportExcelQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCustomerExportExcel401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiDashboardStatsQueryKey = () =>
+  [{ url: "/api/Dashboard/stats" }] as const;
+
+export type GetApiDashboardStatsQueryKey = ReturnType<
+  typeof getApiDashboardStatsQueryKey
+>;
+
+export function getApiDashboardStatsQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiDashboardStatsQueryKey();
+  return queryOptions<
+    GetApiDashboardStatsQueryResponse,
+    ResponseErrorConfig<GetApiDashboardStats401>,
+    GetApiDashboardStatsQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiDashboardStats({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Dashboard/stats}
+ */
+export function useGetApiDashboardStats<
+  TData = GetApiDashboardStatsQueryResponse,
+  TQueryData = GetApiDashboardStatsQueryResponse,
+  TQueryKey extends QueryKey = GetApiDashboardStatsQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiDashboardStatsQueryResponse,
+        ResponseErrorConfig<GetApiDashboardStats401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey = resolvedOptions?.queryKey ?? getApiDashboardStatsQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiDashboardStatsQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<TData, ResponseErrorConfig<GetApiDashboardStats401>> & {
+    queryKey: TQueryKey;
+  };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiDashboardExportExcelQueryKey = () =>
+  [{ url: "/api/Dashboard/export/excel" }] as const;
+
+export type GetApiDashboardExportExcelQueryKey = ReturnType<
+  typeof getApiDashboardExportExcelQueryKey
+>;
+
+export function getApiDashboardExportExcelQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiDashboardExportExcelQueryKey();
+  return queryOptions<
+    GetApiDashboardExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiDashboardExportExcel401>,
+    GetApiDashboardExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiDashboardExportExcel({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Dashboard/export/excel}
+ */
+export function useGetApiDashboardExportExcel<
+  TData = GetApiDashboardExportExcelQueryResponse,
+  TQueryData = GetApiDashboardExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiDashboardExportExcelQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiDashboardExportExcelQueryResponse,
+        ResponseErrorConfig<GetApiDashboardExportExcel401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiDashboardExportExcelQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiDashboardExportExcelQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiDashboardExportExcel401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
 export const getApiEquipmentQueryKey = (params?: GetApiEquipmentQueryParams) =>
   [{ url: "/api/Equipment" }, ...(params ? [params] : [])] as const;
 
@@ -1093,6 +1397,76 @@ export function useGetApiEquipmentCategories<
   ) as UseQueryResult<
     TData,
     ResponseErrorConfig<GetApiEquipmentCategories401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiEquipmentExportExcelQueryKey = () =>
+  [{ url: "/api/Equipment/export/excel" }] as const;
+
+export type GetApiEquipmentExportExcelQueryKey = ReturnType<
+  typeof getApiEquipmentExportExcelQueryKey
+>;
+
+export function getApiEquipmentExportExcelQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiEquipmentExportExcelQueryKey();
+  return queryOptions<
+    GetApiEquipmentExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentExportExcel401>,
+    GetApiEquipmentExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiEquipmentExportExcel({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Equipment/export/excel}
+ */
+export function useGetApiEquipmentExportExcel<
+  TData = GetApiEquipmentExportExcelQueryResponse,
+  TQueryData = GetApiEquipmentExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiEquipmentExportExcelQueryKey,
+>(
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiEquipmentExportExcelQueryResponse,
+        ResponseErrorConfig<GetApiEquipmentExportExcel401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiEquipmentExportExcelQueryKey();
+
+  const query = useQuery(
+    {
+      ...getApiEquipmentExportExcelQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiEquipmentExportExcel401>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -1242,6 +1616,154 @@ export function useGetApiOrder<
   return query;
 }
 
+export const getApiOrderExportPdfQueryKey = (
+  params?: GetApiOrderExportPdfQueryParams,
+) => [{ url: "/api/Order/export/pdf" }, ...(params ? [params] : [])] as const;
+
+export type GetApiOrderExportPdfQueryKey = ReturnType<
+  typeof getApiOrderExportPdfQueryKey
+>;
+
+export function getApiOrderExportPdfQueryOptions(
+  params?: GetApiOrderExportPdfQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderExportPdfQueryKey(params);
+  return queryOptions<
+    GetApiOrderExportPdfQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>,
+    GetApiOrderExportPdfQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderExportPdf(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/export/pdf}
+ */
+export function useGetApiOrderExportPdf<
+  TData = GetApiOrderExportPdfQueryResponse,
+  TQueryData = GetApiOrderExportPdfQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderExportPdfQueryKey,
+>(
+  params?: GetApiOrderExportPdfQueryParams,
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiOrderExportPdfQueryResponse,
+        ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderExportPdfQueryKey(params);
+
+  const query = useQuery(
+    {
+      ...getApiOrderExportPdfQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderExportExcelQueryKey = (
+  params?: GetApiOrderExportExcelQueryParams,
+) => [{ url: "/api/Order/export/excel" }, ...(params ? [params] : [])] as const;
+
+export type GetApiOrderExportExcelQueryKey = ReturnType<
+  typeof getApiOrderExportExcelQueryKey
+>;
+
+export function getApiOrderExportExcelQueryOptions(
+  params?: GetApiOrderExportExcelQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderExportExcelQueryKey(params);
+  return queryOptions<
+    GetApiOrderExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportExcel400 | GetApiOrderExportExcel401>,
+    GetApiOrderExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderExportExcel(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/export/excel}
+ */
+export function useGetApiOrderExportExcel<
+  TData = GetApiOrderExportExcelQueryResponse,
+  TQueryData = GetApiOrderExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderExportExcelQueryKey,
+>(
+  params?: GetApiOrderExportExcelQueryParams,
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiOrderExportExcelQueryResponse,
+        ResponseErrorConfig<
+          GetApiOrderExportExcel400 | GetApiOrderExportExcel401
+        >,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderExportExcelQueryKey(params);
+
+  const query = useQuery(
+    {
+      ...getApiOrderExportExcelQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiOrderExportExcel400 | GetApiOrderExportExcel401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
 export const getApiOrderIdQueryKey = (id: GetApiOrderIdPathParams["id"]) =>
   [{ url: "/api/Order/:id", params: { id: id } }] as const;
 
@@ -1310,6 +1832,92 @@ export function useGetApiOrderId<
     TData,
     ResponseErrorConfig<
       GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderIdExportPdfQueryKey = (
+  id: GetApiOrderIdExportPdfPathParams["id"],
+) => [{ url: "/api/Order/:id/export/pdf", params: { id: id } }] as const;
+
+export type GetApiOrderIdExportPdfQueryKey = ReturnType<
+  typeof getApiOrderIdExportPdfQueryKey
+>;
+
+export function getApiOrderIdExportPdfQueryOptions(
+  id: GetApiOrderIdExportPdfPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderIdExportPdfQueryKey(id);
+  return queryOptions<
+    GetApiOrderIdExportPdfQueryResponse,
+    ResponseErrorConfig<
+      | GetApiOrderIdExportPdf400
+      | GetApiOrderIdExportPdf401
+      | GetApiOrderIdExportPdf404
+    >,
+    GetApiOrderIdExportPdfQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderIdExportPdf(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/:id/export/pdf}
+ */
+export function useGetApiOrderIdExportPdf<
+  TData = GetApiOrderIdExportPdfQueryResponse,
+  TQueryData = GetApiOrderIdExportPdfQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderIdExportPdfQueryKey,
+>(
+  id: GetApiOrderIdExportPdfPathParams["id"],
+  options: {
+    query?: Partial<
+      QueryObserverOptions<
+        GetApiOrderIdExportPdfQueryResponse,
+        ResponseErrorConfig<
+          | GetApiOrderIdExportPdf400
+          | GetApiOrderIdExportPdf401
+          | GetApiOrderIdExportPdf404
+        >,
+        TData,
+        TQueryData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderIdExportPdfQueryKey(id);
+
+  const query = useQuery(
+    {
+      ...getApiOrderIdExportPdfQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as QueryObserverOptions,
+    queryClient,
+  ) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<
+      | GetApiOrderIdExportPdf400
+      | GetApiOrderIdExportPdf401
+      | GetApiOrderIdExportPdf404
     >
   > & { queryKey: TQueryKey };
 
@@ -2453,6 +3061,275 @@ export function useGetApiCustomerSuspense<
   return query;
 }
 
+export const getApiCustomerMineSuspenseQueryKey = () =>
+  [{ url: "/api/Customer/mine" }] as const;
+
+export type GetApiCustomerMineSuspenseQueryKey = ReturnType<
+  typeof getApiCustomerMineSuspenseQueryKey
+>;
+
+export function getApiCustomerMineSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCustomerMineSuspenseQueryKey();
+  return queryOptions<
+    GetApiCustomerMineQueryResponse,
+    ResponseErrorConfig<GetApiCustomerMine401>,
+    GetApiCustomerMineQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCustomerMine({ ...config, signal: config.signal ?? signal });
+    },
+  });
+}
+
+/**
+ * {@link /api/Customer/mine}
+ */
+export function useGetApiCustomerMineSuspense<
+  TData = GetApiCustomerMineQueryResponse,
+  TQueryKey extends QueryKey = GetApiCustomerMineSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCustomerMineQueryResponse,
+        ResponseErrorConfig<GetApiCustomerMine401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCustomerMineSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCustomerMineSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCustomerMine401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiCustomerExportExcelSuspenseQueryKey = () =>
+  [{ url: "/api/Customer/export/excel" }] as const;
+
+export type GetApiCustomerExportExcelSuspenseQueryKey = ReturnType<
+  typeof getApiCustomerExportExcelSuspenseQueryKey
+>;
+
+export function getApiCustomerExportExcelSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiCustomerExportExcelSuspenseQueryKey();
+  return queryOptions<
+    GetApiCustomerExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiCustomerExportExcel401>,
+    GetApiCustomerExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiCustomerExportExcel({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Customer/export/excel}
+ */
+export function useGetApiCustomerExportExcelSuspense<
+  TData = GetApiCustomerExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiCustomerExportExcelSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiCustomerExportExcelQueryResponse,
+        ResponseErrorConfig<GetApiCustomerExportExcel401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiCustomerExportExcelSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiCustomerExportExcelSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiCustomerExportExcel401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiDashboardStatsSuspenseQueryKey = () =>
+  [{ url: "/api/Dashboard/stats" }] as const;
+
+export type GetApiDashboardStatsSuspenseQueryKey = ReturnType<
+  typeof getApiDashboardStatsSuspenseQueryKey
+>;
+
+export function getApiDashboardStatsSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiDashboardStatsSuspenseQueryKey();
+  return queryOptions<
+    GetApiDashboardStatsQueryResponse,
+    ResponseErrorConfig<GetApiDashboardStats401>,
+    GetApiDashboardStatsQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiDashboardStats({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Dashboard/stats}
+ */
+export function useGetApiDashboardStatsSuspense<
+  TData = GetApiDashboardStatsQueryResponse,
+  TQueryKey extends QueryKey = GetApiDashboardStatsSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiDashboardStatsQueryResponse,
+        ResponseErrorConfig<GetApiDashboardStats401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiDashboardStatsSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiDashboardStatsSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiDashboardStats401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiDashboardExportExcelSuspenseQueryKey = () =>
+  [{ url: "/api/Dashboard/export/excel" }] as const;
+
+export type GetApiDashboardExportExcelSuspenseQueryKey = ReturnType<
+  typeof getApiDashboardExportExcelSuspenseQueryKey
+>;
+
+export function getApiDashboardExportExcelSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiDashboardExportExcelSuspenseQueryKey();
+  return queryOptions<
+    GetApiDashboardExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiDashboardExportExcel401>,
+    GetApiDashboardExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiDashboardExportExcel({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Dashboard/export/excel}
+ */
+export function useGetApiDashboardExportExcelSuspense<
+  TData = GetApiDashboardExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiDashboardExportExcelSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiDashboardExportExcelQueryResponse,
+        ResponseErrorConfig<GetApiDashboardExportExcel401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiDashboardExportExcelSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiDashboardExportExcelSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiDashboardExportExcel401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
 export const getApiEquipmentSuspenseQueryKey = (
   params?: GetApiEquipmentQueryParams,
 ) => [{ url: "/api/Equipment" }, ...(params ? [params] : [])] as const;
@@ -2590,6 +3467,74 @@ export function useGetApiEquipmentCategoriesSuspense<
   ) as UseSuspenseQueryResult<
     TData,
     ResponseErrorConfig<GetApiEquipmentCategories401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiEquipmentExportExcelSuspenseQueryKey = () =>
+  [{ url: "/api/Equipment/export/excel" }] as const;
+
+export type GetApiEquipmentExportExcelSuspenseQueryKey = ReturnType<
+  typeof getApiEquipmentExportExcelSuspenseQueryKey
+>;
+
+export function getApiEquipmentExportExcelSuspenseQueryOptions(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiEquipmentExportExcelSuspenseQueryKey();
+  return queryOptions<
+    GetApiEquipmentExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentExportExcel401>,
+    GetApiEquipmentExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiEquipmentExportExcel({
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Equipment/export/excel}
+ */
+export function useGetApiEquipmentExportExcelSuspense<
+  TData = GetApiEquipmentExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiEquipmentExportExcelSuspenseQueryKey,
+>(
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiEquipmentExportExcelQueryResponse,
+        ResponseErrorConfig<GetApiEquipmentExportExcel401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiEquipmentExportExcelSuspenseQueryKey();
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiEquipmentExportExcelSuspenseQueryOptions(config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiEquipmentExportExcel401>
   > & { queryKey: TQueryKey };
 
   query.queryKey = queryKey as TQueryKey;
@@ -2739,6 +3684,150 @@ export function useGetApiOrderSuspense<
   return query;
 }
 
+export const getApiOrderExportPdfSuspenseQueryKey = (
+  params?: GetApiOrderExportPdfQueryParams,
+) => [{ url: "/api/Order/export/pdf" }, ...(params ? [params] : [])] as const;
+
+export type GetApiOrderExportPdfSuspenseQueryKey = ReturnType<
+  typeof getApiOrderExportPdfSuspenseQueryKey
+>;
+
+export function getApiOrderExportPdfSuspenseQueryOptions(
+  params?: GetApiOrderExportPdfQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderExportPdfSuspenseQueryKey(params);
+  return queryOptions<
+    GetApiOrderExportPdfQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>,
+    GetApiOrderExportPdfQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderExportPdf(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/export/pdf}
+ */
+export function useGetApiOrderExportPdfSuspense<
+  TData = GetApiOrderExportPdfQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderExportPdfSuspenseQueryKey,
+>(
+  params?: GetApiOrderExportPdfQueryParams,
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiOrderExportPdfQueryResponse,
+        ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderExportPdfSuspenseQueryKey(params);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiOrderExportPdfSuspenseQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiOrderExportPdf400 | GetApiOrderExportPdf401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderExportExcelSuspenseQueryKey = (
+  params?: GetApiOrderExportExcelQueryParams,
+) => [{ url: "/api/Order/export/excel" }, ...(params ? [params] : [])] as const;
+
+export type GetApiOrderExportExcelSuspenseQueryKey = ReturnType<
+  typeof getApiOrderExportExcelSuspenseQueryKey
+>;
+
+export function getApiOrderExportExcelSuspenseQueryOptions(
+  params?: GetApiOrderExportExcelQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderExportExcelSuspenseQueryKey(params);
+  return queryOptions<
+    GetApiOrderExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportExcel400 | GetApiOrderExportExcel401>,
+    GetApiOrderExportExcelQueryResponse,
+    typeof queryKey
+  >({
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderExportExcel(params, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/export/excel}
+ */
+export function useGetApiOrderExportExcelSuspense<
+  TData = GetApiOrderExportExcelQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderExportExcelSuspenseQueryKey,
+>(
+  params?: GetApiOrderExportExcelQueryParams,
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiOrderExportExcelQueryResponse,
+        ResponseErrorConfig<
+          GetApiOrderExportExcel400 | GetApiOrderExportExcel401
+        >,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderExportExcelSuspenseQueryKey(params);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiOrderExportExcelSuspenseQueryOptions(params, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<GetApiOrderExportExcel400 | GetApiOrderExportExcel401>
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
 export const getApiOrderIdSuspenseQueryKey = (
   id: GetApiOrderIdPathParams["id"],
 ) => [{ url: "/api/Order/:id", params: { id: id } }] as const;
@@ -2809,6 +3898,90 @@ export function useGetApiOrderIdSuspense<
     TData,
     ResponseErrorConfig<
       GetApiOrderId400 | GetApiOrderId401 | GetApiOrderId403 | GetApiOrderId404
+    >
+  > & { queryKey: TQueryKey };
+
+  query.queryKey = queryKey as TQueryKey;
+
+  return query;
+}
+
+export const getApiOrderIdExportPdfSuspenseQueryKey = (
+  id: GetApiOrderIdExportPdfPathParams["id"],
+) => [{ url: "/api/Order/:id/export/pdf", params: { id: id } }] as const;
+
+export type GetApiOrderIdExportPdfSuspenseQueryKey = ReturnType<
+  typeof getApiOrderIdExportPdfSuspenseQueryKey
+>;
+
+export function getApiOrderIdExportPdfSuspenseQueryOptions(
+  id: GetApiOrderIdExportPdfPathParams["id"],
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const queryKey = getApiOrderIdExportPdfSuspenseQueryKey(id);
+  return queryOptions<
+    GetApiOrderIdExportPdfQueryResponse,
+    ResponseErrorConfig<
+      | GetApiOrderIdExportPdf400
+      | GetApiOrderIdExportPdf401
+      | GetApiOrderIdExportPdf404
+    >,
+    GetApiOrderIdExportPdfQueryResponse,
+    typeof queryKey
+  >({
+    enabled: !!id,
+    queryKey,
+    queryFn: async ({ signal }) => {
+      return getApiOrderIdExportPdf(id, {
+        ...config,
+        signal: config.signal ?? signal,
+      });
+    },
+  });
+}
+
+/**
+ * {@link /api/Order/:id/export/pdf}
+ */
+export function useGetApiOrderIdExportPdfSuspense<
+  TData = GetApiOrderIdExportPdfQueryResponse,
+  TQueryKey extends QueryKey = GetApiOrderIdExportPdfSuspenseQueryKey,
+>(
+  id: GetApiOrderIdExportPdfPathParams["id"],
+  options: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        GetApiOrderIdExportPdfQueryResponse,
+        ResponseErrorConfig<
+          | GetApiOrderIdExportPdf400
+          | GetApiOrderIdExportPdf401
+          | GetApiOrderIdExportPdf404
+        >,
+        TData,
+        TQueryKey
+      >
+    > & { client?: QueryClient };
+    client?: Partial<RequestConfig> & { client?: Client };
+  } = {},
+) {
+  const { query: queryConfig = {}, client: config = {} } = options ?? {};
+  const { client: queryClient, ...resolvedOptions } = queryConfig;
+  const queryKey =
+    resolvedOptions?.queryKey ?? getApiOrderIdExportPdfSuspenseQueryKey(id);
+
+  const query = useSuspenseQuery(
+    {
+      ...getApiOrderIdExportPdfSuspenseQueryOptions(id, config),
+      ...resolvedOptions,
+      queryKey,
+    } as unknown as UseSuspenseQueryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<
+    TData,
+    ResponseErrorConfig<
+      | GetApiOrderIdExportPdf400
+      | GetApiOrderIdExportPdf401
+      | GetApiOrderIdExportPdf404
     >
   > & { queryKey: TQueryKey };
 

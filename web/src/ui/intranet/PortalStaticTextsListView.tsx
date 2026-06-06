@@ -40,14 +40,14 @@ export function PortalStaticTextsListView() {
     <Box>
       <PageHeader
         title="Portal content"
-        subtitle="Edit customer-facing copy for the catalog, cart, and news pages."
+        subtitle="Catalog, cart, and news page copy."
       />
       <PortalTextsSectionNav />
 
       {rows.length === 0 ? (
         <EmptyState
           title="No portal texts"
-          description="Restart the API to seed default portal copy blocks."
+          description="Default copy is created on first startup."
           icon={FileText}
         />
       ) : (

@@ -81,7 +81,7 @@ export function EquipmentForm({
         label="Product image"
         uploadFolder="equipment"
         disabled={isPending}
-        helperText="Optional. Upload or paste a URL (e.g. /files/equipment/…)."
+        helperText="Optional image URL."
       />
       <Box>
         <Typography variant="subtitle2" sx={{ mb: 1 }}>

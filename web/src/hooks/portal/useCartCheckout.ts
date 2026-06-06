@@ -6,7 +6,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { gearhubApiClientOptions } from "../../api/clientOptions";
 import type { RentalOrder } from "../../api/generated/types";
 import {
+  getApiCustomerMineQueryKey,
   getApiEquipmentQueryKey,
+  useGetApiCustomerMine,
   usePostApiOrderCreateorder,
 } from "../../api/generated/react-query";
 import {
@@ -52,11 +54,17 @@ export function useCartCheckout() {
   const form = useForm<OrderCheckoutFormValues>({
     resolver: zodResolver(orderCheckoutFormSchema),
     defaultValues: {
+      customerId: undefined,
       companyName: "",
       contactPerson: "",
       rentalStart: new Date().toISOString().slice(0, 10),
       rentalEnd: tomorrow,
     },
+  });
+
+  const checkoutCompanies = useGetApiCustomerMine({
+    client: gearhubApiClientOptions,
+    query: { enabled: Boolean(getAccessToken()) },
   });
 
   const rentalStart =
@@ -72,11 +80,15 @@ export function useCartCheckout() {
         pendingCheckoutRef.current = null;
         clear();
         queryClient.invalidateQueries({ queryKey: getApiEquipmentQueryKey() });
+        queryClient.invalidateQueries({
+          queryKey: getApiCustomerMineQueryKey(),
+        });
         enqueueSnackbar("Order placed.", { variant: "success" });
         const d = new Date();
         const tmr = new Date(d);
         tmr.setDate(tmr.getDate() + 1);
         form.reset({
+          customerId: undefined,
           companyName: "",
           contactPerson: "",
           rentalStart: d.toISOString().slice(0, 10),
@@ -120,16 +132,26 @@ export function useCartCheckout() {
       values,
     };
     submit.mutate({
-      data: {
-        companyName: values.companyName.trim(),
-        contactPerson: values.contactPerson.trim(),
-        rentalStartDate: new Date(values.rentalStart).toISOString(),
-        rentalEndDate: new Date(values.rentalEnd).toISOString(),
-        items: lines.map((l) => ({
-          equipmentId: l.equipmentId,
-          quantity: l.quantity,
-        })),
-      },
+      data: values.customerId
+        ? {
+            customerId: values.customerId,
+            rentalStartDate: new Date(values.rentalStart).toISOString(),
+            rentalEndDate: new Date(values.rentalEnd).toISOString(),
+            items: lines.map((l) => ({
+              equipmentId: l.equipmentId,
+              quantity: l.quantity,
+            })),
+          }
+        : {
+            companyName: values.companyName.trim(),
+            contactPerson: values.contactPerson.trim(),
+            rentalStartDate: new Date(values.rentalStart).toISOString(),
+            rentalEndDate: new Date(values.rentalEnd).toISOString(),
+            items: lines.map((l) => ({
+              equipmentId: l.equipmentId,
+              quantity: l.quantity,
+            })),
+          },
     });
   });
 
@@ -144,5 +166,6 @@ export function useCartCheckout() {
     orderSubmitError,
     lastPlacedOrderSummary,
     dismissLastPlacedOrderSummary,
+    checkoutCompanies: checkoutCompanies.data ?? [],
   };
 }

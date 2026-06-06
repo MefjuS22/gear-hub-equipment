@@ -1,5 +1,6 @@
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -28,6 +29,7 @@ import {
   useCartCheckout,
   type PortalLastOrderSummary,
 } from "../../hooks/portal/useCartCheckout";
+import type { CustomerCheckoutOptionDto } from "../../api/generated/types";
 import { formatUsd } from "../../lib/formatCurrency";
 import { countRentalPeriodDays } from "../../lib/rentalPeriodDays";
 import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
@@ -63,8 +65,8 @@ function OrderConfirmationSummary({
         title="Order confirmed"
         subtitle={
           orderId != null
-            ? `Order #${orderId} was placed successfully.`
-            : "Your rental order was placed successfully."
+            ? `Order #${orderId} is confirmed.`
+            : "Your order is confirmed."
         }
       />
 
@@ -73,8 +75,7 @@ function OrderConfirmationSummary({
         icon={<CheckCircle2 size={22} aria-hidden />}
         sx={{ mb: 2 }}
       >
-        Thank you. A summary of your order is below. You can start a new order
-        anytime from the catalog.
+        Here is a summary of what you ordered.
       </Alert>
 
       <Grid container spacing={3}>
@@ -92,7 +93,7 @@ function OrderConfirmationSummary({
               {dayjs(summary.rentalEnd).format("MMM D, YYYY")}
             </Typography>
             <Typography variant="body2" sx={{ mb: 0.5 }}>
-              <strong>Client</strong>
+              <strong>Company</strong>
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {summary.companyName}
@@ -115,7 +116,7 @@ function OrderConfirmationSummary({
                     <TableRow>
                       <TableCell>Item</TableCell>
                       <TableCell align="center">Qty</TableCell>
-                      <TableCell align="right">Rate / day</TableCell>
+                      <TableCell align="right">Daily rate</TableCell>
                       <TableCell align="right">Line total</TableCell>
                     </TableRow>
                   </TableHead>
@@ -130,12 +131,6 @@ function OrderConfirmationSummary({
                               sx={{ fontWeight: 600 }}
                             >
                               {l.name}
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                            >
-                              ID #{l.equipmentId}
                             </Typography>
                           </TableCell>
                           <TableCell align="center">{l.quantity}</TableCell>
@@ -158,7 +153,7 @@ function OrderConfirmationSummary({
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Estimated total (same basis as checkout)
+                  Total
                 </Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>
                   {formatUsd(total)}
@@ -189,7 +184,7 @@ function OrderConfirmationSummary({
           size="large"
           onClick={onDismiss}
         >
-          Dismiss summary
+          Done
         </Button>
       </Stack>
     </Box>
@@ -210,6 +205,7 @@ export function CartCheckoutView() {
     orderSubmitError,
     lastPlacedOrderSummary,
     dismissLastPlacedOrderSummary,
+    checkoutCompanies,
   } = useCartCheckout();
 
   const hasPlacedOrderSummary = lastPlacedOrderSummary != null;
@@ -231,8 +227,8 @@ export function CartCheckoutView() {
     return (
       <Box>
         <PageHeader
-          title="Order builder"
-          subtitle="Configure client details and rental parameters, then confirm your equipment cart."
+          title="Checkout"
+          subtitle="Add equipment from the catalog to get started."
         />
         <EmptyState
           title={getPlain("cart.empty.title")}
@@ -248,11 +244,11 @@ export function CartCheckoutView() {
   const inner = (
     <>
       <PageHeader
-        title="Order builder"
+        title="Checkout"
         subtitle={
           isAuthenticated
-            ? "Configure client details and rental parameters."
-            : "Sign in to enter order details and confirm your rental."
+            ? "Enter company details and rental dates."
+            : "Sign in to complete your order."
         }
       />
 
@@ -264,7 +260,43 @@ export function CartCheckoutView() {
         <Grid size={{ xs: 12, lg: 5 }}>
           {isAuthenticated ? (
             <>
-              <SectionCard title="Client information">
+              <SectionCard title="Company details">
+                {checkoutCompanies.length > 0 ? (
+                  <Autocomplete
+                    options={checkoutCompanies}
+                    getOptionLabel={(option) => option.companyName ?? ""}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    onChange={(_, value: CustomerCheckoutOptionDto | null) => {
+                      if (value) {
+                        form.setValue("customerId", value.id, {
+                          shouldValidate: true,
+                        });
+                        form.setValue("companyName", value.companyName ?? "", {
+                          shouldValidate: true,
+                        });
+                        form.setValue(
+                          "contactPerson",
+                          value.contactPerson ?? "",
+                          {
+                            shouldValidate: true,
+                          },
+                        );
+                      } else {
+                        form.setValue("customerId", undefined);
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Saved company"
+                        placeholder="Select a company you used before"
+                        sx={{ mb: 2 }}
+                      />
+                    )}
+                  />
+                ) : null}
                 <Controller
                   name="companyName"
                   control={form.control}
@@ -277,6 +309,10 @@ export function CartCheckoutView() {
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       sx={{ mb: 2 }}
+                      onChange={(event) => {
+                        form.setValue("customerId", undefined);
+                        field.onChange(event);
+                      }}
                     />
                   )}
                 />
@@ -292,6 +328,10 @@ export function CartCheckoutView() {
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       sx={{ mb: 2 }}
+                      onChange={(event) => {
+                        form.setValue("customerId", undefined);
+                        field.onChange(event);
+                      }}
                     />
                   )}
                 />
@@ -300,12 +340,11 @@ export function CartCheckoutView() {
                   color="text.secondary"
                   sx={{ display: "block" }}
                 >
-                  We&apos;ll create a customer record for this rental. The order
-                  is placed under your signed-in account.
+                  Pick a saved company or enter a new one.
                 </Typography>
               </SectionCard>
 
-              <SectionCard title="Rental parameters" sx={{ mt: 2 }}>
+              <SectionCard title="Rental dates" sx={{ mt: 2 }}>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
                   <Controller
                     name="rentalStart"
@@ -363,12 +402,11 @@ export function CartCheckoutView() {
           ) : (
             <SectionCard title="Sign in to continue">
               <Alert severity="info" sx={{ mb: 2 }}>
-                Your cart is saved in this browser. After you sign in, you can
-                add client details and submit the order.
+                Your cart is saved in this browser. Sign in to enter company
+                details and place the order.
               </Alert>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Rental orders must be tied to a signed-in account. Sign in or
-                create an account to continue.
+                You need an account to place an order.
               </Typography>
               <Stack spacing={1.5}>
                 <Link
@@ -430,7 +468,7 @@ export function CartCheckoutView() {
                 }}
               >
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                  Equipment cart
+                  Your cart
                 </Typography>
                 <Chip
                   size="small"
@@ -448,7 +486,7 @@ export function CartCheckoutView() {
                       <TableCell align="center" width={140}>
                         Qty
                       </TableCell>
-                      <TableCell align="right">Rate / day</TableCell>
+                      <TableCell align="right">Daily rate</TableCell>
                       <TableCell align="right" width={56} />
                     </TableRow>
                   </TableHead>
@@ -458,9 +496,6 @@ export function CartCheckoutView() {
                         <TableCell>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             {l.name}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            ID #{l.equipmentId}
                           </Typography>
                         </TableCell>
                         <TableCell align="center">
@@ -533,7 +568,7 @@ export function CartCheckoutView() {
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Estimated total (simplified)
+                  Total
                 </Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>
                   {formatUsd(subtotal)}
@@ -550,7 +585,7 @@ export function CartCheckoutView() {
                     disabled={submit.isPending}
                     endIcon={<span aria-hidden>→</span>}
                   >
-                    Confirm rental order
+                    Place order
                   </Button>
                 ) : (
                   <Stack spacing={1.5}>

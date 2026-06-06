@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   CircularProgress,
   Paper,
   Table,
@@ -10,15 +11,31 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Users } from "lucide-react";
+import { Download, Users } from "lucide-react";
+import { useState } from "react";
 import type { Customer } from "../../api/generated/types";
 import { useCustomersAdmin } from "../../hooks/intranet/useCustomersAdmin";
-import { EmptyState, TablePaginationBar } from "../common";
+import { downloadAuthenticatedFile } from "../../lib/downloadAuthenticatedFile";
+import { EmptyState, PageHeader, TablePaginationBar } from "../common";
 
 export function CustomersAdminView() {
   const { list, items, page, setPage, pageSize, setPageSize, totalCount } =
     useCustomersAdmin();
   const rows = items;
+  const [exportingExcel, setExportingExcel] = useState(false);
+
+  const handleExportExcel = async () => {
+    setExportingExcel(true);
+    try {
+      const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
+      await downloadAuthenticatedFile({
+        path: "/api/Customer/export/excel",
+        fileName: `gearhub-customers-${stamp}.xlsx`,
+      });
+    } finally {
+      setExportingExcel(false);
+    }
+  };
 
   if (list.isLoading) {
     return (
@@ -29,19 +46,26 @@ export function CustomersAdminView() {
   }
 
   return (
-    <div>
-      <Typography
-        variant="h5"
-        component="h1"
-        gutterBottom
-        sx={{ fontWeight: 600 }}
-      >
-        Customers
-      </Typography>
+    <Box>
+      <PageHeader
+        title="Customers"
+        subtitle="Companies linked to rental orders."
+        actions={
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={<Download size={16} aria-hidden />}
+            disabled={exportingExcel || rows.length === 0}
+            onClick={() => void handleExportExcel()}
+          >
+            Export Excel
+          </Button>
+        }
+      />
       {rows.length === 0 ? (
         <EmptyState
-          title="Coming soon"
-          description="Customer management will appear here once available."
+          title="No customers yet"
+          description="Customers are created when orders are placed."
           icon={Users}
         />
       ) : (
@@ -73,6 +97,6 @@ export function CustomersAdminView() {
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
       />
-    </div>
+    </Box>
   );
 }

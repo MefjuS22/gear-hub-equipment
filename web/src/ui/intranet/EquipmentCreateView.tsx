@@ -24,7 +24,7 @@ export function EquipmentCreateView() {
     <Box>
       <PageHeader
         title="Add equipment"
-        subtitle="Create a new rental unit and assign category, brand, warehouse, and pricing."
+        subtitle="Add equipment with category, brand, location, and daily rate."
         actions={
           <Button
             component={Link}

@@ -97,7 +97,7 @@ export function WarehousesAdminView() {
     <Box>
       <PageHeader
         title="Warehouses"
-        subtitle="Physical storage locations used when assigning equipment."
+        subtitle="Storage locations for equipment."
         actions={
           <Button
             variant="containedBlack"

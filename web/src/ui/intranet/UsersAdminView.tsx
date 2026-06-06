@@ -174,7 +174,7 @@ export function UsersAdminView() {
       <Box>
         <PageHeader
           title="Users"
-          subtitle="Create staff accounts and assign Admin or User roles."
+          subtitle="Create staff accounts and assign roles."
         />
         <ErrorAlert
           message={formatApiErrorForDisplay(parseApiError(list.error))}
@@ -189,7 +189,7 @@ export function UsersAdminView() {
     <Box>
       <PageHeader
         title="Users"
-        subtitle="Create staff accounts and assign Admin or User roles. Only admins can manage users."
+        subtitle="Create staff accounts and assign roles."
         actions={
           <Button
             variant="containedBlack"

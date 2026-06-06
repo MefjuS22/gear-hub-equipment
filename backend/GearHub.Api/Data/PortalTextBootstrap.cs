@@ -38,7 +38,7 @@ public static class PortalTextBootstrap
             "catalog.hero.subtitle",
             "Catalog page intro",
             "Subtitle under the catalog heading on /portal.",
-            "Browse and reserve specialized rental equipment. Filter by category or search by name, brand, or model.",
+            "Browse rental equipment. Filter by category or search by name or brand.",
             20,
             now);
         Seed(
@@ -46,7 +46,7 @@ public static class PortalTextBootstrap
             "catalog.featured.fallback",
             "Featured card blurb (fallback)",
             "Shown on featured catalog cards when an item has no custom description.",
-            "<p>Reliable rental unit with transparent daily pricing. Add to your order to reserve dates at checkout.</p>",
+            "<p>Available for rent at a daily rate. Add to your cart to reserve dates.</p>",
             30,
             now);
         Seed(
