@@ -14,11 +14,12 @@ public class OrderService(
     UserManager<ApplicationUser> userManager) : IOrderService
 {
     public async Task<PagedResultDto<RentalOrderListDto>> GetAllAsync(
-        PaginationQuery pagination,
+        OrderListQuery query,
         CancellationToken cancellationToken = default)
     {
-        var (page, pageSize, skip) = Pagination.Normalize(pagination);
+        var (page, pageSize, skip) = Pagination.Normalize(query);
         var (orders, totalCount) = await orderRepository.GetOrdersPageWithDetailsAsync(
+            query,
             skip,
             pageSize,
             cancellationToken);

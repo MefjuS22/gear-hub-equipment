@@ -25,12 +25,20 @@ export type {
   GetApiCmspostSuspenseQueryKey,
   GetApiCustomerQueryKey,
   GetApiCustomerSuspenseQueryKey,
+  GetApiDashboardExportExcelQueryKey,
+  GetApiDashboardExportExcelSuspenseQueryKey,
+  GetApiDashboardStatsQueryKey,
+  GetApiDashboardStatsSuspenseQueryKey,
   GetApiEquipmentCategoriesQueryKey,
   GetApiEquipmentCategoriesSuspenseQueryKey,
   GetApiEquipmentIdQueryKey,
   GetApiEquipmentIdSuspenseQueryKey,
   GetApiEquipmentQueryKey,
   GetApiEquipmentSuspenseQueryKey,
+  GetApiOrderExportPdfQueryKey,
+  GetApiOrderExportPdfSuspenseQueryKey,
+  GetApiOrderIdExportPdfQueryKey,
+  GetApiOrderIdExportPdfSuspenseQueryKey,
   GetApiOrderIdQueryKey,
   GetApiOrderIdSuspenseQueryKey,
   GetApiOrderQueryKey,
@@ -89,6 +97,9 @@ export type {
   CreateUserAdminDto,
   Customer,
   CustomerPagedResultDto,
+  DashboardChartPointDto,
+  DashboardStatsDto,
+  DashboardSummaryDto,
   DeleteApiBrandId204,
   DeleteApiBrandId400,
   DeleteApiBrandId401,
@@ -188,6 +199,14 @@ export type {
   GetApiCustomerQuery,
   GetApiCustomerQueryParams,
   GetApiCustomerQueryResponse,
+  GetApiDashboardExportExcel200,
+  GetApiDashboardExportExcel401,
+  GetApiDashboardExportExcelQuery,
+  GetApiDashboardExportExcelQueryResponse,
+  GetApiDashboardStats200,
+  GetApiDashboardStats401,
+  GetApiDashboardStatsQuery,
+  GetApiDashboardStatsQueryResponse,
   GetApiEquipment200,
   GetApiEquipment401,
   GetApiEquipmentCategories200,
@@ -207,11 +226,24 @@ export type {
   GetApiOrder200,
   GetApiOrder400,
   GetApiOrder401,
+  GetApiOrderExportPdf200,
+  GetApiOrderExportPdf400,
+  GetApiOrderExportPdf401,
+  GetApiOrderExportPdfQuery,
+  GetApiOrderExportPdfQueryParams,
+  GetApiOrderExportPdfQueryResponse,
   GetApiOrderId200,
   GetApiOrderId400,
   GetApiOrderId401,
   GetApiOrderId403,
   GetApiOrderId404,
+  GetApiOrderIdExportPdf200,
+  GetApiOrderIdExportPdf400,
+  GetApiOrderIdExportPdf401,
+  GetApiOrderIdExportPdf404,
+  GetApiOrderIdExportPdfPathParams,
+  GetApiOrderIdExportPdfQuery,
+  GetApiOrderIdExportPdfQueryResponse,
   GetApiOrderIdPathParams,
   GetApiOrderIdQuery,
   GetApiOrderIdQueryResponse,
@@ -408,11 +440,15 @@ export {
   getApiCmspostPublished,
   getApiCmspostPublishedSlug,
   getApiCustomer,
+  getApiDashboardExportExcel,
+  getApiDashboardStats,
   getApiEquipment,
   getApiEquipmentCategories,
   getApiEquipmentId,
   getApiOrder,
+  getApiOrderExportPdf,
   getApiOrderId,
+  getApiOrderIdExportPdf,
   getApiPortaltext,
   getApiPortaltextKey,
   getApiPortaltextPublic,
@@ -489,6 +525,14 @@ export { getApiCustomerQueryKey } from "./react-query.ts";
 export { getApiCustomerQueryOptions } from "./react-query.ts";
 export { getApiCustomerSuspenseQueryKey } from "./react-query.ts";
 export { getApiCustomerSuspenseQueryOptions } from "./react-query.ts";
+export { getApiDashboardExportExcelQueryKey } from "./react-query.ts";
+export { getApiDashboardExportExcelQueryOptions } from "./react-query.ts";
+export { getApiDashboardExportExcelSuspenseQueryKey } from "./react-query.ts";
+export { getApiDashboardExportExcelSuspenseQueryOptions } from "./react-query.ts";
+export { getApiDashboardStatsQueryKey } from "./react-query.ts";
+export { getApiDashboardStatsQueryOptions } from "./react-query.ts";
+export { getApiDashboardStatsSuspenseQueryKey } from "./react-query.ts";
+export { getApiDashboardStatsSuspenseQueryOptions } from "./react-query.ts";
 export { getApiEquipmentCategoriesQueryKey } from "./react-query.ts";
 export { getApiEquipmentCategoriesQueryOptions } from "./react-query.ts";
 export { getApiEquipmentCategoriesSuspenseQueryKey } from "./react-query.ts";
@@ -501,6 +545,14 @@ export { getApiEquipmentQueryKey } from "./react-query.ts";
 export { getApiEquipmentQueryOptions } from "./react-query.ts";
 export { getApiEquipmentSuspenseQueryKey } from "./react-query.ts";
 export { getApiEquipmentSuspenseQueryOptions } from "./react-query.ts";
+export { getApiOrderExportPdfQueryKey } from "./react-query.ts";
+export { getApiOrderExportPdfQueryOptions } from "./react-query.ts";
+export { getApiOrderExportPdfSuspenseQueryKey } from "./react-query.ts";
+export { getApiOrderExportPdfSuspenseQueryOptions } from "./react-query.ts";
+export { getApiOrderIdExportPdfQueryKey } from "./react-query.ts";
+export { getApiOrderIdExportPdfQueryOptions } from "./react-query.ts";
+export { getApiOrderIdExportPdfSuspenseQueryKey } from "./react-query.ts";
+export { getApiOrderIdExportPdfSuspenseQueryOptions } from "./react-query.ts";
 export { getApiOrderIdQueryKey } from "./react-query.ts";
 export { getApiOrderIdQueryOptions } from "./react-query.ts";
 export { getApiOrderIdSuspenseQueryKey } from "./react-query.ts";
@@ -593,6 +645,10 @@ export { useGetApiCmspostPublishedSuspense } from "./react-query.ts";
 export { useGetApiCmspostSuspense } from "./react-query.ts";
 export { useGetApiCustomer } from "./react-query.ts";
 export { useGetApiCustomerSuspense } from "./react-query.ts";
+export { useGetApiDashboardExportExcel } from "./react-query.ts";
+export { useGetApiDashboardExportExcelSuspense } from "./react-query.ts";
+export { useGetApiDashboardStats } from "./react-query.ts";
+export { useGetApiDashboardStatsSuspense } from "./react-query.ts";
 export { useGetApiEquipment } from "./react-query.ts";
 export { useGetApiEquipmentCategories } from "./react-query.ts";
 export { useGetApiEquipmentCategoriesSuspense } from "./react-query.ts";
@@ -600,7 +656,11 @@ export { useGetApiEquipmentId } from "./react-query.ts";
 export { useGetApiEquipmentIdSuspense } from "./react-query.ts";
 export { useGetApiEquipmentSuspense } from "./react-query.ts";
 export { useGetApiOrder } from "./react-query.ts";
+export { useGetApiOrderExportPdf } from "./react-query.ts";
+export { useGetApiOrderExportPdfSuspense } from "./react-query.ts";
 export { useGetApiOrderId } from "./react-query.ts";
+export { useGetApiOrderIdExportPdf } from "./react-query.ts";
+export { useGetApiOrderIdExportPdfSuspense } from "./react-query.ts";
 export { useGetApiOrderIdSuspense } from "./react-query.ts";
 export { useGetApiOrderSuspense } from "./react-query.ts";
 export { useGetApiPortaltext } from "./react-query.ts";
@@ -656,6 +716,9 @@ export {
   createUserAdminDtoSchema,
   customerPagedResultDtoSchema,
   customerSchema,
+  dashboardChartPointDtoSchema,
+  dashboardStatsDtoSchema,
+  dashboardSummaryDtoSchema,
   deleteApiBrandId204Schema,
   deleteApiBrandId400Schema,
   deleteApiBrandId401Schema,
@@ -739,6 +802,12 @@ export {
   getApiCustomer401Schema,
   getApiCustomerQueryParamsSchema,
   getApiCustomerQueryResponseSchema,
+  getApiDashboardExportExcel200Schema,
+  getApiDashboardExportExcel401Schema,
+  getApiDashboardExportExcelQueryResponseSchema,
+  getApiDashboardStats200Schema,
+  getApiDashboardStats401Schema,
+  getApiDashboardStatsQueryResponseSchema,
   getApiEquipment200Schema,
   getApiEquipment401Schema,
   getApiEquipmentCategories200Schema,
@@ -755,11 +824,22 @@ export {
   getApiOrder200Schema,
   getApiOrder400Schema,
   getApiOrder401Schema,
+  getApiOrderExportPdf200Schema,
+  getApiOrderExportPdf400Schema,
+  getApiOrderExportPdf401Schema,
+  getApiOrderExportPdfQueryParamsSchema,
+  getApiOrderExportPdfQueryResponseSchema,
   getApiOrderId200Schema,
   getApiOrderId400Schema,
   getApiOrderId401Schema,
   getApiOrderId403Schema,
   getApiOrderId404Schema,
+  getApiOrderIdExportPdf200Schema,
+  getApiOrderIdExportPdf400Schema,
+  getApiOrderIdExportPdf401Schema,
+  getApiOrderIdExportPdf404Schema,
+  getApiOrderIdExportPdfPathParamsSchema,
+  getApiOrderIdExportPdfQueryResponseSchema,
   getApiOrderIdPathParamsSchema,
   getApiOrderIdQueryResponseSchema,
   getApiOrderQueryParamsSchema,

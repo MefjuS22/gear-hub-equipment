@@ -14,15 +14,30 @@ namespace GearHub.Api.Controllers;
 [Authorize]
 [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
 [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-public class OrderController(IOrderService orderService) : ControllerBase
+public class OrderController(
+    IOrderService orderService,
+    IOrderExportService orderExportService) : ControllerBase
 {
     [HttpGet]
     [HasPermission(AppPermissions.OrdersRead)]
     [ProducesResponseType(typeof(PagedResultDto<RentalOrderListDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<PagedResultDto<RentalOrderListDto>>> GetAll(
-        [FromQuery] PaginationQuery pagination,
+        [FromQuery] OrderListQuery query,
         CancellationToken cancellationToken) =>
-        Ok(await orderService.GetAllAsync(pagination, cancellationToken));
+        Ok(await orderService.GetAllAsync(query, cancellationToken));
+
+    [HttpGet("export/pdf")]
+    [HasPermission(AppPermissions.OrdersRead)]
+    [Produces("application/pdf")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportListPdf(
+        [FromQuery] OrderListQuery query,
+        CancellationToken cancellationToken)
+    {
+        var bytes = await orderExportService.ExportOrdersListPdfAsync(query, cancellationToken);
+        var fileName = $"gearhub-orders-{DateTime.UtcNow:yyyyMMdd-HHmm}.pdf";
+        return File(bytes, "application/pdf", fileName);
+    }
 
     /// <summary>
     /// Order detail for the placing user or a user with the Admin role (resolved from the database).
@@ -62,6 +77,25 @@ public class OrderController(IOrderService orderService) : ControllerBase
         }
 
         return Ok(result.Value);
+    }
+
+    [HttpGet("{id:int}/export/pdf")]
+    [HasPermission(AppPermissions.OrdersRead)]
+    [Produces("application/pdf")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ExportOrderPdf(int id, CancellationToken cancellationToken)
+    {
+        var bytes = await orderExportService.ExportOrderPdfAsync(id, cancellationToken);
+        if (bytes is null)
+        {
+            return ApiResponses.Error(
+                StatusCodes.Status404NotFound,
+                ApiErrorCode.OrderNotFound,
+                "Order not found.");
+        }
+
+        return File(bytes, "application/pdf", $"gearhub-order-{id}.pdf");
     }
 
     [HttpPost("CreateOrder")]

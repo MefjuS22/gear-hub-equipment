@@ -8,6 +8,7 @@ export const AppPermissions = {
   CustomersRead: "customers.read",
   OrdersRead: "orders.read",
   OrdersCreate: "orders.create",
+  DashboardRead: "dashboard.read",
   CmsReadPublished: "cms.read.published",
   CmsManage: "cms.manage",
   FilesUpload: "files.upload",

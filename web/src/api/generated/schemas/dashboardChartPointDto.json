@@ -1,0 +1,9 @@
+{
+  "type": "object",
+  "properties": {
+    "label": { "type": "string", "nullable": true },
+    "value": { "type": "number", "format": "double" }
+  },
+  "additionalProperties": false,
+  "x-readme-ref-name": "DashboardChartPointDto"
+}

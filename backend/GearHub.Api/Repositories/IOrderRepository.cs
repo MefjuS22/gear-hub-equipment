@@ -1,12 +1,18 @@
-﻿using GearHub.Api.Models;
+﻿using GearHub.Api.DTOs;
+using GearHub.Api.Models;
 
 namespace GearHub.Api.Repositories;
 
 public interface IOrderRepository
 {
     Task<(List<RentalOrder> Items, int TotalCount)> GetOrdersPageWithDetailsAsync(
+        OrderListQuery query,
         int skip,
         int take,
+        CancellationToken cancellationToken = default);
+
+    Task<List<RentalOrder>> GetFilteredOrdersWithDetailsAsync(
+        OrderListQuery query,
         CancellationToken cancellationToken = default);
 
     Task<RentalOrder?> GetOrderByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default);

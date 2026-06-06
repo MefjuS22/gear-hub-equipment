@@ -19,6 +19,7 @@ public class AuthService(
     SignInManager<ApplicationUser> signInManager,
     RoleManager<IdentityRole<int>> roleManager,
     ApplicationDbContext dbContext,
+    IHttpContextAccessor httpContextAccessor,
     IOptions<JwtOptions> jwtOptions) : IAuthService
 {
     public async Task<ServiceResult<AuthResponseDto>> LoginAsync(
@@ -28,6 +29,7 @@ public class AuthService(
         var user = await userManager.FindByEmailAsync(request.Email);
         if (user is null)
         {
+            await RecordLoginEventAsync(null, request.Email, success: false, cancellationToken);
             return ServiceResult<AuthResponseDto>.Fail(
                 ApiErrorCode.AuthInvalidCredentials,
                 "Invalid email or password.");
@@ -36,11 +38,13 @@ public class AuthService(
         var signIn = await signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
         if (!signIn.Succeeded)
         {
+            await RecordLoginEventAsync(user.Id, request.Email, success: false, cancellationToken);
             return ServiceResult<AuthResponseDto>.Fail(
                 ApiErrorCode.AuthInvalidCredentials,
                 "Invalid email or password.");
         }
 
+        await RecordLoginEventAsync(user.Id, request.Email, success: true, cancellationToken);
         var token = await BuildTokenAsync(user, cancellationToken);
         return ServiceResult<AuthResponseDto>.Ok(token);
     }
@@ -167,5 +171,23 @@ public class AuthService(
             Roles = roles,
             Permissions = permissions,
         };
+    }
+
+    private async Task RecordLoginEventAsync(
+        int? userId,
+        string email,
+        bool success,
+        CancellationToken cancellationToken)
+    {
+        var ip = httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+        dbContext.LoginEvents.Add(new LoginEvent
+        {
+            UserId = userId,
+            Email = email.Trim(),
+            LoggedInAtUtc = DateTime.UtcNow,
+            Success = success,
+            IpAddress = ip,
+        });
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 }

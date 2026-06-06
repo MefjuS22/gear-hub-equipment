@@ -718,6 +718,75 @@ export type CustomerPagedResultDto = {
   totalPages?: number;
 };
 
+export type DashboardChartPointDto = {
+  /**
+   * @type string
+   */
+  label?: string | null;
+  /**
+   * @type number | undefined, double
+   */
+  value?: number;
+};
+
+export type DashboardSummaryDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  totalOrders?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  ordersLast30Days?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalCustomers?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  totalEquipment?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  availableEquipment?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  loginsLast24Hours?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  uniqueUsersLoggedInLast24Hours?: number;
+  /**
+   * @type number | undefined, double
+   */
+  estimatedRevenueLast30Days?: number;
+};
+
+export type DashboardStatsDto = {
+  /**
+   * @type object | undefined
+   */
+  summary?: DashboardSummaryDto;
+  /**
+   * @type array
+   */
+  ordersByDay?: DashboardChartPointDto[] | null;
+  /**
+   * @type array
+   */
+  revenueByDay?: DashboardChartPointDto[] | null;
+  /**
+   * @type array
+   */
+  topEquipment?: DashboardChartPointDto[] | null;
+  /**
+   * @type array
+   */
+  loginsByDay?: DashboardChartPointDto[] | null;
+};
+
 export type EquipmentDto = {
   /**
    * @type integer | undefined, int32
@@ -1818,6 +1887,41 @@ export type GetApiCustomerQuery = {
   Errors: GetApiCustomer401;
 };
 
+/**
+ * @description OK
+ */
+export type GetApiDashboardStats200 = DashboardStatsDto;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiDashboardStats401 = ProblemDetails;
+
+export type GetApiDashboardStatsQueryResponse = GetApiDashboardStats200;
+
+export type GetApiDashboardStatsQuery = {
+  Response: GetApiDashboardStats200;
+  Errors: GetApiDashboardStats401;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiDashboardExportExcel200 = any;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiDashboardExportExcel401 = ProblemDetails;
+
+export type GetApiDashboardExportExcelQueryResponse =
+  GetApiDashboardExportExcel200;
+
+export type GetApiDashboardExportExcelQuery = {
+  Response: GetApiDashboardExportExcel200;
+  Errors: GetApiDashboardExportExcel401;
+};
+
 export type GetApiEquipmentQueryParams = {
   /**
    * @type string | undefined
@@ -2046,6 +2150,22 @@ export type PostApiFilesUploadMutation = {
 
 export type GetApiOrderQueryParams = {
   /**
+   * @type string | undefined
+   */
+  Search?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  OrderDateFrom?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  OrderDateTo?: string;
+  /**
+   * @type integer | undefined, int32
+   */
+  CustomerId?: number;
+  /**
    * @type integer | undefined, int32
    */
   Page?: number;
@@ -2076,6 +2196,56 @@ export type GetApiOrderQuery = {
   Response: GetApiOrder200;
   QueryParams: GetApiOrderQueryParams;
   Errors: GetApiOrder400 | GetApiOrder401;
+};
+
+export type GetApiOrderExportPdfQueryParams = {
+  /**
+   * @type string | undefined
+   */
+  Search?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  OrderDateFrom?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  OrderDateTo?: string;
+  /**
+   * @type integer | undefined, int32
+   */
+  CustomerId?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiOrderExportPdf200 = any;
+
+/**
+ * @description Bad Request
+ */
+export type GetApiOrderExportPdf400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiOrderExportPdf401 = ProblemDetails;
+
+export type GetApiOrderExportPdfQueryResponse = GetApiOrderExportPdf200;
+
+export type GetApiOrderExportPdfQuery = {
+  Response: GetApiOrderExportPdf200;
+  QueryParams: GetApiOrderExportPdfQueryParams;
+  Errors: GetApiOrderExportPdf400 | GetApiOrderExportPdf401;
 };
 
 export type GetApiOrderIdPathParams = {
@@ -2120,6 +2290,44 @@ export type GetApiOrderIdQuery = {
     | GetApiOrderId401
     | GetApiOrderId403
     | GetApiOrderId404;
+};
+
+export type GetApiOrderIdExportPdfPathParams = {
+  /**
+   * @type integer, int32
+   */
+  id: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiOrderIdExportPdf200 = any;
+
+/**
+ * @description Bad Request
+ */
+export type GetApiOrderIdExportPdf400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiOrderIdExportPdf401 = ProblemDetails;
+
+/**
+ * @description Not Found
+ */
+export type GetApiOrderIdExportPdf404 = ApiErrorResponse;
+
+export type GetApiOrderIdExportPdfQueryResponse = GetApiOrderIdExportPdf200;
+
+export type GetApiOrderIdExportPdfQuery = {
+  Response: GetApiOrderIdExportPdf200;
+  PathParams: GetApiOrderIdExportPdfPathParams;
+  Errors:
+    | GetApiOrderIdExportPdf400
+    | GetApiOrderIdExportPdf401
+    | GetApiOrderIdExportPdf404;
 };
 
 /**

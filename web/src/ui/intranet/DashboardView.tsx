@@ -9,11 +9,14 @@ import {
 import { LayoutDashboard } from "lucide-react";
 
 import { usePermissionSet } from "../../hooks/usePermissionSet";
+import { AppPermissions } from "../../lib/appPermissions";
 import { INTRANET_NAV } from "../../lib/intranetNav";
 import { PageHeader } from "../common";
+import { DashboardStatsPanel } from "./DashboardStatsPanel";
 
 export function DashboardView() {
   const permissions = usePermissionSet();
+  const canViewStats = permissions.has(AppPermissions.DashboardRead);
   const tiles = INTRANET_NAV.filter(
     (item) =>
       item.to !== "/intranet" &&
@@ -24,7 +27,7 @@ export function DashboardView() {
     <Box>
       <PageHeader
         title="Dashboard"
-        subtitle="Shortcuts to the staff areas you can access. Use the sidebar for the full menu."
+        subtitle="Operational overview, statistics, and shortcuts to staff areas."
         actions={
           <Box
             sx={{
@@ -38,6 +41,12 @@ export function DashboardView() {
           </Box>
         }
       />
+
+      {canViewStats ? <DashboardStatsPanel /> : null}
+
+      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+        Quick links
+      </Typography>
 
       <Box
         sx={{

@@ -35,6 +35,7 @@ public static class IdentityDataSeeder
             (AppPermissions.CustomersRead, "View customers"),
             (AppPermissions.OrdersRead, "View rental orders"),
             (AppPermissions.OrdersCreate, "Create rental orders"),
+            (AppPermissions.DashboardRead, "View dashboard statistics and exports"),
             (AppPermissions.CmsReadPublished, "View published CMS posts"),
             (AppPermissions.CmsManage, "Manage CMS posts"),
             (AppPermissions.FilesUpload, "Upload files"),

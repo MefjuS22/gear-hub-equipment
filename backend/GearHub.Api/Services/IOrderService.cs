@@ -6,7 +6,7 @@ namespace GearHub.Api.Services;
 public interface IOrderService
 {
     Task<PagedResultDto<RentalOrderListDto>> GetAllAsync(
-        PaginationQuery pagination,
+        OrderListQuery query,
         CancellationToken cancellationToken = default);
 
     Task<ServiceResult<RentalOrderListDto>> GetByIdForViewerAsync(

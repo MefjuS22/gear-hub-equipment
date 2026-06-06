@@ -11,8 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "@tanstack/react-router";
+import { Download } from "lucide-react";
+import { useState } from "react";
 import { useOrderDetail } from "../../hooks/intranet/useOrderDetail";
 import { formatApiErrorForDisplay, parseApiError } from "../../lib/apiError";
+import { downloadAuthenticatedFile } from "../../lib/downloadAuthenticatedFile";
 import { formatUsd } from "../../lib/formatCurrency";
 import { ErrorAlert, LoadingState, PageHeader } from "../common";
 import {
@@ -26,6 +29,19 @@ type Props = {
 
 export function OrderDetailView({ orderId }: Props) {
   const detail = useOrderDetail(orderId);
+  const [exportingPdf, setExportingPdf] = useState(false);
+
+  const handleExportPdf = async () => {
+    setExportingPdf(true);
+    try {
+      await downloadAuthenticatedFile({
+        path: `/api/Order/${orderId}/export/pdf`,
+        fileName: `gearhub-order-${orderId}.pdf`,
+      });
+    } finally {
+      setExportingPdf(false);
+    }
+  };
 
   if (detail.isLoading) {
     return <LoadingState message="Loading order…" />;
@@ -57,14 +73,25 @@ export function OrderDetailView({ orderId }: Props) {
         title={`Order #${o.id ?? orderId}`}
         subtitle="Rental order details"
         actions={
-          <Button
-            component={Link}
-            to="/intranet/orders"
-            variant="outlined"
-            size="small"
-          >
-            All orders
-          </Button>
+          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Download size={16} aria-hidden />}
+              disabled={exportingPdf}
+              onClick={() => void handleExportPdf()}
+            >
+              Export PDF
+            </Button>
+            <Button
+              component={Link}
+              to="/intranet/orders"
+              variant="outlined"
+              size="small"
+            >
+              All orders
+            </Button>
+          </Box>
         }
       />
 

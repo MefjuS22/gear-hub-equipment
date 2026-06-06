@@ -1,4 +1,5 @@
 ﻿using GearHub.Api.Data;
+using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,21 +8,77 @@ namespace GearHub.Api.Repositories;
 public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
 {
     public async Task<(List<RentalOrder> Items, int TotalCount)> GetOrdersPageWithDetailsAsync(
+        OrderListQuery query,
         int skip,
         int take,
         CancellationToken cancellationToken = default)
     {
-        var query = dbContext.RentalOrders
+        var orderQuery = BuildFilteredQuery(query).OrderByDescending(order => order.OrderDate);
+        var totalCount = await orderQuery.CountAsync(cancellationToken);
+        var items = await orderQuery.Skip(skip).Take(take).ToListAsync(cancellationToken);
+        return (items, totalCount);
+    }
+
+    public async Task<List<RentalOrder>> GetFilteredOrdersWithDetailsAsync(
+        OrderListQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        return await BuildFilteredQuery(query)
+            .OrderByDescending(order => order.OrderDate)
+            .ToListAsync(cancellationToken);
+    }
+
+    private IQueryable<RentalOrder> BuildFilteredQuery(OrderListQuery query)
+    {
+        var orderQuery = dbContext.RentalOrders
             .AsNoTracking()
             .Include(order => order.Customer)
             .Include(order => order.User)
             .Include(order => order.Items)
             .ThenInclude(item => item.Equipment)
-            .OrderByDescending(order => order.OrderDate);
+            .AsQueryable();
 
-        var totalCount = await query.CountAsync(cancellationToken);
-        var items = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
-        return (items, totalCount);
+        if (query.CustomerId is int customerId and > 0)
+        {
+            orderQuery = orderQuery.Where(order => order.CustomerId == customerId);
+        }
+
+        if (query.OrderDateFrom is DateTime from)
+        {
+            var start = DateTime.SpecifyKind(from.Date, DateTimeKind.Utc);
+            orderQuery = orderQuery.Where(order => order.OrderDate >= start);
+        }
+
+        if (query.OrderDateTo is DateTime to)
+        {
+            var endExclusive = DateTime.SpecifyKind(to.Date.AddDays(1), DateTimeKind.Utc);
+            orderQuery = orderQuery.Where(order => order.OrderDate < endExclusive);
+        }
+
+        var search = query.Search?.Trim();
+        if (!string.IsNullOrEmpty(search))
+        {
+            var pattern = $"%{search}%";
+            if (int.TryParse(search, out var orderId))
+            {
+                orderQuery = orderQuery.Where(order =>
+                    order.Id == orderId ||
+                    (order.Customer != null && EF.Functions.ILike(order.Customer.CompanyName, pattern)) ||
+                    (order.User != null && EF.Functions.ILike(order.User.DisplayName, pattern)) ||
+                    (order.User != null && order.User.Email != null &&
+                     EF.Functions.ILike(order.User.Email, pattern)));
+            }
+            else
+            {
+                orderQuery = orderQuery.Where(order =>
+                    (order.Customer != null && EF.Functions.ILike(order.Customer.CompanyName, pattern)) ||
+                    (order.User != null && EF.Functions.ILike(order.User.DisplayName, pattern)) ||
+                    (order.User != null && order.User.Email != null &&
+                     EF.Functions.ILike(order.User.Email, pattern)));
+            }
+        }
+
+        return orderQuery;
     }
 
     public async Task<RentalOrder?> GetOrderByIdWithDetailsAsync(

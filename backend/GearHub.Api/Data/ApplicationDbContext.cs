@@ -20,6 +20,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<RentalOrderItem> RentalOrderItems => Set<RentalOrderItem>();
     public DbSet<CmsPost> CmsPosts => Set<CmsPost>();
     public DbSet<PortalText> PortalTexts => Set<PortalText>();
+    public DbSet<LoginEvent> LoginEvents => Set<LoginEvent>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,6 +66,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(text => text.Key).HasMaxLength(120);
             entity.Property(text => text.Title).HasMaxLength(300);
             entity.Property(text => text.PlacementHint).HasMaxLength(500);
+        });
+
+        modelBuilder.Entity<LoginEvent>(entity =>
+        {
+            entity.HasIndex(login => login.LoggedInAtUtc);
+            entity.Property(login => login.Email).HasMaxLength(256);
+            entity.Property(login => login.IpAddress).HasMaxLength(64);
+            entity.HasOne(login => login.User)
+                .WithMany()
+                .HasForeignKey(login => login.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         modelBuilder.Entity<Warehouse>().HasData(
