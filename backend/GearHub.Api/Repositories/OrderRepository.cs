@@ -99,6 +99,22 @@ public class OrderRepository(ApplicationDbContext dbContext) : IOrderRepository
         return await dbContext.Customers.AnyAsync(customer => customer.Id == customerId, cancellationToken);
     }
 
+    public async Task<Customer?> FindCustomerByCompanyNameAsync(
+        string companyName,
+        CancellationToken cancellationToken = default)
+    {
+        var trimmed = companyName.Trim();
+        if (string.IsNullOrEmpty(trimmed))
+        {
+            return null;
+        }
+
+        return await dbContext.Customers
+            .FirstOrDefaultAsync(
+                customer => EF.Functions.ILike(customer.CompanyName, trimmed),
+                cancellationToken);
+    }
+
     public async Task<bool> UserExistsAsync(int userId, CancellationToken cancellationToken = default)
     {
         return await dbContext.Users.AnyAsync(user => user.Id == userId, cancellationToken);

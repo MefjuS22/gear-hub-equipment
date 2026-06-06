@@ -92,6 +92,10 @@ import type {
   GetApiCustomerQueryResponse,
   GetApiCustomerQueryParams,
   GetApiCustomer401,
+  GetApiCustomerMineQueryResponse,
+  GetApiCustomerMine401,
+  GetApiCustomerExportExcelQueryResponse,
+  GetApiCustomerExportExcel401,
   GetApiDashboardStatsQueryResponse,
   GetApiDashboardStats401,
   GetApiDashboardExportExcelQueryResponse,
@@ -107,6 +111,8 @@ import type {
   GetApiEquipmentCategoriesQueryResponse,
   GetApiEquipmentCategoriesQueryParams,
   GetApiEquipmentCategories401,
+  GetApiEquipmentExportExcelQueryResponse,
+  GetApiEquipmentExportExcel401,
   GetApiEquipmentIdQueryResponse,
   GetApiEquipmentIdPathParams,
   GetApiEquipmentId401,
@@ -133,6 +139,10 @@ import type {
   GetApiOrderExportPdfQueryParams,
   GetApiOrderExportPdf400,
   GetApiOrderExportPdf401,
+  GetApiOrderExportExcelQueryResponse,
+  GetApiOrderExportExcelQueryParams,
+  GetApiOrderExportExcel400,
+  GetApiOrderExportExcel401,
   GetApiOrderIdQueryResponse,
   GetApiOrderIdPathParams,
   GetApiOrderId400,
@@ -821,6 +831,56 @@ export async function getApiCustomer(
   return res.data;
 }
 
+function getGetApiCustomerMineUrl() {
+  const res = { method: "GET", url: `/api/Customer/mine` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Customer/mine}
+ */
+export async function getApiCustomerMine(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCustomerMineQueryResponse,
+    ResponseErrorConfig<GetApiCustomerMine401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCustomerMineUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiCustomerExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Customer/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Customer/export/excel}
+ */
+export async function getApiCustomerExportExcel(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiCustomerExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiCustomerExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiCustomerExportExcelUrl().url.toString(),
+    ...requestConfig,
+  });
+  return res.data;
+}
+
 function getGetApiDashboardStatsUrl() {
   const res = { method: "GET", url: `/api/Dashboard/stats` as const };
   return res;
@@ -954,6 +1014,31 @@ export async function getApiEquipmentCategories(
     method: "GET",
     url: getGetApiEquipmentCategoriesUrl().url.toString(),
     params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiEquipmentExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Equipment/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Equipment/export/excel}
+ */
+export async function getApiEquipmentExportExcel(
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiEquipmentExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiEquipmentExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiEquipmentExportExcelUrl().url.toString(),
     ...requestConfig,
   });
   return res.data;
@@ -1125,6 +1210,33 @@ export async function getApiOrderExportPdf(
   >({
     method: "GET",
     url: getGetApiOrderExportPdfUrl().url.toString(),
+    params,
+    ...requestConfig,
+  });
+  return res.data;
+}
+
+function getGetApiOrderExportExcelUrl() {
+  const res = { method: "GET", url: `/api/Order/export/excel` as const };
+  return res;
+}
+
+/**
+ * {@link /api/Order/export/excel}
+ */
+export async function getApiOrderExportExcel(
+  params?: GetApiOrderExportExcelQueryParams,
+  config: Partial<RequestConfig> & { client?: Client } = {},
+) {
+  const { client: request = fetch, ...requestConfig } = config;
+
+  const res = await request<
+    GetApiOrderExportExcelQueryResponse,
+    ResponseErrorConfig<GetApiOrderExportExcel400 | GetApiOrderExportExcel401>,
+    unknown
+  >({
+    method: "GET",
+    url: getGetApiOrderExportExcelUrl().url.toString(),
     params,
     ...requestConfig,
   });

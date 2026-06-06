@@ -1,6 +1,7 @@
 using GearHub.Api.DTOs;
 using GearHub.Api.Models;
 using GearHub.Api.Repositories;
+using ClosedXML.Excel;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -83,6 +84,95 @@ public class OrderExportService(IOrderRepository orderRepository) : IOrderExport
         });
 
         return document.GeneratePdf();
+    }
+
+    public async Task<byte[]> ExportOrdersListExcelAsync(
+        OrderListQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        var orders = await orderRepository.GetFilteredOrdersWithDetailsAsync(query, cancellationToken);
+        var filterSummary = DescribeFilters(query);
+
+        using var workbook = new XLWorkbook();
+
+        var infoSheet = workbook.Worksheets.Add("Info");
+        infoSheet.Cell(1, 1).Value = "Generated (UTC)";
+        infoSheet.Cell(1, 2).Value = DateTime.UtcNow;
+        infoSheet.Cell(2, 1).Value = "Order count";
+        infoSheet.Cell(2, 2).Value = orders.Count;
+        infoSheet.Cell(3, 1).Value = "Filters";
+        infoSheet.Cell(3, 2).Value = string.IsNullOrEmpty(filterSummary) ? "None" : filterSummary;
+        infoSheet.Row(1).Style.Font.Bold = true;
+        infoSheet.Row(2).Style.Font.Bold = true;
+        infoSheet.Row(3).Style.Font.Bold = true;
+        ExcelExportHelper.FinishSheet(infoSheet);
+
+        var ordersSheet = workbook.Worksheets.Add("Orders");
+        ExcelExportHelper.WriteTableHeader(
+            ordersSheet,
+            "Order ID",
+            "Customer",
+            "User",
+            "User email",
+            "Ordered",
+            "Rental start",
+            "Rental end",
+            "Rental days",
+            "Est. total");
+
+        var lineItemsSheet = workbook.Worksheets.Add("Line items");
+        ExcelExportHelper.WriteTableHeader(
+            lineItemsSheet,
+            "Order ID",
+            "Equipment",
+            "Qty",
+            "Unit price/day",
+            "Rental days",
+            "Line est.");
+
+        var orderRow = 2;
+        var lineRow = 2;
+
+        foreach (var order in orders)
+        {
+            var days = OrderStatsHelper.RentalDays(order);
+            var estimatedTotal = OrderStatsHelper.EstimatedTotal(order);
+
+            ordersSheet.Cell(orderRow, 1).Value = order.Id;
+            ordersSheet.Cell(orderRow, 2).Value = order.Customer?.CompanyName ?? "—";
+            ordersSheet.Cell(orderRow, 3).Value = order.User?.DisplayName ?? "—";
+            ordersSheet.Cell(orderRow, 4).Value = order.User?.Email ?? "—";
+            ordersSheet.Cell(orderRow, 5).Value = order.OrderDate;
+            ordersSheet.Cell(orderRow, 5).Style.DateFormat.Format = "yyyy-mm-dd";
+            ordersSheet.Cell(orderRow, 6).Value = order.RentalStartDate;
+            ordersSheet.Cell(orderRow, 6).Style.DateFormat.Format = "yyyy-mm-dd";
+            ordersSheet.Cell(orderRow, 7).Value = order.RentalEndDate;
+            ordersSheet.Cell(orderRow, 7).Style.DateFormat.Format = "yyyy-mm-dd";
+            ordersSheet.Cell(orderRow, 8).Value = days;
+            ordersSheet.Cell(orderRow, 9).Value = estimatedTotal;
+            ordersSheet.Cell(orderRow, 9).Style.NumberFormat.Format = "#,##0.00";
+            orderRow++;
+
+            foreach (var item in order.Items)
+            {
+                var lineTotal = item.Quantity * item.UnitPrice * days;
+                lineItemsSheet.Cell(lineRow, 1).Value = order.Id;
+                lineItemsSheet.Cell(lineRow, 2).Value =
+                    item.Equipment?.Name ?? $"#{item.EquipmentId}";
+                lineItemsSheet.Cell(lineRow, 3).Value = item.Quantity;
+                lineItemsSheet.Cell(lineRow, 4).Value = item.UnitPrice;
+                lineItemsSheet.Cell(lineRow, 4).Style.NumberFormat.Format = "#,##0.00";
+                lineItemsSheet.Cell(lineRow, 5).Value = days;
+                lineItemsSheet.Cell(lineRow, 6).Value = lineTotal;
+                lineItemsSheet.Cell(lineRow, 6).Style.NumberFormat.Format = "#,##0.00";
+                lineRow++;
+            }
+        }
+
+        ExcelExportHelper.FinishSheet(ordersSheet);
+        ExcelExportHelper.FinishSheet(lineItemsSheet);
+
+        return ExcelExportHelper.SaveWorkbook(workbook);
     }
 
     public async Task<byte[]?> ExportOrderPdfAsync(int orderId, CancellationToken cancellationToken = default)

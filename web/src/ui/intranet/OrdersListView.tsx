@@ -52,6 +52,7 @@ export function OrdersListView() {
     useOrdersList(search);
   const { user } = useAuth();
   const [exportingPdf, setExportingPdf] = useState(false);
+  const [exportingExcel, setExportingExcel] = useState(false);
 
   const customers = useGetApiCustomer(
     { Page: 1, PageSize: LOOKUP_PAGE_SIZE },
@@ -80,6 +81,20 @@ export function OrdersListView() {
     }
   };
 
+  const handleExportExcel = async () => {
+    setExportingExcel(true);
+    try {
+      const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
+      await downloadAuthenticatedFile({
+        path: "/api/Order/export/excel",
+        fileName: `gearhub-orders-${stamp}.xlsx`,
+        queryParams: orderListFilterToApiParams(apiSearch),
+      });
+    } finally {
+      setExportingExcel(false);
+    }
+  };
+
   const filtersActive = hasActiveOrderListFilters(search);
   const rows = items;
 
@@ -105,17 +120,28 @@ export function OrdersListView() {
     <Box sx={{ opacity: isFiltering || list.isFetching ? 0.72 : 1 }}>
       <PageHeader
         title="Orders"
-        subtitle="Filter the list and export a PDF for the current selection."
+        subtitle="Filter the list and export PDF or Excel for the current selection."
         actions={
-          <Button
-            variant="outlined"
-            size="small"
-            startIcon={<Download size={16} aria-hidden />}
-            disabled={exportingPdf}
-            onClick={() => void handleExportPdf()}
-          >
-            Export PDF
-          </Button>
+          <>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Download size={16} aria-hidden />}
+              disabled={exportingExcel}
+              onClick={() => void handleExportExcel()}
+            >
+              Export Excel
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<Download size={16} aria-hidden />}
+              disabled={exportingPdf}
+              onClick={() => void handleExportPdf()}
+            >
+              Export PDF
+            </Button>
+          </>
         }
       />
 

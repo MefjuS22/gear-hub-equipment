@@ -118,14 +118,24 @@ public class OrderService(
         {
             var company = request.CompanyName!.Trim();
             var contact = request.ContactPerson!.Trim();
-            var customer = new Customer
+            var existingCustomer =
+                await orderRepository.FindCustomerByCompanyNameAsync(company, cancellationToken);
+
+            if (existingCustomer is not null)
             {
-                CompanyName = company,
-                ContactPerson = contact,
-            };
-            dbContext.Customers.Add(customer);
-            await dbContext.SaveChangesAsync(cancellationToken);
-            customerId = customer.Id;
+                customerId = existingCustomer.Id;
+            }
+            else
+            {
+                var customer = new Customer
+                {
+                    CompanyName = company,
+                    ContactPerson = contact,
+                };
+                dbContext.Customers.Add(customer);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                customerId = customer.Id;
+            }
         }
 
         var order = new RentalOrder

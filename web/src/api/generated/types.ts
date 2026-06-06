@@ -695,6 +695,21 @@ export type CreateUserAdminDto = {
   roles?: string[] | null;
 };
 
+export type CustomerCheckoutOptionDto = {
+  /**
+   * @type integer | undefined, int32
+   */
+  id?: number;
+  /**
+   * @type string
+   */
+  companyName?: string | null;
+  /**
+   * @type string
+   */
+  contactPerson?: string | null;
+};
+
 export type CustomerPagedResultDto = {
   /**
    * @type array
@@ -1890,6 +1905,41 @@ export type GetApiCustomerQuery = {
 /**
  * @description OK
  */
+export type GetApiCustomerMine200 = CustomerCheckoutOptionDto[];
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiCustomerMine401 = ProblemDetails;
+
+export type GetApiCustomerMineQueryResponse = GetApiCustomerMine200;
+
+export type GetApiCustomerMineQuery = {
+  Response: GetApiCustomerMine200;
+  Errors: GetApiCustomerMine401;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiCustomerExportExcel200 = any;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiCustomerExportExcel401 = ProblemDetails;
+
+export type GetApiCustomerExportExcelQueryResponse =
+  GetApiCustomerExportExcel200;
+
+export type GetApiCustomerExportExcelQuery = {
+  Response: GetApiCustomerExportExcel200;
+  Errors: GetApiCustomerExportExcel401;
+};
+
+/**
+ * @description OK
+ */
 export type GetApiDashboardStats200 = DashboardStatsDto;
 
 /**
@@ -2013,6 +2063,24 @@ export type GetApiEquipmentCategoriesQuery = {
   Response: GetApiEquipmentCategories200;
   QueryParams: GetApiEquipmentCategoriesQueryParams;
   Errors: GetApiEquipmentCategories401;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiEquipmentExportExcel200 = any;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiEquipmentExportExcel401 = ProblemDetails;
+
+export type GetApiEquipmentExportExcelQueryResponse =
+  GetApiEquipmentExportExcel200;
+
+export type GetApiEquipmentExportExcelQuery = {
+  Response: GetApiEquipmentExportExcel200;
+  Errors: GetApiEquipmentExportExcel401;
 };
 
 export type GetApiEquipmentIdPathParams = {
@@ -2246,6 +2314,56 @@ export type GetApiOrderExportPdfQuery = {
   Response: GetApiOrderExportPdf200;
   QueryParams: GetApiOrderExportPdfQueryParams;
   Errors: GetApiOrderExportPdf400 | GetApiOrderExportPdf401;
+};
+
+export type GetApiOrderExportExcelQueryParams = {
+  /**
+   * @type string | undefined
+   */
+  Search?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  OrderDateFrom?: string;
+  /**
+   * @type string | undefined, date-time
+   */
+  OrderDateTo?: string;
+  /**
+   * @type integer | undefined, int32
+   */
+  CustomerId?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  Page?: number;
+  /**
+   * @type integer | undefined, int32
+   */
+  PageSize?: number;
+};
+
+/**
+ * @description OK
+ */
+export type GetApiOrderExportExcel200 = any;
+
+/**
+ * @description Bad Request
+ */
+export type GetApiOrderExportExcel400 = ApiErrorResponse;
+
+/**
+ * @description Unauthorized
+ */
+export type GetApiOrderExportExcel401 = ProblemDetails;
+
+export type GetApiOrderExportExcelQueryResponse = GetApiOrderExportExcel200;
+
+export type GetApiOrderExportExcelQuery = {
+  Response: GetApiOrderExportExcel200;
+  QueryParams: GetApiOrderExportExcelQueryParams;
+  Errors: GetApiOrderExportExcel400 | GetApiOrderExportExcel401;
 };
 
 export type GetApiOrderIdPathParams = {

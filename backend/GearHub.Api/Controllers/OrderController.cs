@@ -39,6 +39,22 @@ public class OrderController(
         return File(bytes, "application/pdf", fileName);
     }
 
+    [HttpGet("export/excel")]
+    [HasPermission(AppPermissions.OrdersRead)]
+    [Produces("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ExportListExcel(
+        [FromQuery] OrderListQuery query,
+        CancellationToken cancellationToken)
+    {
+        var bytes = await orderExportService.ExportOrdersListExcelAsync(query, cancellationToken);
+        var fileName = $"gearhub-orders-{DateTime.UtcNow:yyyyMMdd-HHmm}.xlsx";
+        return File(
+            bytes,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            fileName);
+    }
+
     /// <summary>
     /// Order detail for the placing user or a user with the Admin role (resolved from the database).
     /// </summary>

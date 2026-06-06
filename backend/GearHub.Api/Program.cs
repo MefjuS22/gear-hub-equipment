@@ -82,6 +82,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserAdminService, UserAdminService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IOrderExportService, OrderExportService>();
+builder.Services.AddScoped<IEquipmentExportService, EquipmentExportService>();
+builder.Services.AddScoped<ICustomerExportService, CustomerExportService>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 builder.Services.Configure<FileStorageOptions>(

@@ -108,6 +108,7 @@ export type CmsPostFormValues = z.infer<typeof cmsPostFormSchema>;
 
 export const orderCheckoutFormSchema = z
   .object({
+    customerId: z.number().int().positive().optional(),
     companyName: z.string().min(1, "Company or organization name is required"),
     contactPerson: z.string().min(1, "Contact person is required"),
     rentalStart: z.string().min(1),

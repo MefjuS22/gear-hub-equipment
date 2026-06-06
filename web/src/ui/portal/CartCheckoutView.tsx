@@ -1,5 +1,6 @@
 import {
   Alert,
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -28,6 +29,7 @@ import {
   useCartCheckout,
   type PortalLastOrderSummary,
 } from "../../hooks/portal/useCartCheckout";
+import type { CustomerCheckoutOptionDto } from "../../api/generated/types";
 import { formatUsd } from "../../lib/formatCurrency";
 import { countRentalPeriodDays } from "../../lib/rentalPeriodDays";
 import { usePortalTexts } from "../../hooks/portal/usePortalTexts";
@@ -158,7 +160,7 @@ function OrderConfirmationSummary({
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Estimated total (same basis as checkout)
+                  Estimated total
                 </Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>
                   {formatUsd(total)}
@@ -210,6 +212,7 @@ export function CartCheckoutView() {
     orderSubmitError,
     lastPlacedOrderSummary,
     dismissLastPlacedOrderSummary,
+    checkoutCompanies,
   } = useCartCheckout();
 
   const hasPlacedOrderSummary = lastPlacedOrderSummary != null;
@@ -265,6 +268,42 @@ export function CartCheckoutView() {
           {isAuthenticated ? (
             <>
               <SectionCard title="Client information">
+                {checkoutCompanies.length > 0 ? (
+                  <Autocomplete
+                    options={checkoutCompanies}
+                    getOptionLabel={(option) => option.companyName ?? ""}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    onChange={(_, value: CustomerCheckoutOptionDto | null) => {
+                      if (value) {
+                        form.setValue("customerId", value.id, {
+                          shouldValidate: true,
+                        });
+                        form.setValue("companyName", value.companyName ?? "", {
+                          shouldValidate: true,
+                        });
+                        form.setValue(
+                          "contactPerson",
+                          value.contactPerson ?? "",
+                          {
+                            shouldValidate: true,
+                          },
+                        );
+                      } else {
+                        form.setValue("customerId", undefined);
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Saved company"
+                        placeholder="Choose a company you used before"
+                        sx={{ mb: 2 }}
+                      />
+                    )}
+                  />
+                ) : null}
                 <Controller
                   name="companyName"
                   control={form.control}
@@ -277,6 +316,10 @@ export function CartCheckoutView() {
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       sx={{ mb: 2 }}
+                      onChange={(event) => {
+                        form.setValue("customerId", undefined);
+                        field.onChange(event);
+                      }}
                     />
                   )}
                 />
@@ -292,6 +335,10 @@ export function CartCheckoutView() {
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
                       sx={{ mb: 2 }}
+                      onChange={(event) => {
+                        form.setValue("customerId", undefined);
+                        field.onChange(event);
+                      }}
                     />
                   )}
                 />
@@ -300,8 +347,9 @@ export function CartCheckoutView() {
                   color="text.secondary"
                   sx={{ display: "block" }}
                 >
-                  We&apos;ll create a customer record for this rental. The order
-                  is placed under your signed-in account.
+                  Orders are grouped by company name. Reuse a saved company or
+                  enter a new one — matching names link to the same customer
+                  record.
                 </Typography>
               </SectionCard>
 
@@ -533,7 +581,7 @@ export function CartCheckoutView() {
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Estimated total (simplified)
+                  Estimated total
                 </Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>
                   {formatUsd(subtotal)}
