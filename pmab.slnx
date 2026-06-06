@@ -1,0 +1,9 @@
+<Solution>
+
+  <Project Path="backend/GearHub.Api/GearHub.Api.csproj" />
+
+  <Project Path="desktop/GearHubDesktop/GearHubDesktop/GearHubDesktop.csproj" />
+
+</Solution>
+
+

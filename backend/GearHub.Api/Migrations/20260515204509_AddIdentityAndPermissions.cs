@@ -4,11 +4,6 @@
 
 namespace GearHub.Api.Migrations;
 
-/// <summary>
-/// Upgrades databases created earlier via <c>EnsureCreated()</c> (domain tables already exist)
-/// by adding ASP.NET Identity, permissions, and repointing rental orders to <c>AspNetUsers</c>.
-/// Safe to re-run after a partial failed apply (uses IF NOT EXISTS / IF EXISTS).
-/// </summary>
 public partial class AddIdentityAndPermissions : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
