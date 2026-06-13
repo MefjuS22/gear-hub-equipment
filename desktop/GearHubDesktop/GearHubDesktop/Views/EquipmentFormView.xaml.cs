@@ -10,8 +10,9 @@ namespace GearHubDesktop.Views;
 public partial class EquipmentFormView : ViewControllerBase
 {
     private readonly GearHubApiClient _api;
-    private readonly IAppNavigation _navigation;
+    private readonly IAppNavigation? _navigation;
 
+    private bool _dialogMode;
     private int? _equipmentId;
     private string _equipmentName = string.Empty;
     private string _imageUrl = string.Empty;
@@ -29,6 +30,10 @@ public partial class EquipmentFormView : ViewControllerBase
         InitializeComponent();
         DataContext = this;
     }
+
+    public event EventHandler<bool>? DialogFinished;
+
+    public void ConfigureAsDialog() => _dialogMode = true;
 
     public ObservableCollection<CategoryLookupDto> Categories { get; } = [];
     public ObservableCollection<BrandLookupDto> Brands { get; } = [];
@@ -162,6 +167,18 @@ public partial class EquipmentFormView : ViewControllerBase
             return;
         }
 
+        if (EquipmentName.Trim().Length < 3)
+        {
+            ErrorMessage = "Name must be at least 3 characters.";
+            return;
+        }
+
+        if (DailyRate <= 0)
+        {
+            ErrorMessage = "Daily rate must be greater than zero.";
+            return;
+        }
+
         if (CategoryId <= 0 || BrandId <= 0 || WarehouseId <= 0)
         {
             ErrorMessage = "Category, brand, and warehouse are required.";
@@ -193,10 +210,25 @@ public partial class EquipmentFormView : ViewControllerBase
                 StatusMessage = "Equipment created.";
             }
 
-            _navigation.NavigateTo("staff-equipment");
+            if (_dialogMode)
+            {
+                DialogFinished?.Invoke(this, true);
+            }
+            else
+            {
+                _navigation!.NavigateTo("staff-equipment");
+            }
         });
     }
 
-    private void Cancel_Click(object sender, RoutedEventArgs e) =>
-        _navigation.NavigateTo("staff-equipment");
+    private void Cancel_Click(object sender, RoutedEventArgs e)
+    {
+        if (_dialogMode)
+        {
+            DialogFinished?.Invoke(this, false);
+            return;
+        }
+
+        _navigation!.NavigateTo("staff-equipment");
+    }
 }

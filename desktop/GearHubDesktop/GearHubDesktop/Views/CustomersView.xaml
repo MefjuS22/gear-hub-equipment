@@ -1,12 +1,7 @@
 <views:ViewControllerBase x:Class="GearHubDesktop.Views.CustomersView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:GearHubDesktop.Views"
-             mc:Ignorable="d"
-             d:DesignHeight="450"
-             d:DesignWidth="800">
+             xmlns:views="clr-namespace:GearHubDesktop.Views">
     <views:ViewControllerBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <Style x:Key="BusyAwareButton" TargetType="Button">
@@ -26,19 +21,20 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,12">
-            <TextBlock Text="Customers"
-                       FontSize="22"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center" />
-            <Button Content="Export Excel"
-                    Style="{StaticResource BusyAwareButton}"
-                    DockPanel.Dock="Right"
-                    Padding="12,6"
-                    Click="ExportExcel_Click" />
+        <TextBlock Grid.Row="0" Text="Customers" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,12" />
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                <Button Content="Refresh" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,0" Click="Refresh_Click" />
+                <Button Content="Export Excel" Style="{StaticResource BusyAwareButton}" Padding="12,6" Click="ExportExcel_Click" />
+            </StackPanel>
+            <TextBox Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                     Padding="6,4"
+                     Width="280"
+                     VerticalContentAlignment="Center" />
         </DockPanel>
 
-        <StackPanel Grid.Row="1" Margin="0,0,0,8">
+        <StackPanel Grid.Row="2" Margin="0,0,0,8">
             <TextBlock Text="{Binding ErrorMessage}" Foreground="IndianRed" TextWrapping="Wrap" />
             <TextBlock Text="{Binding StatusMessage}" Foreground="SeaGreen" />
         </StackPanel>
@@ -47,7 +43,8 @@
                   ItemsSource="{Binding Customers}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  CanUserSortColumns="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
                 <DataGridTextColumn Header="Company" Binding="{Binding CompanyName}" Width="*" MinWidth="160" />
@@ -55,13 +52,8 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Border Grid.Row="3"
-                Background="#80FFFFFF"
-                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
-            <TextBlock Text="Loading…"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="16" />
+        <Border Grid.Row="3" Background="#80FFFFFF" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="Loading…" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" />
         </Border>
     </Grid>
 </views:ViewControllerBase>

@@ -257,6 +257,96 @@ public sealed class GearHubApiClient
         return await ApiJson.ReadAsync<UserAdminListDto>(response);
     }
 
+    public async Task SetUserRolesAsync(int id, SetUserRolesDto dto)
+    {
+        var response = await _http.PutAsJsonAsync($"api/Users/{id}/roles", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
+    public async Task DeleteUserAsync(int id)
+    {
+        var response = await _http.DeleteAsync($"api/Users/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
+    public async Task<PagedResultDto<CmsPostListDto>> GetCmsPostsAsync(int page, int pageSize)
+    {
+        var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));
+        var response = await _http.GetAsync($"api/CmsPost{query}");
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<PagedResultDto<CmsPostListDto>>(response);
+    }
+
+    public async Task<CmsPostDetailDto> GetCmsPostByIdAsync(Guid id)
+    {
+        var response = await _http.GetAsync($"api/CmsPost/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<CmsPostDetailDto>(response);
+    }
+
+    public async Task<CmsPostDetailDto> CreateCmsPostAsync(CmsPostUpsertDto dto)
+    {
+        var response = await _http.PostAsJsonAsync("api/CmsPost", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<CmsPostDetailDto>(response);
+    }
+
+    public async Task<CmsPostDetailDto> UpdateCmsPostAsync(Guid id, CmsPostUpsertDto dto)
+    {
+        var response = await _http.PutAsJsonAsync($"api/CmsPost/{id}", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<CmsPostDetailDto>(response);
+    }
+
+    public async Task DeleteCmsPostAsync(Guid id)
+    {
+        var response = await _http.DeleteAsync($"api/CmsPost/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
+    public async Task<PagedResultDto<PortalTextDto>> GetPortalTextsAsync(int page, int pageSize)
+    {
+        var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));
+        var response = await _http.GetAsync($"api/PortalText{query}");
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<PagedResultDto<PortalTextDto>>(response);
+    }
+
+    public async Task<PortalTextDto> GetPortalTextByKeyAsync(string key)
+    {
+        var response = await _http.GetAsync($"api/PortalText/{Uri.EscapeDataString(key)}");
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<PortalTextDto>(response);
+    }
+
+    public async Task<PortalTextDto> UpdatePortalTextAsync(string key, PortalTextUpsertDto dto)
+    {
+        var response = await _http.PutAsJsonAsync($"api/PortalText/{Uri.EscapeDataString(key)}", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<PortalTextDto>(response);
+    }
+
+    public async Task<PagedResultDto<MaintenanceDto>> GetMaintenancesAsync(int page, int pageSize)
+    {
+        var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));
+        var response = await _http.GetAsync($"api/Maintenance{query}");
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<PagedResultDto<MaintenanceDto>>(response);
+    }
+
+    public async Task<MaintenanceDto> CreateMaintenanceAsync(MaintenanceUpsertDto dto)
+    {
+        var response = await _http.PostAsJsonAsync("api/Maintenance", dto, ApiJson.Options);
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<MaintenanceDto>(response);
+    }
+
+    public async Task DeleteMaintenanceAsync(int id)
+    {
+        var response = await _http.DeleteAsync($"api/Maintenance/{id}");
+        await ApiJson.EnsureSuccessAsync(response);
+    }
+
     public async Task<PagedResultDto<CmsPostPublicSummaryDto>> GetPublishedNewsAsync(int page, int pageSize)
     {
         var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));

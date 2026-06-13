@@ -1,15 +1,16 @@
 using System.Collections.ObjectModel;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
+using GearHubDesktop.Views.Dialogs;
 
 namespace GearHubDesktop.Views;
 
 public partial class WarehousesView : ViewControllerBase, ILoadableView
 {
     private readonly GearHubApiClient _api;
-    private string _newName = string.Empty;
-    private string _newLocation = string.Empty;
-    private LookupListItem? _selectedItem;
+    private readonly List<LookupGridRow> _allItems = [];
+    private string _filterText = string.Empty;
+    private LookupGridRow? _selectedItem;
 
     public WarehousesView(GearHubApiClient api)
     {
@@ -18,21 +19,25 @@ public partial class WarehousesView : ViewControllerBase, ILoadableView
         DataContext = this;
     }
 
-    public ObservableCollection<LookupListItem> Items { get; } = [];
+    public ObservableCollection<LookupGridRow> Items { get; } = [];
 
-    public string NewName
+    public string FilterText
     {
-        get => _newName;
-        set => SetProperty(ref _newName, value);
+        get => _filterText;
+        set
+        {
+            if (Equals(_filterText, value))
+            {
+                return;
+            }
+
+            _filterText = value;
+            RaisePropertyChanged();
+            ApplyFilter();
+        }
     }
 
-    public string NewLocation
-    {
-        get => _newLocation;
-        set => SetProperty(ref _newLocation, value);
-    }
-
-    public LookupListItem? SelectedItem
+    public LookupGridRow? SelectedItem
     {
         get => _selectedItem;
         set => SetProperty(ref _selectedItem, value);
@@ -42,23 +47,15 @@ public partial class WarehousesView : ViewControllerBase, ILoadableView
 
     private async void Add_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(NewName))
+        var dialog = new WarehouseDialog();
+        if (DialogWindowHelper.Show(dialog, 440, null) != true)
         {
-            ErrorMessage = "Enter a warehouse name.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(NewLocation))
-        {
-            ErrorMessage = "Enter a location.";
             return;
         }
 
         await RunAsync(async () =>
         {
-            await _api.CreateWarehouseAsync(NewName.Trim(), NewLocation.Trim());
-            NewName = string.Empty;
-            NewLocation = string.Empty;
+            await _api.CreateWarehouseAsync(dialog.WarehouseName, dialog.Location);
             StatusMessage = "Warehouse added.";
             await ReloadCoreAsync();
         });
@@ -73,7 +70,7 @@ public partial class WarehousesView : ViewControllerBase, ILoadableView
         }
 
         if (System.Windows.MessageBox.Show(
-                $"Delete warehouse \"{SelectedItem.Display}\"?",
+                $"Delete warehouse \"{SelectedItem.Name}\"?",
                 "Confirm delete",
                 System.Windows.MessageBoxButton.YesNo,
                 System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.Yes)
@@ -89,20 +86,40 @@ public partial class WarehousesView : ViewControllerBase, ILoadableView
         });
     }
 
-    private async Task ReloadAsync()
-    {
-        await RunAsync(ReloadCoreAsync);
-    }
+    private async void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        await ReloadAsync();
+
+    private async Task ReloadAsync() => await RunAsync(ReloadCoreAsync);
 
     private async Task ReloadCoreAsync()
     {
         var result = await _api.GetWarehousesAsync(1, 500);
-        Items.Clear();
+        _allItems.Clear();
         foreach (var warehouse in result.Items)
         {
-            Items.Add(new LookupListItem(warehouse.Id, $"{warehouse.Id} · {warehouse.Name} · {warehouse.Location}"));
+            _allItems.Add(new LookupGridRow
+            {
+                Id = warehouse.Id,
+                Name = warehouse.Name,
+                Extra = warehouse.Location,
+            });
         }
 
+        ApplyFilter();
         StatusMessage = $"{result.TotalCount} warehouse(s) loaded.";
+    }
+
+    private void ApplyFilter()
+    {
+        Items.Clear();
+        var query = FilterText.Trim();
+        foreach (var item in _allItems.Where(row =>
+                     string.IsNullOrWhiteSpace(query)
+                     || row.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     || (row.Extra?.Contains(query, StringComparison.OrdinalIgnoreCase) ?? false)
+                     || row.Id.ToString().Contains(query, StringComparison.OrdinalIgnoreCase)))
+        {
+            Items.Add(item);
+        }
     }
 }

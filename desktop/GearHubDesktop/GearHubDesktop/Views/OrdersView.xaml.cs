@@ -87,6 +87,9 @@ public partial class OrdersView : ViewControllerBase, ILoadableView
     private async void Search_Click(object sender, System.Windows.RoutedEventArgs e) =>
         await LoadOrdersAsync();
 
+    private async void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        await LoadOrdersAsync();
+
     private async void ClearFilters_Click(object sender, System.Windows.RoutedEventArgs e)
     {
         SearchText = string.Empty;

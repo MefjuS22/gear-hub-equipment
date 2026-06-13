@@ -37,4 +37,6 @@ public enum ApiErrorCode
     UserEmailTaken = 411,
     UserCannotDeleteSelf = 412,
     UserLastAdmin = 413,
+
+    MaintenanceNotFound = 420,
 }

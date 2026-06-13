@@ -44,6 +44,7 @@ public sealed class AppBootstrapper
             };
             return new RemoteImageService(http, settings);
         });
+        services.AddSingleton<IServiceProvider>(sp => sp);
 
         services.AddTransient<LoginView>();
         services.AddTransient<CatalogView>();
@@ -60,9 +61,15 @@ public sealed class AppBootstrapper
         services.AddTransient<BrandsView>();
         services.AddTransient<WarehousesView>();
         services.AddTransient<UsersView>();
+        services.AddTransient<CmsPostsAdminView>();
+        services.AddTransient<CmsPostFormView>();
+        services.AddTransient<PortalTextsAdminView>();
+        services.AddTransient<PortalTextFormView>();
+        services.AddTransient<MaintenanceView>();
         services.AddTransient<PlaceholderView>();
         services.AddSingleton<MainWindow>();
 
-        return services.BuildServiceProvider();
+        var provider = services.BuildServiceProvider();
+        return provider;
     }
 }

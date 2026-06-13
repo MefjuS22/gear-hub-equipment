@@ -29,6 +29,7 @@
             <DatePicker SelectedDate="{Binding OrderDateTo}" Width="140" Margin="0,0,8,8" />
             <ComboBox ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="CompanyName" Width="180" Margin="0,0,8,8" />
             <Button Content="Search" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="Search_Click" />
+            <Button Content="Refresh" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="Refresh_Click" />
             <Button Content="Clear filters" Padding="12,6" Margin="0,0,8,8" Click="ClearFilters_Click" />
             <Button Content="Open order" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="OpenOrder_Click" />
             <Button Content="Export PDF" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="ExportPdf_Click" />

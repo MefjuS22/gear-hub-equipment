@@ -23,22 +23,14 @@
 
         <TextBlock Grid.Row="0" Text="Users" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,12" />
 
-        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="16" Margin="0,0,0,12" MaxWidth="640" HorizontalAlignment="Left">
-            <StackPanel>
-                <TextBlock Text="Create user" FontWeight="SemiBold" Margin="0,0,0,12" />
-                <TextBlock Text="Email" />
-                <TextBox Text="{Binding NewEmail, UpdateSourceTrigger=PropertyChanged}" Padding="8,6" Margin="0,4,0,8" />
-                <TextBlock Text="Password" />
-                <PasswordBox x:Name="NewPasswordInput" Padding="8,6" Margin="0,4,0,8" />
-                <TextBlock Text="Display name" />
-                <TextBox Text="{Binding NewDisplayName, UpdateSourceTrigger=PropertyChanged}" Padding="8,6" Margin="0,4,0,8" />
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                    <CheckBox Content="Admin" IsChecked="{Binding AssignAdminRole}" Margin="0,0,16,0" />
-                    <CheckBox Content="User" IsChecked="{Binding AssignUserRole}" />
-                </StackPanel>
-                <Button Content="Create user" Style="{StaticResource BusyAwareButton}" Padding="12,8" HorizontalAlignment="Left" Click="CreateUser_Click" />
+        <DockPanel Grid.Row="1" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                <Button Content="Add user" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,0" Click="AddUser_Click" />
+                <Button Content="Edit roles" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,0" Click="EditRoles_Click" IsEnabled="{Binding CanEditRoles}" />
+                <Button Content="Delete" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,0" Click="DeleteUser_Click" IsEnabled="{Binding CanDeleteSelectedUser}" />
+                <Button Content="Refresh" Style="{StaticResource BusyAwareButton}" Padding="12,6" Click="Refresh_Click" />
             </StackPanel>
-        </Border>
+        </DockPanel>
 
         <StackPanel Grid.Row="2" Margin="0,0,0,8">
             <TextBlock Text="{Binding ErrorMessage}" Foreground="IndianRed" TextWrapping="Wrap" />
@@ -47,9 +39,12 @@
 
         <DataGrid Grid.Row="3"
                   ItemsSource="{Binding Users}"
+                  SelectedItem="{Binding SelectedUser}"
                   AutoGenerateColumns="False"
                   IsReadOnly="True"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  CanUserSortColumns="True"
+                  SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*" MinWidth="180" />
@@ -58,9 +53,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Border Grid.Row="3"
-                Background="#80FFFFFF"
-                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
+        <Border Grid.Row="3" Background="#80FFFFFF" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <TextBlock Text="Loading…" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" />
         </Border>
     </Grid>

@@ -9,6 +9,8 @@ namespace GearHubDesktop.Views;
 public partial class CustomersView : ViewControllerBase, ILoadableView
 {
     private readonly GearHubApiClient _api;
+    private readonly List<Customer> _allCustomers = [];
+    private string _filterText = string.Empty;
 
     public CustomersView(GearHubApiClient api)
     {
@@ -19,21 +21,26 @@ public partial class CustomersView : ViewControllerBase, ILoadableView
 
     public ObservableCollection<Customer> Customers { get; } = [];
 
-    public async Task LoadAsync()
+    public string FilterText
     {
-        await RunAsync(async () =>
+        get => _filterText;
+        set
         {
-            StatusMessage = null;
-            var result = await _api.GetCustomersAsync(1, 200);
-            Customers.Clear();
-            foreach (var customer in result.Items)
+            if (Equals(_filterText, value))
             {
-                Customers.Add(customer);
+                return;
             }
 
-            StatusMessage = $"{result.TotalCount} customer(s) loaded.";
-        });
+            _filterText = value;
+            RaisePropertyChanged();
+            ApplyFilter();
+        }
     }
+
+    public async Task LoadAsync() => await ReloadAsync();
+
+    private async void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) =>
+        await ReloadAsync();
 
     private async void ExportExcel_Click(object sender, System.Windows.RoutedEventArgs e)
     {
@@ -54,5 +61,31 @@ public partial class CustomersView : ViewControllerBase, ILoadableView
             await _api.DownloadFileAsync("/api/Customer/export/excel", dialog.FileName);
             StatusMessage = "Customers export saved.";
         });
+    }
+
+    private async Task ReloadAsync() => await RunAsync(ReloadCoreAsync);
+
+    private async Task ReloadCoreAsync()
+    {
+        StatusMessage = null;
+        var result = await _api.GetCustomersAsync(1, 500);
+        _allCustomers.Clear();
+        _allCustomers.AddRange(result.Items);
+        ApplyFilter();
+        StatusMessage = $"{result.TotalCount} customer(s) loaded.";
+    }
+
+    private void ApplyFilter()
+    {
+        Customers.Clear();
+        var query = FilterText.Trim();
+        foreach (var customer in _allCustomers.Where(c =>
+                     string.IsNullOrWhiteSpace(query)
+                     || c.CompanyName.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     || c.ContactPerson.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     || c.Id.ToString().Contains(query, StringComparison.OrdinalIgnoreCase)))
+        {
+            Customers.Add(customer);
+        }
     }
 }

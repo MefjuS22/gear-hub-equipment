@@ -146,8 +146,15 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
             "staff-brands" => CreateAndLoad<BrandsView>(),
             "staff-warehouses" => CreateAndLoad<WarehousesView>(),
             "staff-users" => CreateAndLoad<UsersView>(),
-            "staff-cms" => CreatePlaceholder("Portal content", "Use the web app to edit CMS posts and portal copy."),
-            "staff-maintenance" => CreatePlaceholder("Maintenance", "Maintenance scheduling is not available yet."),
+            "staff-cms" => CreateAndLoad<CmsPostsAdminView>(),
+            "staff-cms-post-form" when parameter is CmsPostFormNavigation nav => CreateAndLoad(
+                _services.GetRequiredService<CmsPostFormView>(),
+                view => view.LoadAsync(nav.PostId)),
+            "staff-portal-texts" => CreateAndLoad<PortalTextsAdminView>(),
+            "staff-portal-text-form" when parameter is PortalTextFormNavigation nav => CreateAndLoad(
+                _services.GetRequiredService<PortalTextFormView>(),
+                view => view.LoadAsync(nav.Key)),
+            "staff-maintenance" => CreateAndLoad<MaintenanceView>(),
             _ => CurrentContent,
         };
     }

@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
+using GearHubDesktop.Views.Dialogs;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 
 namespace GearHubDesktop.Views;
@@ -9,14 +11,14 @@ namespace GearHubDesktop.Views;
 public partial class EquipmentAdminView : ViewControllerBase, ILoadableView
 {
     private readonly GearHubApiClient _api;
-    private readonly IAppNavigation _navigation;
+    private readonly IServiceProvider _services;
     private string _searchText = string.Empty;
     private EquipmentDto? _selectedEquipment;
 
-    public EquipmentAdminView(GearHubApiClient api, IAppNavigation navigation)
+    public EquipmentAdminView(GearHubApiClient api, IServiceProvider services)
     {
         _api = api;
-        _navigation = navigation;
+        _services = services;
         InitializeComponent();
         DataContext = this;
     }
@@ -43,10 +45,15 @@ public partial class EquipmentAdminView : ViewControllerBase, ILoadableView
     private async void Refresh_Click(object sender, System.Windows.RoutedEventArgs e) =>
         await LoadEquipmentAsync();
 
-    private void Add_Click(object sender, System.Windows.RoutedEventArgs e) =>
-        _navigation.NavigateTo("staff-equipment-form", new EquipmentFormNavigation());
+    private async void Add_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        if (await FormDialog.ShowEquipmentAsync(_services, null))
+        {
+            await LoadEquipmentAsync();
+        }
+    }
 
-    private void Edit_Click(object sender, System.Windows.RoutedEventArgs e)
+    private async void Edit_Click(object sender, System.Windows.RoutedEventArgs e)
     {
         if (SelectedEquipment is null)
         {
@@ -55,7 +62,10 @@ public partial class EquipmentAdminView : ViewControllerBase, ILoadableView
         }
 
         ErrorMessage = null;
-        _navigation.NavigateTo("staff-equipment-form", new EquipmentFormNavigation { EquipmentId = SelectedEquipment.Id });
+        if (await FormDialog.ShowEquipmentAsync(_services, SelectedEquipment.Id))
+        {
+            await LoadEquipmentAsync();
+        }
     }
 
     private async void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -106,10 +116,7 @@ public partial class EquipmentAdminView : ViewControllerBase, ILoadableView
         });
     }
 
-    private async Task LoadEquipmentAsync()
-    {
-        await RunAsync(LoadEquipmentCoreAsync);
-    }
+    private async Task LoadEquipmentAsync() => await RunAsync(LoadEquipmentCoreAsync);
 
     private async Task LoadEquipmentCoreAsync()
     {

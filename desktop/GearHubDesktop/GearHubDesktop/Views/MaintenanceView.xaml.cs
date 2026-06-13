@@ -1,25 +1,26 @@
 using System.Collections.ObjectModel;
+using GearHubDesktop.DTOs;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
 using GearHubDesktop.Views.Dialogs;
 
 namespace GearHubDesktop.Views;
 
-public partial class BrandsView : ViewControllerBase, ILoadableView
+public partial class MaintenanceView : ViewControllerBase, ILoadableView
 {
     private readonly GearHubApiClient _api;
-    private readonly List<LookupGridRow> _allItems = [];
+    private readonly List<MaintenanceDto> _allItems = [];
     private string _filterText = string.Empty;
-    private LookupGridRow? _selectedItem;
+    private MaintenanceDto? _selectedItem;
 
-    public BrandsView(GearHubApiClient api)
+    public MaintenanceView(GearHubApiClient api)
     {
         _api = api;
         InitializeComponent();
         DataContext = this;
     }
 
-    public ObservableCollection<LookupGridRow> Items { get; } = [];
+    public ObservableCollection<MaintenanceDto> Items { get; } = [];
 
     public string FilterText
     {
@@ -37,7 +38,7 @@ public partial class BrandsView : ViewControllerBase, ILoadableView
         }
     }
 
-    public LookupGridRow? SelectedItem
+    public MaintenanceDto? SelectedItem
     {
         get => _selectedItem;
         set => SetProperty(ref _selectedItem, value);
@@ -47,16 +48,29 @@ public partial class BrandsView : ViewControllerBase, ILoadableView
 
     private async void Add_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        var dialog = new TextInputDialog("Add brand", "Brand name");
-        if (DialogWindowHelper.Show(dialog, 400, null) != true)
+        var equipment = await _api.GetEquipmentAsync(1, 500);
+        if (equipment.Items.Count == 0)
+        {
+            ErrorMessage = "Add equipment before scheduling maintenance.";
+            return;
+        }
+
+        var dialog = new MaintenanceDialog(equipment.Items);
+        if (DialogWindowHelper.Show(dialog, 480, null) != true)
         {
             return;
         }
 
         await RunAsync(async () =>
         {
-            await _api.CreateBrandAsync(dialog.Value.Trim());
-            StatusMessage = "Brand added.";
+            await _api.CreateMaintenanceAsync(new MaintenanceUpsertDto
+            {
+                EquipmentId = dialog.EquipmentId,
+                Date = dialog.Date,
+                Description = dialog.Description,
+            });
+
+            StatusMessage = "Maintenance scheduled.";
             await ReloadCoreAsync();
         });
     }
@@ -65,12 +79,12 @@ public partial class BrandsView : ViewControllerBase, ILoadableView
     {
         if (SelectedItem is null)
         {
-            ErrorMessage = "Select a brand to delete.";
+            ErrorMessage = "Select a maintenance record to delete.";
             return;
         }
 
         if (System.Windows.MessageBox.Show(
-                $"Delete brand \"{SelectedItem.Name}\"?",
+                $"Delete maintenance for \"{SelectedItem.EquipmentName}\"?",
                 "Confirm delete",
                 System.Windows.MessageBoxButton.YesNo,
                 System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.Yes)
@@ -80,8 +94,8 @@ public partial class BrandsView : ViewControllerBase, ILoadableView
 
         await RunAsync(async () =>
         {
-            await _api.DeleteBrandAsync(SelectedItem.Id);
-            StatusMessage = "Brand deleted.";
+            await _api.DeleteMaintenanceAsync(SelectedItem.Id);
+            StatusMessage = "Maintenance deleted.";
             await ReloadCoreAsync();
         });
     }
@@ -93,15 +107,11 @@ public partial class BrandsView : ViewControllerBase, ILoadableView
 
     private async Task ReloadCoreAsync()
     {
-        var result = await _api.GetBrandsAsync(1, 500);
+        var result = await _api.GetMaintenancesAsync(1, 500);
         _allItems.Clear();
-        foreach (var brand in result.Items)
-        {
-            _allItems.Add(new LookupGridRow { Id = brand.Id, Name = brand.Name });
-        }
-
+        _allItems.AddRange(result.Items);
         ApplyFilter();
-        StatusMessage = $"{result.TotalCount} brand(s) loaded.";
+        StatusMessage = $"{result.TotalCount} record(s) loaded.";
     }
 
     private void ApplyFilter()
@@ -110,7 +120,8 @@ public partial class BrandsView : ViewControllerBase, ILoadableView
         var query = FilterText.Trim();
         foreach (var item in _allItems.Where(row =>
                      string.IsNullOrWhiteSpace(query)
-                     || row.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     || row.EquipmentName.Contains(query, StringComparison.OrdinalIgnoreCase)
+                     || row.Description.Contains(query, StringComparison.OrdinalIgnoreCase)
                      || row.Id.ToString().Contains(query, StringComparison.OrdinalIgnoreCase)))
         {
             Items.Add(item);
