@@ -48,8 +48,16 @@ public partial class PortalTextsAdminView : ViewControllerBase, ILoadableView
 
     public async Task LoadAsync() => await LoadTextsAsync();
 
-    private void NewsPosts_Click(object sender, RoutedEventArgs e) =>
+    private void NewsPosts_Click(object sender, RoutedEventArgs e)
+    {
+        if (_navigation.CanGoBack)
+        {
+            _navigation.GoBack();
+            return;
+        }
+
         _navigation.NavigateTo("staff-cms");
+    }
 
     private async void Refresh_Click(object sender, RoutedEventArgs e) =>
         await LoadTextsAsync();

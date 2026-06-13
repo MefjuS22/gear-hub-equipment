@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Services;
+using GearHubDesktop.Shell;
 using Microsoft.Win32;
 
 namespace GearHubDesktop.Views;
@@ -8,12 +9,14 @@ namespace GearHubDesktop.Views;
 public partial class OrderDetailView : ViewControllerBase
 {
     private readonly GearHubApiClient _api;
+    private readonly IAppNavigation _navigation;
     private int _orderId;
     private RentalOrderListDto? _order;
 
-    public OrderDetailView(GearHubApiClient api)
+    public OrderDetailView(GearHubApiClient api, IAppNavigation navigation)
     {
         _api = api;
+        _navigation = navigation;
         InitializeComponent();
         DataContext = this;
     }
@@ -56,6 +59,8 @@ public partial class OrderDetailView : ViewControllerBase
             RaisePropertyChanged(nameof(RentalPeriodLine));
         });
     }
+
+    private void Back_Click(object sender, System.Windows.RoutedEventArgs e) => _navigation.GoBack();
 
     private async void ExportPdf_Click(object sender, System.Windows.RoutedEventArgs e)
     {

@@ -116,6 +116,8 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
         });
     }
 
+    private async void Refresh_Click(object sender, RoutedEventArgs e) => await LoadAsync();
+
     private async Task LoadSelectedDetailAsync()
     {
         SelectedDetail = null;

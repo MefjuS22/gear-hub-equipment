@@ -23,4 +23,7 @@ public partial class MainWindow
 
     private void LogoutButton_OnClick(object sender, System.Windows.RoutedEventArgs e) =>
         _shell.Logout();
+
+    private void BackButton_OnClick(object sender, System.Windows.RoutedEventArgs e) =>
+        _shell.GoBack();
 }

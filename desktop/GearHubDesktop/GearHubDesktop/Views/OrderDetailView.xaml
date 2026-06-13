@@ -21,15 +21,21 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Content="← Back"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Padding="12,6"
+                        Margin="0,0,8,0"
+                        Click="Back_Click" />
+                <Button Content="Export PDF"
+                        Style="{StaticResource BusyAwareButton}"
+                        Padding="12,6"
+                        Click="ExportPdf_Click" />
+            </StackPanel>
             <TextBlock Text="{Binding HeaderText}"
                        FontSize="22"
                        FontWeight="SemiBold"
                        VerticalAlignment="Center" />
-            <Button Content="Export PDF"
-                    Style="{StaticResource BusyAwareButton}"
-                    DockPanel.Dock="Right"
-                    Padding="12,6"
-                    Click="ExportPdf_Click" />
         </DockPanel>
 
         <StackPanel Grid.Row="1" Margin="0,0,0,12">

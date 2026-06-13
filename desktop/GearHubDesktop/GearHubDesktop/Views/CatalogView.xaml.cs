@@ -73,6 +73,8 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
         });
     }
 
+    private async void Refresh_Click(object sender, RoutedEventArgs e) => await LoadAsync();
+
     private async void Search_Click(object sender, RoutedEventArgs e) =>
         await RunAsync(() => LoadPageAsync(resetPage: true));
 

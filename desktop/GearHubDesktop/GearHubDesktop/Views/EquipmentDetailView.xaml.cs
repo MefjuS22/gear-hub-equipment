@@ -3,6 +3,7 @@ using System.Windows.Media;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
+using GearHubDesktop.Shell;
 
 namespace GearHubDesktop.Views;
 
@@ -14,8 +15,10 @@ public partial class EquipmentDetailView : ViewControllerBase
     private readonly ICartService _cart;
     private readonly ApiSettings _settings;
     private readonly IRemoteImageService _images;
+    private readonly IAppNavigation _navigation;
 
     private EquipmentDto? _equipment;
+    private int _equipmentId;
     private ImageSource? _imageSource;
     private bool _isLoading;
 
@@ -23,12 +26,14 @@ public partial class EquipmentDetailView : ViewControllerBase
         GearHubApiClient api,
         ICartService cart,
         ApiSettings settings,
-        IRemoteImageService images)
+        IRemoteImageService images,
+        IAppNavigation navigation)
     {
         _api = api;
         _cart = cart;
         _settings = settings;
         _images = images;
+        _navigation = navigation;
         InitializeComponent();
         DataContext = this;
         DescriptionViewer.BaseUrl = _settings.BaseUrl;
@@ -78,6 +83,7 @@ public partial class EquipmentDetailView : ViewControllerBase
 
     public async Task LoadAsync(int id)
     {
+        _equipmentId = id;
         ErrorMessage = null;
         StatusMessage = null;
         IsLoading = true;
@@ -98,6 +104,18 @@ public partial class EquipmentDetailView : ViewControllerBase
             IsLoading = false;
         }
     }
+
+    private async void Refresh_Click(object sender, RoutedEventArgs e)
+    {
+        if (_equipmentId <= 0)
+        {
+            return;
+        }
+
+        await LoadAsync(_equipmentId);
+    }
+
+    private void Back_Click(object sender, RoutedEventArgs e) => _navigation.GoBack();
 
     private async Task<string> ResolveDescriptionHtmlAsync(string? equipmentHtml)
     {

@@ -157,6 +157,8 @@ public partial class CartView : ViewControllerBase, ILoadableView
         });
     }
 
+    private async void Refresh_Click(object sender, RoutedEventArgs e) => await LoadAsync();
+
     private async void PlaceOrder_Click(object sender, RoutedEventArgs e)
     {
         await RunAsync(async () =>

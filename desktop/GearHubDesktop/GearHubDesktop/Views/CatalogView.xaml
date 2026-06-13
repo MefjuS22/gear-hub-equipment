@@ -21,10 +21,20 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="Equipment catalog" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Browse available gear and add items to your cart."
-                       Style="{StaticResource PageSubtitleText}"
-                       Margin="0,6,0,0" />
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right"
+                        Content="Refresh"
+                        Style="{StaticResource BusyAwareButton}"
+                        Padding="12,6"
+                        VerticalAlignment="Top"
+                        Click="Refresh_Click" />
+                <StackPanel>
+                    <TextBlock Text="Equipment catalog" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Browse available gear and add items to your cart."
+                               Style="{StaticResource PageSubtitleText}"
+                               Margin="0,6,0,0" />
+                </StackPanel>
+            </DockPanel>
         </StackPanel>
 
         <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,0,16">

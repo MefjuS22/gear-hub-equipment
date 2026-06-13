@@ -18,10 +18,20 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="Cart" Style="{StaticResource PageTitleText}" />
-            <TextBlock Text="Review items and place your rental order."
-                       Style="{StaticResource PageSubtitleText}"
-                       Margin="0,6,0,0" />
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right"
+                        Content="Refresh"
+                        Style="{StaticResource BusyAwareButton}"
+                        Padding="12,6"
+                        VerticalAlignment="Top"
+                        Click="Refresh_Click" />
+                <StackPanel>
+                    <TextBlock Text="Cart" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="Review items and place your rental order."
+                               Style="{StaticResource PageSubtitleText}"
+                               Margin="0,6,0,0" />
+                </StackPanel>
+            </DockPanel>
         </StackPanel>
 
         <Grid Grid.Row="1">

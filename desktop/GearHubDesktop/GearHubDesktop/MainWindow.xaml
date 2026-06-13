@@ -136,10 +136,27 @@
                 <Border Grid.Column="1"
                         Background="{StaticResource BackgroundBrush}"
                         Padding="28,24">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Disabled">
-                        <ContentControl Content="{Binding CurrentContent}" />
-                    </ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0"
+                                Content="← Back"
+                                Style="{StaticResource CompactSecondaryButton}"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,0,12"
+                                Padding="12,6"
+                                Visibility="{Binding CanGoBack, Converter={StaticResource BoolVis}}"
+                                Click="BackButton_OnClick" />
+
+                        <ScrollViewer Grid.Row="1"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled">
+                            <ContentControl Content="{Binding CurrentContent}" />
+                        </ScrollViewer>
+                    </Grid>
                 </Border>
             </Grid>
         </Grid>

@@ -23,6 +23,10 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
 
     private LoginView? _loginContent;
 
+    private readonly Stack<NavigationState> _backStack = new();
+    private string? _currentTarget;
+    private object? _currentParameter;
+
     public MainShell(
         IServiceProvider services,
         IAuthSession session,
@@ -112,6 +116,8 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
     public string UserLabel => _session.User?.Email ?? "Guest";
     public int CartCount => _cart.ItemCount;
 
+    public bool CanGoBack => _backStack.Count > 0;
+
     public IEnumerable<NavItem> VisibleNavItems =>
         NavItems.Where(item =>
             item.Section == SelectedSection
@@ -145,12 +151,53 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
     {
         _session.Clear();
         _ = _session.SaveAsync();
+        ClearNavigationHistory();
         CurrentContent = null;
         RefreshAuthState();
     }
 
+    public void GoBack()
+    {
+        if (_backStack.Count == 0)
+        {
+            return;
+        }
+
+        var state = _backStack.Pop();
+        _currentTarget = state.Target;
+        _currentParameter = state.Parameter;
+
+        _suppressNavSelection = true;
+        _selectedNavItem = state.SelectedNavItem;
+        RaisePropertyChanged(nameof(SelectedNavItem));
+        _suppressNavSelection = false;
+
+        CurrentContent = state.Content;
+        RaisePropertyChanged(nameof(CanGoBack));
+    }
+
     public void NavigateTo(string target, object? parameter = null)
     {
+        var isTopLevelNav = parameter is null && NavItems.Any(item => item.Target == target);
+        if (isTopLevelNav)
+        {
+            ClearNavigationHistory();
+        }
+        else if (CurrentContent is not null)
+        {
+            _backStack.Push(new NavigationState
+            {
+                Target = _currentTarget ?? string.Empty,
+                Parameter = _currentParameter,
+                Content = CurrentContent,
+                SelectedNavItem = _selectedNavItem,
+            });
+            RaisePropertyChanged(nameof(CanGoBack));
+        }
+
+        _currentTarget = target;
+        _currentParameter = parameter;
+
         var navItem = NavItems.FirstOrDefault(item => item.Target == target);
         if (navItem is not null)
         {
@@ -247,6 +294,14 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
         RaisePropertyChanged(nameof(ShowStaff));
         RaisePropertyChanged(nameof(UserLabel));
         RaisePropertyChanged(nameof(VisibleNavItems));
+    }
+
+    private void ClearNavigationHistory()
+    {
+        _backStack.Clear();
+        _currentTarget = null;
+        _currentParameter = null;
+        RaisePropertyChanged(nameof(CanGoBack));
     }
 
     private void RaisePropertyChanged([CallerMemberName] string? propertyName = null) =>
