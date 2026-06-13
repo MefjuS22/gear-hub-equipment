@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
@@ -16,7 +16,7 @@ public partial class EquipmentDetailView : ViewControllerBase
     private readonly IRemoteImageService _images;
 
     private EquipmentDto? _equipment;
-    private BitmapImage? _imageSource;
+    private ImageSource? _imageSource;
     private bool _isLoading;
 
     public EquipmentDetailView(
@@ -44,7 +44,7 @@ public partial class EquipmentDetailView : ViewControllerBase
         private set => SetProperty(ref _isLoading, value);
     }
 
-    public BitmapImage? ImageSource
+    public ImageSource? ImageSource
     {
         get => _imageSource;
         private set

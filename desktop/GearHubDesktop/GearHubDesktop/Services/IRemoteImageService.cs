@@ -1,8 +1,8 @@
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace GearHubDesktop.Services;
 
 public interface IRemoteImageService
 {
-    Task<BitmapImage?> LoadAsync(string? publicPathOrUrl, CancellationToken cancellationToken = default);
+    Task<ImageSource?> LoadAsync(string? publicPathOrUrl, CancellationToken cancellationToken = default);
 }

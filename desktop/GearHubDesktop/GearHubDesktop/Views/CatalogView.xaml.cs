@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
@@ -172,7 +172,7 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
         foreach (var row in rows)
         {
             var thumbnail = await _images.LoadAsync(row.Equipment.ImageUrl);
-            row.Thumbnail = thumbnail;
+            await Dispatcher.InvokeAsync(() => row.Thumbnail = thumbnail);
         }
     }
 
@@ -185,7 +185,7 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
 
     public sealed class CatalogRow : INotifyPropertyChanged
     {
-        private BitmapImage? _thumbnail;
+        private ImageSource? _thumbnail;
 
         public CatalogRow(EquipmentDto equipment)
         {
@@ -206,7 +206,7 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
 
         public bool IsAvailable => Equipment.IsAvailable;
 
-        public BitmapImage? Thumbnail
+        public ImageSource? Thumbnail
         {
             get => _thumbnail;
             set

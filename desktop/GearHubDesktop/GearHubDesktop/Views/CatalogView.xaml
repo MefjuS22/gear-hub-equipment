@@ -7,6 +7,7 @@
              mc:Ignorable="d">
     <views:ViewControllerBase.Resources>
         <views:InverseBooleanConverter x:Key="InverseBool" />
+        <views:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibility" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
     </views:ViewControllerBase.Resources>
@@ -89,12 +90,12 @@
                             <DataTemplate>
                                 <Grid Width="48" Height="48">
                                     <Border Background="#F0F0F0" CornerRadius="4"
-                                            Visibility="{Binding HasThumbnail, Converter={StaticResource InverseBool}, FallbackValue=Visible}" />
+                                            Visibility="{Binding HasThumbnail, Converter={StaticResource InverseBoolToVisibility}, FallbackValue=Visible}" />
                                     <TextBlock Text="—"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Foreground="#888888"
-                                               Visibility="{Binding HasThumbnail, Converter={StaticResource InverseBool}}" />
+                                               Visibility="{Binding HasThumbnail, Converter={StaticResource InverseBoolToVisibility}}" />
                                     <Image Source="{Binding Thumbnail}"
                                            Width="48"
                                            Height="48"

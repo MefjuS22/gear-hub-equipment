@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
@@ -20,7 +20,7 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
 
     private NewsArticleRow? _selectedArticle;
     private CmsPostPublicDetailDto? _selectedDetail;
-    private BitmapImage? _coverImageSource;
+    private ImageSource? _coverImageSource;
     private bool _isDetailLoading;
 
     public NewsListView(GearHubApiClient api, ApiSettings settings, IRemoteImageService images)
@@ -64,7 +64,7 @@ public partial class NewsListView : ViewControllerBase, ILoadableView
         }
     }
 
-    public BitmapImage? CoverImageSource
+    public ImageSource? CoverImageSource
     {
         get => _coverImageSource;
         private set
