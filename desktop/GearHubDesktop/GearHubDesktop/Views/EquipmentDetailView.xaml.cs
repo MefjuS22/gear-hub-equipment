@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using GearHubDesktop.DTOs;
 using GearHubDesktop.Helpers;
@@ -10,6 +8,8 @@ namespace GearHubDesktop.Views;
 
 public partial class EquipmentDetailView : ViewControllerBase
 {
+    private const string DescriptionFallbackKey = "catalog.featured.fallback";
+
     private readonly GearHubApiClient _api;
     private readonly ICartService _cart;
     private readonly ApiSettings _settings;
@@ -31,12 +31,15 @@ public partial class EquipmentDetailView : ViewControllerBase
         _images = images;
         InitializeComponent();
         DataContext = this;
+        DescriptionViewer.BaseUrl = _settings.BaseUrl;
     }
 
     public EquipmentDto Equipment =>
         _equipment ?? new EquipmentDto { Name = "Equipment" };
 
     public bool HasEquipment => _equipment is not null;
+
+    public string ApiBaseUrl => _settings.BaseUrl;
 
     public bool IsLoading
     {
@@ -58,8 +61,6 @@ public partial class EquipmentDetailView : ViewControllerBase
     public bool HasImage => ImageSource is not null;
 
     public bool ShowImagePlaceholder => !HasImage;
-
-    public bool HasDescription => !string.IsNullOrWhiteSpace(_equipment?.DescriptionHtml);
 
     public bool CanAddToCart => _equipment?.IsAvailable == true && !IsBusy;
 
@@ -86,7 +87,7 @@ public partial class EquipmentDetailView : ViewControllerBase
             _equipment = await _api.GetEquipmentByIdAsync(id);
             RaiseEquipmentProperties();
             ImageSource = await _images.LoadAsync(_equipment.ImageUrl);
-            LoadDescriptionHtml(_equipment.DescriptionHtml);
+            DescriptionViewer.SetHtml(await ResolveDescriptionHtmlAsync(_equipment.DescriptionHtml));
         }
         catch (Exception ex)
         {
@@ -95,6 +96,30 @@ public partial class EquipmentDetailView : ViewControllerBase
         finally
         {
             IsLoading = false;
+        }
+    }
+
+    private async Task<string> ResolveDescriptionHtmlAsync(string? equipmentHtml)
+    {
+        if (!string.IsNullOrWhiteSpace(equipmentHtml))
+        {
+            return equipmentHtml.Trim();
+        }
+
+        var portalFallback = await TryGetPublicPortalTextHtmlAsync(DescriptionFallbackKey);
+        return PortalTextDefaults.ResolveBodyHtml(DescriptionFallbackKey, portalFallback);
+    }
+
+    private async Task<string?> TryGetPublicPortalTextHtmlAsync(string key)
+    {
+        try
+        {
+            var result = await _api.GetPublicPortalTextsAsync(1, 100);
+            return result.Items?.FirstOrDefault(text => text.Key == key)?.BodyHtml;
+        }
+        catch
+        {
+            return null;
         }
     }
 
@@ -113,18 +138,6 @@ public partial class EquipmentDetailView : ViewControllerBase
         });
     }
 
-    private void LoadDescriptionHtml(string? html)
-    {
-        if (string.IsNullOrWhiteSpace(html))
-        {
-            DescriptionBrowser.NavigateToString("<html><body></body></html>");
-            return;
-        }
-
-        var document = CmsHtmlHelper.BuildWebBrowserDocument(html, _settings.BaseUrl);
-        DescriptionBrowser.NavigateToString(document);
-    }
-
     private void RaiseEquipmentProperties()
     {
         RaisePropertyChanged(nameof(Equipment));
@@ -135,6 +148,5 @@ public partial class EquipmentDetailView : ViewControllerBase
         RaisePropertyChanged(nameof(DailyRateLabel));
         RaisePropertyChanged(nameof(AvailabilityLabel));
         RaisePropertyChanged(nameof(CanAddToCart));
-        RaisePropertyChanged(nameof(HasDescription));
     }
 }

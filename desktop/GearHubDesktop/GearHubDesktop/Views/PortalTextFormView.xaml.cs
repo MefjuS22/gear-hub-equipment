@@ -83,7 +83,7 @@ public partial class PortalTextFormView : ViewControllerBase, INotifyDialogFinis
             return;
         }
 
-        var body = HtmlEditorHelper.NormalizeOutput(BodyEditor.GetHtml());
+        var body = HtmlEditorHelper.NormalizeOutput(await BodyEditor.GetHtmlAsync());
         if (string.IsNullOrEmpty(body))
         {
             ErrorMessage = "Portal content is required.";

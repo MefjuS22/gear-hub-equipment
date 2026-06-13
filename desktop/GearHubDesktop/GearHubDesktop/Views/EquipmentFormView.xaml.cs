@@ -175,23 +175,24 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
 
     private async Task<string?> UploadEditorImageAsync()
     {
-        var dialog = new OpenFileDialog
+        string? filePath = await Dispatcher.InvokeAsync(() =>
         {
-            Filter = "Images|*.png;*.jpg;*.jpeg;*.webp;*.gif|All files|*.*",
-        };
+            return FileDialogHelper.TryPickImage(this, out var path) ? path : null;
+        });
 
-        if (dialog.ShowDialog() != true)
+        if (string.IsNullOrWhiteSpace(filePath))
         {
             return null;
         }
 
         try
         {
-            var upload = await _api.UploadFileAsync(dialog.FileName, "equipment");
+            var upload = await _api.UploadFileAsync(filePath, "equipment");
             return FileUrls.ResolvePublicFileUrl(_settings.BaseUrl, upload.PublicPath);
         }
-        catch
+        catch (Exception ex)
         {
+            await Dispatcher.InvokeAsync(() => ErrorMessage = ex.Message);
             return null;
         }
     }
@@ -222,7 +223,7 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
             return;
         }
 
-        var description = HtmlEditorHelper.NormalizeOutput(DescriptionEditor.GetHtml());
+        var description = HtmlEditorHelper.NormalizeOutput(await DescriptionEditor.GetHtmlAsync());
         var dto = new EquipmentUpsertDto
         {
             Name = EquipmentName.Trim(),

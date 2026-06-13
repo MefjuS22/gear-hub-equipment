@@ -312,6 +312,14 @@ public sealed class GearHubApiClient
         return await ApiJson.ReadAsync<PagedResultDto<PortalTextDto>>(response);
     }
 
+    public async Task<PagedResultDto<PortalTextPublicDto>> GetPublicPortalTextsAsync(int page, int pageSize)
+    {
+        var query = BuildQuery(("page", page.ToString()), ("pageSize", pageSize.ToString()));
+        var response = await _http.GetAsync($"api/PortalText/Public{query}");
+        await ApiJson.EnsureSuccessAsync(response);
+        return await ApiJson.ReadAsync<PagedResultDto<PortalTextPublicDto>>(response);
+    }
+
     public async Task<PortalTextDto> GetPortalTextByKeyAsync(string key)
     {
         var response = await _http.GetAsync($"api/PortalText/{Uri.EscapeDataString(key)}");
@@ -366,8 +374,8 @@ public sealed class GearHubApiClient
     {
         var pairs = query?
             .Where(pair => !string.IsNullOrWhiteSpace(pair.Value))
-            .Select(pair => (pair.Key, pair.Value!))
-            .ToArray() ?? [];
+            .Select(pair => (Key: pair.Key, Value: (string?)pair.Value))
+            .ToArray() ?? Array.Empty<(string Key, string? Value)>();
         var path = relativePath.StartsWith('/') ? relativePath : $"/{relativePath}";
         var url = pairs.Length == 0 ? path.TrimStart('/') : $"{path.TrimStart('/')}{BuildQuery(pairs)}";
 

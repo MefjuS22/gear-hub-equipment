@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:GearHubDesktop.Views"
+             xmlns:controls="clr-namespace:GearHubDesktop.Controls"
              mc:Ignorable="d">
     <views:ViewControllerBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
@@ -82,8 +83,7 @@
             </Border>
 
             <Border Style="{StaticResource Card}"
-                    Margin="0,16,0,0"
-                    Visibility="{Binding HasDescription, Converter={StaticResource BoolToVisibility}}">
+                    Margin="0,16,0,0">
                 <StackPanel>
                     <TextBlock Text="Description"
                                FontWeight="SemiBold"
@@ -91,9 +91,13 @@
                                Margin="0,0,0,10" />
                     <Border BorderBrush="{StaticResource BorderBrush}"
                             BorderThickness="1"
-                            CornerRadius="8">
-                        <WebBrowser x:Name="DescriptionBrowser"
-                                    Height="240" />
+                            CornerRadius="8"
+                            Background="White"
+                            MinHeight="120">
+                        <controls:HtmlContentViewer x:Name="DescriptionViewer"
+                                                    MinHeight="120"
+                                                    MaxHeight="360"
+                                                    BaseUrl="{Binding ApiBaseUrl}" />
                     </Border>
                 </StackPanel>
             </Border>

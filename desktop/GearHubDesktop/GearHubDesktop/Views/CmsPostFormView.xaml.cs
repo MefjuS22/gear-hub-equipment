@@ -128,23 +128,24 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
 
     private async Task<string?> UploadEditorImageAsync()
     {
-        var dialog = new OpenFileDialog
+        string? filePath = await Dispatcher.InvokeAsync(() =>
         {
-            Filter = "Images|*.png;*.jpg;*.jpeg;*.webp;*.gif|All files|*.*",
-        };
+            return FileDialogHelper.TryPickImage(this, out var path) ? path : null;
+        });
 
-        if (dialog.ShowDialog() != true)
+        if (string.IsNullOrWhiteSpace(filePath))
         {
             return null;
         }
 
         try
         {
-            var upload = await _api.UploadFileAsync(dialog.FileName, "cms");
+            var upload = await _api.UploadFileAsync(filePath, "cms");
             return FileUrls.ResolvePublicFileUrl(_settings.BaseUrl, upload.PublicPath);
         }
-        catch
+        catch (Exception ex)
         {
+            await Dispatcher.InvokeAsync(() => ErrorMessage = ex.Message);
             return null;
         }
     }
@@ -163,7 +164,7 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
             Slug = Slug.Trim(),
             Excerpt = string.IsNullOrWhiteSpace(Excerpt) ? null : Excerpt.Trim(),
             CoverImageUrl = string.IsNullOrWhiteSpace(CoverImageUrl) ? null : CoverImageUrl.Trim(),
-            BodyHtml = HtmlEditorHelper.NormalizeOutput(BodyEditor.GetHtml()),
+            BodyHtml = HtmlEditorHelper.NormalizeOutput(await BodyEditor.GetHtmlAsync()),
             IsPublished = IsPublished,
         };
 

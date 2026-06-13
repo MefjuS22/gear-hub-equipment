@@ -198,9 +198,9 @@ public partial class CatalogView : ViewControllerBase, ILoadableView
 
         public string Name => Equipment.Name;
 
-        public string CategoryName => Equipment.CategoryName;
+        public string CategoryName => Equipment.CategoryName ?? string.Empty;
 
-        public string BrandName => Equipment.BrandName;
+        public string BrandName => Equipment.BrandName ?? string.Empty;
 
         public decimal DailyRate => Equipment.DailyRate;
 
