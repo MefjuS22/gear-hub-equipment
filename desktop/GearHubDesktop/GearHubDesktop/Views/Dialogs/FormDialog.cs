@@ -12,26 +12,13 @@ public static class FormDialog
         form.ConfigureAsDialog();
         await form.LoadAsync(equipmentId);
 
-        var window = new Window
-        {
-            Title = equipmentId is null ? "New equipment" : $"Edit equipment #{equipmentId}",
-            Content = form,
-            Width = 760,
-            Height = 640,
-            MinWidth = 600,
-            MinHeight = 480,
-            ResizeMode = ResizeMode.CanResize,
-        };
+        var window = CreateFormWindow(
+            equipmentId is null ? "New equipment" : $"Edit equipment #{equipmentId}",
+            form,
+            780,
+            720);
 
-        var saved = false;
-        form.DialogFinished += (_, ok) =>
-        {
-            saved = ok;
-            window.DialogResult = ok;
-            window.Close();
-        };
-
-        return DialogWindowHelper.Show(window) == true && saved;
+        return ShowForm(window, form);
     }
 
     public static async Task<bool> ShowCmsPostAsync(IServiceProvider services, Guid? postId)
@@ -40,26 +27,13 @@ public static class FormDialog
         form.ConfigureAsDialog();
         await form.LoadAsync(postId);
 
-        var window = new Window
-        {
-            Title = postId is null ? "New post" : "Edit post",
-            Content = form,
-            Width = 760,
-            Height = 680,
-            MinWidth = 600,
-            MinHeight = 520,
-            ResizeMode = ResizeMode.CanResize,
-        };
+        var window = CreateFormWindow(
+            postId is null ? "New post" : "Edit post",
+            form,
+            800,
+            760);
 
-        var saved = false;
-        form.DialogFinished += (_, ok) =>
-        {
-            saved = ok;
-            window.DialogResult = ok;
-            window.Close();
-        };
-
-        return DialogWindowHelper.Show(window) == true && saved;
+        return ShowForm(window, form);
     }
 
     public static async Task<bool> ShowPortalTextAsync(IServiceProvider services, string key)
@@ -68,17 +42,30 @@ public static class FormDialog
         form.ConfigureAsDialog();
         await form.LoadAsync(key);
 
+        var window = CreateFormWindow("Edit portal text", form, 720, 560);
+
+        return ShowForm(window, form);
+    }
+
+    private static Window CreateFormWindow(string title, UIElement content, double width, double height)
+    {
         var window = new Window
         {
-            Title = "Edit portal text",
-            Content = form,
-            Width = 640,
-            Height = 480,
-            MinWidth = 520,
-            MinHeight = 400,
+            Title = title,
+            Content = content,
+            Width = width,
+            Height = height,
+            MinWidth = 620,
+            MinHeight = 480,
             ResizeMode = ResizeMode.CanResize,
         };
 
+        DialogWindowHelper.Configure(window);
+        return window;
+    }
+
+    private static bool ShowForm(Window window, INotifyDialogFinished form)
+    {
         var saved = false;
         form.DialogFinished += (_, ok) =>
         {
@@ -89,4 +76,9 @@ public static class FormDialog
 
         return DialogWindowHelper.Show(window) == true && saved;
     }
+}
+
+public interface INotifyDialogFinished
+{
+    event EventHandler<bool>? DialogFinished;
 }

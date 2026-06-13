@@ -8,6 +8,7 @@ public partial class MaintenanceDialog : Window
     public MaintenanceDialog(IReadOnlyList<EquipmentDto> equipment)
     {
         InitializeComponent();
+        DialogWindowHelper.Configure(this);
         EquipmentCombo.ItemsSource = equipment;
         EquipmentCombo.SelectedIndex = equipment.Count > 0 ? 0 : -1;
         DateInput.SelectedDate = DateTime.Today;

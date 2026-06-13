@@ -4,10 +4,14 @@ namespace GearHubDesktop.Views.Dialogs;
 
 public partial class TextInputDialog : Window
 {
-    public TextInputDialog(string title, string prompt, string? initialValue = null)
+    private readonly bool _required;
+
+    public TextInputDialog(string title, string prompt, string? initialValue = null, bool required = true)
     {
+        _required = required;
         Title = title;
         InitializeComponent();
+        DialogWindowHelper.Configure(this);
         PromptText.Text = prompt;
         InputBox.Text = initialValue ?? string.Empty;
         InputBox.SelectAll();
@@ -18,7 +22,7 @@ public partial class TextInputDialog : Window
 
     private void Ok_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(InputBox.Text))
+        if (_required && string.IsNullOrWhiteSpace(InputBox.Text))
         {
             ErrorText.Text = "Value is required.";
             return;

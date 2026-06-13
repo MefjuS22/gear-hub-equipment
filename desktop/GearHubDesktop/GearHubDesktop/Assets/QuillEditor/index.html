@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    #editor {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ql-toolbar.ql-snow {
+      border: none;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 6px 8px;
+    }
+
+    .ql-container.ql-snow {
+      border: none;
+      flex: 1;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 14px;
+      color: #0f172a;
+    }
+
+    .ql-editor {
+      min-height: 120px;
+      line-height: 1.5;
+    }
+
+    .ql-editor.ql-blank::before {
+      color: #94a3b8;
+      font-style: normal;
+    }
+
+    .ql-editor img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="editor"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+  <script>
+    const EMPTY_VALUES = new Set([
+      "",
+      "<p><br></p>",
+      "<p><br/></p>",
+      "<p><br /></p>",
+      "<p></p>",
+    ]);
+
+    function normalizeHtml(html) {
+      const trimmed = (html || "").trim();
+      return EMPTY_VALUES.has(trimmed) ? "" : trimmed;
+    }
+
+    function readHtml() {
+      if (typeof quill.getSemanticHTML === "function") {
+        return normalizeHtml(quill.getSemanticHTML());
+      }
+      return normalizeHtml(quill.root.innerHTML);
+    }
+
+    const quill = new Quill("#editor", {
+      theme: "snow",
+      placeholder: "Write here…",
+      modules: {
+        toolbar: {
+          container: [
+            ["bold", "italic", "underline"],
+            [{ header: 2 }],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ["link", "image"],
+            ["clean"],
+          ],
+          handlers: {
+            image: () => post({ type: "requestImage" }),
+          },
+        },
+      },
+    });
+
+    quill.on("text-change", () => {
+      post({ type: "htmlChanged", html: readHtml() });
+    });
+
+    function post(payload) {
+      if (window.chrome && window.chrome.webview) {
+        window.chrome.webview.postMessage(payload);
+      }
+    }
+
+    window.setEditorHtml = (html) => {
+      const value = html && html.trim() ? html : "<p><br></p>";
+      quill.clipboard.dangerouslyPasteHTML(value);
+      post({ type: "htmlChanged", html: readHtml() });
+    };
+
+    window.getEditorHtml = () => readHtml();
+
+    window.insertImage = (url) => {
+      if (!url) return;
+      const range = quill.getSelection(true);
+      quill.insertEmbed(range.index, "image", url, Quill.sources.USER);
+      quill.setSelection(range.index + 1);
+    };
+
+    if (window.chrome && window.chrome.webview) {
+      window.chrome.webview.addEventListener("message", (event) => {
+        const msg = event.data;
+        if (!msg || !msg.type) return;
+        if (msg.type === "setHtml") window.setEditorHtml(msg.html);
+        if (msg.type === "insertImage") window.insertImage(msg.url);
+      });
+    }
+
+    post({ type: "ready" });
+  </script>
+</body>
+</html>

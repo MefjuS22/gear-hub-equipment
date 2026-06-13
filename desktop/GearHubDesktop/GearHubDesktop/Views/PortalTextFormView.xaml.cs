@@ -3,10 +3,11 @@ using GearHubDesktop.DTOs;
 using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
+using GearHubDesktop.Views.Dialogs;
 
 namespace GearHubDesktop.Views;
 
-public partial class PortalTextFormView : ViewControllerBase
+public partial class PortalTextFormView : ViewControllerBase, INotifyDialogFinished
 {
     private readonly GearHubApiClient _api;
     private readonly IAppNavigation? _navigation;
@@ -15,7 +16,7 @@ public partial class PortalTextFormView : ViewControllerBase
     private string _textKey = string.Empty;
     private string _title = string.Empty;
     private string _placementHint = string.Empty;
-    private string _bodyPlain = string.Empty;
+    private string _bodyHtml = string.Empty;
 
     public PortalTextFormView(GearHubApiClient api, IAppNavigation navigation)
     {
@@ -23,11 +24,14 @@ public partial class PortalTextFormView : ViewControllerBase
         _navigation = navigation;
         InitializeComponent();
         DataContext = this;
+        BodyEditor.HtmlChanged += (_, _) => _bodyHtml = BodyEditor.GetHtml();
     }
 
     public event EventHandler<bool>? DialogFinished;
 
     public void ConfigureAsDialog() => _dialogMode = true;
+
+    public bool ShowPageHeader => !_dialogMode;
 
     public string PageTitle => string.IsNullOrWhiteSpace(Title) ? "Edit portal text" : Title;
 
@@ -47,21 +51,27 @@ public partial class PortalTextFormView : ViewControllerBase
         }
     }
 
-    public string BodyPlain
+    public string BodyHtml
     {
-        get => _bodyPlain;
-        set => SetProperty(ref _bodyPlain, value);
+        get => _bodyHtml;
+        set
+        {
+            SetProperty(ref _bodyHtml, value);
+            BodyEditor.SetHtml(value);
+        }
     }
 
     public async Task LoadAsync(string key)
     {
         _textKey = key;
+        RaisePropertyChanged(nameof(ShowPageHeader));
+
         await RunAsync(async () =>
         {
             var text = await _api.GetPortalTextByKeyAsync(key);
             Title = text.Title;
             PlacementHint = text.PlacementHint;
-            BodyPlain = PortalTextHelper.ToPlainText(text.BodyHtml);
+            BodyHtml = text.BodyHtml;
         });
     }
 
@@ -73,7 +83,8 @@ public partial class PortalTextFormView : ViewControllerBase
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(BodyPlain))
+        var body = HtmlEditorHelper.NormalizeOutput(BodyEditor.GetHtml());
+        if (string.IsNullOrEmpty(body))
         {
             ErrorMessage = "Portal content is required.";
             return;
@@ -82,7 +93,7 @@ public partial class PortalTextFormView : ViewControllerBase
         var dto = new PortalTextUpsertDto
         {
             Title = Title.Trim(),
-            BodyHtml = PortalTextHelper.PlainToBodyHtml(BodyPlain),
+            BodyHtml = body,
         };
 
         await RunAsync(async () =>

@@ -4,23 +4,30 @@
         Title="New user"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        MinWidth="420">
-    <Border Padding="20" Background="White">
-        <StackPanel>
-            <TextBlock Text="Email" FontWeight="SemiBold" />
-            <TextBox x:Name="EmailInput" Padding="8,6" Margin="0,4,0,12" />
-            <TextBlock Text="Password" FontWeight="SemiBold" />
-            <PasswordBox x:Name="PasswordInput" Padding="8,6" Margin="0,4,0,12" />
-            <TextBlock Text="Display name" FontWeight="SemiBold" />
-            <TextBox x:Name="DisplayNameInput" Padding="8,6" Margin="0,4,0,12" />
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+        MinWidth="440">
+    <Border Style="{StaticResource DialogRoot}">
+        <StackPanel MinWidth="380">
+            <TextBlock Text="Email" Style="{StaticResource FormLabelText}" />
+            <TextBox x:Name="EmailInput" Margin="0,0,0,14" />
+            <TextBlock Text="Password" Style="{StaticResource FormLabelText}" />
+            <PasswordBox x:Name="PasswordInput" Margin="0,0,0,14" />
+            <TextBlock Text="Display name" Style="{StaticResource FormLabelText}" />
+            <TextBox x:Name="DisplayNameInput" Margin="0,0,0,14" />
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
                 <CheckBox x:Name="AdminRoleCheck" Content="Admin" Margin="0,0,16,0" />
                 <CheckBox x:Name="UserRoleCheck" Content="User" IsChecked="True" />
             </StackPanel>
-            <TextBlock x:Name="ErrorText" Foreground="IndianRed" TextWrapping="Wrap" Margin="0,0,0,12" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel" Padding="14,6" Margin="0,0,8,0" IsCancel="True" Click="Cancel_Click" />
-                <Button Content="Create" Padding="14,6" IsDefault="True" Click="Ok_Click" />
+            <TextBlock x:Name="ErrorText" Style="{StaticResource ErrorText}" Margin="0,0,0,12" />
+            <StackPanel Style="{StaticResource DialogFooter}">
+                <Button Content="Cancel"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,0"
+                        IsCancel="True"
+                        Click="Cancel_Click" />
+                <Button Content="Create"
+                        Style="{StaticResource CompactPrimaryButton}"
+                        IsDefault="True"
+                        Click="Ok_Click" />
             </StackPanel>
         </StackPanel>
     </Border>

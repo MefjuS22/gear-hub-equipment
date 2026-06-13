@@ -3,15 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        MinWidth="360">
-    <Border Padding="20" Background="White">
-        <StackPanel>
-            <TextBlock x:Name="PromptText" FontWeight="SemiBold" Margin="0,0,0,8" />
-            <TextBox x:Name="InputBox" Padding="8,6" MinWidth="320" Margin="0,0,0,8" />
-            <TextBlock x:Name="ErrorText" Foreground="IndianRed" TextWrapping="Wrap" Margin="0,0,0,12" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel" Padding="14,6" Margin="0,0,8,0" IsCancel="True" Click="Cancel_Click" />
-                <Button Content="OK" Padding="14,6" IsDefault="True" Click="Ok_Click" />
+        MinWidth="380">
+    <Border Style="{StaticResource DialogRoot}">
+        <StackPanel MinWidth="320">
+            <TextBlock x:Name="PromptText" Style="{StaticResource FormLabelText}" />
+            <TextBox x:Name="InputBox" MinWidth="320" Margin="0,0,0,8" />
+            <TextBlock x:Name="ErrorText" Style="{StaticResource ErrorText}" Margin="0,0,0,12" />
+            <StackPanel Style="{StaticResource DialogFooter}">
+                <Button Content="Cancel"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,0"
+                        IsCancel="True"
+                        Click="Cancel_Click" />
+                <Button Content="OK"
+                        Style="{StaticResource CompactPrimaryButton}"
+                        IsDefault="True"
+                        Click="Ok_Click" />
             </StackPanel>
         </StackPanel>
     </Border>

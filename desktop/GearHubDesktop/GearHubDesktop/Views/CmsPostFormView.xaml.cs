@@ -1,14 +1,17 @@
 using System.Windows;
 using GearHubDesktop.DTOs;
+using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
+using GearHubDesktop.Views.Dialogs;
 using Microsoft.Win32;
 
 namespace GearHubDesktop.Views;
 
-public partial class CmsPostFormView : ViewControllerBase
+public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
 {
     private readonly GearHubApiClient _api;
+    private readonly ApiSettings _settings;
     private readonly IAppNavigation? _navigation;
 
     private bool _dialogMode;
@@ -20,17 +23,22 @@ public partial class CmsPostFormView : ViewControllerBase
     private string _bodyHtml = string.Empty;
     private bool _isPublished;
 
-    public CmsPostFormView(GearHubApiClient api, IAppNavigation navigation)
+    public CmsPostFormView(GearHubApiClient api, ApiSettings settings, IAppNavigation navigation)
     {
         _api = api;
+        _settings = settings;
         _navigation = navigation;
         InitializeComponent();
         DataContext = this;
+        BodyEditor.ResolveImageUrlAsync = UploadEditorImageAsync;
+        BodyEditor.HtmlChanged += (_, _) => _bodyHtml = BodyEditor.GetHtml();
     }
 
     public event EventHandler<bool>? DialogFinished;
 
     public void ConfigureAsDialog() => _dialogMode = true;
+
+    public bool ShowPageHeader => !_dialogMode;
 
     public string PageTitle => _postId is null ? "New post" : "Edit post";
 
@@ -61,7 +69,11 @@ public partial class CmsPostFormView : ViewControllerBase
     public string BodyHtml
     {
         get => _bodyHtml;
-        set => SetProperty(ref _bodyHtml, value);
+        set
+        {
+            SetProperty(ref _bodyHtml, value);
+            BodyEditor.SetHtml(value);
+        }
     }
 
     public bool IsPublished
@@ -74,9 +86,11 @@ public partial class CmsPostFormView : ViewControllerBase
     {
         _postId = postId;
         RaisePropertyChanged(nameof(PageTitle));
+        RaisePropertyChanged(nameof(ShowPageHeader));
 
         if (postId is not Guid id)
         {
+            BodyHtml = string.Empty;
             return;
         }
 
@@ -112,6 +126,29 @@ public partial class CmsPostFormView : ViewControllerBase
         });
     }
 
+    private async Task<string?> UploadEditorImageAsync()
+    {
+        var dialog = new OpenFileDialog
+        {
+            Filter = "Images|*.png;*.jpg;*.jpeg;*.webp;*.gif|All files|*.*",
+        };
+
+        if (dialog.ShowDialog() != true)
+        {
+            return null;
+        }
+
+        try
+        {
+            var upload = await _api.UploadFileAsync(dialog.FileName, "cms");
+            return FileUrls.ResolvePublicFileUrl(_settings.BaseUrl, upload.PublicPath);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(Title))
@@ -126,7 +163,7 @@ public partial class CmsPostFormView : ViewControllerBase
             Slug = Slug.Trim(),
             Excerpt = string.IsNullOrWhiteSpace(Excerpt) ? null : Excerpt.Trim(),
             CoverImageUrl = string.IsNullOrWhiteSpace(CoverImageUrl) ? null : CoverImageUrl.Trim(),
-            BodyHtml = BodyHtml,
+            BodyHtml = HtmlEditorHelper.NormalizeOutput(BodyEditor.GetHtml()),
             IsPublished = IsPublished,
         };
 

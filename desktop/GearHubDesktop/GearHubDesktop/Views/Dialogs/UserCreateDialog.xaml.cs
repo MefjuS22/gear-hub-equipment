@@ -7,6 +7,7 @@ public partial class UserCreateDialog : Window
     public UserCreateDialog()
     {
         InitializeComponent();
+        DialogWindowHelper.Configure(this);
         EmailInput.Focus();
     }
 

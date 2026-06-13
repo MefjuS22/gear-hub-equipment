@@ -4,29 +4,34 @@
         Title="Schedule maintenance"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        MinWidth="440">
-    <Border Padding="20" Background="White">
-        <StackPanel>
-            <TextBlock Text="Equipment" FontWeight="SemiBold" />
+        MinWidth="460">
+    <Border Style="{StaticResource DialogRoot}">
+        <StackPanel MinWidth="400">
+            <TextBlock Text="Equipment" Style="{StaticResource FormLabelText}" />
             <ComboBox x:Name="EquipmentCombo"
                       DisplayMemberPath="Name"
                       SelectedValuePath="Id"
-                      Padding="6,4"
-                      Margin="0,4,0,12" />
-            <TextBlock Text="Date" FontWeight="SemiBold" />
-            <DatePicker x:Name="DateInput" Margin="0,4,0,12" />
-            <TextBlock Text="Description" FontWeight="SemiBold" />
+                      Margin="0,0,0,14" />
+            <TextBlock Text="Date" Style="{StaticResource FormLabelText}" />
+            <DatePicker x:Name="DateInput" Margin="0,0,0,14" />
+            <TextBlock Text="Description" Style="{StaticResource FormLabelText}" />
             <TextBox x:Name="DescriptionInput"
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
                      Height="72"
                      VerticalScrollBarVisibility="Auto"
-                     Padding="8,6"
-                     Margin="0,4,0,12" />
-            <TextBlock x:Name="ErrorText" Foreground="IndianRed" TextWrapping="Wrap" Margin="0,0,0,12" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel" Padding="14,6" Margin="0,0,8,0" IsCancel="True" Click="Cancel_Click" />
-                <Button Content="Save" Padding="14,6" IsDefault="True" Click="Ok_Click" />
+                     Margin="0,0,0,14" />
+            <TextBlock x:Name="ErrorText" Style="{StaticResource ErrorText}" Margin="0,0,0,12" />
+            <StackPanel Style="{StaticResource DialogFooter}">
+                <Button Content="Cancel"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,0"
+                        IsCancel="True"
+                        Click="Cancel_Click" />
+                <Button Content="Save"
+                        Style="{StaticResource CompactPrimaryButton}"
+                        IsDefault="True"
+                        Click="Ok_Click" />
             </StackPanel>
         </StackPanel>
     </Border>

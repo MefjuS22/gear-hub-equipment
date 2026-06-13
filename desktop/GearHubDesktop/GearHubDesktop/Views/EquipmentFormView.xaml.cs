@@ -1,15 +1,18 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using GearHubDesktop.DTOs;
+using GearHubDesktop.Helpers;
 using GearHubDesktop.Services;
 using GearHubDesktop.Shell;
+using GearHubDesktop.Views.Dialogs;
 using Microsoft.Win32;
 
 namespace GearHubDesktop.Views;
 
-public partial class EquipmentFormView : ViewControllerBase
+public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinished
 {
     private readonly GearHubApiClient _api;
+    private readonly ApiSettings _settings;
     private readonly IAppNavigation? _navigation;
 
     private bool _dialogMode;
@@ -23,17 +26,22 @@ public partial class EquipmentFormView : ViewControllerBase
     private int _brandId;
     private int _warehouseId;
 
-    public EquipmentFormView(GearHubApiClient api, IAppNavigation navigation)
+    public EquipmentFormView(GearHubApiClient api, ApiSettings settings, IAppNavigation navigation)
     {
         _api = api;
+        _settings = settings;
         _navigation = navigation;
         InitializeComponent();
         DataContext = this;
+        DescriptionEditor.ResolveImageUrlAsync = UploadEditorImageAsync;
+        DescriptionEditor.HtmlChanged += (_, _) => _descriptionHtml = DescriptionEditor.GetHtml();
     }
 
     public event EventHandler<bool>? DialogFinished;
 
     public void ConfigureAsDialog() => _dialogMode = true;
+
+    public bool ShowPageHeader => !_dialogMode;
 
     public ObservableCollection<CategoryLookupDto> Categories { get; } = [];
     public ObservableCollection<BrandLookupDto> Brands { get; } = [];
@@ -56,7 +64,11 @@ public partial class EquipmentFormView : ViewControllerBase
     public string DescriptionHtml
     {
         get => _descriptionHtml;
-        set => SetProperty(ref _descriptionHtml, value);
+        set
+        {
+            SetProperty(ref _descriptionHtml, value);
+            DescriptionEditor.SetHtml(value);
+        }
     }
 
     public decimal DailyRate
@@ -93,6 +105,7 @@ public partial class EquipmentFormView : ViewControllerBase
     {
         _equipmentId = equipmentId;
         RaisePropertyChanged(nameof(PageTitle));
+        RaisePropertyChanged(nameof(ShowPageHeader));
 
         await RunAsync(async () =>
         {
@@ -132,6 +145,7 @@ public partial class EquipmentFormView : ViewControllerBase
             }
             else
             {
+                DescriptionHtml = string.Empty;
                 CategoryId = Categories.FirstOrDefault()?.Id ?? 0;
                 BrandId = Brands.FirstOrDefault()?.Id ?? 0;
                 WarehouseId = Warehouses.FirstOrDefault()?.Id ?? 0;
@@ -157,6 +171,29 @@ public partial class EquipmentFormView : ViewControllerBase
             ImageUrl = upload.PublicPath;
             StatusMessage = "Image uploaded.";
         });
+    }
+
+    private async Task<string?> UploadEditorImageAsync()
+    {
+        var dialog = new OpenFileDialog
+        {
+            Filter = "Images|*.png;*.jpg;*.jpeg;*.webp;*.gif|All files|*.*",
+        };
+
+        if (dialog.ShowDialog() != true)
+        {
+            return null;
+        }
+
+        try
+        {
+            var upload = await _api.UploadFileAsync(dialog.FileName, "equipment");
+            return FileUrls.ResolvePublicFileUrl(_settings.BaseUrl, upload.PublicPath);
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private async void Save_Click(object sender, RoutedEventArgs e)
@@ -185,6 +222,7 @@ public partial class EquipmentFormView : ViewControllerBase
             return;
         }
 
+        var description = HtmlEditorHelper.NormalizeOutput(DescriptionEditor.GetHtml());
         var dto = new EquipmentUpsertDto
         {
             Name = EquipmentName.Trim(),
@@ -194,7 +232,7 @@ public partial class EquipmentFormView : ViewControllerBase
             DailyRate = DailyRate,
             IsAvailable = IsAvailable,
             ImageUrl = string.IsNullOrWhiteSpace(ImageUrl) ? null : ImageUrl.Trim(),
-            DescriptionHtml = string.IsNullOrWhiteSpace(DescriptionHtml) ? null : DescriptionHtml,
+            DescriptionHtml = string.IsNullOrEmpty(description) ? null : description,
         };
 
         await RunAsync(async () =>

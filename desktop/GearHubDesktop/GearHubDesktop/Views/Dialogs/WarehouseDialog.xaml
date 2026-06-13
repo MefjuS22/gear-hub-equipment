@@ -4,17 +4,24 @@
         Title="Add warehouse"
         ResizeMode="NoResize"
         SizeToContent="WidthAndHeight"
-        MinWidth="400">
-    <Border Padding="20" Background="White">
-        <StackPanel>
-            <TextBlock Text="Name" FontWeight="SemiBold" />
-            <TextBox x:Name="NameInput" Padding="8,6" Margin="0,4,0,12" />
-            <TextBlock Text="Location" FontWeight="SemiBold" />
-            <TextBox x:Name="LocationInput" Padding="8,6" Margin="0,4,0,12" />
-            <TextBlock x:Name="ErrorText" Foreground="IndianRed" TextWrapping="Wrap" Margin="0,0,0,12" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Cancel" Padding="14,6" Margin="0,0,8,0" IsCancel="True" Click="Cancel_Click" />
-                <Button Content="Add" Padding="14,6" IsDefault="True" Click="Ok_Click" />
+        MinWidth="420">
+    <Border Style="{StaticResource DialogRoot}">
+        <StackPanel MinWidth="360">
+            <TextBlock Text="Name" Style="{StaticResource FormLabelText}" />
+            <TextBox x:Name="NameInput" Margin="0,0,0,14" />
+            <TextBlock Text="Location" Style="{StaticResource FormLabelText}" />
+            <TextBox x:Name="LocationInput" Margin="0,0,0,14" />
+            <TextBlock x:Name="ErrorText" Style="{StaticResource ErrorText}" Margin="0,0,0,12" />
+            <StackPanel Style="{StaticResource DialogFooter}">
+                <Button Content="Cancel"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,0"
+                        IsCancel="True"
+                        Click="Cancel_Click" />
+                <Button Content="Add"
+                        Style="{StaticResource CompactPrimaryButton}"
+                        IsDefault="True"
+                        Click="Ok_Click" />
             </StackPanel>
         </StackPanel>
     </Border>

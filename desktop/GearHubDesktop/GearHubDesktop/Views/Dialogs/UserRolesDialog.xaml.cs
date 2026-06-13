@@ -7,6 +7,7 @@ public partial class UserRolesDialog : Window
     public UserRolesDialog(string email, bool admin, bool user)
     {
         InitializeComponent();
+        DialogWindowHelper.Configure(this);
         UserLabel.Text = email;
         AdminRoleCheck.IsChecked = admin;
         UserRoleCheck.IsChecked = user;

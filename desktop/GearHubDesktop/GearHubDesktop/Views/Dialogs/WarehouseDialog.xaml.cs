@@ -7,6 +7,7 @@ public partial class WarehouseDialog : Window
     public WarehouseDialog()
     {
         InitializeComponent();
+        DialogWindowHelper.Configure(this);
         NameInput.Focus();
     }
 
