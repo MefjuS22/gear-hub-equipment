@@ -19,12 +19,10 @@
                             VerticalAlignment="Center">
                     <Button Content="← Back"
                             Style="{StaticResource CompactSecondaryButton}"
-                            Padding="12,6"
                             Margin="0,0,8,0"
                             Click="Back_Click" />
                     <Button Content="Refresh"
-                            Style="{StaticResource BusyAwareButton}"
-                            Padding="12,6"
+                            Style="{StaticResource CompactSecondaryButton}"
                             Click="Refresh_Click" />
                 </StackPanel>
                 <TextBlock Text="{Binding Equipment.Name}"
@@ -83,7 +81,7 @@
                                    Margin="0,0,0,20" />
 
                         <Button Content="Add to cart"
-                                Padding="18,10"
+                                Style="{StaticResource CompactPrimaryButton}"
                                 HorizontalAlignment="Left"
                                 Click="AddToCart_Click"
                                 IsEnabled="{Binding CanAddToCart}" />
@@ -100,7 +98,7 @@
                     Margin="0,16,0,0">
                 <StackPanel>
                     <TextBlock Text="Description"
-                               FontWeight="SemiBold"
+                               Style="{StaticResource FormLabelText}"
                                FontSize="15"
                                Margin="0,0,0,10" />
                     <Border BorderBrush="{StaticResource BorderBrush}"

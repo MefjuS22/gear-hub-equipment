@@ -7,20 +7,18 @@
              mc:Ignorable="d"
              d:DesignHeight="300"
              d:DesignWidth="600">
-    <Grid Margin="16">
+    <Grid>
         <StackPanel VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     MaxWidth="480">
             <TextBlock Text="{Binding Title}"
-                       FontSize="22"
-                       FontWeight="SemiBold"
+                       Style="{StaticResource PageTitleText}"
                        TextAlignment="Center"
                        Margin="0,0,0,12" />
             <TextBlock Text="{Binding Message}"
+                       Style="{StaticResource PageSubtitleText}"
                        TextWrapping="Wrap"
-                       TextAlignment="Center"
-                       Foreground="Gray"
-                       FontSize="14" />
+                       TextAlignment="Center" />
         </StackPanel>
     </Grid>
 </views:ViewControllerBase>

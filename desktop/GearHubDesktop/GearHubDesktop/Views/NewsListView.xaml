@@ -20,8 +20,7 @@
             <DockPanel LastChildFill="True">
                 <Button DockPanel.Dock="Right"
                         Content="Refresh"
-                        Style="{StaticResource BusyAwareButton}"
-                        Padding="12,6"
+                        Style="{StaticResource CompactSecondaryButton}"
                         VerticalAlignment="Top"
                         Click="Refresh_Click" />
                 <StackPanel>
@@ -56,11 +55,11 @@
                                                FontWeight="SemiBold"
                                                TextWrapping="Wrap" />
                                     <TextBlock Text="{Binding PublishedAtDisplay}"
-                                               Foreground="#666666"
+                                               Style="{StaticResource PageSubtitleText}"
                                                FontSize="12"
                                                Margin="0,4,0,0" />
                                     <TextBlock Text="{Binding Excerpt}"
-                                               Foreground="#444444"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
                                                TextWrapping="Wrap"
                                                Margin="0,6,0,0"
                                                MaxHeight="48"
@@ -73,7 +72,7 @@
                     <TextBlock Text="No articles yet."
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="#666666"
+                               Foreground="{StaticResource TextSecondaryBrush}"
                                Visibility="{Binding IsListEmpty, Converter={StaticResource BoolToVisibility}}" />
                 </Grid>
             </Border>
@@ -87,7 +86,7 @@
                                    TextWrapping="Wrap"
                                    Margin="0,0,0,8" />
                         <TextBlock Text="{Binding SelectedDetailPublishedLabel}"
-                                   Foreground="#666666"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
                                    Margin="0,0,0,16" />
                         <Border Background="#F8FAFC"
                                 BorderBrush="{StaticResource BorderBrush}"
@@ -103,7 +102,7 @@
                         </Border>
                         <TextBlock Text="{Binding SelectedDetail.Excerpt}"
                                    TextWrapping="Wrap"
-                                   Foreground="#444444"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
                                    Margin="0,0,0,16"
                                    Visibility="{Binding SelectedDetailExcerptVisibility}" />
                         <WebBrowser x:Name="ArticleBrowser"
@@ -113,13 +112,13 @@
                     <TextBlock Text="Select an article to read."
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="#666666"
+                               Foreground="{StaticResource TextSecondaryBrush}"
                                Visibility="{Binding ShowSelectHint, Converter={StaticResource BoolToVisibility}}" />
 
                     <TextBlock Text="Loading article..."
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="#666666"
+                               Foreground="{StaticResource TextSecondaryBrush}"
                                Visibility="{Binding IsDetailLoading, Converter={StaticResource BoolToVisibility}}" />
                 </Grid>
             </Border>

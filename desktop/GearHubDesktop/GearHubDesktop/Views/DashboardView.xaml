@@ -15,7 +15,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -33,17 +32,16 @@
                     Click="ExportExcel_Click" />
         </DockPanel>
 
-        <TextBlock Grid.Row="1"
-                   Text="{Binding ErrorMessage}"
-                   Style="{StaticResource ErrorText}"
-                   Margin="0,0,0,8" />
+        <StackPanel Grid.Row="1" Margin="0,0,0,12">
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Style="{StaticResource ErrorText}"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
+            <TextBlock Text="{Binding StatusMessage}"
+                       Style="{StaticResource SuccessText}"
+                       Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibility}}" />
+        </StackPanel>
 
-        <TextBlock Grid.Row="2"
-                   Text="{Binding StatusMessage}"
-                   Style="{StaticResource SuccessText}"
-                   Margin="0,0,0,12" />
-
-        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <WrapPanel>
                 <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
@@ -96,7 +94,7 @@
             </WrapPanel>
         </ScrollViewer>
 
-        <Border Grid.Row="3"
+        <Border Grid.Row="2"
                 Style="{StaticResource LoadingOverlay}"
                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <TextBlock Text="Loading…"

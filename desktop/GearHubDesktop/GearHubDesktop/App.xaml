@@ -9,6 +9,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <BooleanToVisibilityConverter x:Key="BoolVis" />
+            <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
 
             <Style TargetType="{x:Type views:ViewControllerBase}">
                 <Setter Property="Background" Value="Transparent" />

@@ -61,8 +61,12 @@
         </Border>
 
         <StackPanel Grid.Row="2" Margin="0,0,0,10">
-            <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorText}" />
-            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource SuccessText}" />
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Style="{StaticResource ErrorText}"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
+            <TextBlock Text="{Binding StatusMessage}"
+                       Style="{StaticResource SuccessText}"
+                       Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibility}}" />
         </StackPanel>
 
         <Border Grid.Row="3" Style="{StaticResource CardFlat}" Padding="0">

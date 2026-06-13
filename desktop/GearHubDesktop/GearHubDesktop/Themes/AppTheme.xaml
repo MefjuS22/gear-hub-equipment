@@ -259,6 +259,11 @@
         <Setter Property="MinHeight" Value="{StaticResource InputHeight}" />
     </Style>
 
+    <Style x:Key="SegmentTabButtonActive" TargetType="Button" BasedOn="{StaticResource CompactSecondaryButton}">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="IsEnabled" Value="False" />
+    </Style>
+
     <!-- Inputs -->
     <Style TargetType="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource AppFont}" />

@@ -43,6 +43,10 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
 
     public string PageTitle => _postId is null ? "New post" : "Edit post";
 
+    public string PageSubtitle => _postId is null
+        ? "Create a news article for the customer portal."
+        : "Update the article title, body, and publish state.";
+
     public string Title
     {
         get => _title;
@@ -94,6 +98,7 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
     {
         _postId = postId;
         RaisePropertyChanged(nameof(PageTitle));
+        RaisePropertyChanged(nameof(PageSubtitle));
         RaisePropertyChanged(nameof(ShowPageHeader));
 
         if (postId is not Guid id)

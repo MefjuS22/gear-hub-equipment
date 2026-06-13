@@ -11,7 +11,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     </views:ViewControllerBase.Resources>
 
-    <Grid Margin="16">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -20,62 +20,71 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+        <DockPanel Grid.Row="0" Margin="0,0,0,16">
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                 <Button Content="← Back"
                         Style="{StaticResource CompactSecondaryButton}"
-                        Padding="12,6"
                         Margin="0,0,8,0"
                         Click="Back_Click" />
                 <Button Content="Export PDF"
-                        Style="{StaticResource BusyAwareButton}"
-                        Padding="12,6"
+                        Style="{StaticResource CompactSecondaryButton}"
                         Click="ExportPdf_Click" />
             </StackPanel>
-            <TextBlock Text="{Binding HeaderText}"
-                       FontSize="22"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center" />
+            <StackPanel>
+                <TextBlock Text="{Binding HeaderText}" Style="{StaticResource PageTitleText}" />
+                <TextBlock Text="Order details and line items."
+                           Style="{StaticResource PageSubtitleText}"
+                           Margin="0,6,0,0" />
+            </StackPanel>
         </DockPanel>
 
-        <StackPanel Grid.Row="1" Margin="0,0,0,12">
-            <TextBlock Text="{Binding CustomerLine}" />
-            <TextBlock Text="{Binding UserLine}" />
-            <TextBlock Text="{Binding OrderDateLine}" />
-            <TextBlock Text="{Binding RentalPeriodLine}" />
-        </StackPanel>
+        <Border Grid.Row="1" Style="{StaticResource Card}" Padding="16" Margin="0,0,0,12">
+            <StackPanel>
+                <TextBlock Text="{Binding CustomerLine}" Foreground="{StaticResource TextPrimaryBrush}" />
+                <TextBlock Text="{Binding UserLine}" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0" />
+                <TextBlock Text="{Binding OrderDateLine}" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0" />
+                <TextBlock Text="{Binding RentalPeriodLine}" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,4,0,0" />
+            </StackPanel>
+        </Border>
 
-        <StackPanel Grid.Row="2" Margin="0,0,0,8">
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="IndianRed" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding StatusMessage}" Foreground="SeaGreen" />
+        <StackPanel Grid.Row="2" Margin="0,0,0,10">
+            <TextBlock Text="{Binding ErrorMessage}"
+                       Style="{StaticResource ErrorText}"
+                       Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
+            <TextBlock Text="{Binding StatusMessage}"
+                       Style="{StaticResource SuccessText}"
+                       Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibility}}" />
         </StackPanel>
 
         <TextBlock Grid.Row="3"
                    Text="Line items"
-                   FontWeight="SemiBold"
+                   Style="{StaticResource FormLabelText}"
                    Margin="0,0,0,8" />
 
-        <DataGrid Grid.Row="4"
-                  ItemsSource="{Binding LineItems}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Equipment ID" Binding="{Binding EquipmentId}" Width="100" />
-                <DataGridTextColumn Header="Equipment" Binding="{Binding EquipmentName}" Width="*" MinWidth="160" />
-                <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="70" />
-                <DataGridTextColumn Header="Unit price" Binding="{Binding UnitPrice, StringFormat=C}" Width="110" />
-                <DataGridTextColumn Header="Line total" Binding="{Binding LineTotalDisplay}" Width="110" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border Grid.Row="4" Style="{StaticResource CardFlat}" Padding="0">
+            <DataGrid ItemsSource="{Binding LineItems}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      BorderThickness="0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Equipment ID" Binding="{Binding EquipmentId}" Width="100" />
+                    <DataGridTextColumn Header="Equipment" Binding="{Binding EquipmentName}" Width="*" MinWidth="160" />
+                    <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="70" />
+                    <DataGridTextColumn Header="Unit price" Binding="{Binding UnitPrice, StringFormat=C}" Width="110" />
+                    <DataGridTextColumn Header="Line total" Binding="{Binding LineTotalDisplay}" Width="110" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
 
         <Border Grid.Row="4"
-                Background="#80FFFFFF"
+                Style="{StaticResource LoadingOverlay}"
                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <TextBlock Text="Loading…"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       FontSize="16" />
+                       FontSize="16"
+                       Foreground="{StaticResource TextSecondaryBrush}" />
         </Border>
     </Grid>
 </views:ViewControllerBase>

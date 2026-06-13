@@ -21,8 +21,7 @@
             <DockPanel LastChildFill="True">
                 <Button DockPanel.Dock="Right"
                         Content="Refresh"
-                        Style="{StaticResource BusyAwareButton}"
-                        Padding="12,6"
+                        Style="{StaticResource CompactSecondaryButton}"
                         VerticalAlignment="Top"
                         Click="Refresh_Click" />
                 <StackPanel>
@@ -99,7 +98,7 @@
                                Text="Your cart is empty."
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Foreground="#666666"
+                               Foreground="{StaticResource TextSecondaryBrush}"
                                Visibility="{Binding IsCartEmpty, Converter={StaticResource BoolToVisibility}}" />
                 </Grid>
             </Border>
@@ -107,15 +106,14 @@
             <Border Grid.Column="1" Style="{StaticResource Card}">
                 <StackPanel>
                     <TextBlock Text="Checkout"
-                               FontWeight="SemiBold"
-                               FontSize="17"
+                               Style="{StaticResource FormLabelText}"
+                               FontSize="15"
                                Margin="0,0,0,18" />
 
                     <TextBlock Text="Saved company" Style="{StaticResource FormLabelText}" />
                     <ComboBox ItemsSource="{Binding SavedCompanies}"
                               SelectedItem="{Binding SelectedCompany}"
                               DisplayMemberPath="CompanyName"
-                              Padding="8,6"
                               Margin="0,0,0,12" />
 
                     <TextBlock Text="Company name" Style="{StaticResource FormLabelText}" />
@@ -139,8 +137,7 @@
                                Margin="0,0,0,16" />
 
                     <Button Content="Place order"
-                            Padding="12,8"
-                            FontWeight="SemiBold"
+                            Style="{StaticResource CompactPrimaryButton}"
                             Click="PlaceOrder_Click"
                             IsEnabled="{Binding CanPlaceOrder}" />
 
