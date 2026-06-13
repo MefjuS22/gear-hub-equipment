@@ -67,7 +67,7 @@
                             <DataGridTextColumn Header="Item" Binding="{Binding Name}" Width="*" MinWidth="160" />
                             <DataGridTextColumn Header="Daily rate" Binding="{Binding DailyRate, StringFormat=C}" Width="100" />
                             <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="60" />
-                            <DataGridTemplateColumn Header="" Width="120">
+                            <DataGridTemplateColumn Header="" Width="120" CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">

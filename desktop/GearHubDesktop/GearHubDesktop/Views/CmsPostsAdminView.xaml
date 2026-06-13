@@ -58,7 +58,7 @@
                 <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" MinWidth="160" />
                 <DataGridTextColumn Header="Slug" Binding="{Binding Slug}" Width="180" />
                 <DataGridTextColumn Header="Published" Binding="{Binding PublishedLabel}" Width="90" />
-                <DataGridTemplateColumn Header="Actions" Width="160">
+                <DataGridTemplateColumn Header="Actions" Width="160" CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

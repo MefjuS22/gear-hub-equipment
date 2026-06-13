@@ -25,6 +25,11 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
     private int _categoryId;
     private int _brandId;
     private int _warehouseId;
+    private string? _equipmentNameError;
+    private string? _dailyRateError;
+    private string? _categoryError;
+    private string? _brandError;
+    private string? _warehouseError;
 
     public EquipmentFormView(GearHubApiClient api, ApiSettings settings, IAppNavigation navigation)
     {
@@ -41,18 +46,24 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
 
     public void ConfigureAsDialog() => _dialogMode = true;
 
-    public bool ShowPageHeader => !_dialogMode;
-
     public ObservableCollection<CategoryLookupDto> Categories { get; } = [];
     public ObservableCollection<BrandLookupDto> Brands { get; } = [];
     public ObservableCollection<WarehouseLookupDto> Warehouses { get; } = [];
 
-    public string PageTitle => _equipmentId is null ? "New equipment" : $"Edit equipment #{_equipmentId}";
+    public string PageTitle => _equipmentId is null ? "Add new equipment" : $"Edit equipment #{_equipmentId}";
+
+    public string PageSubtitle => _equipmentId is null
+        ? "Fill in the details below to add an item to your rental catalog."
+        : "Update availability, pricing, and catalog details.";
 
     public string EquipmentName
     {
         get => _equipmentName;
-        set => SetProperty(ref _equipmentName, value);
+        set
+        {
+            SetProperty(ref _equipmentName, value);
+            SetFieldError(ref _equipmentNameError, null, nameof(EquipmentNameError), nameof(HasEquipmentNameError));
+        }
     }
 
     public string ImageUrl
@@ -74,7 +85,11 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
     public decimal DailyRate
     {
         get => _dailyRate;
-        set => SetProperty(ref _dailyRate, value);
+        set
+        {
+            SetProperty(ref _dailyRate, value);
+            SetFieldError(ref _dailyRateError, null, nameof(DailyRateError), nameof(HasDailyRateError));
+        }
     }
 
     public bool IsAvailable
@@ -86,26 +101,53 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
     public int CategoryId
     {
         get => _categoryId;
-        set => SetProperty(ref _categoryId, value);
+        set
+        {
+            SetProperty(ref _categoryId, value);
+            SetFieldError(ref _categoryError, null, nameof(CategoryError), nameof(HasCategoryError));
+        }
     }
 
     public int BrandId
     {
         get => _brandId;
-        set => SetProperty(ref _brandId, value);
+        set
+        {
+            SetProperty(ref _brandId, value);
+            SetFieldError(ref _brandError, null, nameof(BrandError), nameof(HasBrandError));
+        }
     }
 
     public int WarehouseId
     {
         get => _warehouseId;
-        set => SetProperty(ref _warehouseId, value);
+        set
+        {
+            SetProperty(ref _warehouseId, value);
+            SetFieldError(ref _warehouseError, null, nameof(WarehouseError), nameof(HasWarehouseError));
+        }
     }
+
+    public string? EquipmentNameError => _equipmentNameError;
+    public bool HasEquipmentNameError => !string.IsNullOrEmpty(_equipmentNameError);
+
+    public string? DailyRateError => _dailyRateError;
+    public bool HasDailyRateError => !string.IsNullOrEmpty(_dailyRateError);
+
+    public string? CategoryError => _categoryError;
+    public bool HasCategoryError => !string.IsNullOrEmpty(_categoryError);
+
+    public string? BrandError => _brandError;
+    public bool HasBrandError => !string.IsNullOrEmpty(_brandError);
+
+    public string? WarehouseError => _warehouseError;
+    public bool HasWarehouseError => !string.IsNullOrEmpty(_warehouseError);
 
     public async Task LoadAsync(int? equipmentId)
     {
         _equipmentId = equipmentId;
         RaisePropertyChanged(nameof(PageTitle));
-        RaisePropertyChanged(nameof(ShowPageHeader));
+        RaisePropertyChanged(nameof(PageSubtitle));
 
         await RunAsync(async () =>
         {
@@ -199,27 +241,10 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
 
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(EquipmentName))
-        {
-            ErrorMessage = "Name is required.";
-            return;
-        }
+        ErrorMessage = null;
 
-        if (EquipmentName.Trim().Length < 3)
+        if (!ValidateForm())
         {
-            ErrorMessage = "Name must be at least 3 characters.";
-            return;
-        }
-
-        if (DailyRate <= 0)
-        {
-            ErrorMessage = "Daily rate must be greater than zero.";
-            return;
-        }
-
-        if (CategoryId <= 0 || BrandId <= 0 || WarehouseId <= 0)
-        {
-            ErrorMessage = "Category, brand, and warehouse are required.";
             return;
         }
 
@@ -269,5 +294,76 @@ public partial class EquipmentFormView : ViewControllerBase, INotifyDialogFinish
         }
 
         _navigation!.NavigateTo("staff-equipment");
+    }
+
+    private bool ValidateForm()
+    {
+        ClearValidationErrors();
+
+        var valid = true;
+
+        if (string.IsNullOrWhiteSpace(EquipmentName))
+        {
+            valid &= !SetFieldError(
+                ref _equipmentNameError,
+                "Name is required.",
+                nameof(EquipmentNameError),
+                nameof(HasEquipmentNameError));
+        }
+        else if (EquipmentName.Trim().Length < 3)
+        {
+            valid &= !SetFieldError(
+                ref _equipmentNameError,
+                "Name must be at least 3 characters.",
+                nameof(EquipmentNameError),
+                nameof(HasEquipmentNameError));
+        }
+
+        if (DailyRate <= 0)
+        {
+            valid &= !SetFieldError(
+                ref _dailyRateError,
+                "Daily rate must be greater than zero.",
+                nameof(DailyRateError),
+                nameof(HasDailyRateError));
+        }
+
+        if (CategoryId <= 0)
+        {
+            valid &= !SetFieldError(
+                ref _categoryError,
+                "Category is required.",
+                nameof(CategoryError),
+                nameof(HasCategoryError));
+        }
+
+        if (BrandId <= 0)
+        {
+            valid &= !SetFieldError(
+                ref _brandError,
+                "Brand is required.",
+                nameof(BrandError),
+                nameof(HasBrandError));
+        }
+
+        if (WarehouseId <= 0)
+        {
+            valid &= !SetFieldError(
+                ref _warehouseError,
+                "Warehouse is required.",
+                nameof(WarehouseError),
+                nameof(HasWarehouseError));
+        }
+
+        return valid;
+    }
+
+    private void ClearValidationErrors()
+    {
+        SetFieldError(ref _equipmentNameError, null, nameof(EquipmentNameError), nameof(HasEquipmentNameError));
+        SetFieldError(ref _dailyRateError, null, nameof(DailyRateError), nameof(HasDailyRateError));
+        SetFieldError(ref _categoryError, null, nameof(CategoryError), nameof(HasCategoryError));
+        SetFieldError(ref _brandError, null, nameof(BrandError), nameof(HasBrandError));
+        SetFieldError(ref _warehouseError, null, nameof(WarehouseError), nameof(HasWarehouseError));
     }
 }

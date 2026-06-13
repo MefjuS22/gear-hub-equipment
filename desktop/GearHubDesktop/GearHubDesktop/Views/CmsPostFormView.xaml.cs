@@ -22,6 +22,7 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
     private string _coverImageUrl = string.Empty;
     private string _bodyHtml = string.Empty;
     private bool _isPublished;
+    private string? _titleError;
 
     public CmsPostFormView(GearHubApiClient api, ApiSettings settings, IAppNavigation navigation)
     {
@@ -45,8 +46,15 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
     public string Title
     {
         get => _title;
-        set => SetProperty(ref _title, value);
+        set
+        {
+            SetProperty(ref _title, value);
+            SetFieldError(ref _titleError, null, nameof(TitleError), nameof(HasTitleError));
+        }
     }
+
+    public string? TitleError => _titleError;
+    public bool HasTitleError => !string.IsNullOrEmpty(_titleError);
 
     public string Slug
     {
@@ -152,9 +160,12 @@ public partial class CmsPostFormView : ViewControllerBase, INotifyDialogFinished
 
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
+        ErrorMessage = null;
+        SetFieldError(ref _titleError, null, nameof(TitleError), nameof(HasTitleError));
+
         if (string.IsNullOrWhiteSpace(Title))
         {
-            ErrorMessage = "Title is required.";
+            SetFieldError(ref _titleError, "Title is required.", nameof(TitleError), nameof(HasTitleError));
             return;
         }
 

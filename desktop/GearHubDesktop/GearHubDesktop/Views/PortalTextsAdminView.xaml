@@ -50,7 +50,7 @@
                 <DataGridTextColumn Header="Label" Binding="{Binding Title}" Width="180" />
                 <DataGridTextColumn Header="Placement" Binding="{Binding PlacementHint}" Width="220" />
                 <DataGridTextColumn Header="Preview" Binding="{Binding Preview}" Width="*" MinWidth="200" />
-                <DataGridTemplateColumn Header="Actions" Width="100">
+                <DataGridTemplateColumn Header="Actions" Width="100" CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Edit"

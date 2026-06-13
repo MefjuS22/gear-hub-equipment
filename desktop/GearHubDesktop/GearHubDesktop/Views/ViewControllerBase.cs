@@ -44,6 +44,23 @@ public class ViewControllerBase : UserControl, INotifyPropertyChanged
     protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+    protected bool SetFieldError(
+        ref string? storage,
+        string? message,
+        string errorPropertyName,
+        string hasErrorPropertyName)
+    {
+        if (storage == message)
+        {
+            return !string.IsNullOrEmpty(message);
+        }
+
+        storage = message;
+        RaisePropertyChanged(errorPropertyName);
+        RaisePropertyChanged(hasErrorPropertyName);
+        return !string.IsNullOrEmpty(message);
+    }
+
     protected async Task RunAsync(Func<Task> action)
     {
         ErrorMessage = null;

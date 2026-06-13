@@ -17,6 +17,8 @@ public partial class PortalTextFormView : ViewControllerBase, INotifyDialogFinis
     private string _title = string.Empty;
     private string _placementHint = string.Empty;
     private string _bodyHtml = string.Empty;
+    private string? _titleError;
+    private string? _bodyError;
 
     public PortalTextFormView(GearHubApiClient api, IAppNavigation navigation)
     {
@@ -24,7 +26,11 @@ public partial class PortalTextFormView : ViewControllerBase, INotifyDialogFinis
         _navigation = navigation;
         InitializeComponent();
         DataContext = this;
-        BodyEditor.HtmlChanged += (_, _) => _bodyHtml = BodyEditor.GetHtml();
+        BodyEditor.HtmlChanged += (_, _) =>
+        {
+            _bodyHtml = BodyEditor.GetHtml();
+            SetFieldError(ref _bodyError, null, nameof(BodyError), nameof(HasBodyError));
+        };
     }
 
     public event EventHandler<bool>? DialogFinished;
@@ -48,8 +54,15 @@ public partial class PortalTextFormView : ViewControllerBase, INotifyDialogFinis
         {
             SetProperty(ref _title, value);
             RaisePropertyChanged(nameof(PageTitle));
+            SetFieldError(ref _titleError, null, nameof(TitleError), nameof(HasTitleError));
         }
     }
+
+    public string? TitleError => _titleError;
+    public bool HasTitleError => !string.IsNullOrEmpty(_titleError);
+
+    public string? BodyError => _bodyError;
+    public bool HasBodyError => !string.IsNullOrEmpty(_bodyError);
 
     public string BodyHtml
     {
@@ -77,16 +90,33 @@ public partial class PortalTextFormView : ViewControllerBase, INotifyDialogFinis
 
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
+        ErrorMessage = null;
+        SetFieldError(ref _titleError, null, nameof(TitleError), nameof(HasTitleError));
+        SetFieldError(ref _bodyError, null, nameof(BodyError), nameof(HasBodyError));
+
+        var valid = true;
+
         if (string.IsNullOrWhiteSpace(Title))
         {
-            ErrorMessage = "Staff label is required.";
-            return;
+            valid &= !SetFieldError(
+                ref _titleError,
+                "Staff label is required.",
+                nameof(TitleError),
+                nameof(HasTitleError));
         }
 
         var body = HtmlEditorHelper.NormalizeOutput(await BodyEditor.GetHtmlAsync());
         if (string.IsNullOrEmpty(body))
         {
-            ErrorMessage = "Portal content is required.";
+            valid &= !SetFieldError(
+                ref _bodyError,
+                "Portal content is required.",
+                nameof(BodyError),
+                nameof(HasBodyError));
+        }
+
+        if (!valid)
+        {
             return;
         }
 

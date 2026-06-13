@@ -13,7 +13,7 @@ public static class FormDialog
         await form.LoadAsync(equipmentId);
 
         var window = CreateFormWindow(
-            equipmentId is null ? "New equipment" : $"Edit equipment #{equipmentId}",
+            equipmentId is null ? "Add new equipment" : $"Edit equipment #{equipmentId}",
             form,
             780,
             720);

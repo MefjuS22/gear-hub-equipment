@@ -58,9 +58,9 @@
 
                 <Button Grid.Column="2"
                         Content="Search"
+                        Style="{StaticResource CompactPrimaryButton}"
                         VerticalAlignment="Bottom"
-                        Click="Search_Click"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
+                        Click="Search_Click" />
             </Grid>
         </Border>
 
@@ -77,7 +77,7 @@
                       HeadersVisibility="Column"
                       BorderThickness="0">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="" Width="72">
+                    <DataGridTemplateColumn Header="" Width="72" CanUserSort="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid Width="48" Height="48" Margin="4">
@@ -106,7 +106,7 @@
                     <DataGridTextColumn Header="Brand" Binding="{Binding BrandName}" Width="130" />
                     <DataGridTextColumn Header="Daily rate" Binding="{Binding DailyRate, StringFormat=C}" Width="110" />
                     <DataGridTextColumn Header="Available" Binding="{Binding IsAvailable}" Width="90" />
-                    <DataGridTemplateColumn Header="Actions" Width="200">
+                    <DataGridTemplateColumn Header="Actions" Width="200" CanUserSort="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

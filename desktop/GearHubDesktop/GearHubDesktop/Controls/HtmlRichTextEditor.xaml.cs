@@ -30,9 +30,51 @@ public partial class HtmlRichTextEditor : UserControl
         Loaded += OnLoaded;
     }
 
+    private static void OnHasErrorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is HtmlRichTextEditor editor)
+        {
+            editor.UpdateErrorState();
+        }
+    }
+
+    private void UpdateErrorState()
+    {
+        if (EditorBorder is null)
+        {
+            return;
+        }
+
+        if (HasError)
+        {
+            EditorBorder.BorderBrush = TryFindResource("ErrorBrush") as System.Windows.Media.Brush
+                ?? System.Windows.Media.Brushes.IndianRed;
+            EditorBorder.Background = TryFindResource("ErrorInputBackgroundBrush") as System.Windows.Media.Brush
+                ?? System.Windows.Media.Brushes.MistyRose;
+            return;
+        }
+
+        EditorBorder.BorderBrush = TryFindResource("BorderBrush") as System.Windows.Media.Brush
+            ?? System.Windows.Media.Brushes.LightGray;
+        EditorBorder.Background = TryFindResource("SurfaceBrush") as System.Windows.Media.Brush
+            ?? System.Windows.Media.Brushes.White;
+    }
+
     public event EventHandler? HtmlChanged;
 
     public Func<Task<string?>>? ResolveImageUrlAsync { get; set; }
+
+    public static readonly DependencyProperty HasErrorProperty = DependencyProperty.Register(
+        nameof(HasError),
+        typeof(bool),
+        typeof(HtmlRichTextEditor),
+        new PropertyMetadata(false, OnHasErrorChanged));
+
+    public bool HasError
+    {
+        get => (bool)GetValue(HasErrorProperty);
+        set => SetValue(HasErrorProperty, value);
+    }
 
     public string Html
     {
