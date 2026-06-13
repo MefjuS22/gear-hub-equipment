@@ -9,24 +9,9 @@
              d:DesignWidth="800">
     <views:ViewControllerBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <Style x:Key="KpiCardStyle" TargetType="Border">
-            <Setter Property="Width" Value="180" />
-            <Setter Property="Padding" Value="14" />
-            <Setter Property="BorderBrush" Value="#DDDDDD" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Background" Value="White" />
-        </Style>
-        <Style x:Key="BusyAwareButton" TargetType="Button">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsBusy}" Value="True">
-                    <Setter Property="IsEnabled" Value="False" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </views:ViewControllerBase.Resources>
 
-    <Grid Margin="16">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -34,89 +19,91 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0" Margin="0,0,0,12">
-            <TextBlock Text="Dashboard"
-                       FontSize="22"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center" />
+        <DockPanel Grid.Row="0" Margin="0,0,0,20" LastChildFill="False">
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Dashboard" Style="{StaticResource PageTitleText}" />
+                <TextBlock Text="Overview of orders, equipment, and activity."
+                           Style="{StaticResource PageSubtitleText}"
+                           Margin="0,6,0,0" />
+            </StackPanel>
             <Button Content="Export Excel"
-                    Style="{StaticResource BusyAwareButton}"
+                    Style="{StaticResource CompactSecondaryButton}"
                     DockPanel.Dock="Right"
-                    Padding="12,6"
+                    VerticalAlignment="Center"
                     Click="ExportExcel_Click" />
         </DockPanel>
 
         <TextBlock Grid.Row="1"
                    Text="{Binding ErrorMessage}"
-                   Foreground="IndianRed"
-                   TextWrapping="Wrap"
+                   Style="{StaticResource ErrorText}"
                    Margin="0,0,0,8" />
 
         <TextBlock Grid.Row="2"
                    Text="{Binding StatusMessage}"
-                   Foreground="SeaGreen"
-                   Margin="0,0,0,8" />
+                   Style="{StaticResource SuccessText}"
+                   Margin="0,0,0,12" />
 
         <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
             <WrapPanel>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Total orders" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.TotalOrders}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Total orders" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.TotalOrders}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Orders (30 days)" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.OrdersLast30Days}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Orders (30 days)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.OrdersLast30Days}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Customers" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.TotalCustomers}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Customers" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.TotalCustomers}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Equipment" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.TotalEquipment}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Equipment" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.TotalEquipment}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Available equipment" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.AvailableEquipment}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Available equipment" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.AvailableEquipment}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Logins (24h)" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.LoginsLast24Hours}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Logins (24h)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.LoginsLast24Hours}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Unique users (24h)" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding Summary.UniqueUsersLoggedInLast24Hours}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Unique users (24h)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding Summary.UniqueUsersLoggedInLast24Hours}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource KpiCardStyle}" Margin="0,0,12,12">
+                <Border Style="{StaticResource KpiCard}" Margin="0,0,14,14">
                     <StackPanel>
-                        <TextBlock Text="Revenue (30 days)" Foreground="Gray" FontSize="12" />
-                        <TextBlock Text="{Binding EstimatedRevenueDisplay}" FontSize="24" FontWeight="Bold" />
+                        <TextBlock Text="Revenue (30 days)" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" />
+                        <TextBlock Text="{Binding EstimatedRevenueDisplay}" FontSize="28" FontWeight="Bold" Margin="0,6,0,0" />
                     </StackPanel>
                 </Border>
             </WrapPanel>
         </ScrollViewer>
 
         <Border Grid.Row="3"
-                Background="#80FFFFFF"
+                Style="{StaticResource LoadingOverlay}"
                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <TextBlock Text="Loading…"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       FontSize="16" />
+                       FontSize="16"
+                       Foreground="{StaticResource TextSecondaryBrush}" />
         </Border>
     </Grid>
 </views:ViewControllerBase>

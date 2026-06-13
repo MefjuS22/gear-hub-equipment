@@ -23,12 +23,4 @@ public partial class MainWindow
 
     private void LogoutButton_OnClick(object sender, System.Windows.RoutedEventArgs e) =>
         _shell.Logout();
-
-    private void NavButton_OnClick(object sender, System.Windows.RoutedEventArgs e)
-    {
-        if (sender is System.Windows.Controls.Button { Tag: NavItem item })
-        {
-            _shell.NavigateTo(item);
-        }
-    }
 }

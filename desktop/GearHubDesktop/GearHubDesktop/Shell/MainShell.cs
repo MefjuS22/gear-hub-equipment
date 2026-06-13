@@ -18,6 +18,8 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
 
     private UserControl? _currentContent;
     private NavSection _selectedSection = NavSection.Portal;
+    private NavItem? _selectedNavItem;
+    private bool _suppressNavSelection;
 
     private LoginView? _loginContent;
 
@@ -76,9 +78,34 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
             _selectedSection = value;
             RaisePropertyChanged();
             RaisePropertyChanged(nameof(VisibleNavItems));
+            RaisePropertyChanged(nameof(IsPortalSection));
+            RaisePropertyChanged(nameof(IsStaffSection));
             NavigateToDefaultForSection();
         }
     }
+
+    public NavItem? SelectedNavItem
+    {
+        get => _selectedNavItem;
+        set
+        {
+            if (ReferenceEquals(_selectedNavItem, value))
+            {
+                return;
+            }
+
+            _selectedNavItem = value;
+            RaisePropertyChanged();
+            if (!_suppressNavSelection && value is not null)
+            {
+                NavigateTo(value.Target);
+            }
+        }
+    }
+
+    public bool IsPortalSection => SelectedSection == NavSection.Portal;
+
+    public bool IsStaffSection => SelectedSection == NavSection.Staff;
 
     public bool IsAuthenticated => _session.IsAuthenticated;
     public bool ShowStaff => _session.IsAdmin;
@@ -124,6 +151,15 @@ public sealed class MainShell : INotifyPropertyChanged, IAppNavigation
 
     public void NavigateTo(string target, object? parameter = null)
     {
+        var navItem = NavItems.FirstOrDefault(item => item.Target == target);
+        if (navItem is not null)
+        {
+            _suppressNavSelection = true;
+            _selectedNavItem = navItem;
+            RaisePropertyChanged(nameof(SelectedNavItem));
+            _suppressNavSelection = false;
+        }
+
         CurrentContent = target switch
         {
             "portal-catalog" => CreateAndLoad<CatalogView>(),

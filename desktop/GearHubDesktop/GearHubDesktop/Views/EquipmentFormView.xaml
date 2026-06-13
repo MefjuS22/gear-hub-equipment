@@ -4,13 +4,6 @@
              xmlns:views="clr-namespace:GearHubDesktop.Views">
     <views:ViewControllerBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <Style x:Key="BusyAwareButton" TargetType="Button">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsBusy}" Value="True">
-                    <Setter Property="IsEnabled" Value="False" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </views:ViewControllerBase.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">

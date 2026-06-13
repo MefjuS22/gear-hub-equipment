@@ -11,32 +11,26 @@
         <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
     </views:ViewControllerBase.Resources>
 
-    <Grid Margin="24">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="Cart"
-                       FontSize="24"
-                       FontWeight="SemiBold" />
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Cart" Style="{StaticResource PageTitleText}" />
             <TextBlock Text="Review items and place your rental order."
-                       Foreground="#666666"
-                       Margin="0,4,0,0" />
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,6,0,0" />
         </StackPanel>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="380" />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0"
-                    Background="White"
-                    CornerRadius="8"
-                    Padding="0"
-                    Margin="0,0,16,0">
+            <Border Grid.Column="0" Style="{StaticResource CardFlat}" Padding="0" Margin="0,0,16,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -45,8 +39,7 @@
 
                     <TextBlock Grid.Row="0"
                                Text="{Binding ErrorMessage}"
-                               Foreground="#C62828"
-                               TextWrapping="Wrap"
+                               Style="{StaticResource ErrorText}"
                                Margin="16,16,16,0"
                                Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
 
@@ -69,16 +62,21 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Button Content="-"
-                                                    Width="28"
+                                                    Width="32"
+                                                    Style="{StaticResource SecondaryButton}"
                                                     Margin="4,0,0,0"
+                                                    Padding="0"
                                                     Click="DecreaseQuantity_Click" />
                                             <Button Content="+"
-                                                    Width="28"
+                                                    Width="32"
+                                                    Style="{StaticResource SecondaryButton}"
                                                     Margin="4,0,0,0"
+                                                    Padding="0"
                                                     Click="IncreaseQuantity_Click" />
                                             <Button Content="Remove"
+                                                    Style="{StaticResource GhostButton}"
                                                     Margin="4,0,0,0"
-                                                    Padding="8,2"
+                                                    Padding="8,4"
                                                     Click="RemoveLine_Click" />
                                         </StackPanel>
                                     </DataTemplate>
@@ -96,48 +94,33 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="1"
-                    Background="White"
-                    CornerRadius="8"
-                    Padding="20">
+            <Border Grid.Column="1" Style="{StaticResource Card}">
                 <StackPanel>
                     <TextBlock Text="Checkout"
                                FontWeight="SemiBold"
-                               FontSize="16"
-                               Margin="0,0,0,16" />
+                               FontSize="17"
+                               Margin="0,0,0,18" />
 
-                    <TextBlock Text="Saved company"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,4" />
+                    <TextBlock Text="Saved company" Style="{StaticResource FormLabelText}" />
                     <ComboBox ItemsSource="{Binding SavedCompanies}"
                               SelectedItem="{Binding SelectedCompany}"
                               DisplayMemberPath="CompanyName"
                               Padding="8,6"
                               Margin="0,0,0,12" />
 
-                    <TextBlock Text="Company name"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,4" />
+                    <TextBlock Text="Company name" Style="{StaticResource FormLabelText}" />
                     <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="8,6"
-                             Margin="0,0,0,12" />
+                             Margin="0,0,0,14" />
 
-                    <TextBlock Text="Contact person"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,4" />
+                    <TextBlock Text="Contact person" Style="{StaticResource FormLabelText}" />
                     <TextBox Text="{Binding ContactPerson, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="8,6"
-                             Margin="0,0,0,12" />
+                             Margin="0,0,0,14" />
 
-                    <TextBlock Text="Rental start"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,4" />
+                    <TextBlock Text="Rental start" Style="{StaticResource FormLabelText}" />
                     <DatePicker SelectedDate="{Binding RentalStartDate}"
                                 Margin="0,0,0,12" />
 
-                    <TextBlock Text="Rental end"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,4" />
+                    <TextBlock Text="Rental end" Style="{StaticResource FormLabelText}" />
                     <DatePicker SelectedDate="{Binding RentalEndDate}"
                                 Margin="0,0,0,16" />
 
@@ -152,14 +135,12 @@
                             IsEnabled="{Binding CanPlaceOrder}" />
 
                     <TextBlock Text="{Binding StatusMessage}"
-                               Foreground="#2E7D32"
-                               TextWrapping="Wrap"
+                               Style="{StaticResource SuccessText}"
                                Margin="0,12,0,0"
                                Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibility}}" />
 
                     <TextBlock Text="Sign in to place an order."
-                               Foreground="#666666"
-                               TextWrapping="Wrap"
+                               Style="{StaticResource PageSubtitleText}"
                                Margin="0,12,0,0"
                                Visibility="{Binding ShowSignInHint, Converter={StaticResource BoolToVisibility}}" />
                 </StackPanel>

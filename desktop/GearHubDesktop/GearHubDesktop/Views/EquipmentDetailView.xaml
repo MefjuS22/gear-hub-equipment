@@ -7,92 +7,94 @@
              mc:Ignorable="d">
     <views:ViewControllerBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <views:InverseBooleanConverter x:Key="InverseBool" />
         <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
     </views:ViewControllerBase.Resources>
 
-    <Grid Margin="24">
+    <Grid>
         <StackPanel Visibility="{Binding HasEquipment, Converter={StaticResource BoolToVisibility}}">
             <TextBlock Text="{Binding Equipment.Name}"
-                       FontSize="24"
-                       FontWeight="SemiBold"
-                       Margin="0,0,0,16" />
+                       Style="{StaticResource PageTitleText}"
+                       Margin="0,0,0,20" />
 
             <TextBlock Text="{Binding ErrorMessage}"
-                       Foreground="#C62828"
-                       TextWrapping="Wrap"
+                       Style="{StaticResource ErrorText}"
                        Margin="0,0,0,12"
                        Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
 
-            <Border Background="White"
-                    CornerRadius="8"
-                    Padding="24">
+            <Border Style="{StaticResource Card}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="240" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0"
-                            Background="#F4F6F8"
-                            CornerRadius="6"
-                            Height="180"
-                            Margin="0,0,24,0">
+                            Background="#F8FAFC"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Height="200"
+                            Margin="0,0,28,0">
                         <Grid>
                             <TextBlock Text="No image"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Foreground="#888888"
+                                       Foreground="{StaticResource TextMutedBrush}"
                                        Visibility="{Binding ShowImagePlaceholder, Converter={StaticResource BoolToVisibility}}" />
                             <Image Source="{Binding ImageSource}"
                                    Stretch="Uniform"
-                                   Margin="8"
+                                   Margin="12"
                                    Visibility="{Binding HasImage, Converter={StaticResource BoolToVisibility}}" />
                         </Grid>
                     </Border>
 
-                    <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
                         <TextBlock Text="{Binding CategoryLabel}"
-                                   Foreground="#666666"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
                                    Margin="0,0,0,8" />
                         <TextBlock Text="{Binding BrandLabel}"
-                                   Foreground="#666666"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
                                    Margin="0,0,0,8" />
                         <TextBlock Text="{Binding WarehouseLabel}"
-                                   Foreground="#666666"
-                                   Margin="0,0,0,8" />
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="0,0,0,16" />
                         <TextBlock Text="{Binding DailyRateLabel}"
-                                   FontSize="18"
+                                   FontSize="22"
                                    FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
                                    Margin="0,0,0,8" />
                         <TextBlock Text="{Binding AvailabilityLabel}"
-                                   Margin="0,0,0,16" />
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="0,0,0,20" />
 
                         <Button Content="Add to cart"
-                                Padding="16,8"
+                                Padding="18,10"
                                 HorizontalAlignment="Left"
                                 Click="AddToCart_Click"
                                 IsEnabled="{Binding CanAddToCart}" />
 
                         <TextBlock Text="{Binding StatusMessage}"
-                                   Foreground="#2E7D32"
-                                   Margin="0,12,0,0"
+                                   Style="{StaticResource SuccessText}"
+                                   Margin="0,14,0,0"
                                    Visibility="{Binding StatusMessage, Converter={StaticResource NullToVisibility}}" />
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <Border Background="White"
-                    CornerRadius="8"
-                    Padding="24"
+            <Border Style="{StaticResource Card}"
                     Margin="0,16,0,0"
                     Visibility="{Binding HasDescription, Converter={StaticResource BoolToVisibility}}">
                 <StackPanel>
                     <TextBlock Text="Description"
                                FontWeight="SemiBold"
-                               Margin="0,0,0,8" />
-                    <WebBrowser x:Name="DescriptionBrowser"
-                                Height="240" />
+                               FontSize="15"
+                               Margin="0,0,0,10" />
+                    <Border BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                        <WebBrowser x:Name="DescriptionBrowser"
+                                    Height="240" />
+                    </Border>
                 </StackPanel>
             </Border>
         </StackPanel>
@@ -100,7 +102,7 @@
         <TextBlock Text="Loading equipment..."
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Foreground="#666666"
+                   Style="{StaticResource PageSubtitleText}"
                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibility}}" />
     </Grid>
 </views:ViewControllerBase>

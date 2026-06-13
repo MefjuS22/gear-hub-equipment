@@ -10,22 +10,19 @@
         <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
     </views:ViewControllerBase.Resources>
 
-    <Grid Margin="24">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="News"
-                       FontSize="24"
-                       FontWeight="SemiBold" />
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="News" Style="{StaticResource PageTitleText}" />
             <TextBlock Text="Updates and announcements from GearHub."
-                       Foreground="#666666"
-                       Margin="0,4,0,0" />
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,6,0,0" />
             <TextBlock Text="{Binding ErrorMessage}"
-                       Foreground="#C62828"
-                       TextWrapping="Wrap"
+                       Style="{StaticResource ErrorText}"
                        Margin="0,12,0,0"
                        Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
         </StackPanel>
@@ -36,11 +33,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0"
-                    Background="White"
-                    CornerRadius="8"
-                    Padding="8"
-                    Margin="0,0,16,0">
+            <Border Grid.Column="0" Style="{StaticResource Card}" Padding="8" Margin="0,0,16,0">
                 <Grid>
                     <ListBox ItemsSource="{Binding Articles}"
                              SelectedItem="{Binding SelectedArticle}"
@@ -75,10 +68,7 @@
                 </Grid>
             </Border>
 
-            <Border Grid.Column="1"
-                    Background="White"
-                    CornerRadius="8"
-                    Padding="24">
+            <Border Grid.Column="1" Style="{StaticResource Card}">
                 <Grid>
                     <StackPanel Visibility="{Binding HasSelectedDetail, Converter={StaticResource BoolToVisibility}}">
                         <TextBlock Text="{Binding SelectedDetail.Title}"
@@ -89,8 +79,10 @@
                         <TextBlock Text="{Binding SelectedDetailPublishedLabel}"
                                    Foreground="#666666"
                                    Margin="0,0,0,16" />
-                        <Border Background="#F4F6F8"
-                                CornerRadius="6"
+                        <Border Background="#F8FAFC"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10"
                                 MaxHeight="240"
                                 Margin="0,0,0,16"
                                 Visibility="{Binding HasCoverImage, Converter={StaticResource BoolToVisibility}}">

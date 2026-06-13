@@ -5,60 +5,73 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:GearHubDesktop.Views"
              mc:Ignorable="d"
-             Background="#F4F6F8">
+             Background="{StaticResource BackgroundBrush}">
     <views:ViewControllerBase.Resources>
         <views:InverseBooleanConverter x:Key="InverseBool" />
         <views:NullOrEmptyToVisibilityConverter x:Key="NullToVisibility" />
     </views:ViewControllerBase.Resources>
 
     <Grid>
-        <Border Background="White"
-                CornerRadius="8"
-                Padding="32"
-                MaxWidth="420"
+        <Border Style="{StaticResource Card}"
+                MaxWidth="440"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Padding="36">
             <StackPanel>
-                <TextBlock Text="GearHub"
-                           FontSize="28"
-                           FontWeight="SemiBold"
-                           Margin="0,0,0,4" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <Border Background="{StaticResource AccentBrush}"
+                            CornerRadius="10"
+                            Width="44"
+                            Height="44"
+                            Margin="0,0,14,0">
+                        <TextBlock Text="G"
+                                   Foreground="White"
+                                   FontWeight="Bold"
+                                   FontSize="20"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="GearHub"
+                                   Style="{StaticResource PageTitleText}"
+                                   FontSize="24"
+                                   Margin="0" />
+                        <TextBlock Text="Equipment rental portal"
+                                   Style="{StaticResource PageSubtitleText}"
+                                   Margin="0,2,0,0" />
+                    </StackPanel>
+                </StackPanel>
+
                 <TextBlock Text="Sign in to browse equipment and place orders."
-                           Foreground="#666666"
-                           TextWrapping="Wrap"
+                           Style="{StaticResource PageSubtitleText}"
                            Margin="0,0,0,24" />
 
                 <TextBlock Text="{Binding ErrorMessage}"
-                           Foreground="#C62828"
-                           TextWrapping="Wrap"
+                           Style="{StaticResource ErrorText}"
                            Margin="0,0,0,12"
                            Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}" />
 
-                <TextBlock Text="Email" FontWeight="SemiBold" Margin="0,0,0,4" />
+                <TextBlock Text="Email" Style="{StaticResource FormLabelText}" />
                 <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
-                         Padding="8,6"
-                         Margin="0,0,0,12" />
+                         Margin="0,0,0,14" />
 
-                <TextBlock Text="Password" FontWeight="SemiBold" Margin="0,0,0,4" />
+                <TextBlock Text="Password" Style="{StaticResource FormLabelText}" />
                 <PasswordBox x:Name="PasswordInput"
-                             Padding="8,6"
-                             Margin="0,0,0,12" />
+                             Margin="0,0,0,14" />
 
-                <StackPanel Visibility="{Binding DisplayNameVisibility}">
-                    <TextBlock Text="Display name" FontWeight="SemiBold" Margin="0,0,0,4" />
+                <StackPanel Visibility="{Binding DisplayNameVisibility}" Margin="0,0,0,4">
+                    <TextBlock Text="Display name" Style="{StaticResource FormLabelText}" />
                     <TextBox Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
-                             Padding="8,6"
-                             Margin="0,0,0,12" />
+                             Margin="0,0,0,14" />
                 </StackPanel>
 
                 <CheckBox Content="Create a new account"
                           IsChecked="{Binding IsRegisterMode}"
-                          Margin="0,0,0,20" />
+                          Margin="0,0,0,24" />
 
                 <Button Content="{Binding SubmitLabel}"
                         Click="Submit_Click"
-                        Padding="12,8"
-                        FontWeight="SemiBold"
+                        Padding="14,10"
                         IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" />
             </StackPanel>
         </Border>

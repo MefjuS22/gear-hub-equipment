@@ -4,67 +4,104 @@
              xmlns:views="clr-namespace:GearHubDesktop.Views">
     <views:ViewControllerBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-        <Style x:Key="BusyAwareButton" TargetType="Button">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsBusy}" Value="True">
-                    <Setter Property="IsEnabled" Value="False" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </views:ViewControllerBase.Resources>
 
-    <Grid Margin="16">
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Orders" FontSize="22" FontWeight="SemiBold" Margin="0,0,0,12" />
-
-        <WrapPanel Grid.Row="1" Margin="0,0,0,8">
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="200" Padding="6,4" Margin="0,0,8,8" VerticalContentAlignment="Center" />
-            <DatePicker SelectedDate="{Binding OrderDateFrom}" Width="140" Margin="0,0,8,8" />
-            <DatePicker SelectedDate="{Binding OrderDateTo}" Width="140" Margin="0,0,8,8" />
-            <ComboBox ItemsSource="{Binding Customers}" SelectedItem="{Binding SelectedCustomer}" DisplayMemberPath="CompanyName" Width="180" Margin="0,0,8,8" />
-            <Button Content="Search" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="Search_Click" />
-            <Button Content="Refresh" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="Refresh_Click" />
-            <Button Content="Clear filters" Padding="12,6" Margin="0,0,8,8" Click="ClearFilters_Click" />
-            <Button Content="Open order" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="OpenOrder_Click" />
-            <Button Content="Export PDF" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="ExportPdf_Click" />
-            <Button Content="Export Excel" Style="{StaticResource BusyAwareButton}" Padding="12,6" Margin="0,0,8,8" Click="ExportExcel_Click" />
-        </WrapPanel>
-
-        <StackPanel Grid.Row="2" Margin="0,0,0,8">
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="IndianRed" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding StatusMessage}" Foreground="SeaGreen" />
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Orders" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="Search, filter, and export rental orders."
+                       Style="{StaticResource PageSubtitleText}"
+                       Margin="0,6,0,0" />
         </StackPanel>
 
-        <DataGrid Grid.Row="3"
-                  ItemsSource="{Binding Orders}"
-                  SelectedItem="{Binding SelectedOrder}"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  CanUserAddRows="False"
-                  SelectionMode="Single"
-                  MouseDoubleClick="OrdersGrid_MouseDoubleClick">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
-                <DataGridTextColumn Header="Customer" Binding="{Binding CustomerCompanyName}" Width="*" MinWidth="120" />
-                <DataGridTextColumn Header="User" Binding="{Binding UserName}" Width="120" />
-                <DataGridTextColumn Header="Email" Binding="{Binding UserEmail}" Width="160" />
-                <DataGridTextColumn Header="Order date" Binding="{Binding OrderDate, StringFormat=g}" Width="140" />
-                <DataGridTextColumn Header="Rental start" Binding="{Binding RentalStartDate, StringFormat=d}" Width="110" />
-                <DataGridTextColumn Header="Rental end" Binding="{Binding RentalEndDate, StringFormat=d}" Width="110" />
-                <DataGridTextColumn Header="Items" Binding="{Binding Items.Count}" Width="70" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border Grid.Row="1" Style="{StaticResource Card}" Padding="14" Margin="0,0,0,10">
+            <WrapPanel VerticalAlignment="Center">
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Width="200"
+                         Margin="0,0,8,8"
+                         VerticalContentAlignment="Center" />
+                <DatePicker SelectedDate="{Binding OrderDateFrom}"
+                            Width="150"
+                            Margin="0,0,8,8" />
+                <DatePicker SelectedDate="{Binding OrderDateTo}"
+                            Width="150"
+                            Margin="0,0,8,8" />
+                <ComboBox ItemsSource="{Binding Customers}"
+                          SelectedItem="{Binding SelectedCustomer}"
+                          DisplayMemberPath="CompanyName"
+                          Width="200"
+                          Margin="0,0,8,8" />
+                <Button Content="Search"
+                        Style="{StaticResource CompactPrimaryButton}"
+                        Margin="0,0,8,8"
+                        Click="Search_Click" />
+                <Button Content="Refresh"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,8"
+                        Click="Refresh_Click" />
+            </WrapPanel>
+        </Border>
 
-        <Border Grid.Row="3"
-                Background="#80FFFFFF"
+        <Border Grid.Row="2" Style="{StaticResource CardFlat}" Padding="12,10" Margin="0,0,0,10">
+            <WrapPanel>
+                <Button Content="Clear filters"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,0"
+                        Click="ClearFilters_Click" />
+                <Button Content="Open order"
+                        Style="{StaticResource CompactPrimaryButton}"
+                        Margin="0,0,8,0"
+                        Click="OpenOrder_Click" />
+                <Button Content="Export PDF"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Margin="0,0,8,0"
+                        Click="ExportPdf_Click" />
+                <Button Content="Export Excel"
+                        Style="{StaticResource CompactSecondaryButton}"
+                        Click="ExportExcel_Click" />
+            </WrapPanel>
+        </Border>
+
+        <StackPanel Grid.Row="3" Margin="0,0,0,10">
+            <TextBlock Text="{Binding ErrorMessage}" Style="{StaticResource ErrorText}" />
+            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource SuccessText}" />
+        </StackPanel>
+
+        <Border Grid.Row="4" Style="{StaticResource CardFlat}" Padding="0">
+            <DataGrid ItemsSource="{Binding Orders}"
+                      SelectedItem="{Binding SelectedOrder}"
+                      IsReadOnly="True"
+                      BorderThickness="0"
+                      MouseDoubleClick="OrdersGrid_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" />
+                    <DataGridTextColumn Header="Customer" Binding="{Binding CustomerCompanyName}" Width="*" MinWidth="120" />
+                    <DataGridTextColumn Header="User" Binding="{Binding UserName}" Width="120" />
+                    <DataGridTextColumn Header="Email" Binding="{Binding UserEmail}" Width="160" />
+                    <DataGridTextColumn Header="Order date" Binding="{Binding OrderDate, StringFormat=g}" Width="140" />
+                    <DataGridTextColumn Header="Rental start" Binding="{Binding RentalStartDate, StringFormat=d}" Width="110" />
+                    <DataGridTextColumn Header="Rental end" Binding="{Binding RentalEndDate, StringFormat=d}" Width="110" />
+                    <DataGridTextColumn Header="Items" Binding="{Binding Items.Count}" Width="70" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <Border Grid.Row="4"
+                Style="{StaticResource LoadingOverlay}"
                 Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
-            <TextBlock Text="Loading…" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" />
+            <TextBlock Text="Loading…"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       Foreground="{StaticResource TextSecondaryBrush}" />
         </Border>
     </Grid>
 </views:ViewControllerBase>
