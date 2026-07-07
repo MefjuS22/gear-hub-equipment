@@ -9,6 +9,7 @@ public class EquipmentUpsertDtoValidator : AbstractValidator<EquipmentUpsertDto>
     {
         RuleFor(equipment => equipment.Name)
             .NotEmpty()
+            .MinimumLength(3)
             .MaximumLength(200);
 
         RuleFor(equipment => equipment.CategoryId)

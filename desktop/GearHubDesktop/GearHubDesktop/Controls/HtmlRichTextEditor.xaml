@@ -1,0 +1,14 @@
+<UserControl x:Class="GearHubDesktop.Controls.HtmlRichTextEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             MinHeight="200">
+    <Border x:Name="EditorBorder"
+            Background="{StaticResource SurfaceBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="1"
+            CornerRadius="{StaticResource RadiusSm}">
+        <wv2:WebView2 x:Name="EditorWebView"
+                      MinHeight="180" />
+    </Border>
+</UserControl>

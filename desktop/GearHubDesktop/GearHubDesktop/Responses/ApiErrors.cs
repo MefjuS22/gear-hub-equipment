@@ -1,4 +1,4 @@
-namespace GearHub.Api.Responses;
+namespace GearHubDesktop.Responses;
 
 public enum ApiErrorCode
 {
@@ -37,6 +37,11 @@ public enum ApiErrorCode
     UserEmailTaken = 411,
     UserCannotDeleteSelf = 412,
     UserLastAdmin = 413,
+}
 
-    MaintenanceNotFound = 420,
+public sealed class ApiErrorResponse
+{
+    public ApiErrorCode Code { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public Dictionary<string, string[]>? Errors { get; set; }
 }
